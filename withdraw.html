@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iyal Surveys - Withdraw</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f1f8e9; }
+    header, .bottom-nav { background: #2e7d32; color: white; }
+    header { padding: 15px; display: flex; align-items: center; justify-content: space-between; position: relative; }
+    .logo { display: flex; align-items: center; }
+    .logo img { width: 40px; margin-right: 10px; }
+    .logo span { font-size: 1.2em; font-weight: bold; }
+    .menu-toggle { font-size: 1.5em; cursor: pointer; }
+    nav { position: absolute; top: 60px; right: 15px; background: #388e3c; display: none; flex-direction: column; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 10; }
+    nav a { color: white; text-decoration: none; padding: 8px 0; border-bottom: 1px solid #66bb6a; }
+    .content { padding: 20px; padding-bottom: 100px; }
+    .form-box, .history-box { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 0 10px #ccc; margin-bottom: 20px; }
+    h2 { color: #2e7d32; }
+    label { display: block; margin-top: 10px; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+    button { margin-top: 10px; padding: 10px; background: #2e7d32; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.2); }
+    .bottom-nav a { color: white; text-decoration: none; font-size: 0.9em; text-align: center; }
+    .bottom-nav i { display: block; font-size: 1.2em; margin-bottom: 4px; }
+    .status { font-weight: bold; }
+    .approved { color: green; }
+    .pending { color: orange; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="assets/iyallogo.png" alt="Iyal Logo" />
+      <span>Iyal Surveys</span>
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()"><i class="fa fa-bars"></i></div>
+    <nav id="menu">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="terms.html">Terms & Conditions</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="support.html">Support Page</a>
+    </nav>
+  </header>
+
+  <div class="content">
+    <h2>Balance: <span id="balance">₦0</span></h2>
+
+    <div class="form-box">
+      <h3>Airtime Withdrawal (Min ₦2000)</h3>
+      <label>Phone Number</label>
+      <input type="text" id="airtimePhone" />
+      <label>Network</label>
+      <select id="airtimeNetwork">
+        <option value="MTN">MTN</option>
+        <option value="Airtel">Airtel</option>
+        <option value="Glo">Glo</option>
+        <option value="9mobile">9mobile</option>
+      </select>
+      <label>Amount</label>
+      <input type="number" id="airtimeAmount" />
+      <button id="airtimeBtn" onclick="submitWithdrawal('airtime')">Request Airtime</button>
+    </div>
+
+    <div class="form-box">
+      <h3>Bank Withdrawal (Min ₦5000)</h3>
+      <label>Bank Name</label>
+      <input type="text" id="bankName" />
+      <label>Account Number</label>
+      <input type="text" id="bankAccount" />
+      <label>Amount</label>
+      <input type="number" id="bankAmount" />
+      <button id="bankBtn" onclick="submitWithdrawal('bank')">Request Bank Transfer</button>
+    </div>
+
+    <div class="history-box">
+      <h3>Withdrawal History</h3>
+      <ul id="historyList"></ul>
+      <p>Total Withdrawn: ₦<span id="totalWithdrawn">0</span></p>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
+    <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
+    <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
+    <a href="login.html"><i class="fa fa-sign-out-alt"></i>Logout</a>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyUuew-e4wlIdUDx7olNKx68sjD1UXY9U",
+      authDomain: "iyal-survey.firebaseapp.com",
+      projectId: "iyal-survey",
+      storageBucket: "iyal-survey.firebasestorage.app",
+      messagingSenderId: "356060656195",
+      appId: "1:356060656195:web:d0357a25774de984371af6",
+      measurementId: "G-28XENM0B78"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const balanceDisplay = document.getElementById("balance");
+    const historyList = document.getElementById("historyList");
+    const totalWithdrawnDisplay = document.getElementById("totalWithdrawn");
+    const airtimeBtn = document.getElementById("airtimeBtn");
+    const bankBtn = document.getElementById("bankBtn");
+
+    let currentBalance = 0;
+    let userId = null;
+    let userRef = null;
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      userId = user.uid;
+      userRef = doc(db, "users", userId);
+
+      onSnapshot(userRef, (docSnap) => {
+        const data = docSnap.data();
+        currentBalance = data.balance || 0;
+        balanceDisplay.textContent = `₦${currentBalance}`;
+        airtimeBtn.disabled = currentBalance < 2000;
+        bankBtn.disabled = currentBalance < 5000;
+      });
+
+      const history[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/lzh-yi/Web-Fork-/tree/024b3e55587afdf9f05a677613a75f24e3d1803e/03-CSS%E8%BF%9B%E9%98%B6%2F04-%E5%A6%82%E4%BD%95%E8%AE%A9%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD%EF%BC%9F.md?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054&citationId=1 "github.com")

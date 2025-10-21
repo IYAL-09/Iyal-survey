@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iyal Surveys</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .logo img {
+      width: 100px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      color: #2e7d32;
+      margin: 0;
+      font-size: 2em;
+    }
+    p {
+      color: #4caf50;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 80%;
+      max-width: 300px;
+    }
+    .buttons a {
+      text-decoration: none;
+      background: #2e7d32;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+    .buttons a i {
+      margin-right: 10px;
+    }
+    .buttons a:hover {
+      background: #1b5e20;
+    }
+    .features {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #2e7d32;
+    }
+    .feature i {
+      font-size: 2em;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="assets/iyallogo.png" alt="Iyal Logo" />
+  </div>
+  <h1>Iyal Surveys</h1>
+  <p>Earn by sharing your opinion</p>
+
+  <div class="buttons">
+    <a href="register.html"><i class="fas fa-user-plus"></i> Register</a>
+    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <i class="fas fa-poll"></i>
+      <span>Answer Surveys</span>
+    </div>
+    <div class="feature">
+      <i class="fas fa-gift"></i>
+      <span>Earn Rewards</span>
+    </div>
+    <div class="feature">
+      <i class="fas fa-users"></i>
+      <span>Refer & Earn</span>
+    </div>
+  </div>
+</body>
+</html>
