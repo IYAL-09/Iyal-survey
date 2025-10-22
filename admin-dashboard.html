@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iyal Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #1565c0, #d32f2f);
+      margin: 0;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      width: 40px;
+      margin-right: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 20px;
+    }
+
+    .content {
+      padding: 20px 30px;
+    }
+
+    .search-group {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-group input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      overflow: hidden;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      font-size: 0.9em;
+    }
+
+    th {
+      background: rgba(255,255,255,0.2);
+    }
+
+    button.view-btn {
+      background: #1976d2;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 0.85em;
+    }
+
+    button.view-btn:hover { background: #0d47a1; }
+
+    /* Modal panel */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.6);
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(15px);
+      padding: 30px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 600px;
+      color: #fff;
+      position: relative;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .error { color: #ffbaba; font-weight: bold; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="assets/iyallogo.png" alt="Iyal Logo" />
+      <span>Iyal Admin Dashboard</span>
+    </div>
+    <nav>
+      <a href="admin-dashboard.html">Dashboard</a>
+      <a href="admin-withdrawals.html">Withdrawals</a>
+      <a href="admin-login.html">Logout</a>
+    </nav>
+  </header>
+
+  <div class="content">
+    <div class="error" id="errorMsg"></div>
+
+    <div class="search-group">
+      <input type="text" id="searchInput" placeholder="Search user by email..." />
+    </div>
+
+    <table id="userTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>UID</th>
+          <th>Balance</th>
+          <th>Referrals</th>
+          <th>Surveys</th>
+          <th>Created At</th>
+          <th>Device IP</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Modal for full user details -->
+  <div class="modal" id="userModal">
+    <div class="modal-content" id="modalContent">
+      <span class="modal-close" id="modalClose">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+    import { formatCurrency, filterUsers, animateOpen, animateClose } from "./js/user-utils.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyUuew-e4wlIdUDx7olNKx68sjD1UXY9U",
+      authDomain: "iyal-survey.firebaseapp.com",
+      projectId: "iyal-survey",
+      storageBucket: "iyal-survey.firebasestorage.app",
+      messagingSenderId: "356060656195",
+      appId: "1:356060656195:web:d0357a25774de984371af6",
+      measurementId: "G-28XENM0B78"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Admin code access
+    const ADMIN_CODE = process.env.ADMIN_CODE || "9000000000";
+    const inputCode = prompt("Enter admin access code:");
+    const errorMsg = document.getElementById("errorMsg");
+
+    if (inputCode !== ADMIN_CODE) {
+      errorMsg.textContent = "Access Denied. Invalid code.";
+      document.querySelector("#userTable").style.display = "none";
+    } else {
+      const userTableBody = document.querySelector("#userTable tbody");
+      let allUsers = [];
+
+      // Fetch users in real-time
+      onSnapshot(collection(db, "users"), (snapshot) => {
+        allUsers = [];
+        userTableBody.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const user = {
+            uid: doc.id,
+            name: data.name || "N/A",
+            email: data.email || "N/A",
+            balance: data.balance || 0,
+            referrals: data.referrals || 0,
+            surveysCompleted: data.surveysCompleted || 0,
+            createdAt: data.createdAt || "",
+            deviceIP: data.deviceIP || "N/A"
+          };
+          allUsers.push(user);
+          addUserRow(user);
+        });
+      });
+
+      function addUserRow(user) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.uid}</td>
+          <td>${formatCurrency(user.balance)}</td>
+          <td>${user.referrals}</td>
+          <td>${user.surveysCompleted}</td>
+          <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+          <td>${user.deviceIP}</td>
+          <td><button class="view-btn" data-uid="${user.uid}">View</button></td>
+        `;
+        userTableBody.appendChild(row);
+
+        // View full details
+        row.querySelector(".view-btn").addEventListener("click", () => {
+          const modalBody = document.getElementById("modalBody");
+          modalBody.innerHTML = `
+            <h2>${user.name}</h2>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>UID:</strong> ${user.uid}</p>
+            <p><strong>Balance:</strong> ${formatCurrency(user.balance)}</p>
+            <p><strong>Referrals:</strong> ${user.referrals}</p>
+            <p><strong>Surveys Completed:</strong> ${user.surveysCompleted}</p>
+            <p><strong>Created At:</strong> ${new Date(user.createdAt).toLocaleString()}</p>
+            <p><strong>Device IP:</strong> ${user.deviceIP}</p>
+          `;
+          const modal = document.getElementById("userModal");
+          animateOpen(modal);
+        });
+      }
+
+      // Search functionality
+      const searchInput = document.getElementById("searchInput");
+      searchInput.addEventListener("input", () => {
+        const filtered = filterUsers(allUsers, searchInput.value);
+        userTableBody.innerHTML = "";
+        filtered.forEach(user => addUserRow(user));
+      });
+
+      // Modal close
+      const modalClose = document.getElementById("modalClose");
+      modalClose.addEventListener("click", () => {
+        const modal = document.getElementById("userModal");
+        animateClose(modal);
+      });
+    }
+  </script>
+</body>
+</html>
