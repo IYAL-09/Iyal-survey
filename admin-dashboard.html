@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iyal Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #1565c0, #d32f2f);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      color: #fff;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 16px;
+      margin: 40px 0;
+      width: 95%;
+      max-width: 1200px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 { text-align: center; margin-bottom: 20px; }
+    .input-group { margin-bottom: 20px; text-align: center; }
+    .input-group input {
+      padding: 10px; border-radius: 8px; border: none; outline: none; width: 250px; text-align: center;
+    }
+    .btn {
+      padding: 10px 20px; background: #1976d2; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; color: #fff;
+    }
+    .btn:hover { background: #0d47a1; }
+    .error { color: #ffbaba; margin-top: 10px; text-align: center; }
+
+    #dashboardContent { display: none; margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #000; background: rgba(255,255,255,0.8); border-radius: 8px; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ccc; }
+    th { background: rgba(255,255,255,0.4); }
+    tr:hover { background: rgba(255,255,255,0.2); cursor: pointer; }
+
+    .modal {
+      display: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000;
+    }
+    .modal-content {
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+      padding: 30px; border-radius: 16px; max-width: 500px; width: 90%; text-align: left; color: #fff;
+    }
+    .closeBtn {
+      float: right; cursor: pointer; font-size: 1.2em; font-weight: bold;
+    }
+
+    #searchBar { width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: none; outline: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Iyal Admin Dashboard</h1>
+
+    <!-- Admin Code Input -->
+    <div id="codeAccess">
+      <div class="input-group">
+        <input type="password" id="adminCodeInput" placeholder="Enter Admin Code" />
+      </div>
+      <div class="input-group">
+        <button class="btn" id="codeBtn"><i class="fa fa-lock"></i> Access Dashboard</button>
+      </div>
+      <div class="error" id="codeError"></div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div id="dashboardContent">
+      <input type="text" id="searchBar" placeholder="Search user by email..." />
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>UID</th>
+            <th>Balance</th>
+            <th>Referrals</th>
+            <th>Subscribed Events</th>
+            <th>IP</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody id="userTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- User Details Modal -->
+  <div id="userDetailsModal" class="modal">
+    <div class="modal-content" id="modalContent">
+      <span class="closeBtn">&times;</span>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc, getDocs } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyUuew-e4wlIdUDx7olNKx68sjD1UXY9U",
+      authDomain: "iyal-survey.firebaseapp.com",
+      projectId: "iyal-survey",
+      storageBucket: "iyal-survey.appspot.com",
+      messagingSenderId: "356060656195",
+      appId: "1:356060656195:web:d0357a25774de984371af6",
+      measurementId: "G-28XENM0B78"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // DOM Elements
+    const adminCodeInput = document.getElementById("adminCodeInput");
+    const codeBtn = document.getElementById("codeBtn");
+    const codeError = document.getElementById("codeError");
+    const dashboardContent = document.getElementById("dashboardContent");
+    const codeAccess = document.getElementById("codeAccess");
+    const userTable = document.getElementById("userTable");
+    const searchBar = document.getElementById("searchBar");
+    const userDetailsModal = document.getElementById("userDetailsModal");
+    const modalContent = document.getElementById("modalContent");
+
+    const closeModal = () => { userDetailsModal.style.display = "none"; };
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("closeBtn") || e.target === userDetailsModal) closeModal();
+    });
+
+    // Admin Code Verification
+    codeBtn.addEventListener("click", async () => {
+      codeError.textContent = "";
+      const code = adminCodeInput.value.trim();
+      if (!code) {
+        codeError.textContent = "Please enter the admin code.";
+        return;
+      }
+      try {
+        const res = await fetch("/api/admin-check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+        if (data.success) {
+          codeAccess.style.display = "none";
+          dashboardContent.style.display = "block";
+          fetchUsersRealtime();
+        } else {
+          codeError.textContent = "Access denied. Wrong code.";
+        }
+      } catch (err) {
+        codeError.textContent = "Error fetching server.";
+        console.error(err);
+      }
+    });
+
+    async function fetchUsersRealtime() {
+      const usersCol = collection(db, "users");
+      onSnapshot(usersCol, async (snapshot) => {
+        const users = [];
+        for (const docSnap of snapshot.docs) {
+          const data = docSnap.data();
+          const uid = docSnap.id;
+          // Count subscribed_events if exists
+          let subCount = 0;
+          try {
+            const subsSnap = await getDocs(collection(db, `users/${uid}/subscribed_events`));
+            subCount = subsSnap.size;
+          } catch(e) { subCount = 0; }
+          users.push({
+            id: uid,
+            name: data.name || "N/A",
+            email: data.email || "N/A",
+            balance: data.balance || 0,
+            referrals: data.referrals || 0,
+            ip: data.ip || "N/A",
+            createdAt: data.createdAt,
+            subscribedEvents: subCount
+          });
+        }
+        displayUsers(users);
+      });
+    }
+
+    function displayUsers(users) {
+      userTable.innerHTML = "";
+      const searchQuery = searchBar.value.trim().toLowerCase();
+      users.filter(u => u.email.toLowerCase().includes(searchQuery)).forEach(user => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.id}</td>
+          <td>₦${user.balance}</td>
+          <td>${user.referrals}</td>
+          <td>${user.subscribedEvents}</td>
+          <td>${user.ip}</td>
+          <td>${new Date(user.createdAt?.seconds*1000 || Date.now()).toLocaleDateString()}</td>
+        `;
+        tr.addEventListener("click", () => showUserDetails(user));
+        userTable.appendChild(tr);
+      });
+    }
+
+    searchBar.addEventListener("input", fetchUsersRealtime);
+
+    function showUserDetails(user) {
+      modalContent.innerHTML = `
+        <span class="closeBtn">&times;</span>
+        <h2>${user.name}</h2>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>UID:</strong> ${user.id}</p>
+        <p><strong>Balance:</strong> ₦${user.balance}</p>
+        <p><strong>Referrals:</strong> ${user.referrals}</p>
+        <p><strong>Subscribed Events:</strong> ${user.subscribedEvents}</p>
+        <p><strong>IP:</strong> ${user.ip}</p>
+        <p><strong>Created:</strong> ${new Date(user.createdAt?.seconds*1000 || Date.now()).toLocaleString()}</p>
+      `;
+      userDetailsModal.style.display = "flex";
+    }
+  </script>
+</body>
+</html>
