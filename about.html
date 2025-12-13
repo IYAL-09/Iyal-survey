@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us – Iyal Surveys</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-green-50 min-h-screen flex flex-col">
+
+  <!-- HEADER -->
+  <header class="bg-green-700 text-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="assets/iyallogo.png" alt="Iyal Surveys Logo" class="w-10 h-10 rounded-full">
+        <span class="text-xl font-bold">Iyal Surveys</span>
+      </div>
+      <a href="index.html" class="text-sm hover:underline">
+        <i class="fa fa-home mr-1"></i> Home
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-grow max-w-5xl mx-auto px-4 py-10">
+
+    <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 space-y-8">
+
+      <!-- TITLE -->
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-green-700 mb-2">
+          About Iyal Surveys
+        </h1>
+        <p class="text-gray-600">
+          Learn more about who we are and what we do
+        </p>
+      </div>
+
+      <!-- WHO WE ARE -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
+          <i class="fa fa-users"></i> Who We Are
+        </h2>
+        <p class="text-gray-700 leading-relaxed">
+          Iyal Surveys is an online rewards platform that connects users with
+          trusted third-party survey and offer providers. Our goal is to give
+          users a simple and transparent way to earn rewards by participating
+          in surveys and completing approved tasks.
+        </p>
+      </section>
+
+      <!-- WHAT WE DO -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
+          <i class="fa fa-clipboard-list"></i> What We Do
+        </h2>
+        <p class="text-gray-700 leading-relaxed">
+          We partner with reputable advertising and survey networks to display
+          available surveys and offers to our users. When a user completes a
+          survey successfully, we receive a reward from the survey provider,
+          and a portion of that reward is credited to the user’s account.
+        </p>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section class="space-y-4">
+        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
+          <i class="fa fa-gears"></i> How It Works
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-green-100 p-4 rounded-lg text-center">
+            <i class="fa fa-user-plus text-2xl text-green-700 mb-2"></i>
+            <h3 class="font-semibold mb-1">Create an Account</h3>
+            <p class="text-sm text-gray-700">
+              Sign up and access available surveys and offers.
+            </p>
+          </div>
+
+          <div class="bg-green-100 p-4 rounded-lg text-center">
+            <i class="fa fa-list-check text-2xl text-green-700 mb-2"></i>
+            <h3 class="font-semibold mb-1">Complete Surveys</h3>
+            <p class="text-sm text-gray-700">
+              Participate in surveys provided by our partners.
+            </p>
+          </div>
+
+          <div class="bg-green-100 p-4 rounded-lg text-center">
+            <i class="fa fa-wallet text-2xl text-green-700 mb-2"></i>
+            <h3 class="font-semibold mb-1">Earn Rewards</h3>
+            <p class="text-sm text-gray-700">
+              Earn rewards credited to your account balance.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- IMPORTANT NOTE -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
+          <i class="fa fa-circle-info"></i> Important Information
+        </h2>
+        <p class="text-gray-700 leading-relaxed">
+          Survey availability, eligibility, and completion status are determined
+          entirely by third-party survey providers. Iyal Surveys does not control
+          survey qualification criteria or disqualifications.
+        </p>
+      </section>
+
+      <!-- TRUST & COMPLIANCE -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
+          <i class="fa fa-shield-halved"></i> Trust & Transparency
+        </h2>
+        <p class="text-gray-700 leading-relaxed">
+          We are committed to operating a transparent platform that respects
+          user privacy and complies with applicable laws and third-party
+          network requirements. Please review our
+          <a href="privacy.html" class="text-green-700 font-semibold hover:underline">Privacy Policy</a>
+          and
+          <a href="terms.html" class="text-green-700 font-semibold hover:underline">Terms & Conditions</a>
+          for more information.
+        </p>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-green-700 text-white text-sm">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-2">
+      <p>© 2025 Iyal Surveys. All rights reserved.</p>
+      <div class="flex gap-4">
+        <a href="terms.html" class="hover:underline">Terms</a>
+        <a href="privacy.html" class="hover:underline">Privacy</a>
+        <a href="disclaimer.html" class="hover:underline">Disclaimer</a>
+        <a href="support.html" class="hover:underline">Support</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
