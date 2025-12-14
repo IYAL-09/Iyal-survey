@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Iyal Surveys - Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <!-- reCAPTCHA v2 -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     body {
@@ -125,6 +126,7 @@
       </span>
     </div>
 
+    <!-- reCAPTCHA v2 -->
     <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
 
     <button onclick="login()" id="loginBtn">
@@ -144,8 +146,7 @@
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
     const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
-
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const emailEl = document.getElementById("email");
@@ -155,8 +156,8 @@
     const btnText = document.getElementById("btnText");
     const button = document.getElementById("loginBtn");
 
-    window.togglePassword = function () {
-      const pass = document.getElementById("password");
+    window.togglePassword = function() {
+      const pass = passEl;
       const eye = document.getElementById("eyeIcon");
       if (pass.type === "password") {
         pass.type = "text";
@@ -177,7 +178,6 @@
         status.textContent = "⚠️ Please enter email and password.";
         return;
       }
-
       if (!recaptchaToken) {
         status.style.color = "red";
         status.textContent = "⚠️ Please complete the reCAPTCHA.";
@@ -190,23 +190,24 @@
       status.textContent = "";
 
       try {
-        // Verify reCAPTCHA server-side
-        const recaptchaRes = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor", {
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/smooth-processor`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, recaptcha_token: recaptchaToken, action: "verify_recaptcha" })
+          body: JSON.stringify({ email, password, recaptcha_token: recaptchaToken })
         });
-        const recaptchaData = await recaptchaRes.json();
-        if (!recaptchaData.success) throw new Error("reCAPTCHA verification failed");
+        const data = await res.json();
 
-        // Sign in user client-side
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (data.success) {
+          status.style.color = "green";
+          status.textContent = "✅ Login successful! Redirecting...";
 
-        status.style.color = "green";
-        status.textContent = "✅ Login successful! Redirecting...";
-        setTimeout(() => window.location.href = "dashboard.html", 1200);
+          // Save session in Supabase client for persistence
+          await supabase.auth.setSession(data.session.access_token);
 
+          setTimeout(() => window.location.href = "dashboard.html", 1200);
+        } else {
+          throw new Error(data.message || "Login failed");
+        }
       } catch (err) {
         status.style.color = "red";
         status.textContent = "❌ " + err.message;
@@ -232,16 +233,18 @@
       status.textContent = "";
 
       try {
-        const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor", {
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/smooth-processor`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, action: "forgot_password" })
         });
         const data = await res.json();
-        if (!data.success) throw new Error(data.message || "Failed to send reset email");
-
-        status.style.color = "green";
-        status.textContent = "📧 Password reset link sent to your email.";
+        if (data.success) {
+          status.style.color = "green";
+          status.textContent = "📧 Password reset link sent to your email.";
+        } else {
+          throw new Error(data.message || "Failed to send reset email");
+        }
       } catch(err) {
         status.style.color = "red";
         status.textContent = "❌ " + err.message;
