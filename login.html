@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Iyal Surveys - Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <!-- Cloudflare reCAPTCHA v2 -->
+  <!-- reCAPTCHA v2 -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     body {
@@ -65,7 +65,7 @@
     .eye-toggle {
       position: absolute;
       top: 50%;
-      right: 46px;
+      right: 12px;
       transform: translateY(-50%);
       cursor: pointer;
       color: #4caf50;
@@ -126,7 +126,6 @@
       </span>
     </div>
 
-    <!-- reCAPTCHA v2 -->
     <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
 
     <button onclick="login()" id="loginBtn">
@@ -143,6 +142,12 @@
   </div>
 
   <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const emailEl = document.getElementById("email");
     const passEl = document.getElementById("password");
     const status = document.getElementById("status");
@@ -151,7 +156,7 @@
     const button = document.getElementById("loginBtn");
 
     window.togglePassword = function () {
-      const pass = document.getElementById("password");
+      const pass = passEl;
       const eye = document.getElementById("eyeIcon");
       if (pass.type === "password") {
         pass.type = "text";
@@ -167,17 +172,8 @@
       const password = passEl.value.trim();
       const recaptchaToken = grecaptcha.getResponse();
 
-      if (!email || !password) {
-        status.style.color = "red";
-        status.textContent = "⚠️ Please enter email and password.";
-        return;
-      }
-
-      if (!recaptchaToken) {
-        status.style.color = "red";
-        status.textContent = "⚠️ Please complete the reCAPTCHA.";
-        return;
-      }
+      if (!email || !password) { status.textContent = "⚠️ Enter email and password."; return; }
+      if (!recaptchaToken) { status.textContent = "⚠️ Complete reCAPTCHA."; return; }
 
       spinner.style.display = "inline-block";
       btnText.textContent = "Logging in...";
@@ -185,21 +181,22 @@
       status.textContent = "";
 
       try {
+        // Step 1: Verify reCAPTCHA server-side
         const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, recaptcha_token: recaptchaToken })
+          body: JSON.stringify({ email, recaptcha_token: recaptchaToken })
         });
-
         const data = await res.json();
+        if (!data.success) throw new Error(data.message || "reCAPTCHA failed");
 
-        if (data.success) {
-          status.style.color = "green";
-          status.textContent = "✅ Login successful! Redirecting...";
-          setTimeout(() => window.location.href = "dashboard.html", 1200);
-        } else {
-          throw new Error(data.message || "Login failed");
-        }
+        // Step 2: Sign in client-side (session stored in browser)
+        const { data: sessionData, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error || !sessionData.session) throw new Error("Invalid email or password");
+
+        status.style.color = "green";
+        status.textContent = "✅ Login successful! Redirecting...";
+        setTimeout(() => window.location.href = "dashboard.html", 1200);
 
       } catch (err) {
         status.style.color = "red";
@@ -214,11 +211,7 @@
 
     window.forgotPassword = async function() {
       const email = emailEl.value.trim();
-      if (!email) {
-        status.style.color = "red";
-        status.textContent = "⚠️ Enter your registered email to reset password.";
-        return;
-      }
+      if (!email) { status.textContent = "⚠️ Enter your registered email."; return; }
 
       spinner.style.display = "inline-block";
       btnText.textContent = "Sending reset email...";
@@ -232,12 +225,9 @@
           body: JSON.stringify({ email, action: "forgot_password" })
         });
         const data = await res.json();
-        if (data.success) {
-          status.style.color = "green";
-          status.textContent = "📧 Password reset link sent to your email.";
-        } else {
-          throw new Error(data.message || "Failed to send reset email");
-        }
+        if (!data.success) throw new Error(data.message || "Failed to send email");
+        status.style.color = "green";
+        status.textContent = "📧 Password reset link sent.";
       } catch(err) {
         status.style.color = "red";
         status.textContent = "❌ " + err.message;
