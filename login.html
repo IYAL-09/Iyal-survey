@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Iyal Surveys - Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <!-- reCAPTCHA v2 -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     body {
@@ -65,7 +64,7 @@
     .eye-toggle {
       position: absolute;
       top: 50%;
-      right: 12px;
+      right: 46px;
       transform: translateY(-50%);
       cursor: pointer;
       color: #4caf50;
@@ -145,7 +144,8 @@
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
     const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const emailEl = document.getElementById("email");
@@ -156,7 +156,7 @@
     const button = document.getElementById("loginBtn");
 
     window.togglePassword = function () {
-      const pass = passEl;
+      const pass = document.getElementById("password");
       const eye = document.getElementById("eyeIcon");
       if (pass.type === "password") {
         pass.type = "text";
@@ -172,8 +172,17 @@
       const password = passEl.value.trim();
       const recaptchaToken = grecaptcha.getResponse();
 
-      if (!email || !password) { status.textContent = "⚠️ Enter email and password."; return; }
-      if (!recaptchaToken) { status.textContent = "⚠️ Complete reCAPTCHA."; return; }
+      if (!email || !password) {
+        status.style.color = "red";
+        status.textContent = "⚠️ Please enter email and password.";
+        return;
+      }
+
+      if (!recaptchaToken) {
+        status.style.color = "red";
+        status.textContent = "⚠️ Please complete the reCAPTCHA.";
+        return;
+      }
 
       spinner.style.display = "inline-block";
       btnText.textContent = "Logging in...";
@@ -181,18 +190,18 @@
       status.textContent = "";
 
       try {
-        // Step 1: Verify reCAPTCHA server-side
-        const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor", {
+        // Verify reCAPTCHA server-side
+        const recaptchaRes = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, recaptcha_token: recaptchaToken })
+          body: JSON.stringify({ email, recaptcha_token: recaptchaToken, action: "verify_recaptcha" })
         });
-        const data = await res.json();
-        if (!data.success) throw new Error(data.message || "reCAPTCHA failed");
+        const recaptchaData = await recaptchaRes.json();
+        if (!recaptchaData.success) throw new Error("reCAPTCHA verification failed");
 
-        // Step 2: Sign in client-side (session stored in browser)
-        const { data: sessionData, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error || !sessionData.session) throw new Error("Invalid email or password");
+        // Sign in user client-side
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
 
         status.style.color = "green";
         status.textContent = "✅ Login successful! Redirecting...";
@@ -211,7 +220,11 @@
 
     window.forgotPassword = async function() {
       const email = emailEl.value.trim();
-      if (!email) { status.textContent = "⚠️ Enter your registered email."; return; }
+      if (!email) {
+        status.style.color = "red";
+        status.textContent = "⚠️ Enter your registered email to reset password.";
+        return;
+      }
 
       spinner.style.display = "inline-block";
       btnText.textContent = "Sending reset email...";
@@ -225,9 +238,10 @@
           body: JSON.stringify({ email, action: "forgot_password" })
         });
         const data = await res.json();
-        if (!data.success) throw new Error(data.message || "Failed to send email");
+        if (!data.success) throw new Error(data.message || "Failed to send reset email");
+
         status.style.color = "green";
-        status.textContent = "📧 Password reset link sent.";
+        status.textContent = "📧 Password reset link sent to your email.";
       } catch(err) {
         status.style.color = "red";
         status.textContent = "❌ " + err.message;
