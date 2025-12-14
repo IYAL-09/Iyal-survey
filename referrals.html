@@ -1,157 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Referrals - Iyal Surveys</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <style>
-    /* Circle logo with white border */
-    .logo-circle {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      border: 4px solid white;
-      object-fit: cover;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Referrals - Iyal Surveys</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: #f1f8e9;
+}
+header {
+  background: #2e7d32;
+  color: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid white;
+  object-fit: cover;
+  margin-right: 10px;
+}
+.logo span {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+.menu-toggle {
+  font-size: 1.5em;
+  cursor: pointer;
+}
+nav {
+  position: absolute;
+  top: 60px;
+  right: 15px;
+  background: #388e3c;
+  color: white;
+  display: none;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 0;
+  border-bottom: 1px solid #66bb6a;
+}
+.content {
+  padding: 20px;
+  padding-bottom: 100px;
+}
+.referral-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  margin-bottom: 25px;
+}
+.referral-card h2 {
+  margin: 0;
+  font-size: 1.4em;
+  color: #2e7d32;
+}
+.referral-card p {
+  margin: 10px 0;
+  font-size: 1.1em;
+  color: #444;
+  min-height: 20px;
+}
+.copy-btn {
+  padding: 8px 16px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95em;
+}
+.table-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+.table-card h3 {
+  margin-top: 0;
+  color: #2e7d32;
+  font-size: 1.1em;
+}
+.table-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+.table-card li {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95em;
+  color: #333;
+}
+.rewarded { color: green; font-weight: bold; }
+.pending { color: orange; font-weight: bold; }
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #2e7d32;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+}
+.bottom-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9em;
+  text-align: center;
+}
+.bottom-nav i {
+  display: block;
+  font-size: 1.2em;
+  margin-bottom: 4px;
+}
+</style>
 </head>
-<body class="bg-green-50 font-sans">
+<body>
 
-  <!-- Header -->
-  <header class="bg-green-800 text-white flex items-center justify-between p-4 relative">
-    <div class="flex items-center">
-      <img src="assets/iyallogo.png" alt="Iyal Logo" class="logo-circle mr-3" />
-      <span class="text-xl font-bold">Iyal Surveys</span>
-    </div>
-    <div class="text-2xl cursor-pointer" onclick="toggleMenu()">
-      <i class="fa fa-bars"></i>
-    </div>
-    <nav id="menu" class="absolute right-4 top-16 bg-green-700 rounded-lg shadow-lg flex-col hidden">
-      <a href="dashboard.html" class="block px-4 py-2 hover:bg-green-600">Dashboard</a>
-      <a href="terms.html" class="block px-4 py-2 hover:bg-green-600">Terms & Conditions</a>
-      <a href="privacy.html" class="block px-4 py-2 hover:bg-green-600">Privacy Policy</a>
-      <a href="support.html" class="block px-4 py-2 hover:bg-green-600">Support</a>
-      <a href="login.html" class="block px-4 py-2 hover:bg-green-600">Logout</a>
-    </nav>
-  </header>
+<header>
+  <div class="logo">
+    <img src="assets/iyallogo.png" alt="Iyal Logo" />
+    <span>Iyal Surveys</span>
+  </div>
+  <div class="menu-toggle" onclick="toggleMenu()"><i class="fa fa-bars"></i></div>
+  <nav id="menu">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="terms.html">Terms & Conditions</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="support.html">Support Page</a>
+  </nav>
+</header>
 
-  <!-- Balance & Referral Code -->
-  <div class="p-4">
-    <div class="bg-white rounded-xl shadow-md p-4 mb-4 text-center">
-      <h2 class="text-green-800 font-bold text-lg">Your Balance</h2>
-      <p id="balanceDisplay" class="text-gray-700 mt-2 text-lg">
-        <i class="fa fa-spinner fa-spin"></i> Loading balance...
-      </p>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-md p-4 mb-4 text-center">
-      <h2 class="text-green-800 font-bold text-lg">Your Referral Code</h2>
-      <p id="referralCode" class="text-gray-700 mt-2 text-lg">
-        <i class="fa fa-spinner fa-spin"></i> Loading code...
-      </p>
-      <button class="bg-green-800 text-white px-4 py-2 rounded mt-3 hover:bg-green-700" onclick="copyReferralCode()">
-        <i class="fa fa-copy"></i> Copy Code
-      </button>
-    </div>
+<div class="content">
+  <div class="referral-card">
+    <h2>Your Balance</h2>
+    <p id="balanceDisplay"><i class="fa fa-spinner fa-spin"></i> Loading balance...</p>
   </div>
 
-  <!-- Referral Tables -->
-  <div id="tablesContainer" class="p-4 space-y-4"></div>
-
-  <!-- Bottom Nav -->
-  <div class="fixed bottom-0 w-full bg-green-800 flex justify-around text-white py-2 shadow-inner">
-    <a href="withdraw.html" class="text-center">
-      <i class="fa fa-money-bill-wave block text-lg"></i>
-      Cash Out
-    </a>
-    <a href="referrals.html" class="text-center">
-      <i class="fa fa-users block text-lg"></i>
-      Referrals
-    </a>
-    <a href="dashboard.html" class="text-center">
-      <i class="fa fa-home block text-lg"></i>
-      Dashboard
-    </a>
-    <a href="login.html" class="text-center">
-      <i class="fa fa-sign-out-alt block text-lg"></i>
-      Logout
-    </a>
+  <div class="referral-card">
+    <h2>Your Referral Code</h2>
+    <p id="referralCode"><i class="fa fa-spinner fa-spin"></i> Loading code...</p>
+    <button class="copy-btn" onclick="copyReferralCode()"><i class="fa fa-copy"></i> Copy Code</button>
   </div>
 
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.classList.toggle("hidden");
-    }
+  <div id="tablesContainer"></div>
+</div>
 
-    function copyReferralCode() {
-      const codeText = document.getElementById("referralCode").textContent.trim();
-      if (codeText && !codeText.includes("Loading")) {
-        navigator.clipboard.writeText(codeText).then(() => alert("Referral code copied!"));
-      }
-    }
-  </script>
+<div class="bottom-nav">
+  <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
+  <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
+  <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
+  <a href="login.html"><i class="fa fa-sign-out-alt"></i>Logout</a>
+</div>
 
-  <script type="module">
-    const API_URL = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor";
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("menu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
 
-    const referralCodeDisplay = document.getElementById("referralCode");
-    const balanceDisplay = document.getElementById("balanceDisplay");
-    const tablesContainer = document.getElementById("tablesContainer");
+function copyReferralCode() {
+  const codeText = document.getElementById("referralCode").textContent.trim();
+  if (codeText && !codeText.includes("Loading")) {
+    navigator.clipboard.writeText(codeText).then(() => {
+      alert("Referral code copied to clipboard!");
+    });
+  }
+}
+</script>
 
-    // Get user session from localStorage
-    const userSession = JSON.parse(localStorage.getItem("userSession"));
-    if (!userSession || !userSession.user) {
-      window.location.href = "login.html";
-    }
+<script type="module">
+const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const API_URL = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor";
 
-    const userId = userSession.user.id;
+const balanceEl = document.getElementById("balanceDisplay");
+const referralCodeEl = document.getElementById("referralCode");
+const tablesContainer = document.getElementById("tablesContainer");
 
-    async function loadReferrals() {
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "get_referrals", user_id: userId })
-        });
-        const data = await res.json();
-        if (!data.success) throw new Error(data.message);
+let userSession = JSON.parse(localStorage.getItem("userSession"));
 
-        // Display balance & referral code
-        balanceDisplay.textContent = `₦${Number(data.balance).toLocaleString()}`;
-        referralCodeDisplay.textContent = data.referral_code;
+if (!userSession || !userSession.user) {
+  window.location.href = "login.html";
+}
 
-        // Display referral tables (groups of 5)
-        tablesContainer.innerHTML = "";
-        const tables = data.tables; // Array of referral tables
-        if (!tables.length) {
-          tablesContainer.innerHTML = "<p class='text-center text-gray-700'>No referrals yet.</p>";
-          return;
-        }
+async function loadReferrals() {
+  balanceEl.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading balance...';
+  referralCodeEl.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading code...';
+  tablesContainer.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading referrals...';
 
-        tables.forEach((table, index) => {
-          const tableDiv = document.createElement("div");
-          tableDiv.className = "bg-white p-4 rounded-xl shadow-md";
-          tableDiv.innerHTML = `
-            <h3 class="font-bold text-green-800 mb-2">Referral Table ${index + 1} - Reward: $${table.reward_amount}</h3>
-            <ul class="list-disc pl-5 space-y-1">
-              ${table.referrals.map(ref => `<li class="${ref.status === 'rewarded' ? 'text-green-600' : 'text-orange-500'}">${ref.referred_email} - ${ref.status}</li>`).join('')}
-            </ul>
-          `;
-          tablesContainer.appendChild(tableDiv);
-        });
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": ANON_KEY,
+        "Authorization": `Bearer ${ANON_KEY}`
+      },
+      body: JSON.stringify({ action: "get_referrals", user_id: userSession.user.id })
+    });
 
-      } catch (err) {
-        console.error(err);
-        balanceDisplay.textContent = "Error loading balance";
-        referralCodeDisplay.textContent = "Error loading code";
-        tablesContainer.innerHTML = "<p class='text-center text-red-600'>Error loading referrals.</p>";
-      }
-    }
+    const data = await res.json();
 
-    loadReferrals();
-  </script>
+    if (!data.success) throw new Error(data.message || "Error loading referrals.");
+
+    balanceEl.textContent = `₦${data.balance.toLocaleString()}`;
+    referralCodeEl.textContent = data.referral_code;
+
+    tablesContainer.innerHTML = "";
+    data.tables.forEach((table, index) => {
+      const div = document.createElement("div");
+      div.className = "table-card";
+      div.innerHTML = `
+        <h3>Table ${index + 1} - Reward: $${table.reward_amount}</h3>
+        <ul>
+          ${table.referrals.map(r => `<li>${r.referred_email} - <span class="${r.status.toLowerCase()}">${r.status}</span></li>`).join("")}
+        </ul>
+      `;
+      tablesContainer.appendChild(div);
+    });
+
+  } catch (err) {
+    console.error(err);
+    balanceEl.textContent = "Error loading balance";
+    referralCodeEl.textContent = "Error loading code";
+    tablesContainer.innerHTML = "<p style='color:red;'>Error loading referrals.</p>";
+  }
+}
+
+loadReferrals();
+</script>
+
 </body>
 </html>
