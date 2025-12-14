@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Management - Iyal Surveys Admin</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #1565c0, #d32f2f);
+      min-height: 100vh;
+      color: white;
+      font-family: "Segoe UI", sans-serif;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body class="p-4">
+
+  <!-- HEADER -->
+  <header class="text-center text-2xl font-bold mb-6 glass py-4 rounded-xl shadow-lg">
+    👥 User Management
+  </header>
+
+  <!-- TOP BUTTONS -->
+  <div class="flex justify-between mb-4">
+    <button onclick="location.href='admin-dashboard.html'"
+      class="px-4 py-2 bg-blue-600 rounded-lg shadow text-white font-semibold hover:bg-blue-700">
+      <i class="fa fa-arrow-left"></i> Back
+    </button>
+
+    <button class="px-4 py-2 bg-purple-600 rounded-lg shadow text-white font-semibold hover:bg-purple-700">
+      <i class="fa fa-list"></i> Task
+    </button>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="flex gap-2 mb-4">
+
+    <!-- Search -->
+    <input id="searchInput" 
+      class="flex-1 px-4 py-3 rounded-lg glass text-white placeholder-gray-200" 
+      placeholder="Search by Email or User ID..."
+      oninput="applySearch()">
+
+    <!-- Filter dropdown -->
+    <select id="filterSelect" onchange="applyFilter()" 
+      class="px-3 py-3 rounded-lg glass text-white">
+      <option value="all">All Users</option>
+      <option value="blocked">Blocked Users</option>
+      <option value="active">Active Users</option>
+    </select>
+
+    <!-- Sort button -->
+    <button onclick="sortByNewest()"
+      class="px-4 py-3 bg-yellow-600 rounded-lg shadow text-white font-semibold hover:bg-yellow-700">
+      Newest
+    </button>
+
+  </div>
+
+  <!-- USERS LIST -->
+  <div id="usersList" class="space-y-4"></div>
+
+<script>
+const ENDPOINT = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dynamic-worker";
+
+const adminSession = localStorage.getItem("adminSession");
+if (!adminSession) window.location.href = "admin-login.html";
+
+let allUsers = [];
+
+async function postJSON(body) {
+  const res = await fetch(ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const data = await res.json();
+  if (!data.success) throw new Error(data.message);
+  return data;
+}
+
+async function loadUsers(searchTerm = "") {
+  try {
+    const data = await postJSON({ action: "get_users", search: searchTerm });
+
+    allUsers = data.users.sort((a,b) => b.total_earned - a.total_earned);
+
+    displayUsers(allUsers);
+
+  } catch (err) {
+    document.getElementById("usersList").innerHTML = 
+      `<p class="text-center text-white">${err.message}</p>`;
+  }
+}
+
+function displayUsers(users) {
+  const container = document.getElementById("usersList");
+  container.innerHTML = "";
+
+  if (!users.length) {
+    container.innerHTML = `<p class="text-center text-white">No users found.</p>`;
+    return;
+  }
+
+  users.forEach(u => {
+    const statusColor = u.is_blocked ? "bg-red-600" : "bg-green-600";
+    const statusText = u.is_blocked ? "Blocked" : "Active";
+    const btnColor = u.is_blocked ? "bg-green-700" : "bg-red-700";
+    const btnText = u.is_blocked ? "Unblock" : "Block";
+
+    container.innerHTML += `
+      <div class="glass p-4 rounded-xl shadow-lg">
+        <p class="font-bold text-lg">${u.email}</p>
+        <p class="text-sm opacity-90">User ID: ${u.id}</p>
+
+        <p class="text-sm opacity-90 mt-1">Balance: ₦${u.balance}</p>
+        <p class="text-sm opacity-90">Total Earned: ₦${u.total_earned}</p>
+        <p class="text-sm opacity-90">Total Withdrawn: ₦${u.total_withdrawn}</p>
+        <p class="text-sm opacity-80 mt-1">Created: ${new Date(u.created_at).toLocaleString()}</p>
+
+        <p class="inline-block mt-2 px-3 py-1 rounded-full text-sm ${statusColor}">
+          ${statusText}
+        </p>
+
+        <button onclick="toggleBlock('${u.id}', ${u.is_blocked})"
+          class="mt-3 px-4 py-2 rounded-lg text-white font-semibold ${btnColor}">
+          ${btnText}
+        </button>
+      </div>
+    `;
+  });
+}
+
+/* SEARCH FILTER */
+function applySearch() {
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const filtered = allUsers.filter(
+    u => u.email.toLowerCase().includes(q) || u.id.toLowerCase().includes(q)
+  );
+  displayUsers(filtered);
+}
+
+/* DROPDOWN FILTER */
+function applyFilter() {
+  const value = document.getElementById("filterSelect").value;
+
+  if (value === "blocked") {
+    displayUsers(allUsers.filter(u => u.is_blocked));
+  } 
+  else if (value === "active") {
+    displayUsers(allUsers.filter(u => !u.is_blocked));
+  } 
+  else {
+    displayUsers(allUsers);
+  }
+}
+
+/* SORT NEWEST USERS FIRST */
+function sortByNewest() {
+  const sorted = [...allUsers].sort(
+    (a,b) => new Date(b.created_at) - new Date(a.created_at)
+  );
+  displayUsers(sorted);
+}
+
+/* BLOCK/UNBLOCK */
+async function toggleBlock(userId, currentStatus) {
+  try {
+    await postJSON({ action: "set_block", user_id: userId, block: !currentStatus });
+    loadUsers();
+  } catch (err) {
+    alert("Failed to update user: " + err.message);
+  }
+}
+
+loadUsers();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings - Iyal Surveys</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2e7d32',
+            secondary: '#388e3c'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-green-50 min-h-screen text-gray-800">
+
+<!-- Header -->
+<header class="bg-primary text-white p-4 flex justify-between items-center shadow">
+  <div class="flex items-center gap-3">
+    <img src="iyallogo.png"
+         class="w-[50px] h-[50px] rounded-full border-4 border-white object-cover"
+         alt="Iyal Logo">
+    <span class="text-lg font-bold">Iyal Surveys</span>
+  </div>
+</header>
+
+<!-- Content -->
+<main class="p-4 max-w-md mx-auto">
+
+  <!-- Card -->
+  <div class="bg-white rounded-2xl shadow-lg p-6 mt-6">
+
+    <h2 class="text-xl font-bold text-primary text-center mb-4">
+      <i class="fa fa-lock mr-1"></i> Change Password
+    </h2>
+
+    <!-- Message -->
+    <div id="message" class="hidden mb-4 p-3 rounded-lg text-sm text-center"></div>
+
+    <!-- Form -->
+    <form id="passwordForm" class="space-y-4">
+
+      <div>
+        <label class="text-sm font-medium">Old Password</label>
+        <input type="password" id="oldPassword"
+               class="w-full mt-1 p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-primary"
+               placeholder="Enter old password" required>
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">New Password</label>
+        <input type="password" id="newPassword"
+               class="w-full mt-1 p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-primary"
+               placeholder="Enter new password" required>
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Confirm New Password</label>
+        <input type="password" id="confirmPassword"
+               class="w-full mt-1 p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-primary"
+               placeholder="Confirm new password" required>
+      </div>
+
+      <button type="submit"
+              class="w-full bg-primary text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-secondary transition">
+        <i class="fa fa-save"></i>
+        Change Password
+      </button>
+    </form>
+  </div>
+
+  <!-- Back Button -->
+  <a href="dashboard.html"
+     class="mt-6 block text-center text-primary font-semibold">
+    ← Back to Dashboard
+  </a>
+
+</main>
+
+<!-- Supabase -->
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+  const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const messageBox = document.getElementById("message");
+  const form = document.getElementById("passwordForm");
+
+  // ---- Session Check (localStorage) ----
+  const sessionStr = localStorage.getItem("userSession");
+  if (!sessionStr) {
+    window.location.href = "login.html";
+  }
+
+  // ---- Change Password ----
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const oldPassword = document.getElementById("oldPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (newPassword !== confirmPassword) {
+      showMessage("❌ Passwords do not match", "error");
+      return;
+    }
+
+    try {
+      // Re-authenticate (required for security)
+      const session = JSON.parse(sessionStr);
+      const email = session.user.email;
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password: oldPassword
+      });
+
+      if (signInError) {
+        showMessage("❌ Old password is incorrect", "error");
+        return;
+      }
+
+      // Update password
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) throw error;
+
+      showMessage("✅ Password changed successfully", "success");
+      form.reset();
+
+    } catch (err) {
+      console.error(err);
+      showMessage("❌ Failed to change password", "error");
+    }
+  });
+
+  function showMessage(text, type) {
+    messageBox.className = `mb-4 p-3 rounded-lg text-sm text-center ${
+      type === "success"
+        ? "bg-green-100 text-green-700"
+        : "bg-red-100 text-red-700"
+    }`;
+    messageBox.textContent = text;
+    messageBox.classList.remove("hidden");
+  }
+</script>
+
+</body>
+</html>

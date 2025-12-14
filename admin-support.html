@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Support Inbox - Iyal Surveys</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #ffe5e5;
+    }
+    header {
+      background: #d32f2f;
+      color: white;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    .logo img {
+      width: 40px;
+      margin-right: 10px;
+    }
+    .logo span {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .content {
+      padding: 20px;
+    }
+    h2 {
+      color: #d32f2f;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .message-box {
+      border-radius: 8px;
+      box-shadow: 0 0 5px #ccc;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .unread {
+      background: #e8f5e9;
+      border-left: 5px solid #4caf50;
+    }
+    .seen {
+      background: #eeeeee;
+      border-left: 5px solid #9e9e9e;
+    }
+    .message-box p {
+      margin: 5px 0;
+    }
+    .timestamp {
+      font-size: 0.9em;
+      color: #888;
+    }
+    input[type="date"] {
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      background: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="assets/iyallogo.png" alt="Iyal Logo" />
+      <span>Iyal Admin Panel</span>
+    </div>
+    <nav>
+      <a href="admin-dashboard.html">Dashboard</a>
+      <a href="admin-withdrawals.html">Withdrawals</a>
+      <a href="admin-support.html">Support</a>
+      <a href="admin-login.html">Logout</a>
+    </nav>
+  </header>
+
+  <div class="content">
+    <h2>Support Inbox</h2>
+    <p>View user-submitted reports and messages. Filter by date.</p>
+    <input type="date" id="filterDate" />
+    <div class="error" id="error"></div>
+    <div id="messages"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyUuew-e4wlIdUDx7olNKx68sjD1UXY9U",
+      authDomain: "iyal-survey.firebaseapp.com",
+      projectId: "iyal-survey",
+      storageBucket: "iyal-survey.firebasestorage.app",
+      messagingSenderId: "356060656195",
+      appId: "1:356060656195:web:d0357a25774de984371af6",
+      measurementId: "G-28XENM0B78"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const adminEmail = prompt("Enter admin email to continue:");
+    const errorBox = document.getElementById("error");
+    const messagesBox = document.getElementById("messages");
+    const filterDate = document.getElementById("filterDate");
+
+    if (adminEmail !== "iyaldeveloper@gmail.com") {
+      errorBox.textContent = "Access denied. Unauthorized email.";
+      messagesBox.style.display = "none";
+    } else {
+      function loadMessages(dateFilter = null) {
+        onSnapshot(collection(db, "support"), (snapshot) => {
+          messagesBox.innerHTML = "";
+          snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const msgDate = new Date(data.timestamp);
+            const selectedDate = dateFilter ? new Date(dateFilter) : null;
+
+            const sameDay = selectedDate
+              ? msgDate.toDateString() === selectedDate.toDateString()
+              : true;
+
+            if (sameDay) {
+              const box = document.createElement("div");
+              box.className = "message-box " + (data.status === "unread" ? "unread" : "seen");
+              box.innerHTML = `
+                <p><strong>User ID:</strong> ${data.userId}</p>
+                <p><strong>Message:</strong></p>
+                <p>${data.message}</p>
+                <p class="timestamp">${msgDate.toLocaleString()}</p>
+                ${data.status === "unread" ? `<button onclick="markAsSeen('${docSnap.id}')">Mark as Seen</button>` : ""}
+              `;
+              messagesBox.appendChild(box);
+            }
+          });
+        });
+      }
+
+      loadMessages();
+
+      filterDate.addEventListener("change", () => {
+        loadMessages(filterDate.value);
+      });
+
+      window.markAsSeen = async function(id) {
+        const ref = doc(db, "support", id);
+        await updateDoc(ref, { status: "seen" });
+        alert("Marked as seen");
+      };
+    }
+  </script>
+</body>
+</html>
