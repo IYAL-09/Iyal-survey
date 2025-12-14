@@ -54,32 +54,33 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
   <a href="#" id="logoutBtn"><i class="fa fa-sign-out-alt"></i>Logout</a>
 </div>
 
-<script type="module">
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { persistSession: true });
-const balanceDisplay = document.getElementById("balance");
-const balanceSpinner = document.getElementById("balanceSpinner");
-const logoutBtn = document.getElementById("logoutBtn");
-
+<script>
 function toggleMenu() {
   const menu = document.getElementById("menu");
   menu.style.display = menu.style.display === "flex" ? "none" : "flex";
 }
 
+// ---------- Dashboard Init ----------
 async function initDashboard() {
-  // get persisted session
-  const session = supabase.auth.getSession();
-  if(!session || !session.user) { window.location.href = "login.html"; return; }
+  const balanceDisplay = document.getElementById("balance");
+  const balanceSpinner = document.getElementById("balanceSpinner");
+
+  // Check localStorage for user session
+  const sessionStr = localStorage.getItem("userSession");
+  if(!sessionStr) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const session = JSON.parse(sessionStr);
+  const userId = session.user.id;
 
   try {
+    // Fetch user balance from dynamic endpoint
     const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dynamic-endpoint", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ user_id: session.user.id })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId })
     });
     const data = await res.json();
     balanceDisplay.textContent = `Balance: ₦${data.balance.toLocaleString()}`;
@@ -87,17 +88,17 @@ async function initDashboard() {
     balanceDisplay.textContent = "Balance: ₦0";
     console.error(err);
   } finally {
-    balanceSpinner.style.display="none";
+    balanceSpinner.style.display = "none";
   }
 }
 
-logoutBtn.addEventListener("click", async (e)=>{
-  e.preventDefault();
-  await supabase.auth.signOut();
+// ---------- Logout ----------
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
   localStorage.removeItem("userSession");
-  window.location.href="login.html";
+  window.location.href = "login.html";
 });
 
+// ---------- Run dashboard ----------
 initDashboard();
 </script>
 </body>
