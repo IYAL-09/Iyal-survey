@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Iyal Surveys - Withdraw</title>
+  <title>Withdraw - Iyal Surveys</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
       background: #f1f8e9;
-      padding-bottom: 80px; /* space for bottom nav */
     }
-
     header {
       background: #2e7d32;
       color: white;
@@ -20,33 +18,27 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
     }
-
     .logo {
       display: flex;
       align-items: center;
     }
-
     .logo img {
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      border: 4px solid white;
+      border: 3px solid white;
       object-fit: cover;
       margin-right: 10px;
     }
-
     .logo span {
       font-size: 1.2em;
       font-weight: bold;
     }
-
     .menu-toggle {
       font-size: 1.5em;
       cursor: pointer;
     }
-
     nav {
       position: absolute;
       top: 70px;
@@ -60,14 +52,12 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
       z-index: 10;
     }
-
     nav a {
       color: white;
       text-decoration: none;
       padding: 8px 0;
       border-bottom: 1px solid #66bb6a;
     }
-
     .banner {
       background: #dcedc8;
       color: #33691e;
@@ -76,11 +66,10 @@
       text-align: center;
       font-weight: 500;
     }
-
     .content {
-      padding: 20px;
+      padding: 15px;
+      padding-bottom: 100px;
     }
-
     .card {
       background: white;
       padding: 15px;
@@ -88,13 +77,11 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 20px;
     }
-
     h2 {
       color: #2e7d32;
       margin-top: 0;
       font-size: 1.3em;
     }
-
     input, select, button {
       width: 100%;
       padding: 10px;
@@ -105,46 +92,29 @@
       font-size: 1em;
       box-sizing: border-box;
     }
-
     button {
       background: #2e7d32;
       color: white;
       border: none;
       cursor: pointer;
       font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
     }
-
     button:disabled {
       background: #ccc;
       cursor: not-allowed;
     }
-
     .spinner {
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid white;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      animation: spin 1s linear infinite;
-      display: none;
+      text-align: center;
+      color: #2e7d32;
     }
-
-    @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
-
     .history-item {
       padding: 10px;
       border-bottom: 1px solid #eee;
-      font-size: 0.95em;
+      font-size: 0.9em;
     }
-
     .pending { color: orange; font-weight: bold; }
     .approved { color: green; font-weight: bold; }
     .rejected { color: red; font-weight: bold; }
-
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -156,23 +126,16 @@
       padding: 10px 0;
       box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
     }
-
     .bottom-nav a {
       color: white;
       text-decoration: none;
       font-size: 0.9em;
       text-align: center;
     }
-
     .bottom-nav i {
       display: block;
       font-size: 1.2em;
       margin-bottom: 4px;
-    }
-
-    @media (max-width: 480px) {
-      h2 { font-size: 1.1em; }
-      .logo span { font-size: 1em; }
     }
   </style>
 </head>
@@ -188,12 +151,12 @@
       <a href="referrals.html">Referrals</a>
       <a href="terms.html">Terms</a>
       <a href="privacy.html">Privacy</a>
-      <a href="login.html">Logout</a>
+      <a href="login.html" id="logoutBtn">Logout</a>
     </nav>
   </header>
 
   <div class="banner">
-    Withdrawals are processed manually within 10 days. Airtime: ₦2,000, Bank Transfer: ₦5,000.
+    Withdrawals are processed manually. Airtime: ₦2,000. Bank transfer: ₦5,000. Max 1 withdrawal every 24h.
   </div>
 
   <div class="content">
@@ -205,7 +168,7 @@
     <div class="card">
       <h2>Withdraw Options</h2>
       <select id="withdrawMethod">
-        <option value="">Select method</option>
+        <option value="">Select withdrawal method</option>
         <option value="airtime">Airtime (₦2000)</option>
         <option value="bank">Bank Transfer (₦5000)</option>
       </select>
@@ -219,20 +182,20 @@
           <option value="Glo">Glo</option>
           <option value="9mobile">9mobile</option>
         </select>
-        <button id="airtimeWithdrawBtn" disabled>Withdraw ₦2000</button>
+        <button id="airtimeWithdrawBtn" disabled>Withdraw ₦2000 Airtime</button>
       </div>
 
       <div id="bankForm" style="display:none;">
         <input type="text" id="bankName" placeholder="Bank Name"/>
         <input type="text" id="accountName" placeholder="Account Holder Name"/>
         <input type="text" id="accountNumber" placeholder="Account Number"/>
-        <button id="bankWithdrawBtn" disabled>Withdraw ₦5000</button>
+        <button id="bankWithdrawBtn" disabled>Withdraw ₦5000 Bank Transfer</button>
       </div>
     </div>
 
     <div class="card">
       <h2>Recent Withdrawals</h2>
-      <div id="history"><i class="fa fa-spinner fa-spin"></i> Loading...</div>
+      <div id="history"><div class="spinner"><i class="fa fa-spinner fa-spin"></i> Loading...</div></div>
     </div>
   </div>
 
@@ -249,7 +212,9 @@
     const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const withdrawEndpoint = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task";
+    const endpoint = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task";
+
+    let session, userId;
 
     const balanceEl = document.getElementById("balance");
     const methodSelect = document.getElementById("withdrawMethod");
@@ -259,104 +224,122 @@
     const airtimeBtn = document.getElementById("airtimeWithdrawBtn");
     const bankBtn = document.getElementById("bankWithdrawBtn");
 
-    let userSession = null;
-    let balance = 0;
-
-    function toggleMenu() {
+    // Menu toggle
+    window.toggleMenu = () => {
       const menu = document.getElementById("menu");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
+    };
 
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+
+    // Check session
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      session = data.session;
+      if (!session) return window.location.href = "login.html";
+      userId = session.user.id;
+      loadBalance();
+      loadHistory();
+    };
+
+    // Show forms based on selection
     methodSelect.addEventListener("change", () => {
       airtimeForm.style.display = methodSelect.value === "airtime" ? "block" : "none";
       bankForm.style.display = methodSelect.value === "bank" ? "block" : "none";
     });
 
-    async function init() {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (error || !session) return window.location.href = "login.html";
-      userSession = session;
-      await loadBalance();
-      await loadHistory();
-    }
-
-    async function loadBalance() {
-      const res = await fetch(withdrawEndpoint, {
+    // Fetch balance
+    const loadBalance = async () => {
+      balanceEl.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+      const res = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "get_balance", user_id: userSession.user.id })
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({ action: "get_balance", user_id: userId })
       });
       const data = await res.json();
-      balance = data.balance || 0;
-      balanceEl.textContent = `₦${balance}`;
+      if (data.success) balanceEl.textContent = `₦${data.balance}`;
+      else balanceEl.textContent = "Error loading balance";
+      checkButtons(data.balance);
+    };
+
+    // Fetch history
+    const loadHistory = async () => {
+      historyDiv.innerHTML = '<div class="spinner"><i class="fa fa-spinner fa-spin"></i> Loading...</div>';
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({ action: "get_history", user_id: userId, limit: 10 })
+      });
+      const data = await res.json();
+      if (data.success && data.history.length) {
+        historyDiv.innerHTML = "";
+        data.history.forEach(h => {
+          const div = document.createElement("div");
+          const date = new Date(h.timestamp).toLocaleString();
+          div.classList.add("history-item");
+          div.innerHTML = `<strong>${h.method.toUpperCase()}</strong> - ₦${h.amount}<br>
+            <small>${date}</small><br>
+            <span class="${h.status.toLowerCase()}">${h.status}</span>`;
+          historyDiv.appendChild(div);
+        });
+      } else historyDiv.innerHTML = "<p>No withdrawal history yet.</p>";
+    };
+
+    // Enable/disable buttons based on balance
+    const checkButtons = (balance) => {
       airtimeBtn.disabled = balance < 2000;
       bankBtn.disabled = balance < 5000;
-    }
+    };
 
-    async function loadHistory() {
-      historyDiv.innerHTML = "<i class='fa fa-spinner fa-spin'></i> Loading...";
-      const res = await fetch(withdrawEndpoint, {
+    // Withdraw
+    const withdraw = async (method, details) => {
+      const res = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "get_history", user_id: userSession.user.id, limit: 10 })
-      });
-      const data = await res.json();
-      if (!data.history || data.history.length === 0) {
-        historyDiv.innerHTML = "<p>No withdrawal history yet.</p>";
-        return;
-      }
-      historyDiv.innerHTML = "";
-      data.history.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "history-item";
-        div.innerHTML = `
-          <strong>${item.method.toUpperCase()}</strong> - ₦${item.amount}<br>
-          <small>${new Date(item.timestamp).toLocaleString()}</small><br>
-          <span class="${item.status.toLowerCase()}">${item.status}</span>
-        `;
-        historyDiv.appendChild(div);
-      });
-    }
-
-    async function createWithdrawal(method, details) {
-      const minAmount = method === "airtime" ? 2000 : 5000;
-      if (balance < minAmount) return alert("Insufficient balance");
-
-      const res = await fetch(withdrawEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "withdraw", method, details, user_id: userSession.user.id })
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({ action: "withdraw", user_id: userId, method, details })
       });
       const data = await res.json();
       if (data.success) {
         alert("Withdrawal request submitted!");
-        await loadBalance();
-        await loadHistory();
-        methodSelect.value = "";
-        airtimeForm.style.display = "none";
-        bankForm.style.display = "none";
-      } else {
-        alert("❌ " + data.message);
-      }
-    }
-
-    airtimeBtn.onclick = () => {
-      const details = { number: document.getElementById("airtimeNumber").value, network: document.getElementById("network").value };
-      if (!details.number || !details.network) return alert("Complete the airtime form");
-      createWithdrawal("airtime", details);
+        loadBalance();
+        loadHistory();
+      } else alert(data.message);
     };
 
-    bankBtn.onclick = () => {
+    airtimeBtn.addEventListener("click", () => {
+      const details = {
+        number: document.getElementById("airtimeNumber").value,
+        network: document.getElementById("network").value
+      };
+      if (!details.number || !details.network) return alert("Complete the form");
+      withdraw("airtime", details);
+    });
+
+    bankBtn.addEventListener("click", () => {
       const details = {
         bank: document.getElementById("bankName").value,
         name: document.getElementById("accountName").value,
         number: document.getElementById("accountNumber").value
       };
-      if (!details.bank || !details.name || !details.number) return alert("Complete the bank form");
-      createWithdrawal("bank", details);
-    };
+      if (!details.bank || !details.name || !details.number) return alert("Complete the form");
+      withdraw("bank", details);
+    });
 
-    init();
+    // Initialize
+    checkSession();
   </script>
 </body>
 </html>
