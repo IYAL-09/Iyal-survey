@@ -63,6 +63,7 @@ button:disabled { background:#ccc; cursor:not-allowed;}
       <option value="bank">Bank Transfer (₦5000)</option>
     </select>
 
+    <!-- Airtime Form -->
     <div id="airtimeForm" style="display:none;">
       <input type="text" id="airtimeNumber" placeholder="Phone Number"/>
       <select id="network">
@@ -72,14 +73,19 @@ button:disabled { background:#ccc; cursor:not-allowed;}
         <option value="Glo">Glo</option>
         <option value="9mobile">9mobile</option>
       </select>
-      <button id="airtimeWithdrawBtn" disabled>Withdraw ₦2000 Airtime <span class="spinner" style="display:none;"></span></button>
+      <button id="airtimeWithdrawBtn" disabled>
+        Withdraw ₦2000 Airtime <span class="spinner" style="display:none;"></span>
+      </button>
     </div>
 
+    <!-- Bank Form -->
     <div id="bankForm" style="display:none;">
       <input type="text" id="bankName" placeholder="Bank Name"/>
       <input type="text" id="accountName" placeholder="Account Holder Name"/>
       <input type="text" id="accountNumber" placeholder="Account Number"/>
-      <button id="bankWithdrawBtn" disabled>Withdraw ₦5000 Bank <span class="spinner" style="display:none;"></span></button>
+      <button id="bankWithdrawBtn" disabled>
+        Withdraw ₦5000 Bank <span class="spinner" style="display:none;"></span>
+      </button>
     </div>
 
     <p id="status"></p>
@@ -98,144 +104,154 @@ button:disabled { background:#ccc; cursor:not-allowed;}
   <a href="#" id="logoutBottom"><i class="fa fa-sign-out-alt"></i>Logout</a>
 </div>
 
-<script type="module">
-const API_URL =
-  "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task";
-
-const balanceEl = document.getElementById("balance");
-const statusEl = document.getElementById("status");
-const airtimeBtn = document.getElementById("airtimeWithdrawBtn");
-const bankBtn = document.getElementById("bankWithdrawBtn");
-const historyDiv = document.getElementById("history");
-
-function getSession() {
-  const sessionStr = localStorage.getItem("userSession");
-  if (!sessionStr) window.location.href = "login.html";
-  return JSON.parse(sessionStr);
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("menu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
 }
 
-let userSession = null;
+document.getElementById("withdrawMethod").addEventListener("change", () => {
+  const method = document.getElementById("withdrawMethod").value;
+  document.getElementById("airtimeForm").style.display = method === "airtime" ? "block" : "none";
+  document.getElementById("bankForm").style.display = method === "bank" ? "block" : "none";
+});
+</script>
 
-// ------- Load balance -------
+<script type="module">
+const API_URL = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task";
+
+let userSession = null;
+function getSession() {
+  const s = localStorage.getItem("userSession");
+  if(!s) window.location.href="login.html";
+  return JSON.parse(s);
+}
+
+// --- Load User Info ---
+async function loadUser() {
+  userSession = getSession();
+  await loadBalance();
+  await loadHistory();
+}
+
+// --- Load Balance ---
 async function loadBalance() {
   try {
     const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "get_balance",
-        user_id: userSession.user.id
-      })
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": `Bearer ${userSession.access_token}`
+      },
+      body: JSON.stringify({ action:"get_balance" })
     });
-
     const data = await res.json();
-    if (!data.success) throw new Error("Failed to load balance");
-
-    balanceEl.textContent = `₦${Number(data.balance).toLocaleString()}`;
-    airtimeBtn.disabled = data.balance < 2000;
-    bankBtn.disabled = data.balance < 5000;
-  } catch {
-    balanceEl.textContent = "₦0";
+    document.getElementById("balance").textContent = `₦${data.balance.toLocaleString()}`;
+    document.getElementById("airtimeWithdrawBtn").disabled = data.balance < 2000;
+    document.getElementById("bankWithdrawBtn").disabled = data.balance < 5000;
+  } catch(err) {
+    console.error(err);
+    document.getElementById("balance").textContent = "₦0";
   }
 }
 
-// ------- Load withdrawal history -------
-async function loadHistory() {
-  historyDiv.innerHTML = '<div class="spinner"></div>';
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "history",
-        user_id: userSession.user.id
-      })
-    });
-
-    const data = await res.json();
-    if (!data.success || !data.history.length) {
-      historyDiv.innerHTML = "<p>No withdrawal history yet.</p>";
-      return;
-    }
-
-    historyDiv.innerHTML = "";
-    data.history.forEach(w => {
-      const div = document.createElement("div");
-      div.className = "history-item";
-      div.innerHTML = `
-        <strong>${w.type.toUpperCase()}</strong> - ₦${w.amount}<br>
-        <small>${new Date(w.created_at).toLocaleString()}</small><br>
-        <span class="${w.status.toLowerCase()}">${w.status}</span>
-      `;
-      historyDiv.appendChild(div);
-    });
-  } catch {
-    historyDiv.innerHTML = "<p>Error loading history.</p>";
-  }
-}
-
-// ------- Withdraw submission -------
-async function withdraw(method, details, btn) {
-  statusEl.textContent = "";
+// --- Withdrawal Function ---
+async function createWithdrawal(method, details, btn) {
   const spinner = btn.querySelector(".spinner");
   btn.disabled = true;
   spinner.style.display = "inline-block";
+  const statusEl = document.getElementById("status");
+  statusEl.textContent = "";
 
   try {
     const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "withdraw",
-        user_id: userSession.user.id,
-        method,
-        details
-      })
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": `Bearer ${userSession.access_token}`
+      },
+      body: JSON.stringify({ action:"withdraw", method, details })
     });
-
     const data = await res.json();
-    if (!data.success) throw new Error(data.message);
-
+    if(!data.success) throw new Error(data.message);
     statusEl.style.color = "green";
-    statusEl.textContent = "✅ Withdrawal requested!";
-    loadBalance();
-    loadHistory();
-  } catch (err) {
+    statusEl.textContent = "✅ Withdrawal submitted!";
+    await loadBalance();
+    await loadHistory();
+  } catch(err) {
     statusEl.style.color = "red";
-    statusEl.textContent = err.message;
+    statusEl.textContent = "❌ " + err.message;
   } finally {
     spinner.style.display = "none";
     btn.disabled = false;
   }
 }
 
-// ------- Buttons -------
-airtimeBtn.onclick = () => {
+// --- Buttons ---
+document.getElementById("airtimeWithdrawBtn").addEventListener("click", ()=>{
   const details = {
     number: document.getElementById("airtimeNumber").value,
     network: document.getElementById("network").value
   };
-  if (!details.number || !details.network)
-    return alert("Complete airtime form");
-  withdraw("airtime", details, airtimeBtn);
-};
+  if(!details.number || !details.network) return alert("Complete Airtime form");
+  createWithdrawal("airtime", details, document.getElementById("airtimeWithdrawBtn"));
+});
 
-bankBtn.onclick = () => {
+document.getElementById("bankWithdrawBtn").addEventListener("click", ()=>{
   const details = {
     bank: document.getElementById("bankName").value,
     name: document.getElementById("accountName").value,
     number: document.getElementById("accountNumber").value
   };
-  if (!details.bank || !details.name || !details.number)
-    return alert("Complete bank form");
-  withdraw("bank", details, bankBtn);
-};
+  if(!details.bank || !details.name || !details.number) return alert("Complete Bank form");
+  createWithdrawal("bank", details, document.getElementById("bankWithdrawBtn"));
+});
 
-// ------- Init -------
-userSession = getSession();
-loadBalance();
-loadHistory();
+// --- Load History ---
+async function loadHistory() {
+  const historyDiv = document.getElementById("history");
+  historyDiv.innerHTML = '<div class="spinner"></div>';
+  try {
+    const res = await fetch(API_URL, {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": `Bearer ${userSession.access_token}`
+      },
+      body: JSON.stringify({ action:"history" })
+    });
+    const data = await res.json();
+    if(!data.success || !data.history.length){
+      historyDiv.innerHTML="<p>No withdrawal history yet.</p>";
+      return;
+    }
+    historyDiv.innerHTML="";
+    data.history.forEach(item=>{
+      const div = document.createElement("div");
+      div.className="history-item";
+      div.innerHTML=`
+        <strong>${item.type.toUpperCase()}</strong> - ₦${item.amount}<br>
+        <small>${new Date(item.created_at).toLocaleString()}</small><br>
+        <span class="${item.status.toLowerCase()}">${item.status}</span>
+      `;
+      historyDiv.appendChild(div);
+    });
+  } catch(err) {
+    console.error(err);
+    historyDiv.innerHTML="<p>Error loading history.</p>";
+  }
+}
+
+// --- Logout ---
+function logout() {
+  localStorage.removeItem("userSession");
+  window.location.href="login.html";
+}
+document.getElementById("logoutNav").addEventListener("click", logout);
+document.getElementById("logoutBottom").addEventListener("click", logout);
+
+// --- Initialize ---
+loadUser();
 </script>
 </body>
 </html>
