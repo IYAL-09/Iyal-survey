@@ -98,24 +98,9 @@ button:disabled { background:#ccc; cursor:not-allowed;}
   <a href="#" id="logoutBottom"><i class="fa fa-sign-out-alt"></i>Logout</a>
 </div>
 
-<script>
-function toggleMenu() {
-  const menu = document.getElementById("menu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-}
-
-const withdrawMethod = document.getElementById("withdrawMethod");
-const airtimeForm = document.getElementById("airtimeForm");
-const bankForm = document.getElementById("bankForm");
-
-withdrawMethod.addEventListener("change", () => {
-  airtimeForm.style.display = withdrawMethod.value === "airtime" ? "block" : "none";
-  bankForm.style.display = withdrawMethod.value === "bank" ? "block" : "none";
-});
-</script>
-
 <script type="module">
-const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task";
+const API_URL =
+  "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task";
 
 const balanceEl = document.getElementById("balance");
 const statusEl = document.getElementById("status");
@@ -123,128 +108,133 @@ const airtimeBtn = document.getElementById("airtimeWithdrawBtn");
 const bankBtn = document.getElementById("bankWithdrawBtn");
 const historyDiv = document.getElementById("history");
 
-// --- Use localStorage for session ---
-let userSession = null;
 function getSession() {
   const sessionStr = localStorage.getItem("userSession");
   if (!sessionStr) window.location.href = "login.html";
   return JSON.parse(sessionStr);
 }
 
-// --- Load user data ---
-async function loadUser() {
-  userSession = getSession();
-  loadBalance();
-  loadHistory();
-}
+let userSession = null;
 
-// --- Load balance ---
+// ------- Load balance -------
 async function loadBalance() {
   try {
-    const res = await fetch(SUPABASE_URL, {
+    const res = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "get_balance", user_id: userSession.user.id })
+      body: JSON.stringify({
+        action: "get_balance",
+        user_id: userSession.user.id
+      })
     });
+
     const data = await res.json();
-    balanceEl.textContent = `₦${data.balance.toLocaleString()}`;
+    if (!data.success) throw new Error("Failed to load balance");
+
+    balanceEl.textContent = `₦${Number(data.balance).toLocaleString()}`;
     airtimeBtn.disabled = data.balance < 2000;
     bankBtn.disabled = data.balance < 5000;
-  } catch (err) {
-    console.error(err);
+  } catch {
     balanceEl.textContent = "₦0";
   }
 }
 
-// --- Withdraw ---
-async function createWithdrawal(method, details, btn) {
+// ------- Load withdrawal history -------
+async function loadHistory() {
+  historyDiv.innerHTML = '<div class="spinner"></div>';
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "history",
+        user_id: userSession.user.id
+      })
+    });
+
+    const data = await res.json();
+    if (!data.success || !data.history.length) {
+      historyDiv.innerHTML = "<p>No withdrawal history yet.</p>";
+      return;
+    }
+
+    historyDiv.innerHTML = "";
+    data.history.forEach(w => {
+      const div = document.createElement("div");
+      div.className = "history-item";
+      div.innerHTML = `
+        <strong>${w.type.toUpperCase()}</strong> - ₦${w.amount}<br>
+        <small>${new Date(w.created_at).toLocaleString()}</small><br>
+        <span class="${w.status.toLowerCase()}">${w.status}</span>
+      `;
+      historyDiv.appendChild(div);
+    });
+  } catch {
+    historyDiv.innerHTML = "<p>Error loading history.</p>";
+  }
+}
+
+// ------- Withdraw submission -------
+async function withdraw(method, details, btn) {
   statusEl.textContent = "";
   const spinner = btn.querySelector(".spinner");
   btn.disabled = true;
   spinner.style.display = "inline-block";
 
   try {
-    const res = await fetch(SUPABASE_URL, {
+    const res = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "withdraw", method, details, user_id: userSession.user.id })
+      body: JSON.stringify({
+        action: "withdraw",
+        user_id: userSession.user.id,
+        method,
+        details
+      })
     });
+
     const data = await res.json();
     if (!data.success) throw new Error(data.message);
+
     statusEl.style.color = "green";
-    statusEl.textContent = "✅ Withdrawal request submitted!";
+    statusEl.textContent = "✅ Withdrawal requested!";
     loadBalance();
     loadHistory();
   } catch (err) {
     statusEl.style.color = "red";
-    statusEl.textContent = "❌ " + err.message;
+    statusEl.textContent = err.message;
   } finally {
     spinner.style.display = "none";
     btn.disabled = false;
   }
 }
 
-// --- Buttons ---
-airtimeBtn.addEventListener("click", () => {
+// ------- Buttons -------
+airtimeBtn.onclick = () => {
   const details = {
     number: document.getElementById("airtimeNumber").value,
     network: document.getElementById("network").value
   };
-  if (!details.number || !details.network) return alert("Complete airtime form");
-  createWithdrawal("airtime", details, airtimeBtn);
-});
+  if (!details.number || !details.network)
+    return alert("Complete airtime form");
+  withdraw("airtime", details, airtimeBtn);
+};
 
-bankBtn.addEventListener("click", () => {
+bankBtn.onclick = () => {
   const details = {
     bank: document.getElementById("bankName").value,
     name: document.getElementById("accountName").value,
     number: document.getElementById("accountNumber").value
   };
-  if (!details.bank || !details.name || !details.number) return alert("Complete bank form");
-  createWithdrawal("bank", details, bankBtn);
-});
+  if (!details.bank || !details.name || !details.number)
+    return alert("Complete bank form");
+  withdraw("bank", details, bankBtn);
+};
 
-// --- Load history ---
-async function loadHistory() {
-  historyDiv.innerHTML = '<div class="spinner"></div>';
-  try {
-    const res = await fetch(SUPABASE_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "history", user_id: userSession.user.id })
-    });
-    const data = await res.json();
-    if (!data.success || !data.history.length) {
-      historyDiv.innerHTML = "<p>No withdrawal history yet.</p>";
-      return;
-    }
-    historyDiv.innerHTML = "";
-    data.history.forEach(item => {
-      const div = document.createElement("div");
-      div.classList.add("history-item");
-      div.innerHTML = `
-        <strong>${item.method.toUpperCase()}</strong> - ₦${item.amount}<br>
-        <small>${new Date(item.timestamp).toLocaleString()}</small><br>
-        <span class="${item.status.toLowerCase()}">${item.status}</span>
-      `;
-      historyDiv.appendChild(div);
-    });
-  } catch (err) {
-    console.error(err);
-    historyDiv.innerHTML = "<p>Error loading history.</p>";
-  }
-}
-
-// --- Logout ---
-function logout() {
-  localStorage.removeItem("userSession");
-  window.location.href = "login.html";
-}
-document.getElementById("logoutNav").addEventListener("click", logout);
-document.getElementById("logoutBottom").addEventListener("click", logout);
-
-// --- Initialize page ---
-loadUser();
+// ------- Init -------
+userSession = getSession();
+loadBalance();
+loadHistory();
 </script>
-</body>
-</html>
+
