@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -71,37 +70,52 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
 </div>
 
 <script>
-function toggleMenu(){ const m=document.getElementById('menu'); m.style.display=m.style.display==='flex'?'none':'flex'; }
-function copyCode(){ const c=document.getElementById('refCode').innerText; if(c) navigator.clipboard.writeText(c).then(()=>alert('Copied!')); }
+function toggleMenu(){ 
+  const m = document.getElementById('menu'); 
+  m.style.display = m.style.display==='flex'?'none':'flex'; 
+}
+function copyCode(){ 
+  const c = document.getElementById('refCode').innerText; 
+  if(c) navigator.clipboard.writeText(c).then(()=>alert('Copied!')); 
+}
 
-document.getElementById('logout').onclick=()=>{ localStorage.removeItem('userSession'); location.href='login.html'; };
+document.getElementById('logout').onclick = () => { 
+  localStorage.removeItem('userSession'); 
+  location.href='login.html'; 
+};
 
 async function initReferrals(){
   const sessionStr = localStorage.getItem('userSession');
   if(!sessionStr){ location.href='login.html'; return; }
 
   const session = JSON.parse(sessionStr);
-  const userId = session.user.id;
+  const token = session.access_token; // JWT token
 
   try{
-    const res = await fetch('https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor',{
-      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({user_id:userId})
+    const res = await fetch('https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/referral-data',{
+      method:'POST', 
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization': `Bearer ${token}`
+      }
     });
 
     const data = await res.json();
     if(!data.success) throw new Error('Failed');
 
+    // Balance & Referral Code
     document.getElementById('balance').innerText = '₦' + data.balance.toLocaleString();
     document.getElementById('refCode').innerText = data.referral_code;
 
+    // Render Referral Groups
     const container = document.getElementById('groups');
     container.innerHTML='';
 
     const refs = data.referrals || [];
     let groupIndex = 1;
 
-    for(let i=0;i<refs.length;i+=5){
-      const group = refs.slice(i,i+5);
+    for(let i=0;i<refs.length;i++){
+      const group = refs[i];
       const completed = group.length === 5;
 
       const div = document.createElement('div');
