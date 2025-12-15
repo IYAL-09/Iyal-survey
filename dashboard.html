@@ -1,27 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Iyal Surveys - Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iyal Surveys – Surveys</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-body { font-family:'Segoe UI',sans-serif; margin:0; background:#f1f8e9; color:#2e7d32;}
-header { background:#2e7d32; color:white; padding:15px; display:flex; align-items:center; justify-content:space-between; position:relative;}
+body { font-family:'Segoe UI',sans-serif; margin:0; background:#f1f8e9; color:#2e7d32; }
+header { background:#2e7d32; color:white; padding:15px; display:flex; align-items:center; justify-content:space-between; position:relative; }
 .logo { display:flex; align-items:center; }
-.logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; object-fit:cover; margin-right:10px;}
-.logo span { font-size:1.2em; font-weight:bold;}
-.menu-toggle { font-size:1.5em; cursor:pointer;}
-nav { position:absolute; top:60px; right:15px; background:#388e3c; color:white; display:none; flex-direction:column; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.3); z-index:10;}
-nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px solid #66bb6a;}
-.content { padding:15px; padding-bottom:120px;}
-.intro-banner { background:#c8e6c9; padding:15px; border-radius:8px; margin-bottom:20px; text-align:center; font-size:1em; font-weight:500;}
-#balance { font-size:1.1em; font-weight:bold; margin-bottom:15px; text-align:center; display:flex; align-items:center; justify-content:center;}
-.spinner { width:18px; height:18px; border:3px solid white; border-top:3px solid #2e7d32; border-radius:50%; animation:spin 1s linear infinite; margin-left:8px;}
-@keyframes spin { to { transform: rotate(360deg); } }
-.bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:#2e7d32; display:flex; justify-content:space-around; padding:10px 0; box-shadow:0 -2px 5px rgba(0,0,0,0.2);}
-.bottom-nav a { color:white; text-decoration:none; font-size:0.9em; text-align:center;}
-.bottom-nav i { display:block; font-size:1.2em; margin-bottom:4px;}
+.logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; object-fit:cover; margin-right:10px; }
+.logo span { font-size:1.2em; font-weight:bold; }
+.menu-toggle { font-size:1.5em; cursor:pointer; }
+nav { position:absolute; top:60px; right:15px; background:#388e3c; display:none; flex-direction:column; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.3); z-index:10; }
+nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px solid #66bb6a; }
+.tabs { display:flex; justify-content:space-around; margin:15px 0; }
+.tab { flex:1; text-align:center; padding:10px 0; cursor:pointer; border-radius:8px; font-weight:bold; background:#c8e6c9; margin:0 5px; transition:0.3s; }
+.tab.active { background:#2e7d32; color:white; }
+.content { padding:15px; padding-bottom:120px; }
+.card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; display:flex; align-items:center; gap:15px; }
+.card img { width:50px; height:50px; border-radius:8px; object-fit:cover; }
+.card-info { flex:1; }
+.card-info h3 { margin:0 0 5px; font-size:1.1em; }
+.card-info p { margin:0; font-size:0.9em; color:#555; }
+.card button { padding:8px 12px; background:#2e7d32; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:6px; }
+.card button:disabled { background:#ccc; cursor:not-allowed; }
+.bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:#2e7d32; display:flex; justify-content:space-around; padding:10px 0; box-shadow:0 -2px 5px rgba(0,0,0,0.2); }
+.bottom-nav a { color:white; text-decoration:none; font-size:0.9em; text-align:center; }
+.bottom-nav i { display:block; font-size:1.2em; margin-bottom:4px; }
+.spinner { width:16px; height:16px; border:3px solid #c8e6c9; border-top:3px solid #2e7d32; border-radius:50%; animation:spin 1s linear infinite; display:inline-block; }
+@keyframes spin { to { transform:rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -33,80 +41,122 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
   </div>
   <div class="menu-toggle" onclick="toggleMenu()"><i class="fa fa-bars"></i></div>
   <nav id="menu">
-    <a href="terms.html">Terms & Conditions</a>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="about.html">About Us</a>
-    <a href="disclaimer.html">Disclaimer</a>
-    <a href="support.html">Support</a>
-    <a href="settings.html">Settings</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="referrals.html">Referrals</a>
+    <a href="withdraw.html">Cash Out</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="#" id="logout">Logout</a>
   </nav>
 </header>
 
-<div class="content">
-  <div id="balance">Balance: <div class="spinner" id="balanceSpinner"></div></div>
-  <div class="intro-banner">🎉 Welcome to Iyal Surveys! Complete surveys, earn rewards, and cash out instantly.</div>
+<div class="tabs">
+  <div class="tab active" data-vendor="cpx">CPX Research</div>
+  <div class="tab" data-vendor="bitlab">BitLab</div>
+  <div class="tab" data-vendor="wannads">Wannads</div>
+</div>
+
+<div class="content" id="surveyContent">
+  <p class="spinner"></p>
 </div>
 
 <div class="bottom-nav">
   <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
   <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
-  <a href="task.html"><i class="fa fa-tasks"></i>Tasks</a>
-  <a href="#" id="logoutBtn"><i class="fa fa-sign-out-alt"></i>Logout</a>
+  <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
+  <a href="#" id="logoutBottom"><i class="fa fa-sign-out-alt"></i>Logout</a>
 </div>
+
 <script>
-function toggleMenu() {
-  const menu = document.getElementById("menu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+function toggleMenu(){ 
+  const m=document.getElementById('menu'); 
+  m.style.display=m.style.display==='flex'?'none':'flex'; 
 }
 
-// ---------- Dashboard Init ----------
-async function initDashboard() {
-  const balanceDisplay = document.getElementById("balance");
-  const balanceSpinner = document.getElementById("balanceSpinner");
-
-  const sessionStr = localStorage.getItem("userSession");
-  if (!sessionStr) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  const session = JSON.parse(sessionStr);
-  const userId = session.user.id;
-
-  try {
-    const res = await fetch(
-      "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dynamic-endpoint",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: userId })
-      }
-    );
-
-    const data = await res.json();
-
-    if (!data.success) throw new Error("Failed to load balance");
-
-    balanceDisplay.textContent =
-      `Balance: ₦${Number(data.balance).toLocaleString()}`;
-
-  } catch (err) {
-    console.error(err);
-    balanceDisplay.textContent = "Balance: ₦0";
-  } finally {
-    balanceSpinner.style.display = "none";
-  }
+function logout(){
+  localStorage.removeItem('userSession'); 
+  location.href='login.html'; 
 }
+document.getElementById('logout').addEventListener('click', logout);
+document.getElementById('logoutBottom').addEventListener('click', logout);
 
-// ---------- Logout ----------
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("userSession");
-  window.location.href = "login.html";
+let activeVendor = 'cpx';
+
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    activeVendor = tab.dataset.vendor;
+    loadSurveys();
+  });
 });
 
-// ---------- Run ----------
-initDashboard();
-</script>
+// Fetch surveys from single secure endpoint
+async function loadSurveys(){
+  const content = document.getElementById('surveyContent');
+  content.innerHTML = '<p class="spinner"></p>';
 
+  const sessionStr = localStorage.getItem('userSession');
+  if(!sessionStr){ location.href='login.html'; return; }
+  const token = JSON.parse(sessionStr).access_token;
+
+  try{
+    const res = await fetch('https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/referral-data',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await res.json();
+    if(!data.success) throw new Error('Failed to fetch data');
+
+    // Example surveys per vendor (replace with real API data)
+    const surveys = {
+      cpx: [
+        {title:'CPX Survey 1', desc:'Earn ₦500', icon:'fa-chart-bar', url:'#'},
+        {title:'CPX Survey 2', desc:'Earn ₦800', icon:'fa-poll', url:'#'}
+      ],
+      bitlab: [
+        {title:'BitLab Survey 1', desc:'Earn ₦400', icon:'fa-vial', url:'#'},
+        {title:'BitLab Survey 2', desc:'Earn ₦700', icon:'fa-flask', url:'#'}
+      ],
+      wannads: [
+        {title:'Wannads Survey 1', desc:'Earn ₦300', icon:'fa-lightbulb', url:'#'},
+        {title:'Wannads Survey 2', desc:'Earn ₦600', icon:'fa-brain', url:'#'}
+      ]
+    };
+
+    const vendorSurveys = surveys[activeVendor] || [];
+    if(vendorSurveys.length===0){
+      content.innerHTML='<p>No surveys available.</p>';
+      return;
+    }
+
+    content.innerHTML = '';
+    vendorSurveys.forEach(s=>{
+      const div = document.createElement('div');
+      div.className='card';
+      div.innerHTML = `
+        <i class="fa ${s.icon}" style="font-size:24px;"></i>
+        <div class="card-info">
+          <h3>${s.title}</h3>
+          <p>${s.desc}</p>
+        </div>
+        <button onclick="window.open('${s.url}','_blank')"><i class="fa fa-arrow-right"></i> Start</button>
+      `;
+      content.appendChild(div);
+    });
+
+  }catch(err){
+    console.error(err);
+    content.innerHTML='<p>Error loading surveys.</p>';
+  }
+}
+
+// Initial load
+loadSurveys();
+</script>
 </body>
 </html>
