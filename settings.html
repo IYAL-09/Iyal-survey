@@ -1,28 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settings – Iyal Surveys</title>
 
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 </head>
 <body class="bg-[#f1f8e9] text-[#2e7d32] font-sans">
 
-<!-- HEADER -->
-<header class="bg-[#2e7d32] text-white p-4 flex items-center justify-between relative">
+<header class="bg-[#2e7d32] text-white p-4 flex justify-between items-center relative">
   <div class="flex items-center gap-3">
     <img src="iyallogo.png" class="w-12 h-12 rounded-full border-2 border-white">
     <span class="font-bold text-lg">Iyal Surveys</span>
   </div>
-  <button onclick="toggleMenu()" class="text-xl">
-    <i class="fa fa-bars"></i>
-  </button>
+  <button onclick="toggleMenu()"><i class="fa fa-bars text-xl"></i></button>
 
   <nav id="menu" class="hidden absolute right-4 top-16 bg-[#388e3c] rounded-lg shadow-lg w-40 flex flex-col">
     <a href="dashboard.html" class="px-4 py-2 border-b border-green-300">Dashboard</a>
@@ -32,110 +26,83 @@
   </nav>
 </header>
 
-<!-- CONTENT -->
 <main class="p-4 pb-32 max-w-md mx-auto">
 
-  <div class="bg-white rounded-xl shadow-md p-5">
-    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
-      <i class="fa fa-lock"></i> Change Password
-    </h2>
+<div class="bg-white rounded-xl shadow-md p-5">
+  <h2 class="font-bold text-lg mb-4 flex items-center gap-2">
+    <i class="fa fa-shield-halved"></i> Change Password
+  </h2>
 
-    <!-- OLD PASSWORD -->
-    <div class="mb-4">
-      <label class="text-sm font-semibold">Old Password</label>
-      <div class="flex items-center border rounded-lg px-3 mt-1 bg-white">
-        <i class="fa fa-eye cursor-pointer text-green-600 mr-3"
-           onclick="toggle('oldPassword', this)"></i>
-        <input id="oldPassword" type="password"
-          class="w-full py-3 outline-none text-sm"
-          placeholder="Enter old password">
-      </div>
+  <!-- OLD -->
+  <div class="mb-4">
+    <label class="text-sm font-semibold">Old Password</label>
+    <div class="flex items-center border rounded-lg px-3 mt-1">
+      <i class="fa fa-eye text-green-600 mr-3 cursor-pointer"
+         onclick="toggle('oldPassword', this)"></i>
+      <input id="oldPassword" type="password" class="w-full py-3 outline-none text-sm">
     </div>
-
-    <!-- NEW PASSWORD -->
-    <div class="mb-4">
-      <label class="text-sm font-semibold">New Password</label>
-      <div class="flex items-center border rounded-lg px-3 mt-1 bg-white">
-        <i class="fa fa-eye cursor-pointer text-green-600 mr-3"
-           onclick="toggle('newPassword', this)"></i>
-        <input id="newPassword" type="password"
-          class="w-full py-3 outline-none text-sm"
-          placeholder="Create new password">
-      </div>
-    </div>
-
-    <!-- CONFIRM PASSWORD -->
-    <div class="mb-4">
-      <label class="text-sm font-semibold">Confirm New Password</label>
-      <div class="flex items-center border rounded-lg px-3 mt-1 bg-white">
-        <i class="fa fa-eye cursor-pointer text-green-600 mr-3"
-           onclick="toggle('confirmPassword', this)"></i>
-        <input id="confirmPassword" type="password"
-          class="w-full py-3 outline-none text-sm"
-          placeholder="Confirm new password">
-      </div>
-    </div>
-
-    <button id="updateBtn"
-      class="w-full bg-[#2e7d32] text-white py-3 rounded-lg font-bold mt-3 active:scale-95 transition">
-      Update Password
-    </button>
-
-    <p id="status" class="text-center font-semibold mt-3"></p>
   </div>
+
+  <!-- NEW -->
+  <div class="mb-4">
+    <label class="text-sm font-semibold">New Password</label>
+    <div class="flex items-center border rounded-lg px-3 mt-1">
+      <i class="fa fa-eye text-green-600 mr-3 cursor-pointer"
+         onclick="toggle('newPassword', this)"></i>
+      <input id="newPassword" type="password" class="w-full py-3 outline-none text-sm">
+    </div>
+  </div>
+
+  <!-- CONFIRM -->
+  <div class="mb-4">
+    <label class="text-sm font-semibold">Confirm New Password</label>
+    <div class="flex items-center border rounded-lg px-3 mt-1">
+      <i class="fa fa-eye text-green-600 mr-3 cursor-pointer"
+         onclick="toggle('confirmPassword', this)"></i>
+      <input id="confirmPassword" type="password" class="w-full py-3 outline-none text-sm">
+    </div>
+  </div>
+
+  <button id="updateBtn"
+    class="w-full bg-[#2e7d32] text-white py-3 rounded-lg font-bold mt-3">
+    Update Password
+  </button>
+
+  <p id="status" class="text-center mt-3 font-semibold"></p>
+</div>
 
 </main>
 
-<!-- BOTTOM NAV -->
 <div class="fixed bottom-0 w-full bg-[#2e7d32] flex justify-around py-2 text-white">
-  <a href="withdraw.html" class="text-center text-sm">
-    <i class="fa fa-money-bill-wave block text-lg"></i>Cash Out
-  </a>
-  <a href="referrals.html" class="text-center text-sm">
-    <i class="fa fa-users block text-lg"></i>Referrals
-  </a>
-  <a href="dashboard.html" class="text-center text-sm">
-    <i class="fa fa-home block text-lg"></i>Dashboard
-  </a>
+  <a href="withdraw.html"><i class="fa fa-money-bill-wave block"></i>Cash Out</a>
+  <a href="referrals.html"><i class="fa fa-users block"></i>Referrals</a>
+  <a href="dashboard.html"><i class="fa fa-home block"></i>Dashboard</a>
 </div>
 
-<!-- SCRIPT -->
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase = createClient(
   "https://xkshzlfducmnglxfnxzk.supabase.co",
-  "YOUR_ANON_KEY"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
 );
 
-/* MENU */
-window.toggleMenu = () => {
+window.toggleMenu = () =>
   document.getElementById("menu").classList.toggle("hidden");
-};
 
-/* AUTH */
-const { data:{ session } } = await supabase.auth.getSession();
-if(!session) location.href="login.html";
-
-/* TOGGLE PASSWORD */
 window.toggle = (id, icon) => {
-  const input = document.getElementById(id);
-  input.type = input.type === "password" ? "text" : "password";
+  const i = document.getElementById(id);
+  i.type = i.type === "password" ? "text" : "password";
   icon.classList.toggle("fa-eye-slash");
 };
 
-/* UPDATE PASSWORD */
-document.getElementById("updateBtn").onclick = async () => {
-  const oldP = oldPassword.value;
+const { data:{ session } } = await supabase.auth.getSession();
+if(!session) location.href="login.html";
+
+document.getElementById("updateBtn").onclick = async ()=>{
   const newP = newPassword.value;
   const confirmP = confirmPassword.value;
   const status = document.getElementById("status");
-
-  if(!oldP || !newP || !confirmP)
-    return status.textContent="⚠️ All fields required";
-
-  if(newP.length < 6)
-    return status.textContent="⚠️ Password too short";
 
   if(newP !== confirmP)
     return status.textContent="⚠️ Passwords do not match";
@@ -143,16 +110,14 @@ document.getElementById("updateBtn").onclick = async () => {
   const { error } = await supabase.auth.updateUser({ password:newP });
 
   if(error){
-    status.className="text-red-600 text-center mt-3";
+    status.className="text-red-600";
     status.textContent="❌ " + error.message;
   } else {
-    status.className="text-green-600 text-center mt-3";
-    status.textContent="✅ Password updated successfully";
-    document.querySelectorAll("input").forEach(i=>i.value="");
+    status.className="text-green-600";
+    status.textContent="✅ Password updated. Email notification sent.";
   }
 };
 
-/* LOGOUT */
 document.getElementById("logout").onclick = async ()=>{
   await supabase.auth.signOut();
   location.href="login.html";
