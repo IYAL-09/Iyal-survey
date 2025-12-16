@@ -18,6 +18,7 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
 .tab { flex:1; text-align:center; padding:10px 0; cursor:pointer; border-radius:8px; font-weight:bold; background:#c8e6c9; margin:0 5px; transition:0.3s; }
 .tab.active { background:#2e7d32; color:white; }
 .content { padding:15px; padding-bottom:120px; }
+.balance-card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; text-align:center; font-size:1.2em; font-weight:bold; display:flex; justify-content:center; align-items:center; gap:10px; }
 .card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; display:flex; align-items:center; gap:15px; }
 .card img { width:50px; height:50px; border-radius:8px; object-fit:cover; }
 .card-info { flex:1; }
@@ -50,14 +51,23 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
   </nav>
 </header>
 
-<div class="tabs">
-  <div class="tab active" data-vendor="cpx">CPX Research</div>
-  <div class="tab" data-vendor="bitlab">BitLab</div>
-  <div class="tab" data-vendor="wannads">Wannads</div>
-</div>
+<div class="content">
+  <!-- Balance Card -->
+  <div class="balance-card">
+    Balance: <span id="userBalance"><span class="spinner"></span></span>
+  </div>
 
-<div class="content" id="surveyContent">
-  <p class="spinner"></p>
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-vendor="cpx">CPX Research</div>
+    <div class="tab" data-vendor="bitlab">BitLab</div>
+    <div class="tab" data-vendor="wannads">Wannads</div>
+  </div>
+
+  <!-- Survey Content -->
+  <div id="surveyContent">
+    <p class="spinner"></p>
+  </div>
 </div>
 
 <div class="bottom-nav">
@@ -92,11 +102,31 @@ tabs.forEach(tab=>{
   });
 });
 
+async function loadBalance(){
+  const balanceEl = document.getElementById('userBalance');
+  balanceEl.innerHTML = '<span class="spinner"></span>';
+  const sessionStr = localStorage.getItem('userSession');
+  if(!sessionStr){ location.href='login.html'; return; }
+  const token = JSON.parse(sessionStr).access_token;
+
+  try{
+    const res = await fetch('https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/referral-data',{
+      method:'POST',
+      headers:{'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}
+    });
+    const data = await res.json();
+    if(!data.success) throw new Error('Failed');
+    balanceEl.textContent = `₦${data.balance.toLocaleString()}`;
+  }catch(err){
+    console.error(err);
+    balanceEl.textContent = '₦0';
+  }
+}
+
 // Fetch surveys from single secure endpoint
 async function loadSurveys(){
   const content = document.getElementById('surveyContent');
   content.innerHTML = '<p class="spinner"></p>';
-
   const sessionStr = localStorage.getItem('userSession');
   if(!sessionStr){ location.href='login.html'; return; }
   const token = JSON.parse(sessionStr).access_token;
@@ -110,9 +140,9 @@ async function loadSurveys(){
       }
     });
     const data = await res.json();
-    if(!data.success) throw new Error('Failed to fetch data');
+    if(!data.success) throw new Error('Failed');
 
-    // Example surveys per vendor (replace with real API data)
+    // Example surveys per vendor
     const surveys = {
       cpx: [
         {title:'CPX Survey 1', desc:'Earn ₦500', icon:'fa-chart-bar', url:'#'},
@@ -156,6 +186,7 @@ async function loadSurveys(){
 }
 
 // Initial load
+loadBalance();
 loadSurveys();
 </script>
 </body>
