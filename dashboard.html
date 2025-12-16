@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Iyal Surveys – Surveys</title>
+<title>Iyal Surveys – Dashboard</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
 body { font-family:'Segoe UI',sans-serif; margin:0; background:#f1f8e9; color:#2e7d32; }
@@ -65,9 +65,7 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
   </div>
 
   <!-- Survey Content -->
-  <div id="surveyContent">
-    <p class="spinner"></p>
-  </div>
+  <div id="surveyContent"><span class="spinner"></span></div>
 </div>
 
 <div class="bottom-nav">
@@ -82,7 +80,6 @@ function toggleMenu(){
   const m=document.getElementById('menu'); 
   m.style.display=m.style.display==='flex'?'none':'flex'; 
 }
-
 function logout(){
   localStorage.removeItem('userSession'); 
   location.href='login.html'; 
@@ -91,44 +88,18 @@ document.getElementById('logout').addEventListener('click', logout);
 document.getElementById('logoutBottom').addEventListener('click', logout);
 
 let activeVendor = 'cpx';
-
-const tabs = document.querySelectorAll('.tab');
-tabs.forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    tabs.forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     tab.classList.add('active');
     activeVendor = tab.dataset.vendor;
     loadSurveys();
   });
 });
 
-async function loadBalance(){
-  const balanceEl = document.getElementById('userBalance');
-  balanceEl.innerHTML = '<span class="spinner"></span>';
+async function fetchUserData(){
   const sessionStr = localStorage.getItem('userSession');
-  if(!sessionStr){ location.href='login.html'; return; }
-  const token = JSON.parse(sessionStr).access_token;
-
-  try{
-    const res = await fetch('https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/referral-data',{
-      method:'POST',
-      headers:{'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}
-    });
-    const data = await res.json();
-    if(!data.success) throw new Error('Failed');
-    balanceEl.textContent = `₦${data.balance.toLocaleString()}`;
-  }catch(err){
-    console.error(err);
-    balanceEl.textContent = '₦0';
-  }
-}
-
-// Fetch surveys from single secure endpoint
-async function loadSurveys(){
-  const content = document.getElementById('surveyContent');
-  content.innerHTML = '<p class="spinner"></p>';
-  const sessionStr = localStorage.getItem('userSession');
-  if(!sessionStr){ location.href='login.html'; return; }
+  if(!sessionStr) location.href='login.html';
   const token = JSON.parse(sessionStr).access_token;
 
   try{
@@ -141,48 +112,59 @@ async function loadSurveys(){
     });
     const data = await res.json();
     if(!data.success) throw new Error('Failed');
-
-    // Example surveys per vendor
-    const surveys = {
-      cpx: [
-        {title:'CPX Survey 1', desc:'Earn ₦500', icon:'fa-chart-bar', url:'#'},
-        {title:'CPX Survey 2', desc:'Earn ₦800', icon:'fa-poll', url:'#'}
-      ],
-      bitlab: [
-        {title:'BitLab Survey 1', desc:'Earn ₦400', icon:'fa-vial', url:'#'},
-        {title:'BitLab Survey 2', desc:'Earn ₦700', icon:'fa-flask', url:'#'}
-      ],
-      wannads: [
-        {title:'Wannads Survey 1', desc:'Earn ₦300', icon:'fa-lightbulb', url:'#'},
-        {title:'Wannads Survey 2', desc:'Earn ₦600', icon:'fa-brain', url:'#'}
-      ]
-    };
-
-    const vendorSurveys = surveys[activeVendor] || [];
-    if(vendorSurveys.length===0){
-      content.innerHTML='<p>No surveys available.</p>';
-      return;
-    }
-
-    content.innerHTML = '';
-    vendorSurveys.forEach(s=>{
-      const div = document.createElement('div');
-      div.className='card';
-      div.innerHTML = `
-        <i class="fa ${s.icon}" style="font-size:24px;"></i>
-        <div class="card-info">
-          <h3>${s.title}</h3>
-          <p>${s.desc}</p>
-        </div>
-        <button onclick="window.open('${s.url}','_blank')"><i class="fa fa-arrow-right"></i> Start</button>
-      `;
-      content.appendChild(div);
-    });
-
+    return data;
   }catch(err){
     console.error(err);
-    content.innerHTML='<p>Error loading surveys.</p>';
+    return null;
   }
+}
+
+async function loadBalance(){
+  const el = document.getElementById('userBalance');
+  el.innerHTML='<span class="spinner"></span>';
+  const data = await fetchUserData();
+  if(data) el.textContent=`₦${Number(data.balance).toLocaleString()}`;
+  else el.textContent='₦0';
+}
+
+async function loadSurveys(){
+  const content = document.getElementById('surveyContent');
+  content.innerHTML='<span class="spinner"></span>';
+  const data = await fetchUserData();
+  if(!data){ content.innerHTML='Error loading surveys'; return; }
+
+  const surveys = {
+    cpx: [
+      {title:'CPX Survey 1', desc:'Earn ₦500', icon:'fa-chart-bar', url:'#'},
+      {title:'CPX Survey 2', desc:'Earn ₦800', icon:'fa-poll', url:'#'}
+    ],
+    bitlab: [
+      {title:'BitLab Survey 1', desc:'Earn ₦400', icon:'fa-vial', url:'#'},
+      {title:'BitLab Survey 2', desc:'Earn ₦700', icon:'fa-flask', url:'#'}
+    ],
+    wannads: [
+      {title:'Wannads Survey 1', desc:'Earn ₦300', icon:'fa-lightbulb', url:'#'},
+      {title:'Wannads Survey 2', desc:'Earn ₦600', icon:'fa-brain', url:'#'}
+    ]
+  };
+
+  const vendorSurveys = surveys[activeVendor] || [];
+  if(vendorSurveys.length===0){ content.innerHTML='No surveys available'; return; }
+
+  content.innerHTML='';
+  vendorSurveys.forEach(s=>{
+    const div = document.createElement('div');
+    div.className='card';
+    div.innerHTML = `
+      <i class="fa ${s.icon}" style="font-size:24px;"></i>
+      <div class="card-info">
+        <h3>${s.title}</h3>
+        <p>${s.desc}</p>
+      </div>
+      <button onclick="window.open('${s.url}','_blank')"><i class="fa fa-arrow-right"></i> Start</button>
+    `;
+    content.appendChild(div);
+  });
 }
 
 // Initial load
