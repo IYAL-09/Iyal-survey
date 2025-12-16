@@ -1,166 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Settings - Iyal Surveys</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Settings – Iyal Surveys</title>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+body { font-family:'Segoe UI',sans-serif; margin:0; background:#f1f8e9; color:#2e7d32; }
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#2e7d32',
-            secondary: '#388e3c'
-          }
-        }
-      }
-    }
-  </script>
+header {
+  background:#2e7d32;
+  color:white;
+  padding:15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:relative;
+}
+.logo { display:flex; align-items:center; }
+.logo img {
+  width:50px; height:50px;
+  border-radius:50%;
+  border:3px solid white;
+  margin-right:10px;
+}
+.logo span { font-size:1.2em; font-weight:bold; }
+
+.menu-toggle { font-size:1.5em; cursor:pointer; }
+
+nav {
+  position:absolute;
+  top:60px;
+  right:15px;
+  background:#388e3c;
+  display:none;
+  flex-direction:column;
+  padding:10px;
+  border-radius:8px;
+  z-index:10;
+}
+nav a {
+  color:white;
+  text-decoration:none;
+  padding:8px 0;
+  border-bottom:1px solid #66bb6a;
+}
+
+.content { padding:20px; padding-bottom:120px; }
+
+.card {
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom:20px;
+}
+
+h2 { margin-top:0; }
+
+.input-group {
+  position:relative;
+  margin-bottom:15px;
+}
+.input-group i {
+  position:absolute;
+  top:50%;
+  left:12px;
+  transform:translateY(-50%);
+  color:#4caf50;
+}
+.input-group input {
+  width:100%;
+  padding:12px 40px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:1em;
+}
+.eye {
+  position:absolute;
+  top:50%;
+  right:12px;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#4caf50;
+}
+
+button {
+  width:100%;
+  padding:12px;
+  background:#2e7d32;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:1em;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:disabled {
+  background:#9e9e9e;
+  cursor:not-allowed;
+}
+
+#status {
+  margin-top:10px;
+  font-weight:bold;
+  text-align:center;
+}
+
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#2e7d32;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+}
+.bottom-nav a {
+  color:white;
+  text-decoration:none;
+  font-size:0.9em;
+  text-align:center;
+}
+.bottom-nav i {
+  display:block;
+  font-size:1.2em;
+  margin-bottom:4px;
+}
+</style>
 </head>
 
-<body class="bg-green-50 min-h-screen text-gray-800">
+<body>
 
-<!-- Header -->
-<header class="bg-primary text-white p-4 flex justify-between items-center shadow">
-  <div class="flex items-center gap-3">
-    <img src="iyallogo.png"
-         class="w-[50px] h-[50px] rounded-full border-4 border-white object-cover"
-         alt="Iyal Logo">
-    <span class="text-lg font-bold">Iyal Surveys</span>
+<header>
+  <div class="logo">
+    <img src="iyallogo.png">
+    <span>Iyal Surveys</span>
   </div>
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <i class="fa fa-bars"></i>
+  </div>
+  <nav id="menu">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="referrals.html">Referrals</a>
+    <a href="withdraw.html">Cash Out</a>
+    <a href="#" id="logout">Logout</a>
+  </nav>
 </header>
 
-<!-- Content -->
-<main class="p-4 max-w-md mx-auto">
+<div class="content">
+  <div class="card">
+    <h2><i class="fa fa-lock"></i> Change Password</h2>
 
-  <!-- Card -->
-  <div class="bg-white rounded-2xl shadow-lg p-6 mt-6">
+    <div class="input-group">
+      <i class="fa fa-key"></i>
+      <input type="password" id="oldPassword" placeholder="Old Password">
+      <i class="fa fa-eye eye" onclick="toggle('oldPassword', this)"></i>
+    </div>
 
-    <h2 class="text-xl font-bold text-primary text-center mb-4">
-      <i class="fa fa-lock mr-1"></i> Change Password
-    </h2>
+    <div class="input-group">
+      <i class="fa fa-lock"></i>
+      <input type="password" id="newPassword" placeholder="New Password">
+      <i class="fa fa-eye eye" onclick="toggle('newPassword', this)"></i>
+    </div>
 
-    <!-- Message -->
-    <div id="message" class="hidden mb-4 p-3 rounded-lg text-sm text-center"></div>
+    <div class="input-group">
+      <i class="fa fa-check"></i>
+      <input type="password" id="confirmPassword" placeholder="Confirm New Password">
+      <i class="fa fa-eye eye" onclick="toggle('confirmPassword', this)"></i>
+    </div>
 
-    <!-- Form -->
-    <form id="passwordForm" class="space-y-4">
-
-      <div>
-        <label class="text-sm font-medium">Old Password</label>
-        <input type="password" id="oldPassword"
-               class="w-full mt-1 p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-primary"
-               placeholder="Enter old password" required>
-      </div>
-
-      <div>
-        <label class="text-sm font-medium">New Password</label>
-        <input type="password" id="newPassword"
-               class="w-full mt-1 p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-primary"
-               placeholder="Enter new password" required>
-      </div>
-
-      <div>
-        <label class="text-sm font-medium">Confirm New Password</label>
-        <input type="password" id="confirmPassword"
-               class="w-full mt-1 p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-primary"
-               placeholder="Confirm new password" required>
-      </div>
-
-      <button type="submit"
-              class="w-full bg-primary text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-secondary transition">
-        <i class="fa fa-save"></i>
-        Change Password
-      </button>
-    </form>
+    <button id="updateBtn">Update Password</button>
+    <p id="status"></p>
   </div>
+</div>
 
-  <!-- Back Button -->
-  <a href="dashboard.html"
-     class="mt-6 block text-center text-primary font-semibold">
-    ← Back to Dashboard
-  </a>
+<div class="bottom-nav">
+  <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
+  <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
+  <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
+</div>
 
-</main>
-
-<!-- Supabase -->
 <script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const supabase = createClient(
+  "https://xkshzlfducmnglxfnxzk.supabase.co",
+  "YOUR_ANON_KEY"
+);
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+/* MENU */
+window.toggleMenu = () => {
+  const m = document.getElementById("menu");
+  m.style.display = m.style.display === "flex" ? "none" : "flex";
+};
 
-  const messageBox = document.getElementById("message");
-  const form = document.getElementById("passwordForm");
+/* AUTH CHECK */
+const { data:{ session } } = await supabase.auth.getSession();
+if(!session) window.location.href="login.html";
 
-  // ---- Session Check (localStorage) ----
-  const sessionStr = localStorage.getItem("userSession");
-  if (!sessionStr) {
-    window.location.href = "login.html";
-  }
+/* SHOW/HIDE PASSWORD */
+window.toggle = (id, el) => {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+  el.classList.toggle("fa-eye-slash");
+};
 
-  // ---- Change Password ----
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+/* UPDATE PASSWORD */
+document.getElementById("updateBtn").onclick = async () => {
+  const oldP = document.getElementById("oldPassword").value;
+  const newP = document.getElementById("newPassword").value;
+  const confirmP = document.getElementById("confirmPassword").value;
+  const status = document.getElementById("status");
 
-    const oldPassword = document.getElementById("oldPassword").value;
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+  if(!oldP || !newP || !confirmP)
+    return status.textContent="⚠️ Fill all fields";
 
-    if (newPassword !== confirmPassword) {
-      showMessage("❌ Passwords do not match", "error");
-      return;
-    }
+  if(newP.length < 6)
+    return status.textContent="⚠️ Password too short";
 
-    try {
-      // Re-authenticate (required for security)
-      const session = JSON.parse(sessionStr);
-      const email = session.user.email;
+  if(newP !== confirmP)
+    return status.textContent="⚠️ Passwords do not match";
 
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password: oldPassword
-      });
-
-      if (signInError) {
-        showMessage("❌ Old password is incorrect", "error");
-        return;
-      }
-
-      // Update password
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword
-      });
-
-      if (error) throw error;
-
-      showMessage("✅ Password changed successfully", "success");
-      form.reset();
-
-    } catch (err) {
-      console.error(err);
-      showMessage("❌ Failed to change password", "error");
-    }
+  const { error } = await supabase.auth.updateUser({
+    password: newP
   });
 
-  function showMessage(text, type) {
-    messageBox.className = `mb-4 p-3 rounded-lg text-sm text-center ${
-      type === "success"
-        ? "bg-green-100 text-green-700"
-        : "bg-red-100 text-red-700"
-    }`;
-    messageBox.textContent = text;
-    messageBox.classList.remove("hidden");
+  if(error){
+    status.style.color="red";
+    status.textContent="❌ " + error.message;
+  } else {
+    status.style.color="green";
+    status.textContent="✅ Password updated successfully";
+    document.querySelectorAll("input").forEach(i=>i.value="");
   }
+};
+
+/* LOGOUT */
+document.getElementById("logout").onclick = async () => {
+  await supabase.auth.signOut();
+  window.location.href="login.html";
+};
 </script>
 
 </body>
