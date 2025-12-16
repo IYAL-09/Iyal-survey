@@ -5,35 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iyal Surveys – Referrals</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
 <style>
 body { font-family:'Segoe UI',sans-serif; margin:0; background:#f1f8e9; color:#2e7d32; }
 header { background:#2e7d32; color:white; padding:15px; display:flex; align-items:center; justify-content:space-between; position:relative; }
 .logo { display:flex; align-items:center; }
-.logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; margin-right:10px; }
+.logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; object-fit:cover; margin-right:10px; }
+.logo span { font-size:1.2em; font-weight:bold; }
 .menu-toggle { font-size:1.5em; cursor:pointer; }
-nav { position:absolute; top:60px; right:15px; background:#388e3c; display:none; flex-direction:column; padding:10px; border-radius:8px; z-index:100; }
-nav a { color:white; text-decoration:none; padding:8px 0; }
+nav { position:absolute; top:60px; right:15px; background:#388e3c; display:none; flex-direction:column; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.3); z-index:10; }
+nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px solid #66bb6a; }
 .content { padding:15px; padding-bottom:120px; }
-.card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; text-align:center; }
-.card h2 { margin:0 0 10px; font-size:1.2em; }
-.referral-description { background:#e8f5e9; padding:15px; border-radius:12px; margin-bottom:20px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
-.referral-description ul { padding-left:20px; }
-.referral-description li { margin-bottom:8px; }
+.card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; }
+.copy-btn { padding:8px 14px; background:#2e7d32; color:white; border:none; border-radius:6px; cursor:pointer; }
 .group { background:#fff; padding:15px; border-radius:10px; margin-bottom:15px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
 .group h3 { margin:0 0 10px; font-size:1.05em; }
 .group ul { list-style:none; padding:0; margin:0; }
-.group li { padding:6px 0; font-size:0.95em; display:flex; align-items:center; gap:8px; }
-.group li i { color:#2e7d32; }
+.group li { padding:6px 0; border-bottom:1px solid #eee; font-size:0.95em; }
 .status-complete { color:green; font-weight:bold; margin-top:8px; }
 .status-pending { color:orange; font-weight:bold; margin-top:8px; }
 .bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:#2e7d32; display:flex; justify-content:space-around; padding:10px 0; box-shadow:0 -2px 5px rgba(0,0,0,0.2); }
-.bottom-nav a { color:white; text-decoration:none; font-size:0.9em; }
+.bottom-nav a { color:white; text-decoration:none; font-size:0.9em; text-align:center; }
 .bottom-nav i { display:block; font-size:1.2em; margin-bottom:4px; }
 .spinner { width:16px; height:16px; border:3px solid #c8e6c9; border-top:3px solid #2e7d32; border-radius:50%; animation:spin 1s linear infinite; display:inline-block; }
 @keyframes spin { to { transform:rotate(360deg); } }
 </style>
-
 </head>
 <body>
 
@@ -45,9 +40,8 @@ nav a { color:white; text-decoration:none; padding:8px 0; }
   <div class="menu-toggle" onclick="toggleMenu()"><i class="fa fa-bars"></i></div>
   <nav id="menu">
     <a href="dashboard.html">Dashboard</a>
+    <a href="referrals.html">Referrals</a>
     <a href="withdraw.html">Cash Out</a>
-    <a href="terms.html">Terms</a>
-    <a href="privacy.html">Privacy</a>
     <a href="#" id="logout">Logout</a>
   </nav>
 </header>
@@ -59,22 +53,24 @@ nav a { color:white; text-decoration:none; padding:8px 0; }
     <p id="balance"><span class="spinner"></span></p>
   </div>
 
-  <!-- Professional Referral Description -->
-  <div class="referral-description">
-    <h3>How the Referral System Works</h3>
-    <p>Invite friends to join Iyal Surveys. Earn ₦2,201 for every group of 5 friends who complete their surveys.</p>
-    <ul>
-      <li><i class="fa fa-user-plus"></i> Invite your friends using your referral code.</li>
-      <li><i class="fa fa-check-circle"></i> Once 5 friends complete their surveys, the group is marked as <strong>rewarded</strong>.</li>
-      <li><i class="fa fa-coins"></i> Each completed group adds ₦2,201 to your balance automatically.</li>
-    </ul>
+  <!-- Referral Info Description -->
+  <div class="card">
+    <h2>Referral System Explained</h2>
+    <p>
+      Invite your friends to join Iyal Surveys! Each time <strong>5 people</strong> you refer sign up and complete their surveys, you earn a reward of <strong>₦2,201</strong>.
+      <ul>
+        <li><i class="fa fa-users"></i> Complete 5 referrals to form a group.</li>
+        <li><i class="fa fa-coins"></i> Receive ₦2,201 for each completed group.</li>
+        <li><i class="fa fa-list"></i> Referrals are displayed in groups below.</li>
+      </ul>
+    </p>
   </div>
 
   <!-- Referral Code Card -->
   <div class="card">
     <h2>Your Referral Code</h2>
     <p id="refCode"><span class="spinner"></span></p>
-    <button onclick="copyCode()"><i class="fa fa-copy"></i> Copy Code</button>
+    <button class="copy-btn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Code</button>
   </div>
 
   <!-- Referral Groups -->
@@ -82,85 +78,92 @@ nav a { color:white; text-decoration:none; padding:8px 0; }
 </div>
 
 <div class="bottom-nav">
-  <a href="withdraw.html"><i class="fa fa-money-bill"></i> Cash Out</a>
-  <a href="referrals.html"><i class="fa fa-users"></i> Referrals</a>
-  <a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a>
-  <a href="#" id="logoutBottom"><i class="fa fa-sign-out-alt"></i> Logout</a>
+  <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
+  <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
+  <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
+  <a href="#" id="logoutBottom"><i class="fa fa-sign-out-alt"></i>Logout</a>
 </div>
 
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(
+  "https://xkshzlfducmnglxfnxzk.supabase.co",
+  "YOUR_ANON_KEY"
+);
 
-/* Hamburger menu */
-function toggleMenu() {
-  const menu = document.getElementById("menu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-}
+/* MENU */
+window.toggleMenu = () => {
+  const m = document.getElementById("menu");
+  m.style.display = m.style.display === "flex" ? "none" : "flex";
+};
 
-/* Copy referral code */
-function copyCode() {
+/* COPY CODE */
+window.copyCode = () => {
   const code = document.getElementById("refCode").innerText;
   if(code) navigator.clipboard.writeText(code).then(()=>alert("Copied!"));
-}
+};
 
-/* Logout */
-async function logout() {
-  localStorage.removeItem("userSession");
+/* AUTH CHECK */
+const { data:{ session } } = await supabase.auth.getSession();
+if(!session) window.location.href="login.html";
+
+/* LOAD REFERRALS */
+async function loadReferrals(){
+  const res = await fetch(
+    "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/bright-worker",
+    {
+      method:"POST",
+      headers:{
+        "Authorization":`Bearer ${session.access_token}`,
+        "Content-Type":"application/json"
+      }
+    }
+  );
+  const data = await res.json();
+  if(!data.success) return;
+
+  document.getElementById("balance").textContent = "₦" + Number(data.balance).toLocaleString();
+  document.getElementById("refCode").textContent = data.referral_code;
+
+  const container = document.getElementById("groups");
+  container.innerHTML = "";
+  let groupIndex = 1;
+  for(const group of data.referrals){
+    const completed = group.length === 5;
+    const div = document.createElement("div");
+    div.className = "group";
+    div.innerHTML = `<h3>Referral Group ${groupIndex}</h3>`;
+    const ul = document.createElement("ul");
+    group.forEach(r=>{
+      const li = document.createElement("li");
+      li.textContent = r.referred_email || "Pending user";
+      ul.appendChild(li);
+    });
+    div.appendChild(ul);
+    const status = document.createElement("div");
+    status.className = completed ? "status-complete" : "status-pending";
+    status.textContent = completed ? "Rewarded: ₦2,201" : "Pending (need 5 referrals)";
+    div.appendChild(status);
+    container.appendChild(div);
+    groupIndex++;
+  }
+  if(data.referrals.length===0) container.innerHTML="<p>No referrals yet.</p>";
+}
+loadReferrals();
+
+/* LOGOUT */
+async function logout(){
   await supabase.auth.signOut();
-  location.href = "login.html";
+  window.location.href="login.html";
 }
 document.getElementById("logout").onclick = logout;
 document.getElementById("logoutBottom").onclick = logout;
 
-/* Fetch user session from localStorage (from login page) */
-const sessionStr = localStorage.getItem("userSession");
-if(!sessionStr) location.href="login.html";
-const session = JSON.parse(sessionStr);
-
-/* Fetch Referrals & Balance */
-async function loadReferrals() {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/bright-worker`, {
-    method:"POST",
-    headers:{
-      "Authorization": `Bearer ${session.access_token}`,
-      "Content-Type":"application/json"
-    }
-  });
-
-  const data = await res.json();
-  if(!data.success){
-    alert("Failed to load referrals.");
-    return;
-  }
-
-  document.getElementById("balance").innerText = "₦" + Number(data.balance).toLocaleString();
-  document.getElementById("refCode").innerText = data.referral_code;
-
-  const groupsEl = document.getElementById("groups");
-  groupsEl.innerHTML = "";
-
-  let groupIndex = 1;
-  for(const group of data.referrals){
-    const div = document.createElement("div");
-    div.className = "group";
-    let html = `<h3>Referral Group ${groupIndex++}</h3><ul>`;
-    for(const r of group){
-      html += `<li><i class="fa fa-user"></i> ${r.referred_email || "Pending user"}</li>`;
-    }
-    html += "</ul>";
-    const status = group.length === 5 ? '<div class="status-complete">Rewarded: ₦2,201</div>' : '<div class="status-pending">Pending (need 5 referrals)</div>';
-    div.innerHTML = html + status;
-    groupsEl.appendChild(div);
-  }
-
-  if(data.referrals.length === 0) groupsEl.innerHTML = "<p>No referrals yet.</p>";
-}
-
-loadReferrals();
+/* AUTH STATE */
+supabase.auth.onAuthStateChange(event=>{
+  if(event==="SIGNED_OUT") window.location.href="login.html";
+});
 </script>
 
 </body>
