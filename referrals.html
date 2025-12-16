@@ -44,6 +44,7 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
     <a href="terms.html">Terms</a>
     <a href="privacy.html">Privacy</a>
     <a href="support.html">Support</a>
+    <a href="#" id="logout">Logout</a>
   </nav>
 </header>
 
@@ -66,91 +67,79 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
   <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
   <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
   <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
-  <a href="#" id="logout"><i class="fa fa-sign-out-alt"></i>Logout</a>
+  <a href="#" id="logoutBottom"><i class="fa fa-sign-out-alt"></i>Logout</a>
 </div>
 
 <script>
 function toggleMenu(){ 
-  const m = document.getElementById('menu'); 
-  m.style.display = m.style.display==='flex'?'none':'flex'; 
+  const m=document.getElementById('menu'); 
+  m.style.display=m.style.display==='flex'?'none':'flex'; 
 }
 function copyCode(){ 
-  const c = document.getElementById('refCode').innerText; 
+  const c=document.getElementById('refCode').innerText; 
   if(c) navigator.clipboard.writeText(c).then(()=>alert('Copied!')); 
 }
-
-document.getElementById('logout').onclick = () => { 
+function logout(){ 
   localStorage.removeItem('userSession'); 
   location.href='login.html'; 
-};
+}
+document.getElementById('logout').addEventListener('click', logout);
+document.getElementById('logoutBottom').addEventListener('click', logout);
 
-async function initReferrals(){
+async function loadReferrals(){
   const sessionStr = localStorage.getItem('userSession');
   if(!sessionStr){ location.href='login.html'; return; }
-
-  const session = JSON.parse(sessionStr);
-  const token = session.access_token; // JWT token
+  const token = JSON.parse(sessionStr).access_token;
 
   try{
     const res = await fetch('https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/referral-data',{
-      method:'POST', 
+      method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization':`Bearer ${token}`
       }
     });
-
     const data = await res.json();
     if(!data.success) throw new Error('Failed');
 
-    // Balance & Referral Code
-    document.getElementById('balance').innerText = '₦' + data.balance.toLocaleString();
+    document.getElementById('balance').innerText = '₦'+Number(data.balance).toLocaleString();
     document.getElementById('refCode').innerText = data.referral_code;
 
-    // Render Referral Groups
     const container = document.getElementById('groups');
     container.innerHTML='';
-
     const refs = data.referrals || [];
     let groupIndex = 1;
-
-    for(let i=0;i<refs.length;i++){
-      const group = refs[i];
-      const completed = group.length === 5;
-
+    for(const group of refs){
+      const completed = group.length===5;
       const div = document.createElement('div');
       div.className='group';
-      div.innerHTML = `<h3>Referral Group ${groupIndex}</h3>`;
-
-      const ul = document.createElement('ul');
+      div.innerHTML=`<h3>Referral Group ${groupIndex}</h3>`;
+      const ul=document.createElement('ul');
       group.forEach(r=>{
-        const li = document.createElement('li');
+        const li=document.createElement('li');
         li.textContent = r.referred_email || 'Pending user';
         ul.appendChild(li);
       });
       div.appendChild(ul);
-
-      const status = document.createElement('div');
-      status.className = completed ? 'status-complete' : 'status-pending';
-      status.textContent = completed ? 'Rewarded: ₦2,201' : 'Pending (need 5 referrals)';
+      const status=document.createElement('div');
+      status.className=completed?'status-complete':'status-pending';
+      status.textContent=completed?'Rewarded: ₦2,201':'Pending (need 5 referrals)';
       div.appendChild(status);
-
       container.appendChild(div);
       groupIndex++;
     }
 
-    if(refs.length===0){ container.innerHTML='<p>No referrals yet.</p>'; }
+    if(refs.length===0) container.innerHTML='<p>No referrals yet.</p>';
 
   }catch(err){
     console.error(err);
     document.getElementById('balance').innerText='Error loading balance';
     document.getElementById('refCode').innerText='Error loading code';
-    document.getElementById('groups').innerHTML='<p>Error loading referrals.</p>';
+    document.getElementById('groups').innerHTML='<p>Error loading referrals</p>';
   }
 }
 
-initReferrals();
+loadReferrals();
 </script>
-
 </body>
 </html>
