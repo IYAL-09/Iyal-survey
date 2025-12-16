@@ -56,77 +56,79 @@ button:disabled { background:#9e9e9e; cursor:not-allowed;}
     <a href="register.html"><i class="fa fa-user-plus"></i> Create new account</a>
   </div>
 </div>
-
 <script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+const SUPABASE_ANON_KEY = "PASTE_YOUR_ANON_KEY_HERE";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const status = document.getElementById("status");
 const spinner = document.getElementById("spinner");
 const btnText = document.getElementById("btnText");
 const button = document.getElementById("loginBtn");
-const emailEl = document.getElementById("email");
-const passEl = document.getElementById("password");
 
-window.togglePassword = function () {
-  const eye = document.getElementById("eyeIcon");
-  if(passEl.type === "password") { passEl.type="text"; eye.classList.replace("fa-eye","fa-eye-slash"); }
-  else { passEl.type="password"; eye.classList.replace("fa-eye-slash","fa-eye"); }
-};
-
-window.login = async function() {
-  const email = emailEl.value.trim();
-  const password = passEl.value.trim();
+window.login = async function () {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
   const recaptchaToken = grecaptcha.getResponse();
 
-  if(!email || !password){ status.style.color="red"; status.textContent="⚠️ Enter email & password."; return;}
-  if(!recaptchaToken){ status.style.color="red"; status.textContent="⚠️ Complete the reCAPTCHA."; return;}
+  if (!email || !password) {
+    status.textContent = "⚠️ Enter email & password";
+    return;
+  }
 
-  spinner.style.display="inline-block"; btnText.textContent="Logging in..."; button.disabled=true; status.textContent="";
+  if (!recaptchaToken) {
+    status.textContent = "⚠️ Complete the reCAPTCHA";
+    return;
+  }
+
+  spinner.style.display = "inline-block";
+  btnText.textContent = "Logging in...";
+  button.disabled = true;
+  status.textContent = "";
 
   try {
-    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({email,password,recaptcha_token:recaptchaToken})
+    /* ---------- VERIFY reCAPTCHA (BACKEND) ---------- */
+    const captchaRes = await fetch(
+      "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/verify-captcha",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recaptcha_token: recaptchaToken })
+      }
+    );
+
+    const captchaData = await captchaRes.json();
+    if (!captchaData.success) {
+      throw new Error("Captcha verification failed");
+    }
+
+    /* ---------- SUPABASE LOGIN ---------- */
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
     });
 
-    const data = await res.json();
+    if (error) throw error;
 
-    if(!data.success) throw new Error(data.message||"Login failed");
+    status.style.color = "green";
+    status.textContent = "✅ Login successful!";
+    setTimeout(() => (window.location.href = "dashboard.html"), 1000);
 
-    // Save session securely
-    localStorage.setItem("userSession", JSON.stringify(data.session));
-
-    status.style.color="green";
-    status.textContent="✅ Login successful! Redirecting...";
-    setTimeout(()=> window.location.href="dashboard.html", 1200);
-
-  } catch(err){
-    status.style.color="red";
-    status.textContent="❌ "+err.message;
-  } finally{
-    spinner.style.display="none";
-    btnText.textContent="Login";
-    button.disabled=false;
+  } catch (err) {
+    status.style.color = "red";
+    status.textContent = "❌ " + err.message;
     grecaptcha.reset();
+  } finally {
+    spinner.style.display = "none";
+    btnText.textContent = "Login";
+    button.disabled = false;
   }
 };
-
-window.forgotPassword = async function() {
-  const email = emailEl.value.trim();
-  if(!email){ status.style.color="red"; status.textContent="⚠️ Enter registered email."; return;}
-  spinner.style.display="inline-block"; btnText.textContent="Sending reset..."; button.disabled=true; status.textContent="";
-
-  try {
-    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({email,action:"forgot_password"})
-    });
-    const data = await res.json();
-    if(data.success){ status.style.color="green"; status.textContent="📧 Password reset email sent."; }
-    else throw new Error(data.message||"Failed to send email");
-  } catch(err){ status.style.color="red"; status.textContent="❌ "+err.message; }
-  finally{ spinner.style.display="none"; btnText.textContent="Login"; button.disabled=false; }
-};
 </script>
+
+
 </body>
 </html>
