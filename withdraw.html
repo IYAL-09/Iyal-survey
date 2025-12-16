@@ -63,7 +63,6 @@ button:disabled { background:#ccc; cursor:not-allowed;}
       <option value="bank">Bank Transfer (₦5000)</option>
     </select>
 
-    <!-- Airtime Form -->
     <div id="airtimeForm" style="display:none;">
       <input type="text" id="airtimeNumber" placeholder="Phone Number"/>
       <select id="network">
@@ -78,7 +77,6 @@ button:disabled { background:#ccc; cursor:not-allowed;}
       </button>
     </div>
 
-    <!-- Bank Form -->
     <div id="bankForm" style="display:none;">
       <input type="text" id="bankName" placeholder="Bank Name"/>
       <input type="text" id="accountName" placeholder="Account Holder Name"/>
@@ -118,26 +116,33 @@ document.getElementById("withdrawMethod").addEventListener("change", () => {
 </script>
 
 <script type="module">
-const API_URL = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const supabase = createClient(
+  "https://xkshzlfducmnglxfnxzk.supabase.co",
+  "YOUR_ANON_KEY"
+);
 
 let userSession = null;
-function getSession() {
-  const s = localStorage.getItem("userSession");
-  if(!s) window.location.href="login.html";
-  return JSON.parse(s);
+
+// --- GET SESSION ---
+const { data:{ session } } = await supabase.auth.getSession();
+if(!session){
+  window.location.href = "login.html";
+} else {
+  userSession = session;
 }
 
-// --- Load User Info ---
+// --- LOAD USER ---
 async function loadUser() {
-  userSession = getSession();
   await loadBalance();
   await loadHistory();
 }
 
-// --- Load Balance ---
+// --- LOAD BALANCE ---
 async function loadBalance() {
   try {
-    const res = await fetch(API_URL, {
+    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task",{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -149,22 +154,22 @@ async function loadBalance() {
     document.getElementById("balance").textContent = `₦${data.balance.toLocaleString()}`;
     document.getElementById("airtimeWithdrawBtn").disabled = data.balance < 2000;
     document.getElementById("bankWithdrawBtn").disabled = data.balance < 5000;
-  } catch(err) {
+  } catch(err){
     console.error(err);
     document.getElementById("balance").textContent = "₦0";
   }
 }
 
-// --- Withdrawal Function ---
-async function createWithdrawal(method, details, btn) {
+// --- CREATE WITHDRAWAL ---
+async function createWithdrawal(method, details, btn){
   const spinner = btn.querySelector(".spinner");
   btn.disabled = true;
   spinner.style.display = "inline-block";
   const statusEl = document.getElementById("status");
   statusEl.textContent = "";
 
-  try {
-    const res = await fetch(API_URL, {
+  try{
+    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task",{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -178,7 +183,7 @@ async function createWithdrawal(method, details, btn) {
     statusEl.textContent = "✅ Withdrawal submitted!";
     await loadBalance();
     await loadHistory();
-  } catch(err) {
+  } catch(err){
     statusEl.style.color = "red";
     statusEl.textContent = "❌ " + err.message;
   } finally {
@@ -187,7 +192,7 @@ async function createWithdrawal(method, details, btn) {
   }
 }
 
-// --- Buttons ---
+// --- BUTTONS ---
 document.getElementById("airtimeWithdrawBtn").addEventListener("click", ()=>{
   const details = {
     number: document.getElementById("airtimeNumber").value,
@@ -207,12 +212,12 @@ document.getElementById("bankWithdrawBtn").addEventListener("click", ()=>{
   createWithdrawal("bank", details, document.getElementById("bankWithdrawBtn"));
 });
 
-// --- Load History ---
+// --- LOAD HISTORY ---
 async function loadHistory() {
   const historyDiv = document.getElementById("history");
   historyDiv.innerHTML = '<div class="spinner"></div>';
-  try {
-    const res = await fetch(API_URL, {
+  try{
+    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task",{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -236,21 +241,21 @@ async function loadHistory() {
       `;
       historyDiv.appendChild(div);
     });
-  } catch(err) {
+  } catch(err){
     console.error(err);
     historyDiv.innerHTML="<p>Error loading history.</p>";
   }
 }
 
-// --- Logout ---
-function logout() {
-  localStorage.removeItem("userSession");
+// --- LOGOUT ---
+function logout(){
+  supabase.auth.signOut();
   window.location.href="login.html";
 }
 document.getElementById("logoutNav").addEventListener("click", logout);
 document.getElementById("logoutBottom").addEventListener("click", logout);
 
-// --- Initialize ---
+// --- INIT ---
 loadUser();
 </script>
 </body>
