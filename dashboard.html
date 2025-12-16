@@ -1,156 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Iyal Surveys – Dashboard</title>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
 <style>
 body { font-family:'Segoe UI',sans-serif; margin:0; background:#f1f8e9; color:#2e7d32; }
-header { background:#2e7d32; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center; }
-.logo { display:flex; align-items:center; gap:10px; }
-.logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; }
-.menu-toggle { font-size:1.5em; cursor:pointer; }
-
-.balance-card {
-  background:white;
-  margin:20px;
-  padding:20px;
-  border-radius:12px;
-  text-align:center;
-  font-size:1.3em;
-  font-weight:bold;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
-
-.tabs { display:flex; justify-content:space-around; margin:15px; }
-.tab {
-  flex:1;
-  margin:0 5px;
-  padding:10px;
-  background:#c8e6c9;
-  text-align:center;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.tab.active { background:#2e7d32; color:white; }
-
-.card {
-  background:white;
-  margin:15px;
-  padding:15px;
-  border-radius:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.bottom-nav {
-  position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
-  background:#2e7d32;
-  display:flex;
-  justify-content:space-around;
-  padding:10px 0;
-}
-
-.bottom-nav a { color:white; text-decoration:none; text-align:center; }
-.bottom-nav i { display:block; font-size:1.2em; }
-
-.spinner {
-  width:16px;
-  height:16px;
-  border:3px solid #c8e6c9;
-  border-top:3px solid #2e7d32;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-  display:inline-block;
-}
+header { background:#2e7d32; color:white; padding:15px; display:flex; justify-content:space-between; }
+.balance-card { background:white; padding:20px; margin:20px; border-radius:12px; text-align:center; font-size:1.3em; }
+.spinner { width:18px; height:18px; border:3px solid #c8e6c9; border-top:3px solid #2e7d32; border-radius:50%; animation:spin 1s linear infinite; display:inline-block; }
 @keyframes spin { to { transform:rotate(360deg); } }
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="logo">
-    <img src="iyallogo.png">
-    <strong>Iyal Surveys</strong>
-  </div>
-  <div class="menu-toggle" onclick="logout()">
-    <i class="fa fa-sign-out-alt"></i>
-  </div>
+  <div>Iyal Surveys</div>
+  <button id="logoutBtn">Logout</button>
 </header>
 
 <div class="balance-card">
   Balance: <span id="balance"><span class="spinner"></span></span>
 </div>
 
-<div class="tabs">
-  <div class="tab active">CPX</div>
-  <div class="tab">BitLab</div>
-  <div class="tab">Wannads</div>
-</div>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-<div id="surveyList">
-  <div class="card">
-    <div>Sample Survey</div>
-    <button onclick="alert('Vendor iframe here')">Start</button>
-  </div>
-</div>
+const supabase = createClient(
+  "https://xkshzlfducmnglxfnxzk.supabase.co",
+  "YOUR_ANON_KEY"
+);
 
-<div class="bottom-nav">
-  <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
-  <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
-  <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
-</div>
+/* 🔐 CHECK SESSION */
+const {
+  data: { session }
+} = await supabase.auth.getSession();
 
-<script>
-function logout(){
-  localStorage.removeItem('userSession');
-  location.href = 'login.html';
+if (!session) {
+  window.location.href = "login.html";
 }
 
-async function loadBalance(){
-  const sessionStr = localStorage.getItem('userSession');
-  if(!sessionStr){
-    location.href = 'login.html';
-    return;
-  }
-
-  const token = JSON.parse(sessionStr).access_token;
-
-  try{
-    const res = await fetch(
-      'https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor',
-      {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'Authorization':`Bearer ${token}`
-        }
+/* 🔄 LOAD BALANCE */
+async function loadBalance() {
+  const res = await fetch(
+    "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor",
+    {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${session.access_token}`,
+        "Content-Type": "application/json"
       }
-    );
+    }
+  );
 
-    const data = await res.json();
-    if(!data.success) throw new Error(data.message);
-
-    document.getElementById('balance').innerText =
-      '₦' + Number(data.balance).toLocaleString();
-
-  }catch(err){
-    console.error(err);
-    document.getElementById('balance').innerText = '₦0';
+  const data = await res.json();
+  if (data.success) {
+    document.getElementById("balance").textContent =
+      "₦" + Number(data.balance).toLocaleString();
+  } else {
+    document.getElementById("balance").textContent = "₦0";
   }
 }
 
 loadBalance();
+
+/* 🚪 LOGOUT */
+document.getElementById("logoutBtn").onclick = async () => {
+  await supabase.auth.signOut();
+  window.location.href = "login.html";
+};
+
+/* 🔁 AUTH STATE */
+supabase.auth.onAuthStateChange((event) => {
+  if (event === "SIGNED_OUT") {
+    window.location.href = "login.html";
+  }
+});
 </script>
 
 </body>
