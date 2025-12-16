@@ -13,20 +13,24 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to botto
 .logo img { width:90px; height:90px; border-radius:50%; border:4px solid white; object-fit:cover;}
 h2 { text-align:center; color:#2e7d32; margin-bottom:20px;}
 .input-group { position:relative; margin-bottom:20px;}
-.input-group i.fa { position:absolute; top:50%; left:12px; transform:translateY(-50%); color:#4caf50; font-size:1.1em;}
-.input-group input { width:100%; padding:10px 38px; border:1px solid #ccc; border-radius:8px; font-size:1em; box-sizing:border-box;}
-.eye-toggle { position:absolute; top:50%; right:12px; transform:translateY(-50%); cursor:pointer; color:#4caf50;}
+.input-group i.fa { position:absolute; top:50%; left:12px; transform:translateY(-50%); color:#4caf50; font-size:1.1em; z-index:1;}
+.input-group input { width:100%; padding:10px 38px 10px 38px; border:1px solid #ccc; border-radius:8px; font-size:1em; box-sizing:border-box; position:relative; z-index:0;}
+.eye-toggle { position:absolute; top:50%; right:46px; transform:translateY(-50%); cursor:pointer; color:#4caf50; z-index:2;}
 button { width:100%; padding:12px; background:#2e7d32; color:white; border:none; border-radius:8px; font-size:1em; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;}
+button:hover { background:#1b5e20;}
 button:disabled { background:#9e9e9e; cursor:not-allowed;}
 .spinner { border:3px solid #f3f3f3; border-top:3px solid white; border-radius:50%; width:18px; height:18px; animation:spin 1s linear infinite; display:none;}
 @keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 #status { text-align:center; margin-top:10px; color:red;}
+.actions { text-align:center; margin-top:15px;}
+.actions a { color:#2e7d32; text-decoration:underline; cursor:pointer; display:block; margin-top:10px;}
+.g-recaptcha { margin-bottom:15px; }
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="logo"><img src="iyallogo.png" alt="Logo"/></div>
-  <h2>Login</h2>
+  <div class="logo"><img src="iyallogo.png" alt="Iyal Logo" /></div>
+  <h2>Welcome Back</h2>
 
   <div class="input-group">
     <i class="fa fa-envelope"></i>
@@ -40,68 +44,88 @@ button:disabled { background:#9e9e9e; cursor:not-allowed;}
 
   <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
 
-  <button id="loginBtn" onclick="login()">
+  <button onclick="login()" id="loginBtn">
     <span id="btnText">Login</span>
     <div class="spinner" id="spinner"></div>
   </button>
 
   <p id="status"></p>
+
+  <div class="actions">
+    <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+    <a href="register.html"><i class="fa fa-user-plus"></i> Create new account</a>
+  </div>
 </div>
 
 <script type="module">
-const emailEl = document.getElementById("email");
-const passEl = document.getElementById("password");
-const statusEl = document.getElementById("status");
+const status = document.getElementById("status");
 const spinner = document.getElementById("spinner");
 const btnText = document.getElementById("btnText");
-const loginBtn = document.getElementById("loginBtn");
+const button = document.getElementById("loginBtn");
+const emailEl = document.getElementById("email");
+const passEl = document.getElementById("password");
 
-window.togglePassword = function() {
+window.togglePassword = function () {
   const eye = document.getElementById("eyeIcon");
-  if(passEl.type === "password"){ passEl.type="text"; eye.classList.replace("fa-eye","fa-eye-slash"); }
+  if(passEl.type === "password") { passEl.type="text"; eye.classList.replace("fa-eye","fa-eye-slash"); }
   else { passEl.type="password"; eye.classList.replace("fa-eye-slash","fa-eye"); }
 };
 
-window.login = async function(){
+window.login = async function() {
   const email = emailEl.value.trim();
   const password = passEl.value.trim();
   const recaptchaToken = grecaptcha.getResponse();
 
-  if(!email || !password){ statusEl.textContent="Enter email and password"; statusEl.style.color="red"; return; }
-  if(!recaptchaToken){ statusEl.textContent="Complete the captcha"; statusEl.style.color="red"; return; }
+  if(!email || !password){ status.style.color="red"; status.textContent="⚠️ Enter email & password."; return;}
+  if(!recaptchaToken){ status.style.color="red"; status.textContent="⚠️ Complete the reCAPTCHA."; return;}
 
-  spinner.style.display="inline-block";
-  btnText.textContent="Logging in...";
-  loginBtn.disabled = true;
-  statusEl.textContent="";
+  spinner.style.display="inline-block"; btnText.textContent="Logging in..."; button.disabled=true; status.textContent="";
 
-  try{
-    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor",{
+  try {
+    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor", {
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body: JSON.stringify({email,password,recaptcha_token:recaptchaToken})
     });
+
     const data = await res.json();
 
-    if(data.success){
-      localStorage.setItem("userSession", JSON.stringify(data.session));
-      localStorage.setItem("userInfo", JSON.stringify(data.user));
-      statusEl.textContent="Login successful!";
-      statusEl.style.color="green";
-      setTimeout(()=> window.location.href="dashboard.html", 1200);
-    } else {
-      throw new Error(data.message);
-    }
+    if(!data.success) throw new Error(data.message||"Login failed");
+
+    // Save session securely
+    localStorage.setItem("userSession", JSON.stringify(data.session));
+
+    status.style.color="green";
+    status.textContent="✅ Login successful! Redirecting...";
+    setTimeout(()=> window.location.href="dashboard.html", 1200);
 
   } catch(err){
-    statusEl.textContent="❌ " + err.message;
-    statusEl.style.color="red";
+    status.style.color="red";
+    status.textContent="❌ "+err.message;
   } finally{
     spinner.style.display="none";
     btnText.textContent="Login";
-    loginBtn.disabled = false;
+    button.disabled=false;
     grecaptcha.reset();
   }
+};
+
+window.forgotPassword = async function() {
+  const email = emailEl.value.trim();
+  if(!email){ status.style.color="red"; status.textContent="⚠️ Enter registered email."; return;}
+  spinner.style.display="inline-block"; btnText.textContent="Sending reset..."; button.disabled=true; status.textContent="";
+
+  try {
+    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email,action:"forgot_password"})
+    });
+    const data = await res.json();
+    if(data.success){ status.style.color="green"; status.textContent="📧 Password reset email sent."; }
+    else throw new Error(data.message||"Failed to send email");
+  } catch(err){ status.style.color="red"; status.textContent="❌ "+err.message; }
+  finally{ spinner.style.display="none"; btnText.textContent="Login"; button.disabled=false; }
 };
 </script>
 </body>
