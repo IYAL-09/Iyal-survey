@@ -3,197 +3,169 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Register - Iyal Surveys</title>
-
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<!-- Google reCAPTCHA -->
+<title>Iyal Surveys - Register</title>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
+/* Spinner */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.spinner { border:3px solid #f3f3f3; border-top:3px solid white; border-radius:50%; width:18px; height:18px; animation:spin 1s linear infinite; display:none; }
 /* Password strength checklist */
-.strength-item {
-  display:flex; align-items:center; gap:6px; font-size:0.875rem;
-}
-.strength-item i { color:green; display:none; }
-.strength-item.valid i { display:inline-block; }
+.strength-check { font-size:0.9rem; margin-top:5px; }
+.strength-check span { display:flex; align-items:center; gap:6px; margin-top:2px; color:#999; }
+.strength-check span.valid { color:#2e7d32; font-weight:bold; }
 </style>
 </head>
 <body class="bg-green-50 flex items-center justify-center min-h-screen p-4">
 
-<div class="w-full max-w-md">
-  <div class="bg-white shadow-xl rounded-2xl p-6 space-y-6 animate-fadeIn">
-    <!-- Logo & Site Name -->
-    <div class="text-center">
-      <img src="assets/logo.png" class="mx-auto rounded-full border-2 border-white w-12 h-12" />
-      <h1 class="mt-2 text-2xl font-bold text-green-800">Iyal Surveys</h1>
+<div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 animate-fadeIn">
+  <div class="text-center mb-6">
+    <img src="iyallogo.png" alt="Iyal Logo" class="mx-auto w-16 h-16 rounded-full border-4 border-white object-cover"/>
+    <h1 class="text-2xl font-bold text-green-800 mt-2">Iyal Surveys</h1>
+  </div>
+
+  <form id="registerForm" class="space-y-4">
+    <input type="text" name="full_name" id="full_name" placeholder="Full Name" class="w-full p-3 border rounded-lg"/>
+    <input type="email" name="email" id="email" placeholder="Email Address" class="w-full p-3 border rounded-lg"/>
+
+    <div class="relative">
+      <input type="password" name="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg"/>
+      <span class="absolute right-3 top-3 cursor-pointer" onclick="togglePassword('password','eye1')">
+        <i class="fa fa-eye" id="eye1"></i>
+      </span>
+      <div class="strength-check" id="passwordStrength">
+        <span id="rule-uppercase"><i class="fa fa-circle"></i> At least one uppercase letter</span>
+        <span id="rule-number"><i class="fa fa-circle"></i> At least one number</span>
+        <span id="rule-special"><i class="fa fa-circle"></i> At least one special character</span>
+        <span id="rule-length"><i class="fa fa-circle"></i> Minimum 6 characters</span>
+      </div>
     </div>
 
-    <form id="registerForm" class="space-y-4">
-      <input type="text" id="full_name" placeholder="Full Name" required
-        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
+    <div class="relative">
+      <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" class="w-full p-3 border rounded-lg"/>
+      <span class="absolute right-3 top-3 cursor-pointer" onclick="togglePassword('confirm_password','eye2')">
+        <i class="fa fa-eye" id="eye2"></i>
+      </span>
+    </div>
 
-      <input type="email" id="email" placeholder="Email Address" required
-        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
+    <input type="text" name="referral_code" id="referral_code" placeholder="Referral Code (optional)" class="w-full p-3 border rounded-lg"/>
 
-      <div class="relative">
-        <input type="password" id="password" placeholder="Password" required
-          class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
-        <i class="fa fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
-          id="togglePassword"></i>
-      </div>
+    <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
 
-      <div class="relative">
-        <input type="password" id="confirm_password" placeholder="Confirm Password" required
-          class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
-        <i class="fa fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
-          id="toggleConfirm"></i>
-      </div>
+    <button type="submit" id="registerBtn" class="w-full bg-green-700 text-white p-3 rounded-lg flex justify-center items-center gap-2">
+      Create Account
+      <div class="spinner" id="spinner"></div>
+    </button>
 
-      <!-- Password Strength -->
-      <div id="passwordStrength" class="space-y-1">
-        <div class="strength-item" id="upper"><i class="fa fa-check"></i> At least 1 uppercase letter</div>
-        <div class="strength-item" id="lower"><i class="fa fa-check"></i> At least 1 lowercase letter</div>
-        <div class="strength-item" id="number"><i class="fa fa-check"></i> At least 1 number</div>
-        <div class="strength-item" id="special"><i class="fa fa-check"></i> At least 1 special character</div>
-        <div class="strength-item" id="length"><i class="fa fa-check"></i> Minimum 6 characters</div>
-      </div>
-
-      <input type="text" id="referral_code" placeholder="Referral Code (optional)"
-        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
-
-      <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
-
-      <button type="submit" id="registerBtn"
-        class="w-full bg-green-700 text-white font-bold py-3 rounded-lg relative disabled:opacity-50 flex justify-center items-center gap-2">
-        Create Account
-        <div class="spinner border-2 border-white border-t-transparent rounded-full w-5 h-5 hidden"></div>
-      </button>
-
-      <div id="message" class="text-center font-semibold mt-2"></div>
-
-      <div class="text-center text-sm">
-        Already have an account? <a href="login.html" class="text-green-700 font-bold">Login</a>
-      </div>
-    </form>
-  </div>
+    <p class="text-center text-sm mt-2">Already have an account? <a href="login.html" class="font-bold text-green-700">Login</a></p>
+    <div id="message" class="text-center font-bold mt-2"></div>
+  </form>
 </div>
 
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"; // replace with your anon key
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const form = document.getElementById("registerForm");
+const spinner = document.getElementById("spinner");
 const messageBox = document.getElementById("message");
-const spinner = document.querySelector(".spinner");
 const registerBtn = document.getElementById("registerBtn");
-const passwordInput = document.getElementById("password");
-const confirmInput = document.getElementById("confirm_password");
 
 // Toggle password visibility
-document.getElementById("togglePassword").onclick = () => {
-  passwordInput.type = passwordInput.type === "password" ? "text" : "password";
-};
-document.getElementById("toggleConfirm").onclick = () => {
-  confirmInput.type = confirmInput.type === "password" ? "text" : "password";
+window.togglePassword = (id, eyeId) => {
+  const input = document.getElementById(id);
+  const icon = document.getElementById(eyeId);
+  if(input.type === "password") { input.type = "text"; icon.classList.replace("fa-eye","fa-eye-slash"); }
+  else { input.type="password"; icon.classList.replace("fa-eye-slash","fa-eye"); }
 };
 
 // Password strength check
-const upperEl = document.getElementById("upper");
-const lowerEl = document.getElementById("lower");
-const numberEl = document.getElementById("number");
-const specialEl = document.getElementById("special");
-const lengthEl = document.getElementById("length");
-
-passwordInput.addEventListener("input", () => {
+const passwordInput = document.getElementById("password");
+const rules = {
+  uppercase: /[A-Z]/,
+  number: /[0-9]/,
+  special: /[^A-Za-z0-9]/,
+  length: /.{6,}/
+};
+passwordInput.addEventListener("input",()=>{
   const val = passwordInput.value;
-  upperEl.classList.toggle("valid", /[A-Z]/.test(val));
-  lowerEl.classList.toggle("valid", /[a-z]/.test(val));
-  numberEl.classList.toggle("valid", /[0-9]/.test(val));
-  specialEl.classList.toggle("valid", /[^A-Za-z0-9]/.test(val));
-  lengthEl.classList.toggle("valid", val.length >= 6);
+  for(const rule in rules){
+    const el = document.getElementById(`rule-${rule}`);
+    if(rules[rule].test(val)) el.classList.add("valid"); else el.classList.remove("valid");
+  }
 });
 
-form.addEventListener("submit", async (e) => {
+form.addEventListener("submit", async e=>{
   e.preventDefault();
   messageBox.textContent = "";
-  spinner.classList.remove("hidden");
+  spinner.style.display = "inline-block";
   registerBtn.disabled = true;
 
-  const full_name = document.getElementById("full_name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = passwordInput.value;
-  const confirm_password = confirmInput.value;
-  const referral_code = document.getElementById("referral_code").value.trim() || null;
+  const full_name = form.full_name.value.trim();
+  const email = form.email.value.trim();
+  const password = form.password.value;
+  const confirm_password = form.confirm_password.value;
+  const referral_code = form.referral_code.value.trim() || null;
 
-  // Password match check
-  if (password !== confirm_password) {
-    showError("Passwords do not match");
-    resetBtn();
-    return;
-  }
-
-  // Password strength check
-  if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password) || password.length < 6) {
-    showError("Password does not meet strength requirements");
-    resetBtn();
+  if(password !== confirm_password){
+    messageBox.textContent="❌ Passwords do not match";
+    messageBox.className="text-center font-bold text-red-600";
+    spinner.style.display="none";
+    registerBtn.disabled=false;
     return;
   }
 
   // reCAPTCHA
   const recaptchaToken = grecaptcha.getResponse();
-  if (!recaptchaToken) {
-    showError("Please complete the reCAPTCHA");
-    resetBtn();
+  if(!recaptchaToken){
+    messageBox.textContent="❌ Please complete the reCAPTCHA";
+    messageBox.className="text-center font-bold text-red-600";
+    spinner.style.display="none";
+    registerBtn.disabled=false;
     return;
   }
 
-  try {
-    // Verify reCAPTCHA via backend
-    const captchaRes = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ recaptcha_token: recaptchaToken })
+  try{
+    // verify reCAPTCHA via backend
+    const captchaRes = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({recaptcha_token: recaptchaToken})
     });
     const captchaData = await captchaRes.json();
-    if (!captchaData.success) throw new Error("Captcha verification failed");
+    if(!captchaData.success) throw new Error("Captcha verification failed");
 
-    // Sign up with Supabase Auth
+    // create user
     const { data, error } = await supabase.auth.signUp({
       email, password,
       options: { data: { full_name, referral_code } }
     });
 
-    if (error) {
-      if (error.message.includes("already registered")) throw new Error("Email is already registered");
+    if(error){
+      if(error.message.includes("already registered") || error.message.includes("already exists")){
+        throw new Error("Email is already registered");
+      }
       throw error;
     }
 
-    messageBox.textContent = "✅ Registration successful! Check your email to confirm.";
-    messageBox.className = "text-green-700 font-bold mt-2 text-center";
+    messageBox.textContent="✅ Registration successful! Redirecting...";
+    messageBox.className="text-center font-bold text-green-700";
+    setTimeout(()=>window.location.href="dashboard.html",1500);
 
-    setTimeout(() => window.location.href = "dashboard.html", 1500);
-
-  } catch (err) {
-    showError(err.message || "Registration failed");
+  }catch(err){
+    messageBox.textContent="❌ "+err.message;
+    messageBox.className="text-center font-bold text-red-600";
     grecaptcha.reset();
-  } finally { resetBtn(); }
+  }finally{
+    spinner.style.display="none";
+    registerBtn.disabled=false;
+  }
 });
-
-function showError(msg) {
-  messageBox.textContent = "❌ " + msg;
-  messageBox.className = "text-red-600 font-bold mt-2 text-center";
-}
-
-function resetBtn() {
-  spinner.classList.add("hidden");
-  registerBtn.disabled = false;
-}
 </script>
 </body>
 </html>
