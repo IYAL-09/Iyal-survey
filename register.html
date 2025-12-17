@@ -16,7 +16,7 @@
 
 <style>
 /* Password strength indicator */
-.strength-item { font-size: 0.875rem; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+.strength-item { font-size: 0.875rem; display: flex; align-items: center; gap: 6px; }
 .strength-item .fa-check { color: green; display: none; }
 .strength-item.valid .fa-check { display: inline-block; }
 </style>
@@ -74,7 +74,12 @@
 </div>
 
 <script type="module">
-const ENDPOINT = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_ANON_KEY"; // replace with your anon key
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const form = document.getElementById("registerForm");
 const messageBox = document.getElementById("message");
 const spinner = document.querySelector(".spinner");
@@ -82,11 +87,11 @@ const registerBtn = document.getElementById("registerBtn");
 const passwordInput = document.getElementById("password");
 
 // Toggle password visibility
-function togglePassword(){
+function togglePassword() {
   passwordInput.type = passwordInput.type === "password" ? "text" : "password";
 }
 
-// Password Strength Check
+// Password strength check
 const upperEl = document.getElementById("upper");
 const numberEl = document.getElementById("number");
 const specialEl = document.getElementById("special");
@@ -100,7 +105,7 @@ passwordInput.addEventListener("input", () => {
   lengthEl.classList.toggle("valid", val.length >= 6);
 });
 
-form.addEventListener("submit", async e => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
   messageBox.textContent = "";
   spinner.classList.remove("hidden");
@@ -116,37 +121,43 @@ form.addEventListener("submit", async e => {
   }
 
   const recaptchaToken = grecaptcha.getResponse();
-  if(!recaptchaToken){
+  if (!recaptchaToken) {
     showError("Please complete the reCAPTCHA");
     spinner.classList.add("hidden");
     registerBtn.disabled = false;
     return;
   }
 
-  const payload = {
-    full_name: document.getElementById("full_name").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    password: passwordInput.value,
-    referral_code: document.getElementById("referral_code").value.trim() || null,
-    recaptcha_token: recaptchaToken
-  };
+  const email = document.getElementById("email").value.trim();
+  const password = passwordInput.value;
+  const full_name = document.getElementById("full_name").value.trim();
+  const referral_code = document.getElementById("referral_code").value.trim() || null;
 
   try {
-    const res = await fetch(ENDPOINT, {
+    // Verify reCAPTCHA on backend
+    const captchaRes = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ recaptcha_token: recaptchaToken })
     });
-    const data = await res.json();
+    const captchaData = await captchaRes.json();
+    if (!captchaData.success) throw new Error("Captcha verification failed");
 
-    if(!data.success) throw new Error(data.message);
+    // Create user with Supabase auth
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name, referral_code } }
+    });
 
-    messageBox.textContent = "✅ Registration successful! Redirecting...";
+    if (error) throw error;
+
+    messageBox.textContent = "✅ Registration successful! Check email to confirm.";
     messageBox.className = "text-green-700 font-bold mt-2 text-center";
 
-    setTimeout(() => window.location.href="dashboard.html", 1500);
+    setTimeout(() => window.location.href = "dashboard.html", 1500);
 
-  } catch(err){
+  } catch (err) {
     showError(err.message || "Registration failed");
     grecaptcha.reset();
   } finally {
@@ -155,7 +166,7 @@ form.addEventListener("submit", async e => {
   }
 });
 
-function showError(msg){
+function showError(msg) {
   messageBox.textContent = "❌ " + msg;
   messageBox.className = "text-red-600 font-bold mt-2 text-center";
 }
