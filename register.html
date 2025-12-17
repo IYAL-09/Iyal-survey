@@ -3,78 +3,80 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Iyal Surveys – Register</title>
-
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
+<title>Register - Iyal Surveys</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 <style>
-/* Custom styles */
-body { background: linear-gradient(135deg,#e8f5e9,#c8e6c9); }
-.card { max-width:400px; margin:auto; margin-top:40px; padding:30px; background:white; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.1);}
-.logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; object-fit:cover;}
-.input-group { position:relative; margin-bottom:15px;}
-.input-group i { position:absolute; top:50%; left:12px; transform:translateY(-50%); color:#4caf50;}
-.eye-toggle { position:absolute; top:50%; right:12px; transform:translateY(-50%); cursor:pointer; color:#4caf50;}
-.spinner { display:none; border:3px solid #f3f3f3; border-top:3px solid #2e7d32; border-radius:50%; width:18px; height:18px; animation:spin 1s linear infinite; position:absolute; right:12px; top:50%; transform:translateY(-50%);}
-@keyframes spin { to{ transform: rotate(360deg); } }
-.checklist li { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
-.checklist li.valid i { color:green; } 
-.checklist li.invalid i { color:#ccc; } 
+  body { margin:0; font-family:'Segoe UI',sans-serif; background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9); display:flex; justify-content:center; align-items:center; min-height:100vh;}
+  .card { background:white; border-radius:12px; padding:25px; max-width:400px; width:90%; box-shadow:0 4px 20px rgba(0,0,0,0.1); animation:fadeIn 0.6s ease; }
+  @keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+  .logo { text-align:center; margin-bottom:15px; }
+  .logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; object-fit:cover; }
+  .logo h1 { margin-top:8px; font-size:1.4em; color:#2e7d32; }
+  h2 { text-align:center; color:#2e7d32; margin-bottom:15px; font-size:1.2em; }
+  .input-group { position:relative; margin-bottom:15px; }
+  input { width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; font-size:1em; box-sizing:border-box; }
+  .eye-toggle { position:absolute; top:50%; right:12px; transform:translateY(-50%); cursor:pointer; color:#4caf50; }
+  button { width:100%; padding:12px; background:#2e7d32; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:10px; }
+  button:disabled { background:#9e9e9e; cursor:not-allowed; }
+  .spinner { display:none; width:18px; height:18px; border:3px solid white; border-top:3px solid transparent; border-radius:50%; animation:spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .message { text-align:center; margin-top:10px; font-weight:bold; }
+  .error { color:#d32f2f; }
+  .success { color:#2e7d32; }
+  .password-checklist { list-style:none; padding-left:0; font-size:0.9em; margin-bottom:10px; }
+  .password-checklist li { display:flex; align-items:center; margin-bottom:5px; }
+  .password-checklist li i { margin-right:8px; transition:all 0.3s ease; }
+  .login-link { text-align:center; margin-top:10px; }
+  .login-link a { color:#2e7d32; font-weight:bold; text-decoration:none; }
 </style>
 </head>
 <body>
 
 <div class="card">
-  <div class="flex items-center gap-3 mb-4 logo">
-    <img src="iyallogo.png" alt="Iyal Logo"/>
-    <span class="text-2xl font-bold text-green-800">Iyal Surveys</span>
+  <div class="logo">
+    <img src="iyallogo.png" alt="Iyal Logo">
+    <h1>Iyal Surveys</h1>
   </div>
+  <h2>Create Account</h2>
 
   <form id="registerForm">
     <div class="input-group">
-      <i class="fa fa-user"></i>
-      <input type="text" name="full_name" id="full_name" placeholder="Full Name" class="w-full p-3 pl-10 border rounded" required/>
+      <input type="text" id="full_name" name="full_name" placeholder="Full Name" required>
     </div>
 
     <div class="input-group">
-      <i class="fa fa-envelope"></i>
-      <input type="email" name="email" id="email" placeholder="Email Address" class="w-full p-3 pl-10 border rounded" required/>
+      <input type="email" id="email" name="email" placeholder="Email" required>
     </div>
 
-    <div class="input-group">
-      <i class="fa fa-lock"></i>
-      <input type="password" name="password" id="password" placeholder="Password" class="w-full p-3 pl-10 border rounded" required/>
-      <span class="eye-toggle" onclick="togglePassword()"><i class="fa fa-eye" id="eyeIcon"></i></span>
+    <div class="input-group password-wrapper">
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <span class="eye-toggle" onclick="togglePassword('password','eye1')"><i id="eye1" class="fa fa-eye"></i></span>
     </div>
 
-    <div class="input-group">
-      <i class="fa fa-lock"></i>
-      <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" class="w-full p-3 pl-10 border rounded" required/>
-      <span class="eye-toggle" onclick="toggleConfirmPassword()"><i class="fa fa-eye" id="eyeIconConfirm"></i></span>
+    <ul class="password-checklist" id="passwordChecklist">
+      <li id="checkLength"><i class="fa fa-times"></i> Minimum 6 characters</li>
+      <li id="checkUpper"><i class="fa fa-times"></i> At least 1 uppercase letter</li>
+      <li id="checkNumber"><i class="fa fa-times"></i> At least 1 number</li>
+      <li id="checkSpecial"><i class="fa fa-times"></i> At least 1 special character (!@#$%^&*)</li>
+    </ul>
+
+    <div class="input-group password-wrapper">
+      <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+      <span class="eye-toggle" onclick="togglePassword('confirm_password','eye2')"><i id="eye2" class="fa fa-eye"></i></span>
     </div>
 
-    <div class="mb-2">
-      <ul class="checklist list-none text-sm">
-        <li id="rule-uppercase" class="invalid"><i class="fa fa-circle"></i> At least one uppercase letter</li>
-        <li id="rule-number" class="invalid"><i class="fa fa-circle"></i> At least one number</li>
-        <li id="rule-special" class="invalid"><i class="fa fa-circle"></i> At least one special character</li>
-        <li id="rule-length" class="invalid"><i class="fa fa-circle"></i> Minimum 6 characters</li>
-      </ul>
-    </div>
+    <input type="text" id="referral_code" name="referral_code" placeholder="Referral Code (optional)">
 
-    <div class="g-recaptcha mb-4" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
+    <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
 
-    <button type="submit" class="w-full bg-green-800 text-white font-bold p-3 rounded relative flex justify-center items-center gap-2">
-      <span id="btnText">Create Account</span>
+    <button type="submit" id="registerBtn">
+      Create Account
       <div class="spinner" id="spinner"></div>
     </button>
 
-    <p id="message" class="text-center mt-2 font-semibold"></p>
-
-    <p class="text-center mt-3 text-sm">Already have an account? <a href="login.html" class="text-green-800 font-bold">Login</a></p>
+    <div id="message" class="message"></div>
+    <div class="login-link">Already have an account? <a href="login.html">Login</a></div>
   </form>
 </div>
 
@@ -83,101 +85,97 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const ENDPOINT = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const form = document.getElementById("registerForm");
-const message = document.getElementById("message");
+const messageBox = document.getElementById("message");
 const spinner = document.getElementById("spinner");
-const btnText = document.getElementById("btnText");
+const registerBtn = document.getElementById("registerBtn");
 
-const password = document.getElementById("password");
-const confirmPassword = document.getElementById("confirm_password");
+function togglePassword(inputId, iconId){
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+  if(input.type==="password"){ input.type="text"; icon.classList.replace("fa-eye","fa-eye-slash"); }
+  else { input.type="password"; icon.classList.replace("fa-eye-slash","fa-eye"); }
+}
 
-// Password strength rules
-const ruleUpper = document.getElementById("rule-uppercase");
-const ruleNumber = document.getElementById("rule-number");
-const ruleSpecial = document.getElementById("rule-special");
-const ruleLength = document.getElementById("rule-length");
-
-password.addEventListener("input", () => {
-  const val = password.value;
-  // Uppercase
-  if(/[A-Z]/.test(val)) ruleUpper.className="valid"; else ruleUpper.className="invalid";
-  // Number
-  if(/\d/.test(val)) ruleNumber.className="valid"; else ruleNumber.className="invalid";
-  // Special
-  if(/[!@#$%^&*(),.?":{}|<>~`_+\-=/\\[\];']/g.test(val)) ruleSpecial.className="valid"; else ruleSpecial.className="invalid";
-  // Length
-  if(val.length >= 6) ruleLength.className="valid"; else ruleLength.className="invalid";
+// Password Strength Meter
+const passwordInput = document.getElementById("password");
+passwordInput.addEventListener("input", ()=>{
+  const val = passwordInput.value;
+  document.getElementById("checkLength").querySelector("i").className = val.length>=6?"fa fa-check":"fa fa-times";
+  document.getElementById("checkUpper").querySelector("i").className = /[A-Z]/.test(val)?"fa fa-check":"fa fa-times";
+  document.getElementById("checkNumber").querySelector("i").className = /\d/.test(val)?"fa fa-check":"fa fa-times";
+  document.getElementById("checkSpecial").querySelector("i").className = /[!@#$%^&*()_+[\]{};':"\\|,.<>\/?~-]/.test(val)?"fa fa-check":"fa fa-times";
 });
 
-// Toggle password visibility
-function togglePassword(){
-  const type = password.type === "password" ? "text" : "password";
-  password.type = type;
-  document.getElementById("eyeIcon").className = type==="password"?"fa fa-eye":"fa fa-eye-slash";
-}
-function toggleConfirmPassword(){
-  const type = confirmPassword.type === "password" ? "text" : "password";
-  confirmPassword.type = type;
-  document.getElementById("eyeIconConfirm").className = type==="password"?"fa fa-eye":"fa fa-eye-slash";
-}
-
-// Form submission
-form.addEventListener("submit", async e => {
+form.addEventListener("submit", async (e)=>{
   e.preventDefault();
-  message.textContent="";
-  message.className="";
+  messageBox.textContent = "";
   spinner.style.display="inline-block";
-  btnText.textContent="Creating...";
-  
+  registerBtn.disabled = true;
+
   const full_name = document.getElementById("full_name").value.trim();
   const email = document.getElementById("email").value.trim();
-  const pass = password.value;
-  const confirmPass = confirmPassword.value;
-  const recaptchaToken = grecaptcha.getResponse();
+  const password = document.getElementById("password").value;
+  const confirm_password = document.getElementById("confirm_password").value;
+  const referral_code = document.getElementById("referral_code").value.trim() || null;
 
-  if(pass !== confirmPass){ message.textContent="❌ Passwords do not match"; message.className="text-red-600 font-semibold text-center"; spinner.style.display="none"; btnText.textContent="Create Account"; return; }
-
-  if(!/[A-Z]/.test(pass) || !/\d/.test(pass) || !/[!@#$%^&*(),.?":{}|<>~`_+\-=/\\[\];']/g.test(pass) || pass.length<6){
-    message.textContent="❌ Password does not meet requirements"; message.className="text-red-600 font-semibold text-center"; spinner.style.display="none"; btnText.textContent="Create Account"; return;
+  if(password!==confirm_password){
+    messageBox.textContent="❌ Passwords do not match";
+    messageBox.className="message error";
+    spinner.style.display="none";
+    registerBtn.disabled=false;
+    return;
   }
 
-  if(!recaptchaToken){ message.textContent="❌ Complete reCAPTCHA"; message.className="text-red-600 font-semibold text-center"; spinner.style.display="none"; btnText.textContent="Create Account"; return; }
+  const recaptchaToken = grecaptcha.getResponse();
+  if(!recaptchaToken){
+    messageBox.textContent="❌ Complete the reCAPTCHA";
+    messageBox.className="message error";
+    spinner.style.display="none";
+    registerBtn.disabled=false;
+    return;
+  }
 
   try{
-    // Verify reCAPTCHA via your backend
-    const captchaRes = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler",{
+    // Verify reCAPTCHA via backend
+    const captchaRes = await fetch(ENDPOINT,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ recaptcha_token: recaptchaToken })
+      body: JSON.stringify({recaptcha_token: recaptchaToken})
     });
     const captchaData = await captchaRes.json();
     if(!captchaData.success) throw new Error("Captcha verification failed");
 
-    // Create user
-    const { data, error } = await supabase.auth.signUp({ email, password: pass, options:{ data:{ full_name } }});
+    // Create user via Supabase Auth
+    const { data, error } = await supabase.auth.signUp({
+      email, password,
+      options: { data: { full_name, referral_code } }
+    });
+
     if(error){
-      if(error.message.includes("already registered") || error.message.includes("duplicate")) throw new Error("Email already registered");
-      throw error;
+      if(error.message.toLowerCase().includes("already registered")){
+        throw new Error("Email is already registered");
+      } else throw error;
     }
 
-    message.textContent="✅ Registration successful! Redirecting...";
-    message.className="text-green-600 font-semibold text-center";
+    // Success
+    messageBox.textContent = "✅ Registration successful! Please confirm your email.";
+    messageBox.className="message success";
+    setTimeout(()=>{ window.location.href="login.html"; }, 1500);
 
-    setTimeout(()=> window.location.href="dashboard.html",1500);
-
-  }catch(err){
-    message.textContent="❌ "+err.message;
-    message.className="text-red-600 font-semibold text-center";
+  } catch(err){
+    messageBox.textContent="❌ "+err.message;
+    messageBox.className="message error";
     grecaptcha.reset();
-  }finally{
+  } finally{
     spinner.style.display="none";
-    btnText.textContent="Create Account";
+    registerBtn.disabled=false;
   }
 });
 </script>
-
 </body>
 </html>
