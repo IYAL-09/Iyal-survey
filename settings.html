@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Settings – Change Password</title>
+<title>Change Password – Iyal Surveys</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
@@ -14,55 +14,54 @@ body{
   background:#f1f8e9;
   color:#2e7d32;
 }
-
-/* HEADER */
 header{
   background:#2e7d32;
   color:white;
   padding:15px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
 }
 .logo{
   display:flex;
   align-items:center;
 }
 .logo img{
-  width:45px;
-  height:45px;
+  width:45px;height:45px;
   border-radius:50%;
   border:3px solid white;
   margin-right:10px;
 }
-.logo span{
-  font-weight:bold;
-  font-size:1.2em;
-}
+.logo span{font-weight:bold;font-size:1.2em;}
 
-/* CONTENT */
 .content{
   padding:20px;
-  max-width:420px;
+  max-width:440px;
   margin:auto;
 }
 
 .card{
   background:white;
-  padding:20px;
-  border-radius:14px;
-  box-shadow:0 4px 12px rgba(0,0,0,.1);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 6px 15px rgba(0,0,0,.1);
 }
 
 h2{
   margin-top:0;
-  font-size:1.2em;
+  font-size:1.25em;
 }
 
-/* INPUT GROUP */
+/* INPUT BLOCK */
+.section{
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:15px;
+}
+
 .input-group{
   position:relative;
-  margin-bottom:15px;
+  margin-bottom:12px;
 }
 .input-group input{
   width:100%;
@@ -82,11 +81,10 @@ h2{
 
 /* STRENGTH */
 .strength{
-  height:6px;
-  border-radius:4px;
+  height:7px;
   background:#eee;
+  border-radius:4px;
   overflow:hidden;
-  margin-top:6px;
 }
 .strength div{
   height:100%;
@@ -94,15 +92,33 @@ h2{
   transition:.3s;
 }
 
+/* RULES */
+.rules{
+  font-size:.9em;
+  margin-top:10px;
+}
+.rules div{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+.rules i{
+  font-size:.9em;
+}
+.bad{color:#e53935;}
+.good{color:#2e7d32;}
+
 /* BUTTON */
 button{
   width:100%;
-  padding:12px;
+  padding:13px;
   background:#2e7d32;
   color:white;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
   font-weight:bold;
+  font-size:1em;
   cursor:pointer;
   display:flex;
   align-items:center;
@@ -110,12 +126,12 @@ button{
   gap:10px;
 }
 button:disabled{
-  background:#ccc;
+  background:#c8e6c9;
+  cursor:not-allowed;
 }
 
 .spinner{
-  width:18px;
-  height:18px;
+  width:18px;height:18px;
   border:3px solid #c8e6c9;
   border-top:3px solid white;
   border-radius:50%;
@@ -144,25 +160,33 @@ button:disabled{
   <div class="card">
     <h2>Change Password</h2>
 
-    <!-- STEP 1 -->
-    <div class="input-group">
-      <input type="password" id="oldPassword" placeholder="Current password">
-      <i class="fa fa-eye toggle" onclick="toggle('oldPassword',this)"></i>
-    </div>
+    <div class="section">
+      <div class="input-group">
+        <input type="password" id="oldPassword" placeholder="Current password">
+        <i class="fa fa-eye toggle" onclick="toggle('oldPassword',this)"></i>
+      </div>
 
-    <!-- STEP 2 -->
-    <div class="input-group">
-      <input type="password" id="newPassword" placeholder="New password">
-      <i class="fa fa-eye toggle" onclick="toggle('newPassword',this)"></i>
+      <div class="input-group">
+        <input type="password" id="newPassword" placeholder="New password">
+        <i class="fa fa-eye toggle" onclick="toggle('newPassword',this)"></i>
+      </div>
+
       <div class="strength"><div id="strengthBar"></div></div>
+
+      <div class="rules">
+        <div id="rLen" class="bad"><i class="fa fa-times-circle"></i> Minimum 6 characters</div>
+        <div id="rUp" class="bad"><i class="fa fa-times-circle"></i> One uppercase letter</div>
+        <div id="rNum" class="bad"><i class="fa fa-times-circle"></i> One number</div>
+        <div id="rSpec" class="bad"><i class="fa fa-times-circle"></i> One special character</div>
+      </div>
+
+      <div class="input-group" style="margin-top:12px">
+        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+        <i class="fa fa-eye toggle" onclick="toggle('confirmPassword',this)"></i>
+      </div>
     </div>
 
-    <div class="input-group">
-      <input type="password" id="confirmPassword" placeholder="Confirm new password">
-      <i class="fa fa-eye toggle" onclick="toggle('confirmPassword',this)"></i>
-    </div>
-
-    <button id="updateBtn">
+    <button id="updateBtn" disabled>
       Update Password
       <span class="spinner" style="display:none"></span>
     </button>
@@ -174,59 +198,75 @@ button:disabled{
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const supabase = createClient(
+const supabase=createClient(
   "https://xkshzlfducmnglxfnxzk.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
+  "YOUR_ANON_KEY"
 );
 
-/* SESSION CHECK */
-const { data:{ session } } = await supabase.auth.getSession();
+/* AUTH */
+const { data:{session} }=await supabase.auth.getSession();
 if(!session) location.href="login.html";
 
-/* TOGGLE PASSWORD */
-window.toggle = (id, el)=>{
+/* TOGGLE */
+window.toggle=(id,el)=>{
   const i=document.getElementById(id);
   i.type=i.type==="password"?"text":"password";
   el.classList.toggle("fa-eye-slash");
 };
 
-/* STRENGTH */
-const bar=document.getElementById("strengthBar");
-document.getElementById("newPassword").oninput=e=>{
-  const v=e.target.value;
-  let s=0;
-  if(v.length>=8) s++;
-  if(/[A-Z]/.test(v)) s++;
-  if(/[0-9]/.test(v)) s++;
-  if(/[^A-Za-z0-9]/.test(v)) s++;
-
-  const pct=[0,25,50,75,100][s];
-  bar.style.width=pct+"%";
-  bar.style.background=["#ccc","#f44336","#ff9800","#8bc34a","#2e7d32"][s];
+/* PASSWORD VALIDATION */
+const rules={
+  len:v=>v.length>=6,
+  up:v=>/[A-Z]/.test(v),
+  num:v=>/[0-9]/.test(v),
+  spec:v=>/[^A-Za-z0-9]/.test(v)
 };
 
-/* UPDATE PASSWORD */
-document.getElementById("updateBtn").onclick=async()=>{
-  const oldP=oldPassword.value;
-  const newP=newPassword.value;
-  const conf=confirmPassword.value;
+const bar=document.getElementById("strengthBar");
+const btn=document.getElementById("updateBtn");
+
+newPassword.oninput=()=>{
+  const v=newPassword.value;
+  let score=0;
+
+  updateRule("rLen",rules.len(v)); if(rules.len(v)) score++;
+  updateRule("rUp",rules.up(v)); if(rules.up(v)) score++;
+  updateRule("rNum",rules.num(v)); if(rules.num(v)) score++;
+  updateRule("rSpec",rules.spec(v)); if(rules.spec(v)) score++;
+
+  const widths=[0,25,50,75,100];
+  bar.style.width=widths[score]+"%";
+  bar.style.background=["#ccc","#f44336","#ff9800","#8bc34a","#2e7d32"][score];
+
+  btn.disabled=!(score===4 && confirmPassword.value===v);
+};
+
+confirmPassword.oninput=()=>{
+  btn.disabled=confirmPassword.value!==newPassword.value;
+};
+
+function updateRule(id,ok){
+  const el=document.getElementById(id);
+  el.className=ok?"good":"bad";
+  el.querySelector("i").className=ok?"fa fa-check-circle":"fa fa-times-circle";
+}
+
+/* UPDATE */
+updateBtn.onclick=async()=>{
   const msg=document.getElementById("message");
-  const btn=document.getElementById("updateBtn");
-  const spin=btn.querySelector(".spinner");
+  const spin=updateBtn.querySelector(".spinner");
 
   msg.textContent="";
-  if(!oldP||!newP||!conf) return msg.textContent="❌ Fill all fields";
-  if(newP!==conf) return msg.textContent="❌ Passwords do not match";
+  updateBtn.disabled=true; spin.style.display="inline-block";
 
-  btn.disabled=true; spin.style.display="inline-block";
+  const { error } = await supabase.auth.updateUser({ password:newPassword.value });
 
-  const { error } = await supabase.auth.updateUser({ password:newP });
-
-  btn.disabled=false; spin.style.display="none";
+  spin.style.display="none";
 
   if(error){
     msg.style.color="red";
     msg.textContent="❌ "+error.message;
+    updateBtn.disabled=false;
   }else{
     msg.style.color="green";
     msg.textContent="✅ Password updated successfully";
