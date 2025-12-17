@@ -1,106 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register - Iyal Surveys</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Register - Iyal Surveys</title>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google reCAPTCHA -->
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .container { width: 100%; max-width: 420px; padding: 20px; }
-    .logo { text-align: center; margin-bottom: 15px; }
-    .logo img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid white; background: white; object-fit: cover; }
-    .logo h1 { margin: 10px 0 0; color: #2e7d32; font-size: 26px; }
-    .form-box { background: white; padding: 22px; border-radius: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
-    input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; }
-    .password-wrapper { position: relative; }
-    .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #555; }
-    button { width: 100%; padding: 12px; background: #2e7d32; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; position: relative; }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .spinner { display: none; width: 18px; height: 18px; border: 3px solid white; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .message { text-align: center; margin-top: 10px; font-weight: bold; }
-    .error { color: #d32f2f; }
-    .success { color: #2e7d32; }
-    .login-link { text-align: center; margin-top: 12px; }
-    .login-link a { color: #2e7d32; text-decoration: none; font-weight: bold; }
-  </style>
+<!-- Google reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<style>
+/* Password strength indicator */
+.strength-item { font-size: 0.875rem; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+.strength-item .fa-check { color: green; display: none; }
+.strength-item.valid .fa-check { display: inline-block; }
+</style>
 </head>
+<body class="bg-green-50 flex items-center justify-center min-h-screen p-4">
 
-<body>
-  <div class="container">
-    <div class="logo">
-      <img src="assets/logo.png" alt="Iyal Surveys Logo">
-      <h1>Iyal Surveys</h1>
-    </div>
-
-    <div class="form-box">
-      <form id="registerForm">
-        <input type="text" id="full_name" placeholder="Full Name" required>
-        <input type="email" id="email" placeholder="Email Address" required>
-
-        <div class="password-wrapper">
-          <input type="password" id="password" placeholder="Password" required>
-          <i class="fa fa-eye toggle-password" onclick="togglePassword()"></i>
-        </div>
-
-        <input type="text" id="referral_code" placeholder="Referral Code (optional)">
-
-        <!-- Google reCAPTCHA Checkbox -->
-        <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
-
-        <button type="submit" id="registerBtn">
-          Create Account
-          <div class="spinner" id="spinner"></div>
-        </button>
-
-        <div id="message" class="message"></div>
-
-        <div class="login-link">
-          Already have an account? <a href="login.html">Login</a>
-        </div>
-      </form>
-    </div>
+<div class="w-full max-w-md">
+  <div class="text-center mb-6">
+    <img src="assets/logo.png" class="mx-auto rounded-full border-2 border-white w-12 h-12" />
+    <h1 class="mt-2 text-2xl font-bold text-green-800">Iyal Surveys</h1>
   </div>
 
-<script>
+  <div class="bg-white shadow-lg rounded-xl p-6 space-y-4 animate-fadeIn">
+    <form id="registerForm" class="space-y-4">
+
+      <input type="text" id="full_name" placeholder="Full Name" required
+        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+
+      <input type="email" id="email" placeholder="Email Address" required
+        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+
+      <div class="relative">
+        <input type="password" id="password" placeholder="Password" required
+          class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+        <i class="fa fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
+          onclick="togglePassword()"></i>
+      </div>
+
+      <!-- Password Strength -->
+      <div id="passwordStrength" class="space-y-1">
+        <div class="strength-item" id="upper"><i class="fa fa-check"></i> At least 1 uppercase letter</div>
+        <div class="strength-item" id="number"><i class="fa fa-check"></i> At least 1 number</div>
+        <div class="strength-item" id="special"><i class="fa fa-check"></i> At least 1 special character (^)_+*%$#)</div>
+        <div class="strength-item" id="length"><i class="fa fa-check"></i> Minimum 6 characters</div>
+      </div>
+
+      <input type="text" id="referral_code" placeholder="Referral Code (optional)"
+        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+
+      <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
+
+      <button type="submit" id="registerBtn"
+        class="w-full bg-green-700 text-white font-bold py-3 rounded-lg relative disabled:opacity-50 flex justify-center items-center gap-2">
+        Create Account
+        <div class="spinner border-2 border-white border-t-transparent rounded-full w-5 h-5 hidden"></div>
+      </button>
+
+      <div id="message" class="text-center font-semibold mt-2"></div>
+
+      <div class="text-center text-sm">
+        Already have an account? <a href="login.html" class="text-green-700 font-bold">Login</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
 const ENDPOINT = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler";
 const form = document.getElementById("registerForm");
 const messageBox = document.getElementById("message");
-const spinner = document.getElementById("spinner");
+const spinner = document.querySelector(".spinner");
 const registerBtn = document.getElementById("registerBtn");
+const passwordInput = document.getElementById("password");
 
 // Toggle password visibility
-function togglePassword() {
-  const input = document.getElementById("password");
-  input.type = input.type === "password" ? "text" : "password";
+function togglePassword(){
+  passwordInput.type = passwordInput.type === "password" ? "text" : "password";
 }
 
-form.addEventListener("submit", async (e) => {
+// Password Strength Check
+const upperEl = document.getElementById("upper");
+const numberEl = document.getElementById("number");
+const specialEl = document.getElementById("special");
+const lengthEl = document.getElementById("length");
+
+passwordInput.addEventListener("input", () => {
+  const val = passwordInput.value;
+  upperEl.classList.toggle("valid", /[A-Z]/.test(val));
+  numberEl.classList.toggle("valid", /[0-9]/.test(val));
+  specialEl.classList.toggle("valid", /[\^)_+\*\%\$#]/.test(val));
+  lengthEl.classList.toggle("valid", val.length >= 6);
+});
+
+form.addEventListener("submit", async e => {
   e.preventDefault();
   messageBox.textContent = "";
-  spinner.style.display = "inline-block";
+  spinner.classList.remove("hidden");
   registerBtn.disabled = true;
 
-  // Get reCAPTCHA token
-  const token = grecaptcha.getResponse();
-  if (!token) {
+  // Validate password strength before sending
+  if (!/[A-Z]/.test(passwordInput.value) || !/[0-9]/.test(passwordInput.value) ||
+      !/[\^)_+\*\%\$#]/.test(passwordInput.value) || passwordInput.value.length < 6) {
+    showError("Password does not meet strength requirements");
+    spinner.classList.add("hidden");
+    registerBtn.disabled = false;
+    return;
+  }
+
+  const recaptchaToken = grecaptcha.getResponse();
+  if(!recaptchaToken){
     showError("Please complete the reCAPTCHA");
-    spinner.style.display = "none";
+    spinner.classList.add("hidden");
     registerBtn.disabled = false;
     return;
   }
@@ -108,40 +126,40 @@ form.addEventListener("submit", async (e) => {
   const payload = {
     full_name: document.getElementById("full_name").value.trim(),
     email: document.getElementById("email").value.trim(),
-    password: document.getElementById("password").value,
+    password: passwordInput.value,
     referral_code: document.getElementById("referral_code").value.trim() || null,
-    recaptcha_token: token
+    recaptcha_token: recaptchaToken
   };
 
   try {
-    const res = await fetch(ENDPOINT, {   
+    const res = await fetch(ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-
     const data = await res.json();
 
-    if (!data.success) throw new Error(data.message);
+    if(!data.success) throw new Error(data.message);
 
     messageBox.textContent = "✅ Registration successful! Redirecting...";
-    messageBox.className = "message success";
+    messageBox.className = "text-green-700 font-bold mt-2 text-center";
 
-    setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+    setTimeout(() => window.location.href="dashboard.html", 1500);
 
-  } catch (err) {
+  } catch(err){
     showError(err.message || "Registration failed");
-    grecaptcha.reset(); // reset reCAPTCHA after failure
+    grecaptcha.reset();
   } finally {
-    spinner.style.display = "none";
+    spinner.classList.add("hidden");
     registerBtn.disabled = false;
   }
 });
 
-function showError(msg) {
+function showError(msg){
   messageBox.textContent = "❌ " + msg;
-  messageBox.className = "message error";
+  messageBox.className = "text-red-600 font-bold mt-2 text-center";
 }
 </script>
+
 </body>
 </html>
