@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Withdraw - Iyal Surveys</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
 <style>
 body { font-family:'Segoe UI',sans-serif; margin:0; background:#f1f8e9; color:#2e7d32;}
 header { background:#2e7d32; color:white; padding:15px; display:flex; align-items:center; justify-content:space-between; position:relative;}
@@ -12,31 +13,112 @@ header { background:#2e7d32; color:white; padding:15px; display:flex; align-item
 .logo img { width:50px; height:50px; border-radius:50%; border:4px solid white; object-fit:cover; margin-right:10px;}
 .logo span { font-size:1.4em; font-weight:bold;}
 .menu-toggle { font-size:1.5em; cursor:pointer;}
-nav { position:absolute; top:80px; right:15px; background:#388e3c; color:white; display:none; flex-direction:column; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.3); z-index:10;}
+nav { position:absolute; top:80px; right:15px; background:#388e3c; display:none; flex-direction:column; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.3); z-index:10;}
 nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px solid #66bb6a;}
+
 .content { padding:20px; padding-bottom:120px;}
-h2 { margin-top:0; font-size:1.3em;}
-.card { background:white; padding:20px; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.1); margin-bottom:20px;}
-input, select, button { width:100%; padding:12px; margin-top:8px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc; font-size:1em; box-sizing:border-box;}
-button { background:#2e7d32; color:white; border:none; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:10px;}
-button:disabled { background:#ccc; cursor:not-allowed;}
-.spinner { width:18px; height:18px; border:3px solid #f3f3f3; border-top:3px solid white; border-radius:50%; animation:spin 1s linear infinite; display:inline-block;}
+h2 { margin-top:0; font-size:1.2em;}
+
+.card {
+  background:white;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom:20px;
+}
+
+.info-banner {
+  background:#e8f5e9;
+  border-left:6px solid #2e7d32;
+}
+
+.info-banner ul {
+  padding-left:18px;
+  font-size:0.95em;
+  line-height:1.7;
+}
+
+.info-banner li i {
+  color:#2e7d32;
+  margin-right:6px;
+}
+
+input, select, button {
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  margin-bottom:15px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:1em;
+}
+
+button {
+  background:#2e7d32;
+  color:white;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+button:disabled {
+  background:#a5d6a7;
+  cursor:not-allowed;
+  opacity:0.8;
+}
+
+.spinner {
+  width:18px;
+  height:18px;
+  border:3px solid #f3f3f3;
+  border-top:3px solid white;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  display:inline-block;
+}
+
 @keyframes spin { to { transform: rotate(360deg); } }
-#status { text-align:center; margin-top:10px; font-weight:bold;}
-.bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:#2e7d32; display:flex; justify-content:space-around; padding:10px 0; box-shadow:0 -2px 5px rgba(0,0,0,0.2);}
+
+#status {
+  text-align:center;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#2e7d32;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  box-shadow:0 -2px 5px rgba(0,0,0,0.2);
+}
 .bottom-nav a { color:white; text-decoration:none; font-size:0.9em; text-align:center;}
 .bottom-nav i { display:block; font-size:1.2em; margin-bottom:4px;}
-.history-item { padding:10px; border-bottom:1px solid #eee; font-size:0.9em;}
-.pending { color:orange; font-weight:bold; }
-.approved { color:green; font-weight:bold; }
-.rejected { color:red; font-weight:bold; }
+
+.history-item {
+  padding:10px;
+  border-bottom:1px solid #eee;
+  font-size:0.9em;
+}
+.pending { color:orange; font-weight:bold;}
+.approved { color:green; font-weight:bold;}
+.rejected { color:red; font-weight:bold;}
 </style>
 </head>
+
 <body>
 
 <header>
   <div class="logo">
-    <img src="iyallogo.png" alt="Iyal Logo" />
+    <img src="iyallogo.png"/>
     <span>Iyal Surveys</span>
   </div>
   <div class="menu-toggle" onclick="toggleMenu()"><i class="fa fa-bars"></i></div>
@@ -45,19 +127,34 @@ button:disabled { background:#ccc; cursor:not-allowed;}
     <a href="privacy.html">Privacy Policy</a>
     <a href="about.html">About Us</a>
     <a href="disclaimer.html">Disclaimer</a>
-        <a href="support.html">Supports</a>
+    <a href="support.html">Supports</a>
     <a href="settings.html">Settings</a>
   </nav>
 </header>
 
 <div class="content">
+
+  <!-- 🔔 INFO BANNER -->
+  <div class="card info-banner">
+    <h2><i class="fa fa-info-circle"></i> Withdrawal Information</h2>
+    <ul>
+      <li><i class="fa fa-clock"></i> Withdrawals are allowed <strong>once every 24 hours</strong>.</li>
+      <li><i class="fa fa-money-bill-wave"></i> Minimum withdrawal: <strong>₦2,000 (Airtime)</strong>, <strong>₦5,000 (Bank)</strong>.</li>
+      <li><i class="fa fa-hourglass-half"></i> Processing time: <strong>Within 24 hours</strong>.</li>
+      <li><i class="fa fa-check-circle"></i> Approved withdrawals are processed automatically.</li>
+    </ul>
+  </div>
+
+  <!-- 💰 BALANCE -->
   <div class="card">
     <h2>Your Balance</h2>
     <p id="balance">Loading... <span class="spinner"></span></p>
   </div>
 
+  <!-- 💸 WITHDRAW -->
   <div class="card">
-    <h2>Withdraw</h2>
+    <h2>Withdraw Funds</h2>
+
     <select id="withdrawMethod">
       <option value="">Select Withdrawal Method</option>
       <option value="airtime">Airtime (₦2000)</option>
@@ -68,12 +165,12 @@ button:disabled { background:#ccc; cursor:not-allowed;}
       <input type="text" id="airtimeNumber" placeholder="Phone Number"/>
       <select id="network">
         <option value="">Select Network</option>
-        <option value="MTN">MTN</option>
-        <option value="Airtel">Airtel</option>
-        <option value="Glo">Glo</option>
-        <option value="9mobile">9mobile</option>
+        <option>MTN</option>
+        <option>Airtel</option>
+        <option>Glo</option>
+        <option>9mobile</option>
       </select>
-      <button id="airtimeWithdrawBtn" disabled>
+      <button id="airtimeWithdrawBtn">
         Withdraw ₦2000 Airtime <span class="spinner" style="display:none;"></span>
       </button>
     </div>
@@ -82,7 +179,7 @@ button:disabled { background:#ccc; cursor:not-allowed;}
       <input type="text" id="bankName" placeholder="Bank Name"/>
       <input type="text" id="accountName" placeholder="Account Holder Name"/>
       <input type="text" id="accountNumber" placeholder="Account Number"/>
-      <button id="bankWithdrawBtn" disabled>
+      <button id="bankWithdrawBtn">
         Withdraw ₦5000 Bank <span class="spinner" style="display:none;"></span>
       </button>
     </div>
@@ -90,6 +187,7 @@ button:disabled { background:#ccc; cursor:not-allowed;}
     <p id="status"></p>
   </div>
 
+  <!-- 📜 HISTORY -->
   <div class="card">
     <h2>Recent Withdrawals</h2>
     <div id="history"><div class="spinner"></div></div>
@@ -103,19 +201,6 @@ button:disabled { background:#ccc; cursor:not-allowed;}
   <a href="#" id="logoutBottom"><i class="fa fa-sign-out-alt"></i>Logout</a>
 </div>
 
-<script>
-function toggleMenu() {
-  const menu = document.getElementById("menu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-}
-
-document.getElementById("withdrawMethod").addEventListener("change", () => {
-  const method = document.getElementById("withdrawMethod").value;
-  document.getElementById("airtimeForm").style.display = method === "airtime" ? "block" : "none";
-  document.getElementById("bankForm").style.display = method === "bank" ? "block" : "none";
-});
-</script>
-
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -124,140 +209,81 @@ const supabase = createClient(
   "YOUR_ANON_KEY"
 );
 
-let userSession = null;
+const LOCK_KEY = "last_withdraw_time";
+const LOCK_TIME = 24 * 60 * 60 * 1000;
 
-// --- GET SESSION ---
-const { data:{ session } } = await supabase.auth.getSession();
-if(!session){
-  window.location.href = "login.html";
-} else {
-  userSession = session;
+function toggleMenu(){
+  const m = document.getElementById("menu");
+  m.style.display = m.style.display === "flex" ? "none" : "flex";
+}
+window.toggleMenu = toggleMenu;
+
+const { data:{ session }} = await supabase.auth.getSession();
+if(!session) location.href="login.html";
+
+function remainingTime(){
+  const last = localStorage.getItem(LOCK_KEY);
+  if(!last) return 0;
+  const diff = Date.now() - Number(last);
+  return diff < LOCK_TIME ? LOCK_TIME - diff : 0;
 }
 
-// --- LOAD USER ---
-async function loadUser() {
-  await loadBalance();
-  await loadHistory();
-}
-
-// --- LOAD BALANCE ---
-async function loadBalance() {
-  try {
-    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "Authorization": `Bearer ${userSession.access_token}`
-      },
-      body: JSON.stringify({ action:"get_balance" })
-    });
-    const data = await res.json();
-    document.getElementById("balance").textContent = `₦${data.balance.toLocaleString()}`;
-    document.getElementById("airtimeWithdrawBtn").disabled = data.balance < 2000;
-    document.getElementById("bankWithdrawBtn").disabled = data.balance < 5000;
-  } catch(err){
-    console.error(err);
-    document.getElementById("balance").textContent = "₦0";
+function applyLock(){
+  const r = remainingTime();
+  if(r > 0){
+    const h = Math.floor(r / 3600000);
+    const m = Math.floor((r % 3600000) / 60000);
+    document.getElementById("status").innerHTML =
+      `<i class="fa fa-lock"></i> Next withdrawal in ${h}h ${m}m`;
+    document.getElementById("airtimeWithdrawBtn").disabled = true;
+    document.getElementById("bankWithdrawBtn").disabled = true;
+    return true;
   }
+  return false;
 }
 
-// --- CREATE WITHDRAWAL ---
-async function createWithdrawal(method, details, btn){
-  const spinner = btn.querySelector(".spinner");
-  btn.disabled = true;
-  spinner.style.display = "inline-block";
-  const statusEl = document.getElementById("status");
-  statusEl.textContent = "";
+document.getElementById("withdrawMethod").onchange = e=>{
+  airtimeForm.style.display = e.target.value==="airtime"?"block":"none";
+  bankForm.style.display = e.target.value==="bank"?"block":"none";
+};
 
-  try{
-    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "Authorization": `Bearer ${userSession.access_token}`
-      },
-      body: JSON.stringify({ action:"withdraw", method, details })
-    });
-    const data = await res.json();
-    if(!data.success) throw new Error(data.message);
-    statusEl.style.color = "green";
-    statusEl.textContent = "✅ Withdrawal submitted!";
-    await loadBalance();
-    await loadHistory();
-  } catch(err){
-    statusEl.style.color = "red";
-    statusEl.textContent = "❌ " + err.message;
-  } finally {
-    spinner.style.display = "none";
-    btn.disabled = false;
-  }
+async function loadBalance(){
+  const r = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task",{
+    method:"POST",
+    headers:{ "Authorization":`Bearer ${session.access_token}`, "Content-Type":"application/json"},
+    body:JSON.stringify({ action:"get_balance" })
+  });
+  const d = await r.json();
+  balance.textContent = "₦" + d.balance.toLocaleString();
 }
 
-// --- BUTTONS ---
-document.getElementById("airtimeWithdrawBtn").addEventListener("click", ()=>{
-  const details = {
-    number: document.getElementById("airtimeNumber").value,
-    network: document.getElementById("network").value
-  };
-  if(!details.number || !details.network) return alert("Complete Airtime form");
-  createWithdrawal("airtime", details, document.getElementById("airtimeWithdrawBtn"));
-});
-
-document.getElementById("bankWithdrawBtn").addEventListener("click", ()=>{
-  const details = {
-    bank: document.getElementById("bankName").value,
-    name: document.getElementById("accountName").value,
-    number: document.getElementById("accountNumber").value
-  };
-  if(!details.bank || !details.name || !details.number) return alert("Complete Bank form");
-  createWithdrawal("bank", details, document.getElementById("bankWithdrawBtn"));
-});
-
-// --- LOAD HISTORY ---
-async function loadHistory() {
-  const historyDiv = document.getElementById("history");
-  historyDiv.innerHTML = '<div class="spinner"></div>';
-  try{
-    const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "Authorization": `Bearer ${userSession.access_token}`
-      },
-      body: JSON.stringify({ action:"history" })
-    });
-    const data = await res.json();
-    if(!data.success || !data.history.length){
-      historyDiv.innerHTML="<p>No withdrawal history yet.</p>";
-      return;
-    }
-    historyDiv.innerHTML="";
-    data.history.forEach(item=>{
-      const div = document.createElement("div");
-      div.className="history-item";
-      div.innerHTML=`
-        <strong>${item.type.toUpperCase()}</strong> - ₦${item.amount}<br>
-        <small>${new Date(item.created_at).toLocaleString()}</small><br>
-        <span class="${item.status.toLowerCase()}">${item.status}</span>
-      `;
-      historyDiv.appendChild(div);
-    });
-  } catch(err){
-    console.error(err);
-    historyDiv.innerHTML="<p>Error loading history.</p>";
-  }
+async function loadHistory(){
+  const r = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-task",{
+    method:"POST",
+    headers:{ "Authorization":`Bearer ${session.access_token}`, "Content-Type":"application/json"},
+    body:JSON.stringify({ action:"history" })
+  });
+  const d = await r.json();
+  history.innerHTML="";
+  if(!d.history.length) return history.innerHTML="<p>No history yet.</p>";
+  d.history.forEach(x=>{
+    history.innerHTML+=`
+      <div class="history-item">
+        <strong>${x.type}</strong> - ₦${x.amount}<br>
+        <small>${new Date(x.created_at).toLocaleString()}</small><br>
+        <span class="${x.status.toLowerCase()}">${x.status}</span>
+      </div>`;
+  });
 }
 
-// --- LOGOUT ---
-function logout(){
-  supabase.auth.signOut();
-  window.location.href="login.html";
-}
-document.getElementById("logoutNav").addEventListener("click", logout);
-document.getElementById("logoutBottom").addEventListener("click", logout);
+applyLock();
+loadBalance();
+loadHistory();
 
-// --- INIT ---
-loadUser();
+logoutBottom.onclick = async ()=>{
+  await supabase.auth.signOut();
+  location.href="login.html";
+};
 </script>
 </body>
 </html>
