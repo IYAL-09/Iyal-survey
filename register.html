@@ -7,91 +7,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <style>
-body {
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-}
-.card {
-  background:white;
-  border-radius:12px;
-  padding:25px;
-  max-width:400px;
-  width:90%;
-  box-shadow:0 4px 20px rgba(0,0,0,0.1);
-}
+body { margin:0; font-family:'Segoe UI',sans-serif; background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9); display:flex; justify-content:center; align-items:center; min-height:100vh;}
+.card { background:white; border-radius:12px; padding:25px; max-width:400px; width:90%; box-shadow:0 4px 20px rgba(0,0,0,0.1);}
 .logo { text-align:center; margin-bottom:15px; }
 .logo img { width:50px; height:50px; border-radius:50%; }
 .logo h1 { color:#2e7d32; margin-top:8px; }
 h2 { text-align:center; color:#2e7d32; margin-bottom:15px; }
-
 .input-group { position:relative; margin-bottom:15px; }
-input {
-  width:100%;
-  padding:12px;
-  border:1px solid #ccc;
-  border-radius:8px;
-  box-sizing:border-box;
-}
-
-.eye-toggle {
-  position:absolute;
-  top:50%;
-  right:12px;
-  transform:translateY(-50%);
-  cursor:pointer;
-  color:#4caf50;
-}
-
-button {
-  width:100%;
-  padding:12px;
-  background:#2e7d32;
-  color:white;
-  border:none;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:10px;
-}
+input { width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; box-sizing:border-box; }
+.eye-toggle { position:absolute; top:50%; right:12px; transform:translateY(-50%); cursor:pointer; color:#4caf50; }
+button { width:100%; padding:12px; background:#2e7d32; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:10px; }
 button:disabled { background:#9e9e9e; }
-
-.spinner {
-  display:none;
-  width:18px;
-  height:18px;
-  border:3px solid white;
-  border-top:3px solid transparent;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-}
+.spinner { display:none; width:18px; height:18px; border:3px solid white; border-top:3px solid transparent; border-radius:50%; animation:spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
 .message { text-align:center; margin-top:10px; font-weight:bold; }
 .error { color:#d32f2f; }
 .success { color:#2e7d32; }
-
 .login-link { text-align:center; margin-top:10px; }
 .login-link a { color:#2e7d32; font-weight:bold; text-decoration:none; }
-
-.password-checklist {
-  list-style:none;
-  padding-left:0;
-  font-size:0.9em;
-  margin-bottom:10px;
-}
-.password-checklist li {
-  display:flex;
-  align-items:center;
-  margin-bottom:5px;
-}
+.password-checklist { list-style:none; padding-left:0; font-size:0.9em; margin-bottom:10px; }
+.password-checklist li { display:flex; align-items:center; margin-bottom:5px; }
 .password-checklist li i { margin-right:8px; }
 </style>
 </head>
@@ -106,28 +41,10 @@ button:disabled { background:#9e9e9e; }
   <h2>Create Account</h2>
 
   <form id="registerForm">
-
-    <div class="input-group">
-      <input id="full_name" placeholder="Full Name" required>
-    </div>
-
-    <div class="input-group">
-      <input id="email" type="email" placeholder="Email" required>
-    </div>
-
-    <div class="input-group">
-      <input id="password" type="password" placeholder="Password" required>
-      <span class="eye-toggle" onclick="togglePassword('password','eye1')">
-        <i id="eye1" class="fa fa-eye"></i>
-      </span>
-    </div>
-
-    <div class="input-group">
-      <input id="confirm_password" type="password" placeholder="Confirm Password" required>
-      <span class="eye-toggle" onclick="togglePassword('confirm_password','eye2')">
-        <i id="eye2" class="fa fa-eye"></i>
-      </span>
-    </div>
+    <div class="input-group"><input id="full_name" placeholder="Full Name" required></div>
+    <div class="input-group"><input id="email" type="email" placeholder="Email" required></div>
+    <div class="input-group"><input id="password" type="password" placeholder="Password" required><span class="eye-toggle" onclick="togglePassword('password','eye1')"><i id="eye1" class="fa fa-eye"></i></span></div>
+    <div class="input-group"><input id="confirm_password" type="password" placeholder="Confirm Password" required><span class="eye-toggle" onclick="togglePassword('confirm_password','eye2')"><i id="eye2" class="fa fa-eye"></i></span></div>
 
     <ul class="password-checklist">
       <li id="checkLength"><i class="fa fa-times"></i> Minimum 6 characters</li>
@@ -137,14 +54,8 @@ button:disabled { background:#9e9e9e; }
     </ul>
 
     <input id="referral_code" placeholder="Referral Code (optional)">
-
-    <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
-
-    <button id="registerBtn" type="submit">
-      Create Account
-      <div class="spinner" id="spinner"></div>
-    </button>
-
+    <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+    <button id="registerBtn" type="submit">Create Account<div class="spinner" id="spinner"></div></button>
     <div id="message" class="message"></div>
     <div class="login-link">Already have an account? <a href="login.html">Login</a></div>
   </form>
@@ -153,11 +64,7 @@ button:disabled { background:#9e9e9e; }
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const supabase = createClient(
-  "https://xkshzlfducmnglxfnxzk.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
-);
-
+const supabase = createClient("https://xkshzlfducmnglxfnxzk.supabase.co", "YOUR_ANON_KEY");
 const ENDPOINT = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler";
 
 const form = document.getElementById("registerForm");
@@ -168,17 +75,11 @@ const btn = document.getElementById("registerBtn");
 window.togglePassword = (inputId, iconId) => {
   const input = document.getElementById(inputId);
   const icon = document.getElementById(iconId);
-  if (input.type === "password") {
-    input.type = "text";
-    icon.classList.replace("fa-eye","fa-eye-slash");
-  } else {
-    input.type = "password";
-    icon.classList.replace("fa-eye-slash","fa-eye");
-  }
+  if(input.type==="password"){ input.type="text"; icon.classList.replace("fa-eye","fa-eye-slash"); }
+  else{ input.type="password"; icon.classList.replace("fa-eye-slash","fa-eye"); }
 };
 
-// Password checklist
-document.getElementById("password").addEventListener("input", e => {
+document.getElementById("password").addEventListener("input", e=>{
   const val = e.target.value;
   document.getElementById("checkLength").querySelector("i").className = val.length>=6?"fa fa-check":"fa fa-times";
   document.getElementById("checkUpper").querySelector("i").className = /[A-Z]/.test(val)?"fa fa-check":"fa fa-times";
@@ -186,87 +87,84 @@ document.getElementById("password").addEventListener("input", e => {
   document.getElementById("checkSpecial").querySelector("i").className = /[^A-Za-z0-9]/.test(val)?"fa fa-check":"fa fa-times";
 });
 
-form.addEventListener("submit", async e => {
+form.addEventListener("submit", async e=>{
   e.preventDefault();
-  spinner.style.display = "inline-block";
-  btn.disabled = true;
-  messageBox.textContent = "";
+  spinner.style.display="inline-block";
+  btn.disabled=true;
+  messageBox.textContent="";
 
-  try {
+  try{
     const full_name = document.getElementById("full_name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const confirm = document.getElementById("confirm_password").value;
     const referral_code = document.getElementById("referral_code").value.trim() || null;
 
-    if(password !== confirm) throw new Error("Passwords do not match");
-
+    if(password!==confirm) throw new Error("Passwords do not match");
     const recaptcha_token = grecaptcha.getResponse();
     if(!recaptcha_token) throw new Error("Complete the reCAPTCHA");
 
-    // Call Edge Function for captcha + email precheck
+    // Call Edge Function (captcha + email + referral)
     const res = await fetch(ENDPOINT, {
       method:"POST",
       headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ recaptcha_token, email })
+      body: JSON.stringify({ recaptcha_token, email, referral_code })
     });
     const data = await res.json();
     if(!data.success) throw new Error(data.message);
 
+    const { referring_user } = data; // Get referring user info if exists
+
     // Signup
     const { data: signUpData, error } = await supabase.auth.signUp({
-      email,
-      password,
+      email, password,
       options: { data: { name: full_name, referral_code } }
     });
     if(error) throw error;
-    if(!signUpData.user) throw new Error("Signup failed");
 
-    // Get user's IP address
+    // Get IP
     const ipRes = await fetch('https://api.ipify.org?format=json');
     const ipData = await ipRes.json();
     const userIp = ipData.ip || "";
 
-    // Insert into users table
+    // Insert new user
     const insertPayload = {
       id: signUpData.user.id,
-      email: email,
+      email,
       name: full_name,
-      referral_code: referral_code,
+      referral_code,
       created_at: new Date().toISOString(),
       balance: 0,
       total_earned: 0,
       total_withdrawn: 0,
       ip_adress: userIp,
-      is_blocked: false,
-      referral_count: 0,
-      referred_by: null
+      is_blocked:false,
+      referral_count:0,
+      referred_by: referring_user ? referring_user.id : null
     };
-
-    // Handle referral linking
-    if(referral_code){
-      const { data: refUser } = await supabase.from("users").select("id, referral_count").eq("referral_code", referral_code).single();
-      if(refUser){
-        insertPayload.referred_by = refUser.id;
-        // Update referral_count for referring user
-        await supabase.from("users").update({ referral_count: refUser.referral_count + 1 }).eq("id", refUser.id);
-      }
-    }
 
     const { error: insertError } = await supabase.from("users").insert([insertPayload]);
     if(insertError) throw insertError;
 
-    messageBox.textContent = "✅ Registration successful! Check your email to verify.";
-    messageBox.className = "message success";
+    // Update referring user's reward/bonus if exists
+    if(referring_user){
+      await supabase.from("users").update({
+        referral_count: referring_user.referral_count + 1,
+        total_earned: referring_user.total_earned + 10 // example bonus: 10 units
+      }).eq("id", referring_user.id);
+    }
+
+    messageBox.textContent="✅ Registration successful! Check your email to verify.";
+    messageBox.className="message success";
     setTimeout(()=>location.href="login.html",1500);
 
-  } catch(err){
-    messageBox.textContent = "❌ "+err.message;
-    messageBox.className = "message error";
+  }catch(err){
+    messageBox.textContent="❌ "+err.message;
+    messageBox.className="message error";
     grecaptcha.reset();
-  } finally {
-    spinner.style.display = "none";
-    btn.disabled = false;
+  }finally{
+    spinner.style.display="none";
+    btn.disabled=false;
   }
 });
 </script>
