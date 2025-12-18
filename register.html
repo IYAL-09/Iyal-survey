@@ -204,7 +204,7 @@ form.addEventListener("submit", async e => {
     const recaptcha_token = grecaptcha.getResponse();
     if(!recaptcha_token) throw new Error("Complete the reCAPTCHA");
 
-    // Call Edge Function for captcha verification + email precheck
+    // Call Edge Function for captcha + email precheck
     const res = await fetch(ENDPOINT, {
       method:"POST",
       headers:{ "Content-Type":"application/json" },
@@ -217,11 +217,44 @@ form.addEventListener("submit", async e => {
     const { data: signUpData, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name, referral_code } }
+      options: { data: { name: full_name, referral_code } }
     });
-
     if(error) throw error;
     if(!signUpData.user) throw new Error("Signup failed");
+
+    // Get user's IP address
+    const ipRes = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipRes.json();
+    const userIp = ipData.ip || "";
+
+    // Insert into users table
+    const insertPayload = {
+      id: signUpData.user.id,
+      email: email,
+      name: full_name,
+      referral_code: referral_code,
+      created_at: new Date().toISOString(),
+      balance: 0,
+      total_earned: 0,
+      total_withdrawn: 0,
+      ip_adress: userIp,
+      is_blocked: false,
+      referral_count: 0,
+      referred_by: null
+    };
+
+    // Handle referral linking
+    if(referral_code){
+      const { data: refUser } = await supabase.from("users").select("id, referral_count").eq("referral_code", referral_code).single();
+      if(refUser){
+        insertPayload.referred_by = refUser.id;
+        // Update referral_count for referring user
+        await supabase.from("users").update({ referral_count: refUser.referral_count + 1 }).eq("id", refUser.id);
+      }
+    }
+
+    const { error: insertError } = await supabase.from("users").insert([insertPayload]);
+    if(insertError) throw insertError;
 
     messageBox.textContent = "✅ Registration successful! Check your email to verify.";
     messageBox.className = "message success";
