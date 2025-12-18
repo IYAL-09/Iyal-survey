@@ -54,7 +54,7 @@ button:disabled { background:#9e9e9e; }
     </ul>
 
     <input id="referral_code" placeholder="Referral Code (optional)">
-    <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+    <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
     <button id="registerBtn" type="submit">Create Account<div class="spinner" id="spinner"></div></button>
     <div id="message" class="message"></div>
     <div class="login-link">Already have an account? <a href="login.html">Login</a></div>
@@ -64,7 +64,7 @@ button:disabled { background:#9e9e9e; }
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const supabase = createClient("https://xkshzlfducmnglxfnxzk.supabase.co", "YOUR_ANON_KEY");
+const supabase = createClient("https://xkshzlfducmnglxfnxzk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0");
 const ENDPOINT = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler";
 
 const form = document.getElementById("registerForm");
