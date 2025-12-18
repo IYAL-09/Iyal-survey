@@ -4,33 +4,109 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Register - Iyal Surveys</title>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <style>
-  body { margin:0; font-family:'Segoe UI',sans-serif; background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9); display:flex; justify-content:center; align-items:center; min-height:100vh;}
-  .card { background:white; border-radius:12px; padding:25px; max-width:400px; width:90%; box-shadow:0 4px 20px rgba(0,0,0,0.1); animation:fadeIn 0.6s ease; }
-  @keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+  body {
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+  }
+  .card {
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    max-width:400px;
+    width:90%;
+    box-shadow:0 4px 20px rgba(0,0,0,0.1);
+    animation:fadeIn 0.6s ease;
+  }
+  @keyframes fadeIn {
+    from {opacity:0; transform:translateY(20px);}
+    to {opacity:1; transform:translateY(0);}
+  }
   .logo { text-align:center; margin-bottom:15px; }
-  .logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; object-fit:cover; }
+  .logo img {
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    border:3px solid white;
+    object-fit:cover;
+  }
   .logo h1 { margin-top:8px; font-size:1.4em; color:#2e7d32; }
   h2 { text-align:center; color:#2e7d32; margin-bottom:15px; font-size:1.2em; }
   .input-group { position:relative; margin-bottom:15px; }
-  input { width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; font-size:1em; box-sizing:border-box; }
-  .eye-toggle { position:absolute; top:50%; right:12px; transform:translateY(-50%); cursor:pointer; color:#4caf50; }
-  button { width:100%; padding:12px; background:#2e7d32; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:10px; }
+  input {
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:1em;
+    box-sizing:border-box;
+  }
+  .eye-toggle {
+    position:absolute;
+    top:50%;
+    right:12px;
+    transform:translateY(-50%);
+    cursor:pointer;
+    color:#4caf50;
+  }
+  button {
+    width:100%;
+    padding:12px;
+    background:#2e7d32;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+  }
   button:disabled { background:#9e9e9e; cursor:not-allowed; }
-  .spinner { display:none; width:18px; height:18px; border:3px solid white; border-top:3px solid transparent; border-radius:50%; animation:spin 1s linear infinite; }
+  .spinner {
+    display:none;
+    width:18px;
+    height:18px;
+    border:3px solid white;
+    border-top:3px solid transparent;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
   @keyframes spin { to { transform: rotate(360deg); } }
   .message { text-align:center; margin-top:10px; font-weight:bold; }
   .error { color:#d32f2f; }
   .success { color:#2e7d32; }
-  .password-checklist { list-style:none; padding-left:0; font-size:0.9em; margin-bottom:10px; }
-  .password-checklist li { display:flex; align-items:center; margin-bottom:5px; }
-  .password-checklist li i { margin-right:8px; transition:all 0.3s ease; }
+  .password-checklist {
+    list-style:none;
+    padding-left:0;
+    font-size:0.9em;
+    margin-bottom:10px;
+  }
+  .password-checklist li {
+    display:flex;
+    align-items:center;
+    margin-bottom:5px;
+  }
+  .password-checklist li i { margin-right:8px; }
   .login-link { text-align:center; margin-top:10px; }
-  .login-link a { color:#2e7d32; font-weight:bold; text-decoration:none; }
+  .login-link a {
+    color:#2e7d32;
+    font-weight:bold;
+    text-decoration:none;
+  }
 </style>
 </head>
+
 <body>
 
 <div class="card">
@@ -38,35 +114,40 @@
     <img src="iyallogo.png" alt="Iyal Logo">
     <h1>Iyal Surveys</h1>
   </div>
+
   <h2>Create Account</h2>
 
   <form id="registerForm">
     <div class="input-group">
-      <input type="text" id="full_name" name="full_name" placeholder="Full Name" required>
+      <input type="text" id="full_name" placeholder="Full Name" required>
     </div>
 
     <div class="input-group">
-      <input type="email" id="email" name="email" placeholder="Email" required>
+      <input type="email" id="email" placeholder="Email" required>
     </div>
 
-    <div class="input-group password-wrapper">
-      <input type="password" id="password" name="password" placeholder="Password" required>
-      <span class="eye-toggle" onclick="togglePassword('password','eye1')"><i id="eye1" class="fa fa-eye"></i></span>
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Password" required>
+      <span class="eye-toggle" onclick="togglePassword('password','eye1')">
+        <i id="eye1" class="fa fa-eye"></i>
+      </span>
     </div>
 
-    <ul class="password-checklist" id="passwordChecklist">
+    <ul class="password-checklist">
       <li id="checkLength"><i class="fa fa-times"></i> Minimum 6 characters</li>
       <li id="checkUpper"><i class="fa fa-times"></i> At least 1 uppercase letter</li>
       <li id="checkNumber"><i class="fa fa-times"></i> At least 1 number</li>
-      <li id="checkSpecial"><i class="fa fa-times"></i> At least 1 special character (!@#$%^&*)</li>
+      <li id="checkSpecial"><i class="fa fa-times"></i> At least 1 special character</li>
     </ul>
 
-    <div class="input-group password-wrapper">
-      <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
-      <span class="eye-toggle" onclick="togglePassword('confirm_password','eye2')"><i id="eye2" class="fa fa-eye"></i></span>
+    <div class="input-group">
+      <input type="password" id="confirm_password" placeholder="Confirm Password" required>
+      <span class="eye-toggle" onclick="togglePassword('confirm_password','eye2')">
+        <i id="eye2" class="fa fa-eye"></i>
+      </span>
     </div>
 
-    <input type="text" id="referral_code" name="referral_code" placeholder="Referral Code (optional)">
+    <input type="text" id="referral_code" placeholder="Referral Code (optional)">
 
     <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
 
@@ -76,7 +157,10 @@
     </button>
 
     <div id="message" class="message"></div>
-    <div class="login-link">Already have an account? <a href="login.html">Login</a></div>
+
+    <div class="login-link">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
   </form>
 </div>
 
@@ -84,7 +168,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
 const ENDPOINT = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -97,85 +181,91 @@ const registerBtn = document.getElementById("registerBtn");
 function togglePassword(inputId, iconId){
   const input = document.getElementById(inputId);
   const icon = document.getElementById(iconId);
-  if(input.type==="password"){ input.type="text"; icon.classList.replace("fa-eye","fa-eye-slash"); }
-  else { input.type="password"; icon.classList.replace("fa-eye-slash","fa-eye"); }
+  if(input.type==="password"){
+    input.type="text";
+    icon.classList.replace("fa-eye","fa-eye-slash");
+  } else {
+    input.type="password";
+    icon.classList.replace("fa-eye-slash","fa-eye");
+  }
 }
 
-// Password Strength Meter
-const passwordInput = document.getElementById("password");
-passwordInput.addEventListener("input", ()=>{
-  const val = passwordInput.value;
-  document.getElementById("checkLength").querySelector("i").className = val.length>=6?"fa fa-check":"fa fa-times";
-  document.getElementById("checkUpper").querySelector("i").className = /[A-Z]/.test(val)?"fa fa-check":"fa fa-times";
-  document.getElementById("checkNumber").querySelector("i").className = /\d/.test(val)?"fa fa-check":"fa fa-times";
-  document.getElementById("checkSpecial").querySelector("i").className = /[!@#$%^&*()_+[\]{};':"\\|,.<>\/?~-]/.test(val)?"fa fa-check":"fa fa-times";
+document.getElementById("password").addEventListener("input", e => {
+  const v = e.target.value;
+  document.getElementById("checkLength").querySelector("i").className = v.length>=6?"fa fa-check":"fa fa-times";
+  document.getElementById("checkUpper").querySelector("i").className = /[A-Z]/.test(v)?"fa fa-check":"fa fa-times";
+  document.getElementById("checkNumber").querySelector("i").className = /\d/.test(v)?"fa fa-check":"fa fa-times";
+  document.getElementById("checkSpecial").querySelector("i").className = /[^A-Za-z0-9]/.test(v)?"fa fa-check":"fa fa-times";
 });
 
-form.addEventListener("submit", async (e)=>{
+form.addEventListener("submit", async e => {
   e.preventDefault();
   messageBox.textContent = "";
-  spinner.style.display="inline-block";
+  spinner.style.display = "inline-block";
   registerBtn.disabled = true;
 
-  const full_name = document.getElementById("full_name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const confirm_password = document.getElementById("confirm_password").value;
-  const referral_code = document.getElementById("referral_code").value.trim() || null;
+  const full_name = full_name.value.trim();
+  const email = email.value.trim();
+  const password = password.value;
+  const confirm = confirm_password.value;
+  const referral_code = referral_code.value.trim() || null;
 
-  if(password!==confirm_password){
-    messageBox.textContent="❌ Passwords do not match";
-    messageBox.className="message error";
-    spinner.style.display="none";
-    registerBtn.disabled=false;
+  if(password !== confirm){
+    showError("Passwords do not match");
     return;
   }
 
-  const recaptchaToken = grecaptcha.getResponse();
-  if(!recaptchaToken){
-    messageBox.textContent="❌ Complete the reCAPTCHA";
-    messageBox.className="message error";
-    spinner.style.display="none";
-    registerBtn.disabled=false;
+  const token = grecaptcha.getResponse();
+  if(!token){
+    showError("Complete the reCAPTCHA");
     return;
   }
 
-  try{
-    // Verify reCAPTCHA via backend
+  try {
     const captchaRes = await fetch(ENDPOINT,{
       method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({recaptcha_token: recaptchaToken})
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ recaptcha_token: token })
     });
-    const captchaData = await captchaRes.json();
-    if(!captchaData.success) throw new Error("Captcha verification failed");
+    const captcha = await captchaRes.json();
+    if(!captcha.success) throw new Error("Captcha verification failed");
 
-    // Create user via Supabase Auth
     const { data, error } = await supabase.auth.signUp({
-      email, password,
-      options: { data: { full_name, referral_code } }
+      email,
+      password,
+      options:{ data:{ full_name, referral_code } }
     });
 
-    if(error){
-      if(error.message.toLowerCase().includes("already registered")){
-        throw new Error("Email is already registered");
-      } else throw error;
+    if(error) throw error;
+
+    // 🔒 CRITICAL FIX
+    if(!data.user){
+      throw new Error("Email already registered. Please log in.");
     }
 
-    // Success
-    messageBox.textContent = "✅ Registration successful! Please confirm your email.";
-    messageBox.className="message success";
-    setTimeout(()=>{ window.location.href="login.html"; }, 1500);
+    showSuccess("Registration successful! Check your email to verify.");
+    setTimeout(()=>location.href="login.html",1500);
 
   } catch(err){
-    messageBox.textContent="❌ "+err.message;
-    messageBox.className="message error";
+    showError(err.message);
     grecaptcha.reset();
-  } finally{
-    spinner.style.display="none";
-    registerBtn.disabled=false;
   }
 });
+
+function showError(msg){
+  messageBox.textContent = "❌ " + msg;
+  messageBox.className = "message error";
+  spinner.style.display="none";
+  registerBtn.disabled=false;
+}
+
+function showSuccess(msg){
+  messageBox.textContent = "✅ " + msg;
+  messageBox.className = "message success";
+  spinner.style.display="none";
+  registerBtn.disabled=false;
+}
 </script>
+
 </body>
 </html>
