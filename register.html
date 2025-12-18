@@ -62,9 +62,6 @@ button:disabled { background:#9e9e9e; }
 </div>
 
 <script type="module">
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const supabase = createClient("https://xkshzlfducmnglxfnxzk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0");
 const ENDPOINT = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler";
 
 const form = document.getElementById("registerForm");
@@ -79,6 +76,7 @@ window.togglePassword = (inputId, iconId) => {
   else{ input.type="password"; icon.classList.replace("fa-eye-slash","fa-eye"); }
 };
 
+// Password checklist
 document.getElementById("password").addEventListener("input", e=>{
   const val = e.target.value;
   document.getElementById("checkLength").querySelector("i").className = val.length>=6?"fa fa-check":"fa fa-times";
@@ -104,55 +102,14 @@ form.addEventListener("submit", async e=>{
     const recaptcha_token = grecaptcha.getResponse();
     if(!recaptcha_token) throw new Error("Complete the reCAPTCHA");
 
-    // Call Edge Function (captcha + email + referral)
+    // Call Edge Function (handles auth + users table + referral)
     const res = await fetch(ENDPOINT, {
       method:"POST",
       headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ recaptcha_token, email, referral_code })
+      body: JSON.stringify({ recaptcha_token, email, password, full_name, referral_code })
     });
     const data = await res.json();
     if(!data.success) throw new Error(data.message);
-
-    const { referring_user } = data; // Get referring user info if exists
-
-    // Signup
-    const { data: signUpData, error } = await supabase.auth.signUp({
-      email, password,
-      options: { data: { name: full_name, referral_code } }
-    });
-    if(error) throw error;
-
-    // Get IP
-    const ipRes = await fetch('https://api.ipify.org?format=json');
-    const ipData = await ipRes.json();
-    const userIp = ipData.ip || "";
-
-    // Insert new user
-    const insertPayload = {
-      id: signUpData.user.id,
-      email,
-      name: full_name,
-      referral_code,
-      created_at: new Date().toISOString(),
-      balance: 0,
-      total_earned: 0,
-      total_withdrawn: 0,
-      ip_adress: userIp,
-      is_blocked:false,
-      referral_count:0,
-      referred_by: referring_user ? referring_user.id : null
-    };
-
-    const { error: insertError } = await supabase.from("users").insert([insertPayload]);
-    if(insertError) throw insertError;
-
-    // Update referring user's reward/bonus if exists
-    if(referring_user){
-      await supabase.from("users").update({
-        referral_count: referring_user.referral_count + 1,
-        total_earned: referring_user.total_earned + 10 // example bonus: 10 units
-      }).eq("id", referring_user.id);
-    }
 
     messageBox.textContent="✅ Registration successful! Check your email to verify.";
     messageBox.className="message success";
