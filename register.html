@@ -111,7 +111,7 @@ form.addEventListener("submit", async e=>{
     const data = await res.json();
     if(!data.success) throw new Error(data.message);
 
-    messageBox.textContent="✅ Registration successful! Check your email to verify.";
+    messageBox.textContent="✅ Registration successful! Redirecting to login page .";
     messageBox.className="message success";
     setTimeout(()=>location.href="login.html",1500);
 
