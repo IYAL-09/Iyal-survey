@@ -26,7 +26,6 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
 .card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; }
 
 .bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:#2e7d32; display:flex; justify-content:space-around; padding:10px 0; }
-
 .bottom-nav a { color:white; text-decoration:none; font-size:0.9em; text-align:center; }
 .bottom-nav i { display:block; font-size:1.2em; margin-bottom:4px; }
 
@@ -89,7 +88,7 @@ iframe {
 
 <div class="content">
   <div class="balance-card">
-    Balance: <span id="userBalance">₦0</span>
+    Balance: <span id="userBalance">₦ Loading...</span>
   </div>
 
   <div class="tabs">
@@ -121,7 +120,7 @@ iframe {
   <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
   <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
   <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
-  <a href="login.html" id="logoutBottom"><i class="fa fa-sign-out-alt"></i>Logout</a>
+  <a href="#" id="logoutBottom"><i class="fa fa-sign-out-alt"></i>Logout</a>
 </div>
 
 <script type="module">
@@ -132,10 +131,9 @@ const supabase = createClient(
   "YOUR_ANON_KEY"
 );
 
+/* AUTH */
 const { data:{ session } } = await supabase.auth.getSession();
 if(!session) location.href="login.html";
-
-document.getElementById("userBalance").textContent = "₦ Loading...";
 
 /* MENU */
 window.toggleMenu = () => {
@@ -143,9 +141,31 @@ window.toggleMenu = () => {
   m.style.display = m.style.display === "flex" ? "none" : "flex";
 };
 
+/* LOAD BALANCE */
+async function loadBalance(){
+  try{
+    const res = await fetch(
+      "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor",
+      {
+        method:"POST",
+        headers:{
+          "Authorization":`Bearer ${session.access_token}`,
+          "Content-Type":"application/json"
+        }
+      }
+    );
+    const data = await res.json();
+    document.getElementById("userBalance").textContent =
+      "₦" + Number(data.balance || 0).toLocaleString();
+  }catch{
+    document.getElementById("userBalance").textContent = "₦0";
+  }
+}
+loadBalance();
+
+/* SURVEYS */
 let activeVendor = "cpx";
 
-/* TAB HANDLING */
 document.querySelectorAll(".tab").forEach(tab=>{
   tab.onclick = ()=>{
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
@@ -160,23 +180,20 @@ function loadSurveys(){
   c.innerHTML = "";
 
   if(activeVendor === "cpx"){
-    document.getElementById("consentModal").style.display="flex";
-  } else {
+    document.getElementById("consentModal").style.display = "flex";
+  }else{
     c.innerHTML = `<div class="card">Surveys for ${activeVendor}</div>`;
   }
 }
 
-/* CONSENT HANDLERS */
+/* CONSENT */
 document.getElementById("acceptConsent").onclick = ()=>{
   document.getElementById("consentModal").style.display="none";
-
-  const userId = session.user.id;
-  const iframe = `
+  document.getElementById("surveyContent").innerHTML = `
     <iframe 
-      src="https://offers.cpx-research.com/index.php?app_id=CPX_APP_ID&ext_user_id=${userId}">
+      src="https://offers.cpx-research.com/index.php?app_id=CPX_APP_ID&ext_user_id=${session.user.id}">
     </iframe>
   `;
-  document.getElementById("surveyContent").innerHTML = iframe;
 };
 
 document.getElementById("rejectConsent").onclick = ()=>{
