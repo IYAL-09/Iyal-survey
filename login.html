@@ -4,42 +4,147 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Iyal Surveys - Login</title>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <style>
-body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9); margin:0; padding:20px;}
-.container { max-width:400px; margin:auto; background:white; padding:25px; border-radius:12px; box-shadow:0 0 10px #ccc;}
-.logo { text-align:center; margin-bottom:15px;}
-.logo img { width:90px; height:90px; border-radius:50%; border:4px solid white; object-fit:cover;}
-h2 { text-align:center; color:#2e7d32; margin-bottom:20px;}
-.input-group { position:relative; margin-bottom:20px;}
-.input-group i.fa { position:absolute; top:50%; left:12px; transform:translateY(-50%); color:#4caf50; font-size:1.1em; z-index:1;}
-.input-group input { width:100%; padding:10px 38px 10px 38px; border:1px solid #ccc; border-radius:8px; font-size:1em; box-sizing:border-box; position:relative; z-index:0;}
-.eye-toggle { position:absolute; top:50%; right:46px; transform:translateY(-50%); cursor:pointer; color:#4caf50; z-index:2;}
-button { width:100%; padding:12px; background:#2e7d32; color:white; border:none; border-radius:8px; font-size:1em; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;}
-button:hover { background:#1b5e20;}
-button:disabled { background:#9e9e9e; cursor:not-allowed;}
-.spinner { border:3px solid #f3f3f3; border-top:3px solid white; border-radius:50%; width:18px; height:18px; animation:spin 1s linear infinite; display:none;}
-@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
-#status { text-align:center; margin-top:10px; color:red;}
-.actions { text-align:center; margin-top:15px;}
-.actions a { color:#2e7d32; text-decoration:underline; cursor:pointer; display:block; margin-top:10px;}
-.g-recaptcha { margin-bottom:15px; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9);
+  margin: 0;
+  padding: 20px;
+}
+.container {
+  max-width: 400px;
+  margin: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #ccc;
+}
+.logo {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.logo img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 4px solid white;
+  object-fit: cover;
+}
+h2 {
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 20px;
+}
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+.input-group i.fa {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #4caf50;
+  font-size: 1.1em;
+  z-index: 1;
+}
+.input-group input {
+  width: 100%;
+  padding: 10px 38px 10px 38px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+.eye-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #4caf50;
+  z-index: 2;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+button:hover {
+  background: #1b5e20;
+}
+button:disabled {
+  background: #9e9e9e;
+  cursor: not-allowed;
+}
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  animation: spin 1s linear infinite;
+  display: none;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+#status {
+  text-align: center;
+  margin-top: 10px;
+  color: red;
+}
+.actions {
+  text-align: center;
+  margin-top: 15px;
+}
+.actions a {
+  color: #2e7d32;
+  text-decoration: underline;
+  cursor: pointer;
+  display: block;
+  margin-top: 10px;
+}
+.g-recaptcha {
+  margin-bottom: 15px;
+}
 </style>
 </head>
+
 <body>
+
 <div class="container">
-  <div class="logo"><img src="iyallogo.png" alt="Iyal Logo" /></div>
+  <div class="logo">
+    <img src="iyallogo.png" alt="Iyal Logo" />
+  </div>
+
   <h2>Welcome Back</h2>
 
   <div class="input-group">
     <i class="fa fa-envelope"></i>
     <input type="email" id="email" placeholder="Email" />
   </div>
+
   <div class="input-group">
     <i class="fa fa-lock"></i>
     <input type="password" id="password" placeholder="Password" />
-    <span class="eye-toggle" onclick="togglePassword()"><i class="fa fa-eye" id="eyeIcon"></i></span>
+    <span class="eye-toggle" onclick="togglePassword()">
+      <i class="fa fa-eye" id="eyeIcon"></i>
+    </span>
   </div>
 
   <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
@@ -56,11 +161,12 @@ button:disabled { background:#9e9e9e; cursor:not-allowed;}
     <a href="register.html"><i class="fa fa-user-plus"></i> Create new account</a>
   </div>
 </div>
+
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const SUPABASE_ANON_KEY = "YOUR_ANON_KEY_HERE";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -68,6 +174,22 @@ const status = document.getElementById("status");
 const spinner = document.getElementById("spinner");
 const btnText = document.getElementById("btnText");
 const button = document.getElementById("loginBtn");
+
+/* 🔐 PASSWORD TOGGLE — FIXED */
+window.togglePassword = function () {
+  const passwordInput = document.getElementById("password");
+  const eyeIcon = document.getElementById("eyeIcon");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    eyeIcon.classList.remove("fa-eye");
+    eyeIcon.classList.add("fa-eye-slash");
+  } else {
+    passwordInput.type = "password";
+    eyeIcon.classList.remove("fa-eye-slash");
+    eyeIcon.classList.add("fa-eye");
+  }
+};
 
 window.login = async function () {
   const email = document.getElementById("email").value.trim();
@@ -90,7 +212,6 @@ window.login = async function () {
   status.textContent = "";
 
   try {
-    /* ---------- VERIFY reCAPTCHA (BACKEND) ---------- */
     const captchaRes = await fetch(
       "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor",
       {
@@ -101,16 +222,9 @@ window.login = async function () {
     );
 
     const captchaData = await captchaRes.json();
-    if (!captchaData.success) {
-      throw new Error("Captcha verification failed");
-    }
+    if (!captchaData.success) throw new Error("Captcha verification failed");
 
-    /* ---------- SUPABASE LOGIN ---------- */
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
 
     status.style.color = "green";
@@ -129,6 +243,5 @@ window.login = async function () {
 };
 </script>
 
-
 </body>
-</html>
+  </html>
