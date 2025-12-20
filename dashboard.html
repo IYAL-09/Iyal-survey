@@ -191,7 +191,7 @@ document.getElementById("acceptConsent").onclick = ()=>{
   document.getElementById("consentModal").style.display="none";
   document.getElementById("surveyContent").innerHTML = `
     <iframe 
-      src="https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${session.user.id}">
+ <iframe width="100%" frameBorder="0" height="2000px"  src="https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id={unique_user_id}&secure_hash={secure_hash}&username={user_name}&email={user_email}&subid_1=&subid_2"></iframe>
     </iframe>
   `;
 };
