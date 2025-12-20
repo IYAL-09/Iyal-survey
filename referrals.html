@@ -59,10 +59,10 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
   <div class="card">
     <h2>Referral System Explained</h2>
     <p>
-      Invite your friends to join Iyal Surveys! Each time <strong>5 people</strong> you refer sign up and complete their surveys, you earn a reward of <strong>₦2,201</strong>.
+      Invite your friends to join Iyal Surveys! Each time <strong>5 people</strong> you refer sign up and complete their surveys, you earn a reward of <strong>₦200</strong>.
       <ul>
         <li><i class="fa fa-users"></i> Complete 5 referrals to form a group.</li>
-        <li><i class="fa fa-coins"></i> Receive ₦2,201 for each completed group.</li>
+        <li><i class="fa fa-coins"></i> Receive ₦200 for each completed group.</li>
         <li><i class="fa fa-list"></i> Referrals are displayed in groups below.</li>
       </ul>
     </p>
@@ -145,7 +145,7 @@ async function loadReferrals(){
     div.appendChild(ul);
     const status = document.createElement("div");
     status.className = completed ? "status-complete" : "status-pending";
-    status.textContent = completed ? "Rewarded: ₦2,201" : "Pending (need 5 referrals)";
+    status.textContent = completed ? "Rewarded: ₦200" : "Pending (need 5 referrals)";
     div.appendChild(status);
     container.appendChild(div);
     groupIndex++;
