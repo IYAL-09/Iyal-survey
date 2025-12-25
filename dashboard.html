@@ -10,10 +10,10 @@
 body { font-family:'Segoe UI',sans-serif; margin:0; background:#f1f8e9; color:#2e7d32; }
 header { background:#2e7d32; color:white; padding:15px; display:flex; align-items:center; justify-content:space-between; position:relative; }
 .logo { display:flex; align-items:center; }
-.logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; margin-right:10px; }
+.logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; object-fit:cover; margin-right:10px; }
 .logo span { font-size:1.2em; font-weight:bold; }
 .menu-toggle { font-size:1.5em; cursor:pointer; }
-nav { position:absolute; top:60px; right:15px; background:#388e3c; display:none; flex-direction:column; padding:10px; border-radius:8px; z-index:10; }
+nav { position:absolute; top:60px; right:15px; background:#388e3c; display:none; flex-direction:column; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.3); z-index:10; }
 nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px solid #66bb6a; }
 
 .tabs { display:flex; justify-content:space-around; margin:15px 0; }
@@ -22,20 +22,47 @@ nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px soli
 
 .content { padding:15px; padding-bottom:140px; }
 .balance-card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; text-align:center; font-size:1.2em; font-weight:bold; }
-.card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; }
 
-iframe { width:100%; height:75vh; border:none; border-radius:12px; }
+.card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; }
 
 .bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:#2e7d32; display:flex; justify-content:space-around; padding:10px 0; }
 .bottom-nav a { color:white; text-decoration:none; font-size:0.9em; text-align:center; }
 .bottom-nav i { display:block; font-size:1.2em; margin-bottom:4px; }
 
-/* CPX CONSENT */
-#consentModal { position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:999; }
-#consentBox { background:#fff; padding:20px; border-radius:12px; max-width:420px; text-align:center; }
-#consentBox button { margin:10px; padding:10px 15px; border:none; border-radius:6px; cursor:pointer; font-weight:bold; }
+/* CONSENT MODAL (UNCHANGED) */
+#consentModal {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+#consentBox {
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  max-width:420px;
+  text-align:center;
+}
+#consentBox button {
+  margin:10px;
+  padding:10px 15px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+}
 .accept { background:#2e7d32; color:#fff; }
 .reject { background:#ccc; }
+
+iframe {
+  width:100%;
+  height:70vh;
+  border-radius:12px;
+  border:none;
+}
 </style>
 </head>
 
@@ -43,14 +70,19 @@ iframe { width:100%; height:75vh; border:none; border-radius:12px; }
 
 <header>
   <div class="logo">
-    <img src="iyallogo.png">
+    <img src="iyallogo.png" />
     <span>Iyal Surveys</span>
   </div>
-  <div class="menu-toggle" onclick="toggleMenu()"><i class="fa fa-bars"></i></div>
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <i class="fa fa-bars"></i>
+  </div>
   <nav id="menu">
-    <a href="terms.html">Terms</a>
-    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms & conditions</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="about.html">About Us</a>
+    <a href="disclaimer.html">Disclaimer</a>
     <a href="support.html">Support</a>
+    <a href="settings.html">Settings</a>
   </nav>
 </header>
 
@@ -61,25 +93,33 @@ iframe { width:100%; height:75vh; border:none; border-radius:12px; }
 
   <div class="tabs">
     <div class="tab active" data-vendor="cpx">CPX Research</div>
-    <div class="tab" data-vendor="bitlab">BitLabs</div>
+    <div class="tab" data-vendor="bitlab">BitLab</div>
     <div class="tab" data-vendor="wannads">Wannads</div>
   </div>
 
   <div id="surveyContent"></div>
 </div>
 
-<!-- CPX CONSENT -->
+<!-- CPX CONSENT MODAL (UNCHANGED) -->
 <div id="consentModal">
   <div id="consentBox">
-    <p>CPX Research uses cookies for survey tracking.</p>
+    <p>
+      CPX Research uses cookies and tracking technologies to deliver surveys.
+      By accepting, you agree to data processing.
+    </p>
+    <p>
+      <a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank">CPX Privacy</a> |
+      <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank">CPX Terms</a>
+    </p>
     <button class="accept" id="acceptConsent">Accept</button>
     <button class="reject" id="rejectConsent">Reject</button>
   </div>
 </div>
 
 <div class="bottom-nav">
-  <a href="withdraw.html"><i class="fa fa-money-bill"></i>Cashout</a>
-  <a href="dashboard.html"><i class="fa fa-home"></i>Home</a>
+  <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
+  <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
+  <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
   <a href="#" id="logoutBottom"><i class="fa fa-sign-out-alt"></i>Logout</a>
 </div>
 
@@ -88,62 +128,95 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase = createClient(
   "https://xkshzlfducmnglxfnxzk.supabase.co",
-  "YOUR_ANON_KEY"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
 );
 
+/* AUTH */
 const { data:{ session } } = await supabase.auth.getSession();
 if(!session) location.href="login.html";
 
-window.toggleMenu = ()=> {
-  const m=document.getElementById("menu");
-  m.style.display = m.style.display==="flex"?"none":"flex";
+/* MENU */
+window.toggleMenu = () => {
+  const m = document.getElementById("menu");
+  m.style.display = m.style.display === "flex" ? "none" : "flex";
 };
 
-let activeVendor="cpx";
+/* LOAD BALANCE */
+async function loadBalance(){
+  try{
+    const res = await fetch(
+      "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor",
+      {
+        method:"POST",
+        headers:{
+          "Authorization":`Bearer ${session.access_token}`,
+          "Content-Type":"application/json"
+        }
+      }
+    );
+    const data = await res.json();
+    document.getElementById("userBalance").textContent =
+      "₦" + Number(data.balance || 0).toLocaleString();
+  }catch{
+    document.getElementById("userBalance").textContent = "₦0";
+  }
+}
+loadBalance();
+
+/* SURVEYS */
+let activeVendor = "cpx";
 
 document.querySelectorAll(".tab").forEach(tab=>{
-  tab.onclick=()=>{
+  tab.onclick = ()=>{
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
-    activeVendor=tab.dataset.vendor;
+    activeVendor = tab.dataset.vendor;
     loadSurveys();
   };
 });
 
 function loadSurveys(){
-  const c=document.getElementById("surveyContent");
-  c.innerHTML="";
+  const c = document.getElementById("surveyContent");
+  c.innerHTML = "";
 
-  if(activeVendor==="cpx"){
-    document.getElementById("consentModal").style.display="flex";
+  if(activeVendor === "cpx"){
+    document.getElementById("consentModal").style.display = "flex";
+    return;
   }
 
-  if(activeVendor==="bitlab"){
-    const uid=session.user.id;
-    const token="5f6cc641-dd5c-4551-a948-5c526d61d97a";
-    c.innerHTML=`<iframe src="https://web.bitlabs.ai/?token=${token}&uid=${uid}"></iframe>`;
+  if(activeVendor === "bitlab"){
+    const userId = session.user.id;
+    const bitlabToken = "5f6cc641-dd5c-4551-a948-5c526d61d97a";
+
+    const iframeSrc = `https://web.bitlabs.ai/?token=${bitlabToken}&uid=${userId}`;
+
+    c.innerHTML = `
+      <iframe src="${iframeSrc}"></iframe>
+    `;
+    return;
   }
 
-  if(activeVendor==="wannads"){
-    c.innerHTML=`<div class="card">Wannads coming soon</div>`;
-  }
+  c.innerHTML = `<div class="card">Surveys for ${activeVendor}</div>`;
 }
 
-document.getElementById("acceptConsent").onclick=()=>{
+/* CPX CONSENT (UNCHANGED) */
+document.getElementById("acceptConsent").onclick = ()=>{
   document.getElementById("consentModal").style.display="none";
-  const uid=session.user.id;
-  document.getElementById("surveyContent").innerHTML=
-    `<iframe src="https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${uid}"></iframe>`;
+  const userId = session.user.id;
+  const iframeSrc = `https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${userId}`;
+  document.getElementById("surveyContent").innerHTML = `<iframe src="${iframeSrc}"></iframe>`;
 };
 
-document.getElementById("rejectConsent").onclick=()=>{
+document.getElementById("rejectConsent").onclick = ()=>{
   document.getElementById("consentModal").style.display="none";
-  document.getElementById("surveyContent").innerHTML=`<div class="card">Consent required.</div>`;
+  document.getElementById("surveyContent").innerHTML =
+    `<div class="card">You rejected cookies. CPX surveys cannot be shown.</div>`;
 };
 
 loadSurveys();
 
-document.getElementById("logoutBottom").onclick=async()=>{
+/* LOGOUT */
+document.getElementById("logoutBottom").onclick = async ()=>{
   await supabase.auth.signOut();
   location.href="login.html";
 };
