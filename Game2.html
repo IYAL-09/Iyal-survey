@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iyal Games – Play & Earn (Demo)</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+:root {
+  --primary: #2e7d32;
+  --light: #f1f8e9;
+  --white: #ffffff;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: var(--light);
+  color: var(--primary);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  background: var(--primary);
+  color: white;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+  margin-right: 8px;
+}
+.logo span {
+  font-weight: bold;
+}
+
+/* Ads */
+.ad-slot {
+  height: 60px;
+  background: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #999;
+}
+
+/* Content */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.intro-banner {
+  background: white;
+  width: 90%;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.85em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+}
+
+/* Progress */
+.progress-container {
+  width: 90%;
+  height: 12px;
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--primary);
+  transition: width 0.5s ease;
+}
+
+/* Game Grid */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  max-width: 320px;
+  width: 100%;
+  perspective: 1000px;
+}
+
+/* Cards */
+.card {
+  height: 65px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+  cursor: pointer;
+}
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4em;
+}
+
+.card-back {
+  background: var(--primary);
+  color: white;
+  border: 1px solid #1b5e20;
+}
+
+.card-front {
+  background: white;
+  color: var(--primary);
+  transform: rotateY(180deg);
+  border: 2px solid var(--primary);
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: var(--primary);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+}
+.bottom-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.8em;
+  text-align: center;
+}
+.bottom-nav i {
+  display: block;
+  font-size: 1.2em;
+}
+
+/* Overlay */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  color: white;
+  z-index: 200;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <img src="iyallogo.png" alt="Logo">
+    <span>Iyal Games</span>
+  </div>
+  <i class="fa fa-bars"></i>
+</header>
+
+<div class="ad-slot">ADVERTISEMENT BANNER (TOP)</div>
+
+<div class="main-content">
+  <div class="intro-banner">
+    <b>Match & Earn (Demo):</b> Complete 5 rounds to earn <b>₦5</b>.
+  </div>
+
+  <div class="progress-container">
+    <div id="progress" class="progress-fill"></div>
+  </div>
+
+  <div id="game-info" style="font-weight:bold;margin-bottom:8px;"></div>
+
+  <div id="grid" class="game-grid"></div>
+</div>
+
+<div class="ad-slot">ADVERTISEMENT BANNER (BOTTOM)</div>
+
+<nav class="bottom-nav">
+  <a href="#"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
+  <a href="#"><i class="fa fa-users"></i>Referrals</a>
+  <a href="#"><i class="fa fa-home"></i>Home</a>
+  <a href="#"><i class="fa fa-gamepad" style="color:#a5d6a7"></i>Games</a>
+</nav>
+
+<div id="overlay">
+  <h2 id="win-title">Great!</h2>
+  <p>Loading next round <span id="next-lvl"></span>...</p>
+  <i class="fa fa-spinner fa-spin fa-2x"></i>
+</div>
+
+<script>
+const symbols = ['💎','💰','⭐','🚀','🔥','🍀','🎁','⚡'];
+const totalPairs = symbols.length;
+
+let cards = [];
+let flipped = [];
+let matches = 0;
+let lockBoard = false;
+
+/* Session */
+function getGameState() {
+  let state = JSON.parse(sessionStorage.getItem('iyal_session')) || { round: 1 };
+  if (state.round > 5) state.round = 1;
+
+  sessionStorage.setItem('iyal_session', JSON.stringify(state));
+  document.getElementById('game-info').innerText = `Game ${state.round} of 5`;
+  document.getElementById('progress').style.width = `${(state.round - 1) * 20}%`;
+  return state;
+}
+
+function initGame() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  flipped = [];
+  matches = 0;
+  lockBoard = false;
+
+  cards = [...symbols, ...symbols].sort(() => Math.random() - 0.5);
+
+  cards.forEach(symbol => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.symbol = symbol;
+    card.innerHTML = `
+      <div class="card-face card-back">?</div>
+      <div class="card-face card-front">${symbol}</div>
+    `;
+    card.addEventListener('click', flipCard);
+    grid.appendChild(card);
+  });
+}
+
+function flipCard() {
+  if (lockBoard || this.classList.contains('flipped')) return;
+
+  this.classList.add('flipped');
+  flipped.push(this);
+
+  if (flipped.length === 2) {
+    lockBoard = true;
+    checkMatch();
+  }
+}
+
+function checkMatch() {
+  const match = flipped[0].dataset.symbol === flipped[1].dataset.symbol;
+
+  if (match) {
+    matches++;
+    resetTurn();
+    if (matches === totalPairs) endGame();
+  } else {
+    setTimeout(() => {
+      flipped.forEach(c => c.classList.remove('flipped'));
+      resetTurn();
+    }, 800);
+  }
+}
+
+function resetTurn() {
+  flipped = [];
+  lockBoard = false;
+}
+
+function endGame() {
+  let state = JSON.parse(sessionStorage.getItem('iyal_session'));
+  state.round++;
+  sessionStorage.setItem('iyal_session', JSON.stringify(state));
+
+  const overlay = document.getElementById('overlay');
+  overlay.style.display = 'flex';
+  document.getElementById('next-lvl').innerText = state.round > 5 ? 'Reward' : state.round;
+
+  if (state.round > 5) {
+    document.getElementById('win-title').innerText = '₦5 Earned (Demo)';
+  }
+
+  setTimeout(() => location.reload(), 2500);
+}
+
+getGameState();
+initGame();
+</script>
+
+</body>
+</html>
