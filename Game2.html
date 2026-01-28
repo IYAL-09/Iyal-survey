@@ -9,173 +9,161 @@
 
 <style>
 :root {
-  --primary: #2e7d32;
-  --light: #f1f8e9;
-  --white: #ffffff;
+  --primary:#2e7d32;
+  --light:#f1f8e9;
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  background: var(--light);
-  color: var(--primary);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:var(--light);
+  color:var(--primary);
+  height:100vh;
+  display:flex;
+  flex-direction:column;
 }
 
 /* Header */
 header {
-  background: var(--primary);
-  color: white;
-  padding: 10px 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background:var(--primary);
+  color:white;
+  padding:10px 15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
+  display:flex;
+  align-items:center;
 }
 .logo img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid white;
-  margin-right: 8px;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:2px solid white;
+  margin-right:8px;
 }
-.logo span {
-  font-weight: bold;
+
+.balance {
+  background:#1b5e20;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:0.85em;
+  font-weight:bold;
 }
 
 /* Ads */
 .ad-slot {
-  height: 60px;
-  background: #e0e0e0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  color: #999;
+  height:60px;
+  background:#e0e0e0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  color:#999;
+  margin:6px 0;
 }
 
 /* Content */
 .main-content {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
+  flex:1;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:10px;
 }
 
 .intro-banner {
-  background: white;
-  width: 90%;
-  padding: 10px;
-  border-radius: 8px;
-  text-align: center;
-  font-size: 0.85em;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  margin-bottom: 10px;
+  background:white;
+  width:90%;
+  padding:10px;
+  border-radius:8px;
+  text-align:center;
+  font-size:0.85em;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom:10px;
 }
 
 /* Progress */
 .progress-container {
-  width: 90%;
-  height: 12px;
-  background: #ddd;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 10px;
+  width:90%;
+  height:12px;
+  background:#ddd;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:10px;
 }
 .progress-fill {
-  height: 100%;
-  width: 0%;
-  background: var(--primary);
-  transition: width 0.5s ease;
+  height:100%;
+  width:0%;
+  background:var(--primary);
+  transition:0.5s;
 }
 
 /* Game Grid */
 .game-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  max-width: 320px;
-  width: 100%;
-  perspective: 1000px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  max-width:320px;
+  width:100%;
+  perspective:1000px;
 }
 
 /* Cards */
 .card {
-  height: 65px;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.5s;
-  cursor: pointer;
+  height:65px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:0.5s;
+  cursor:pointer;
 }
 .card.flipped {
-  transform: rotateY(180deg);
+  transform:rotateY(180deg);
 }
-
 .card-face {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4em;
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.4em;
 }
-
 .card-back {
-  background: var(--primary);
-  color: white;
-  border: 1px solid #1b5e20;
+  background:var(--primary);
+  color:white;
 }
-
 .card-front {
-  background: white;
-  color: var(--primary);
-  transform: rotateY(180deg);
-  border: 2px solid var(--primary);
+  background:white;
+  color:var(--primary);
+  transform:rotateY(180deg);
+  border:2px solid var(--primary);
 }
 
-/* Bottom Nav */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: var(--primary);
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
+/* Reward Animation */
+#reward {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:300;
+  color:white;
+  text-align:center;
 }
-.bottom-nav a {
-  color: white;
-  text-decoration: none;
-  font-size: 0.8em;
-  text-align: center;
+.coin {
+  font-size:3em;
+  animation:float 1.2s infinite alternate;
 }
-.bottom-nav i {
-  display: block;
-  font-size: 1.2em;
-}
-
-/* Overlay */
-#overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: none;
-  color: white;
-  z-index: 200;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+@keyframes float {
+  from { transform:translateY(0); }
+  to { transform:translateY(-20px); }
 }
 </style>
 </head>
@@ -184,17 +172,18 @@ header {
 
 <header>
   <div class="logo">
-    <img src="iyallogo.png" alt="Logo">
+    <img src="iyallogo.png">
     <span>Iyal Games</span>
   </div>
-  <i class="fa fa-bars"></i>
+  <div class="balance">₦<span id="balance">0</span></div>
 </header>
 
 <div class="ad-slot">ADVERTISEMENT BANNER (TOP)</div>
 
 <div class="main-content">
+
   <div class="intro-banner">
-    <b>Match & Earn (Demo):</b> Complete 5 rounds to earn <b>₦5</b>.
+    <b>Match & Earn:</b> Complete 5 games to earn <b>₦5</b>
   </div>
 
   <div class="progress-container">
@@ -204,115 +193,102 @@ header {
   <div id="game-info" style="font-weight:bold;margin-bottom:8px;"></div>
 
   <div id="grid" class="game-grid"></div>
+
+  <!-- 🔥 BOTTOM AD IMMEDIATELY AFTER GAME -->
+  <div class="ad-slot">ADVERTISEMENT BANNER (BOTTOM)</div>
+
 </div>
 
-<div class="ad-slot">ADVERTISEMENT BANNER (BOTTOM)</div>
-
-<nav class="bottom-nav">
-  <a href="#"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
-  <a href="#"><i class="fa fa-users"></i>Referrals</a>
-  <a href="#"><i class="fa fa-home"></i>Home</a>
-  <a href="#"><i class="fa fa-gamepad" style="color:#a5d6a7"></i>Games</a>
-</nav>
-
-<div id="overlay">
-  <h2 id="win-title">Great!</h2>
-  <p>Loading next round <span id="next-lvl"></span>...</p>
-  <i class="fa fa-spinner fa-spin fa-2x"></i>
+<!-- Reward Overlay -->
+<div id="reward">
+  <div class="coin">🪙🪙🪙</div>
+  <h2>₦5 Added to Your Balance!</h2>
 </div>
 
 <script>
-const symbols = ['💎','💰','⭐','🚀','🔥','🍀','🎁','⚡'];
-const totalPairs = symbols.length;
+const symbols=['💎','💰','⭐','🚀','🔥','🍀','🎁','⚡'];
+const totalPairs=symbols.length;
+let cards=[],flipped=[],matches=0,lock=false;
 
-let cards = [];
-let flipped = [];
-let matches = 0;
-let lockBoard = false;
+function getBalance(){
+  let b=parseInt(localStorage.getItem('balance'))||0;
+  document.getElementById('balance').innerText=b;
+}
+getBalance();
 
-/* Session */
-function getGameState() {
-  let state = JSON.parse(sessionStorage.getItem('iyal_session')) || { round: 1 };
-  if (state.round > 5) state.round = 1;
-
-  sessionStorage.setItem('iyal_session', JSON.stringify(state));
-  document.getElementById('game-info').innerText = `Game ${state.round} of 5`;
-  document.getElementById('progress').style.width = `${(state.round - 1) * 20}%`;
-  return state;
+function getState(){
+  let s=JSON.parse(sessionStorage.getItem('iyal_session'))||{round:1};
+  if(s.round>5) s.round=1;
+  sessionStorage.setItem('iyal_session',JSON.stringify(s));
+  document.getElementById('game-info').innerText=`Game ${s.round} of 5`;
+  document.getElementById('progress').style.width=`${(s.round-1)*20}%`;
+  return s;
 }
 
-function initGame() {
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-
-  flipped = [];
-  matches = 0;
-  lockBoard = false;
-
-  cards = [...symbols, ...symbols].sort(() => Math.random() - 0.5);
-
-  cards.forEach(symbol => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.dataset.symbol = symbol;
-    card.innerHTML = `
+function initGame(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  flipped=[];matches=0;lock=false;
+  cards=[...symbols,...symbols].sort(()=>Math.random()-0.5);
+  cards.forEach(sym=>{
+    const c=document.createElement('div');
+    c.className='card';
+    c.dataset.symbol=sym;
+    c.innerHTML=`
       <div class="card-face card-back">?</div>
-      <div class="card-face card-front">${symbol}</div>
-    `;
-    card.addEventListener('click', flipCard);
-    grid.appendChild(card);
+      <div class="card-face card-front">${sym}</div>`;
+    c.onclick=flip;
+    grid.appendChild(c);
   });
 }
 
-function flipCard() {
-  if (lockBoard || this.classList.contains('flipped')) return;
-
+function flip(){
+  if(lock||this.classList.contains('flipped'))return;
   this.classList.add('flipped');
   flipped.push(this);
-
-  if (flipped.length === 2) {
-    lockBoard = true;
-    checkMatch();
+  if(flipped.length===2){
+    lock=true;
+    check();
   }
 }
 
-function checkMatch() {
-  const match = flipped[0].dataset.symbol === flipped[1].dataset.symbol;
-
-  if (match) {
+function check(){
+  if(flipped[0].dataset.symbol===flipped[1].dataset.symbol){
     matches++;
-    resetTurn();
-    if (matches === totalPairs) endGame();
+    reset();
+    if(matches===totalPairs) endGame();
   } else {
-    setTimeout(() => {
-      flipped.forEach(c => c.classList.remove('flipped'));
-      resetTurn();
-    }, 800);
+    setTimeout(()=>{
+      flipped.forEach(c=>c.classList.remove('flipped'));
+      reset();
+    },800);
   }
 }
 
-function resetTurn() {
-  flipped = [];
-  lockBoard = false;
+function reset(){
+  flipped=[];
+  lock=false;
 }
 
-function endGame() {
-  let state = JSON.parse(sessionStorage.getItem('iyal_session'));
-  state.round++;
-  sessionStorage.setItem('iyal_session', JSON.stringify(state));
+function endGame(){
+  let s=getState();
+  s.round++;
+  sessionStorage.setItem('iyal_session',JSON.stringify(s));
 
-  const overlay = document.getElementById('overlay');
-  overlay.style.display = 'flex';
-  document.getElementById('next-lvl').innerText = state.round > 5 ? 'Reward' : state.round;
+  if(s.round>5){
+    let bal=parseInt(localStorage.getItem('balance'))||0;
+    bal+=5;
+    localStorage.setItem('balance',bal);
+    document.getElementById('balance').innerText=bal;
 
-  if (state.round > 5) {
-    document.getElementById('win-title').innerText = '₦5 Earned (Demo)';
+    document.getElementById('reward').style.display='flex';
+    setTimeout(()=>location.reload(),2500);
+  } else {
+    setTimeout(()=>location.reload(),1200);
   }
-
-  setTimeout(() => location.reload(), 2500);
 }
 
-getGameState();
+getState();
 initGame();
 </script>
 
