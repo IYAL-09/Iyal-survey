@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iyal Games – Play & Earn (Demo)</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+:root {
+  --primary:#2e7d32;
+  --light:#f1f8e9;
+}
+
+body {
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:var(--light);
+  color:var(--primary);
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Header */
+header {
+  background:var(--primary);
+  color:white;
+  padding:10px 15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo {
+  display:flex;
+  align-items:center;
+}
+.logo img {
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  border:2px solid white;
+  margin-right:8px;
+}
+.logo span { 
+  font-size:1.2em; 
+  font-weight:bold;
+  }
+
+.balance {
+  background:#1b5e20;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:0.85em;
+  font-weight:bold;
+}
+
+/* Ads */
+.ad-slot {
+  height:60px;
+  background:#e0e0e0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  color:#999;
+  margin:6px 0;
+}
+
+/* Content */
+.main-content {
+  flex:1;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:10px;
+}
+
+.intro-banner {
+  background:white;
+  width:90%;
+  padding:10px;
+  border-radius:8px;
+  text-align:center;
+  font-size:0.85em;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom:10px;
+}
+
+/* Progress */
+.progress-container {
+  width:90%;
+  height:12px;
+  background:#ddd;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:10px;
+}
+.progress-fill {
+  height:100%;
+  width:0%;
+  background:var(--primary);
+  transition:0.5s;
+}
+
+/* Game Grid */
+.game-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  max-width:320px;
+  width:100%;
+  perspective:1000px;
+}
+
+/* Cards */
+.card {
+  height:65px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:0.5s;
+  cursor:pointer;
+}
+.card.flipped {
+  transform:rotateY(180deg);
+}
+.card-face {
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.4em;
+}
+.card-back {
+  background:var(--primary);
+  color:white;
+}
+.card-front {
+  background:white;
+  color:var(--primary);
+  transform:rotateY(180deg);
+  border:2px solid var(--primary);
+}
+
+/* Reward Animation */
+#reward {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:300;
+  color:white;
+  text-align:center;
+}
+.coin {
+  font-size:3em;
+  animation:float 1.2s infinite alternate;
+}
+@keyframes float {
+  from { transform:translateY(0); }
+  to { transform:translateY(-20px); }
+}
+
+/* Bottom Nav (UNCHANGED) */
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:var(--primary);
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+}
+.bottom-nav a {
+  color:white;
+  text-decoration:none;
+  font-size:0.9em;
+  text-align:center;
+}
+.bottom-nav i {
+  display:block;
+  font-size:1.2em;
+  margin-bottom: 4px;
+}
+
+.balance {
+  background:white;
+  margin:8px auto 0;
+  width:90%;
+  padding:8px 12px;
+  border-radius:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:bold;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Hamburger Menu */
+.menu-btn {
+  font-size:1.3em;
+  cursor:pointer;
+}
+
+.menu {
+  position:absolute;
+  top:55px;
+  right:15px;
+  background:#1b5e20;
+  border-radius:8px;
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+  z-index:200;
+}
+.menu a {
+  color:white;
+  padding:10px 15px;
+  text-decoration:none;
+  font-size:0.9em;
+  border-bottom:1px solid rgba(255,255,255,0.2);
+}
+.menu a:last-child {
+  border-bottom:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <img src="iyallogo.png">
+    <span>Iyal Surveys</span>
+  </div>
+  
+    <div class="menu-btn" onclick="toggleMenu()">
+    <i class="fa fa-bars"></i>
+  </div>
+  
+   <div class="menu" id="menu">
+    <a href="terms.html">Terms & conditions</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="about.html">About Us</a>
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="support.html">Support</a>
+    <a href="settings.html">Settings</a>
+  </div>
+</header>
+
+<div class="balance">
+  <span>Your Balance</span>
+  <span>₦<span id="balance">0</span></span>
+</div>
+
+<div class="ad-slot">
+   <script>
+    atOptions = {
+      'key' : '14189ec26d52057355c9769b7d93bf4f',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/14189ec26d52057355c9769b7d93bf4f/invoke.js"></script>
+</div>
+
+<div class="main-content">
+
+  <div class="intro-banner">
+    <b>Match & Earn:</b> Complete 5 games to earn <b>₦5</b>
+  </div>
+
+  <div class="progress-container">
+    <div id="progress" class="progress-fill"></div>
+  </div>
+
+  <div id="game-info" style="font-weight:bold;margin-bottom:8px;"></div>
+
+  <div id="grid" class="game-grid"></div>
+
+  <!-- 🔥 BOTTOM AD IMMEDIATELY AFTER GAME -->
+  <div class="ad-slot">
+   <script>
+    atOptions = {
+      'key' : '14189ec26d52057355c9769b7d93bf4f',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/14189ec26d52057355c9769b7d93bf4f/invoke.js"></script>
+</div>
+
+</div>
+
+<!-- Reward Overlay -->
+<div id="reward">
+  <div class="coin">🪙🪙🪙</div>
+  <h2>₦5 Added to Your Balance!</h2>
+ 
+
+</div>
+
+<audio 
+  id="cardSound" 
+  src=""
+  preload="auto">
+</audio>
+
+<nav class="bottom-nav">
+  <a href="withdrawal.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
+  <a href="refferals.html"><i class="fa fa-users"></i>Referrals</a>
+  <a href="dashboard.html"><i class="fa fa-home"></i>Dashboard</a>
+</nav>
+
+<script>
+const symbols=['💎','💰','⭐','🚀','🔥','🍀','🎁','⚡'];
+const totalPairs=symbols.length;
+let cards=[],flipped=[],matches=0,lock=false;
+
+function getBalance(){
+  let b=parseInt(localStorage.getItem('balance'))||0;
+  document.getElementById('balance').innerText=b;
+}
+getBalance();
+
+function getState(){
+  let s=JSON.parse(sessionStorage.getItem('iyal_session'))||{round:1};
+  if(s.round>5) s.round=1;
+  sessionStorage.setItem('iyal_session',JSON.stringify(s));
+  document.getElementById('game-info').innerText=`Game ${s.round} of 5`;
+  document.getElementById('progress').style.width=`${(s.round-1)*20}%`;
+  return s;
+}
+
+function toggleMenu(){
+  const m=document.getElementById('menu');
+  m.style.display=m.style.display==='flex'?'none':'flex';
+}
+
+const cardSound = document.getElementById('cardSound');
+
+function flip() {
+  if (lock || this.classList.contains('flipped')) return;
+
+  // play sound
+  cardSound.currentTime = 0;
+  cardSound.play().catch(() => {
+    // ignore autoplay restriction errors
+  });
+
+  this.classList.add('flipped');
+  flipped.push(this);
+
+  if (flipped.length === 2) {
+    lock = true;
+    check();
+  }
+}
+
+function initGame(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  flipped=[];matches=0;lock=false;
+  cards=[...symbols,...symbols].sort(()=>Math.random()-0.5);
+  cards.forEach(sym=>{
+    const c=document.createElement('div');
+    c.className='card';
+    c.dataset.symbol=sym;
+    c.innerHTML=`
+      <div class="card-face card-back">?</div>
+      <div class="card-face card-front">${sym}</div>`;
+    c.onclick=flip;
+    grid.appendChild(c);
+  });
+}
+
+
+function check(){
+  if(flipped[0].dataset.symbol===flipped[1].dataset.symbol){
+    matches++;
+    reset();
+    if(matches===totalPairs) endGame();
+  } else {
+    setTimeout(()=>{
+      flipped.forEach(c=>c.classList.remove('flipped'));
+      reset();
+    },800);
+  }
+}
+
+function reset(){
+  flipped=[];
+  lock=false;
+}
+
+function endGame(){
+  let s=getState();
+  s.round++;
+  sessionStorage.setItem('iyal_session',JSON.stringify(s));
+
+  if(s.round>5){
+    let bal=parseInt(localStorage.getItem('balance'))||0;
+    bal+=5;
+    localStorage.setItem('balance',bal);
+    document.getElementById('balance').innerText=bal;
+
+    document.getElementById('reward').style.display='flex';
+    setTimeout(()=>location.reload(),2500);
+  } else {
+    setTimeout(()=>location.reload(),1200);
+  }
+}
+
+getState();
+initGame();
+</script>
+
+</body>
+</html>
