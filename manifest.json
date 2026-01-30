@@ -9,14 +9,14 @@
   "description": "A survey platform where users perform tasks and games to earn and get paid.",
   "icons": [
     {
-      "src": "iyallogo.png",
+      "src": "iyallogo.jpg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpg"
     },
     {
-      "src": "iyallogo.png",
+      "src": "iyallogo.jpg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpg"
     }
   ],
   "orientation": "any",
