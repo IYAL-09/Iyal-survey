@@ -1,25 +1,27 @@
 {
   "name": "Iyal Surveys",
   "short_name": "Iyal Surveys",
-  "start_url": "https://iyal-survey.vercel.app/dashboard.html",
+  "id": "iyal-surveys",
+  "start_url": "/dashboard.html",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "description": "A survey platform where users perform tasks and games to earn and get paid.",
-  "icons": [
-    {
-      "src": "iyallogo.png",
-      "sizes": "512x512",
-      "type": "image/jpeg"
-    },
-    {
-      "src": "iyallogo192.png",
-      "sizes": "192x192",
-      "type": "image/jpeg"
-    }
-  ],
   "orientation": "any",
   "categories": ["finance", "productivity"],
-  "id": "iyal-surveys"
+  "icons": [
+    {
+      "src": "/iyallogo192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/iyallogo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
