@@ -349,6 +349,31 @@ async function loadBalance(){
 }
 loadBalance();
 
+  async function updateLastVisit() {
+
+  // get logged in user
+  const { data: userData } =
+    await supabase.auth.getUser();
+
+  const user = userData.user;
+
+  if (!user) return;
+
+  // update last visit
+  const { error } = await supabase
+    .from('users')
+    .update({
+      last_visit: new Date()
+    })
+    .eq('id', user.id);
+
+  if (error) {
+    console.log(error);
+  }
+}
+
+updateLastVisit();
+
 /* SEGMENT SWITCH */
 const buttons=document.querySelectorAll(".segmented button");
 const indicator=document.getElementById("indicator");
