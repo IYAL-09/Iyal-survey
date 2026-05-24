@@ -35,6 +35,7 @@ body {
   height: 90px;
   border-radius: 50%;
   border: 4px solid white;
+  object-fit: cover;
 }
 
 h2 {
@@ -54,6 +55,7 @@ h2 {
   left: 12px;
   transform: translateY(-50%);
   color: #4caf50;
+  font-size: 1.1em;
 }
 
 .input-group input {
@@ -61,6 +63,8 @@ h2 {
   padding: 10px 38px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  font-size: 1em;
+  box-sizing: border-box;
 }
 
 .eye-toggle {
@@ -79,6 +83,7 @@ button {
   color: white;
   border: none;
   border-radius: 8px;
+  font-size: 1em;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -110,6 +115,7 @@ button:disabled {
 #status {
   text-align: center;
   margin-top: 10px;
+  color: red;
 }
 
 .actions {
@@ -124,7 +130,7 @@ button:disabled {
   margin-top: 10px;
 }
 
-/* reCAPTCHA clean UI */
+/* IMPROVED RECAPTCHA */
 .g-recaptcha {
   margin-bottom: 15px;
   display: flex;
@@ -191,11 +197,10 @@ button:disabled {
     <a href="#" onclick="event.preventDefault(); forgotPassword()">Forgot Password?</a>
     <a href="register.html"><i class="fa fa-user-plus"></i> Create new account</a>
   </div>
-
 </div>
 
 <!-- SUPPORT BUTTON -->
-<a href="support.html" class="support-btn">
+<a href="support.html" class="support-btn" title="Do you need support?">
   <i class="fa fa-headset"></i>
 </a>
 
@@ -225,7 +230,6 @@ window.togglePassword = function () {
   }
 };
 
-/* LOGIN */
 window.login = async function () {
 
   const email = document.getElementById("email").value.trim();
@@ -281,7 +285,6 @@ window.login = async function () {
   }
 };
 
-/* FORGOT PASSWORD - FIXED FOR VERCEL */
 window.forgotPassword = async function () {
 
   const email = document.getElementById("email").value.trim();
@@ -291,7 +294,8 @@ window.forgotPassword = async function () {
     return;
   }
 
-  const resetUrl = "https://iyal-survey.vercel.app/reset-password.html";
+  // Get current domain for dynamic redirect URL
+  const resetUrl = window.location.origin + "/reset-password.html";
 
   try {
 
@@ -302,7 +306,7 @@ window.forgotPassword = async function () {
     if (error) throw error;
 
     status.style.color = "green";
-    status.textContent = "✅ Reset email sent. Check inbox/spam.";
+    status.textContent = "✅ Reset email sent - Check your inbox";
 
   } catch (err) {
     status.style.color = "red";
