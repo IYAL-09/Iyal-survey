@@ -613,6 +613,22 @@ throw new Error("No session");
 }
 
 /* =========================
+   MENU TOGGLE
+========================= */
+
+window.toggleMenu = function(){
+
+const menu = document.getElementById("menu");
+
+if(menu.style.display === "flex"){
+menu.style.display = "none";
+}else{
+menu.style.display = "flex";
+}
+
+};
+
+/* =========================
    LOAD DASHBOARD DATA
 ========================= */
 
@@ -638,12 +654,16 @@ const data = await res.json();
 
 console.log("Dashboard Data:", data);
 
+if(!data.success){
+throw new Error(data.message || "Failed to load dashboard");
+}
+
 /* =========================
    USERNAME
 ========================= */
 
 document.getElementById("username").textContent =
-data.username || data.name || "User";
+data.username || "User";
 
 /* =========================
    BALANCE
@@ -652,33 +672,6 @@ data.username || data.name || "User";
 animateBalance(
 Number(data.balance || 0)
 );
-
-/* =========================
-   TOTAL EARNED
-========================= */
-
-if(document.getElementById("totalEarned")){
-document.getElementById("totalEarned").textContent =
-`₦${Number(data.total_earned || 0).toLocaleString()}`;
-}
-
-/* =========================
-   TOTAL WITHDRAWN
-========================= */
-
-if(document.getElementById("totalWithdrawn")){
-document.getElementById("totalWithdrawn").textContent =
-`₦${Number(data.total_withdrawn || 0).toLocaleString()}`;
-}
-
-/* =========================
-   REFERRALS
-========================= */
-
-if(document.getElementById("referralCount")){
-document.getElementById("referralCount").textContent =
-data.referral_count || 0;
-}
 
 }catch(err){
 
@@ -714,8 +707,11 @@ const timer = setInterval(()=>{
 start += increment;
 
 if(start >= balance){
+
 start = balance;
+
 clearInterval(timer);
+
 }
 
 balanceElement.textContent =
@@ -726,22 +722,182 @@ balanceElement.textContent =
 }
 
 /* =========================
+   SURVEY VENDORS
+========================= */
+
+let activeVendor = "cpx";
+
+document.querySelectorAll(".vendor-btn").forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+document.querySelectorAll(".vendor-btn")
+.forEach(b=>b.classList.remove("active"));
+
+btn.classList.add("active");
+
+activeVendor = btn.dataset.vendor;
+
+loadSurveys();
+
+});
+
+});
+
+/* =========================
+   LOAD SURVEYS
+========================= */
+
+function loadSurveys(){
+
+const surveyContent =
+document.getElementById("surveyContent");
+
+/* LOADER */
+
+surveyContent.innerHTML = `
+<div class="loader-wrap">
+<div class="loader"></div>
+</div>
+`;
+
+/* =========================
+   CPX
+========================= */
+
+if(activeVendor === "cpx"){
+
+document.getElementById("consentModal")
+.style.display = "flex";
+
+return;
+
+}
+
+/* =========================
+   BITLABS
+========================= */
+
+if(activeVendor === "bitlab"){
+
+const userId = session.user.id;
+
+const bitlabsToken =
+"5f6cc641-dd5c-4551-a948-5c526d61d97a";
+
+const iframeSrc =
+`https://web.bitlabs.ai/?token=${bitlabsToken}&uid=${userId}`;
+
+surveyContent.innerHTML = `
+<iframe
+src="${iframeSrc}"
+allowfullscreen>
+</iframe>
+`;
+
+return;
+
+}
+
+/* =========================
+   WANNADS
+========================= */
+
+if(activeVendor === "wannads"){
+
+const userId = session.user.id;
+
+/* PUT YOUR WANNADS LINK HERE */
+
+const iframeSrc =
+`https://publishers.wannads.com/wall?apiKey=YOUR_WANNADS_API_KEY&userId=${userId}`;
+
+surveyContent.innerHTML = `
+<iframe
+src="${iframeSrc}"
+allowfullscreen>
+</iframe>
+`;
+
+return;
+
+}
+
+}
+
+/* =========================
+   CPX CONSENT ACCEPT
+========================= */
+
+document.getElementById("acceptConsent")
+.addEventListener("click",()=>{
+
+document.getElementById("consentModal")
+.style.display = "none";
+
+const userId = session.user.id;
+
+/* CPX OFFERWALL */
+
+const iframeSrc =
+`https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${userId}`;
+
+document.getElementById("surveyContent")
+.innerHTML = `
+<iframe
+src="${iframeSrc}"
+allowfullscreen>
+</iframe>
+`;
+
+});
+
+/* =========================
+   CPX CONSENT REJECT
+========================= */
+
+document.getElementById("rejectConsent")
+.addEventListener("click",()=>{
+
+document.getElementById("consentModal")
+.style.display = "none";
+
+document.getElementById("surveyContent")
+.innerHTML = `
+<div style="
+padding:40px;
+text-align:center;
+color:#bbf7d0;
+">
+You rejected cookies.<br>
+CPX surveys cannot be shown.
+</div>
+`;
+
+});
+
+/* =========================
    LOGOUT
 ========================= */
 
-window.logout = async function(){
+document.getElementById("logoutBtn")
+.addEventListener("click", async (e)=>{
+
+e.preventDefault();
 
 await supabase.auth.signOut();
 
 window.location.href = "login.html";
 
-}
+});
 
 /* =========================
    START
 ========================= */
 
 loadDashboard();
+
+loadSurveys();
 
 </script>
 
