@@ -130,7 +130,6 @@ button:disabled {
   margin-top: 10px;
 }
 
-/* IMPROVED RECAPTCHA */
 .g-recaptcha {
   margin-bottom: 15px;
   display: flex;
@@ -141,7 +140,6 @@ button:disabled {
   border: 1px solid #ddd;
 }
 
-/* SUPPORT BUTTON */
 .support-btn {
   position: fixed;
   bottom: 18px;
@@ -199,7 +197,6 @@ button:disabled {
   </div>
 </div>
 
-<!-- SUPPORT BUTTON -->
 <a href="support.html" class="support-btn" title="Do you need support?">
   <i class="fa fa-headset"></i>
 </a>
@@ -301,46 +298,51 @@ window.forgotPassword = async function () {
     return;
   }
 
-  // Get current domain for dynamic redirect URL
-  const resetUrl = window.location.origin + "/reset-password.html";
-
+  // Get current origin (domain)
+  const currentOrigin = window.location.origin;
+  console.log("Current origin:", currentOrigin);
+  
+  // Use the origin directly without the redirectTo param first
+  // Let Supabase use the Site URL from dashboard
+  
   // Show loading state
-  status.textContent = "⏳ Sending reset email...";
   status.style.color = "#666";
+  status.textContent = "⏳ Sending reset email...";
 
   try {
 
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: resetUrl
-    });
+    // Try WITHOUT redirectTo first - let Supabase use Site URL
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+
+    console.log("Reset password response:", { data, error });
 
     if (error) {
-      console.error("Supabase error:", error);
-      throw error;
+      // Check the error more thoroughly
+      const errorMsg = error.message || error.toString();
+      console.log("Error message:", errorMsg);
+      
+      // Handle specific error cases
+      if (errorMsg.includes("not found") || errorMsg.includes("User not found")) {
+        // For security, still show success but log it
+        status.style.color = "green";
+        status.textContent = "✅ If this email is registered, a reset link has been sent";
+        return;
+      }
+      
+      // Other errors - show the actual message
+      status.style.color = "red";
+      status.textContent = "Error: " + errorMsg;
+      return;
     }
 
-    // Check if data is returned (means email was sent)
-    if (data) {
-      status.style.color = "green";
-      status.textContent = "✅ Reset email sent - Check your inbox";
-    } else {
-      // Even with no data, Supabase may return success for security
-      // Show the same message to not reveal if email exists
-      status.style.color = "green";
-      status.textContent = "✅ If this email exists, a reset link has been sent";
-    }
+    // Success - show generic message
+    status.style.color = "green";
+    status.textContent = "✅ If this email is registered, a reset link has been sent";
 
   } catch (err) {
-    console.error("Full error:", err);
+    console.error("Caught exception:", err);
     status.style.color = "red";
-    // Provide more specific error messages
-    if (err.message === "User not found") {
-      status.textContent = "⚠️ No account with this email";
-    } else if (err.message && err.message.includes("rate limit")) {
-      status.textContent = "⚠️ Too many attempts. Please try again later";
-    } else {
-      status.textContent = err.message || "Failed to send reset email";
-    }
+    status.textContent = "An unexpected error occurred";
   }
 };
 </script>
