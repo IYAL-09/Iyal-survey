@@ -31,8 +31,8 @@ overflow-x:hidden;
 
 .bg-blur{
 position:fixed;
-width:500px;
-height:500px;
+width:400px;
+height:400px;
 border-radius:50%;
 filter:blur(120px);
 opacity:.18;
@@ -42,14 +42,14 @@ animation:float 8s ease-in-out infinite;
 
 .bg1{
 background:#00ffae;
-top:-150px;
-left:-100px;
+top:-120px;
+left:-120px;
 }
 
 .bg2{
 background:#0066ff;
-bottom:-150px;
-right:-100px;
+bottom:-120px;
+right:-120px;
 animation-delay:2s;
 }
 
@@ -58,7 +58,7 @@ animation-delay:2s;
 transform:translateY(0);
 }
 50%{
-transform:translateY(30px);
+transform:translateY(25px);
 }
 }
 
@@ -72,9 +72,9 @@ align-items:center;
 position:sticky;
 top:0;
 z-index:100;
+background:rgba(5,8,22,.8);
 backdrop-filter:blur(18px);
-background:rgba(5,8,22,.75);
-border-bottom:1px solid rgba(255,255,255,.08);
+border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .logo{
@@ -84,58 +84,47 @@ gap:12px;
 }
 
 .logo img{
-width:52px;
-height:52px;
+width:48px;
+height:48px;
 border-radius:50%;
 object-fit:cover;
-border:2px solid rgba(255,255,255,.2);
+border:2px solid rgba(255,255,255,.12);
 }
 
-.logo-text h2{
+.logo span{
 font-size:1.1rem;
 font-weight:700;
 }
 
-.logo-text p{
-font-size:.85rem;
-color:#94a3b8;
-margin-top:3px;
-}
-
-/* MENU */
-
 .menu-toggle{
-width:45px;
-height:45px;
+width:42px;
+height:42px;
 display:flex;
 align-items:center;
 justify-content:center;
-border-radius:14px;
 background:rgba(255,255,255,.05);
 border:1px solid rgba(255,255,255,.08);
+border-radius:14px;
 cursor:pointer;
-font-size:1.2rem;
 transition:.3s;
 }
 
 .menu-toggle:hover{
-transform:scale(1.05);
 background:rgba(255,255,255,.1);
 }
 
 nav{
 position:absolute;
-top:80px;
-right:15px;
+top:75px;
+right:18px;
 display:none;
 flex-direction:column;
-width:230px;
+width:220px;
 padding:10px;
-border-radius:22px;
-background:rgba(15,23,42,.95);
-backdrop-filter:blur(20px);
+border-radius:20px;
+background:#0f172a;
 border:1px solid rgba(255,255,255,.08);
-box-shadow:0 10px 30px rgba(0,0,0,.4);
+box-shadow:0 10px 35px rgba(0,0,0,.35);
 }
 
 nav a{
@@ -148,107 +137,74 @@ font-size:.95rem;
 }
 
 nav a:hover{
-background:rgba(255,255,255,.08);
+background:rgba(255,255,255,.06);
 }
 
 /* CONTENT */
 
 .content{
-padding:18px;
-padding-bottom:130px;
+padding:20px;
+padding-bottom:120px;
 }
 
-/* HERO */
+/* HELLO */
 
-.hero{
-background:linear-gradient(
-135deg,
-rgba(0,255,174,.18),
-rgba(0,102,255,.15)
-);
-padding:24px;
-border-radius:28px;
-margin-bottom:22px;
-border:1px solid rgba(255,255,255,.08);
-backdrop-filter:blur(15px);
-box-shadow:0 10px 40px rgba(0,0,0,.25);
-animation:fadeUp .7s ease;
+.welcome{
+margin-bottom:20px;
+animation:fadeUp .6s ease;
 }
 
-.hero h1{
+.welcome h1{
 font-size:1.8rem;
 font-weight:800;
-margin-bottom:8px;
+margin-bottom:5px;
 }
 
-.hero p{
-color:#cbd5e1;
-line-height:1.5;
+.welcome p{
+color:#94a3b8;
+font-size:.95rem;
 }
 
-/* STATS */
+/* BALANCE */
 
-.stats-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
-margin-bottom:25px;
-}
-
-.card{
+.balance-card{
 background:rgba(255,255,255,.05);
-backdrop-filter:blur(14px);
 border:1px solid rgba(255,255,255,.08);
-border-radius:24px;
-padding:20px;
-box-shadow:0 8px 25px rgba(0,0,0,.25);
-transition:.3s;
+backdrop-filter:blur(16px);
+border-radius:28px;
+padding:24px;
+margin-bottom:22px;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
 animation:fadeUp .7s ease;
 }
 
-.card:hover{
-transform:translateY(-5px);
+.balance-top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:15px;
 }
 
-.card-icon{
+.balance-top h3{
+font-size:1rem;
+color:#94a3b8;
+font-weight:500;
+}
+
+.balance-icon{
 width:52px;
 height:52px;
-border-radius:18px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:1.2rem;
-margin-bottom:14px;
-}
-
-.green{
+border-radius:18px;
 background:rgba(0,255,174,.12);
 color:#00ffae;
+font-size:1.3rem;
 }
 
-.blue{
-background:rgba(59,130,246,.12);
-color:#60a5fa;
-}
-
-.purple{
-background:rgba(168,85,247,.12);
-color:#c084fc;
-}
-
-.orange{
-background:rgba(255,165,0,.12);
-color:#fbbf24;
-}
-
-.card h3{
-font-size:.9rem;
-color:#94a3b8;
-margin-bottom:8px;
-}
-
-.card p{
-font-size:1.5rem;
+.balance-amount{
+font-size:2.1rem;
 font-weight:800;
 }
 
@@ -256,19 +212,24 @@ font-weight:800;
 
 .tabs{
 display:flex;
-gap:10px;
+gap:12px;
 margin-bottom:20px;
 overflow-x:auto;
+padding-bottom:5px;
+}
+
+.tabs::-webkit-scrollbar{
+display:none;
 }
 
 .tab{
-padding:13px 18px;
+flex-shrink:0;
+padding:14px 20px;
 border-radius:18px;
 background:rgba(255,255,255,.05);
 border:1px solid rgba(255,255,255,.08);
-cursor:pointer;
-white-space:nowrap;
 font-weight:600;
+cursor:pointer;
 transition:.3s;
 }
 
@@ -279,9 +240,10 @@ background:linear-gradient(
 #00bfff
 );
 color:#000;
+border:none;
 }
 
-/* SURVEY */
+/* SURVEYS */
 
 #surveyContent{
 animation:fadeUp .7s ease;
@@ -310,18 +272,17 @@ padding:20px;
 
 #consentBox{
 background:#0f172a;
-border:1px solid rgba(255,255,255,.08);
 padding:28px;
-border-radius:28px;
+border-radius:26px;
 max-width:420px;
+border:1px solid rgba(255,255,255,.08);
 text-align:center;
-box-shadow:0 10px 40px rgba(0,0,0,.4);
 }
 
 #consentBox p{
-color:#cbd5e1;
 line-height:1.6;
 margin-bottom:18px;
+color:#cbd5e1;
 }
 
 #consentBox a{
@@ -333,8 +294,8 @@ text-decoration:none;
 padding:13px 18px;
 border:none;
 border-radius:15px;
-cursor:pointer;
 font-weight:700;
+cursor:pointer;
 margin:8px;
 transition:.3s;
 }
@@ -362,24 +323,24 @@ left:50%;
 transform:translateX(-50%);
 width:92%;
 background:rgba(15,23,42,.92);
-backdrop-filter:blur(20px);
+backdrop-filter:blur(18px);
 border:1px solid rgba(255,255,255,.08);
 border-radius:26px;
 display:flex;
 justify-content:space-around;
-padding:15px 10px;
+padding:14px 10px;
+box-shadow:0 10px 35px rgba(0,0,0,.35);
 z-index:100;
-box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 
 .bottom-nav a{
 text-decoration:none;
 color:#cbd5e1;
-font-size:.82rem;
 display:flex;
 flex-direction:column;
 align-items:center;
 gap:5px;
+font-size:.82rem;
 transition:.3s;
 }
 
@@ -389,7 +350,7 @@ transform:translateY(-3px);
 }
 
 .bottom-nav i{
-font-size:1.2rem;
+font-size:1.15rem;
 }
 
 /* ANIMATION */
@@ -397,7 +358,7 @@ font-size:1.2rem;
 @keyframes fadeUp{
 from{
 opacity:0;
-transform:translateY(25px);
+transform:translateY(20px);
 }
 to{
 opacity:1;
@@ -412,186 +373,225 @@ transform:translateY(0);
 <body>
 
 <!-- BACKGROUND -->
+
 <div class="bg-blur bg1"></div>
 <div class="bg-blur bg2"></div>
 
+<!-- HEADER -->
+
 <header>
 
-  <div class="logo">
+<div class="logo">
 
-    <img src="iyallogo.png">
+<img src="iyallogo.png">
 
-    <div class="logo-text">
-      <h2 id="helloUser">Hello User 👋</h2>
-      <p>Welcome back to Iyal Surveys</p>
-    </div>
+<span>Iyal Surveys</span>
 
-  </div>
+</div>
 
-  <div class="menu-toggle" onclick="toggleMenu()">
-    <i class="fa fa-bars"></i>
-  </div>
+<div class="menu-toggle" onclick="toggleMenu()">
+<i class="fa fa-bars"></i>
+</div>
 
-  <nav id="menu">
-    <a href="terms.html">Terms & Conditions</a>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="about.html">About Us</a>
-    <a href="support.html">Support</a>
-    <a href="settings.html">Settings</a>
-  </nav>
+<nav id="menu">
+
+<a href="terms.html">
+Terms & Conditions
+</a>
+
+<a href="privacy.html">
+Privacy Policy
+</a>
+
+<a href="about.html">
+About Us
+</a>
+
+<a href="support.html">
+Support
+</a>
+
+<a href="settings.html">
+Settings
+</a>
+
+</nav>
 
 </header>
 
+<!-- CONTENT -->
+
 <div class="content">
 
-  <!-- HERO -->
-  <div class="hero">
-    <h1>Earn Daily From Surveys</h1>
-    <p>
-      Complete surveys from trusted vendors,
-      earn rewards instantly and withdraw
-      directly to your bank account.
-    </p>
-  </div>
+<!-- HELLO -->
 
-  <!-- STATS -->
-  <div class="stats-grid">
+<div class="welcome">
 
-    <div class="card">
-      <div class="card-icon green">
-        <i class="fa fa-wallet"></i>
-      </div>
+<h1 id="helloUser">
+Hello User 👋
+</h1>
 
-      <h3>Wallet Balance</h3>
+<p>
+Complete surveys and earn rewards daily
+</p>
 
-      <p id="userBalance">
-        ₦0
-      </p>
-    </div>
+</div>
 
-    <div class="card">
-      <div class="card-icon blue">
-        <i class="fa fa-chart-line"></i>
-      </div>
+<!-- BALANCE -->
 
-      <h3>Total Earned</h3>
+<div class="balance-card">
 
-      <p id="totalEarned">
-        ₦0
-      </p>
-    </div>
+<div class="balance-top">
 
-    <div class="card">
-      <div class="card-icon purple">
-        <i class="fa fa-square-poll-vertical"></i>
-      </div>
+<h3>
+Wallet Balance
+</h3>
 
-      <h3>Completed Surveys</h3>
+<div class="balance-icon">
+<i class="fa fa-wallet"></i>
+</div>
 
-      <p id="completedSurveys">
-        0
-      </p>
-    </div>
+</div>
 
-    <div class="card">
-      <div class="card-icon orange">
-        <i class="fa fa-fire"></i>
-      </div>
+<div class="balance-amount"
+id="userBalance">
 
-      <h3>Status</h3>
+₦0
 
-      <p style="font-size:1rem">
-        Active
-      </p>
-    </div>
+</div>
 
-  </div>
+</div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <div class="tab active" data-vendor="cpx">
-      CPX Research
-    </div>
+<!-- TABS -->
 
-    <div class="tab" data-vendor="bitlab">
-      BitLabs
-    </div>
+<div class="tabs">
 
-    <div class="tab" data-vendor="wannads">
-      Wannads
-    </div>
-  </div>
+<div class="tab active"
+data-vendor="cpx">
 
-  <!-- SURVEYS -->
-  <div id="surveyContent"></div>
+CPX Research
+
+</div>
+
+<div class="tab"
+data-vendor="bitlab">
+
+BitLabs
+
+</div>
+
+<div class="tab"
+data-vendor="wannads">
+
+Wannads
+
+</div>
+
+</div>
+
+<!-- SURVEY CONTENT -->
+
+<div id="surveyContent"></div>
 
 </div>
 
 <!-- CONSENT -->
+
 <div id="consentModal">
 
-  <div id="consentBox">
+<div id="consentBox">
 
-    <p>
-      CPX Research uses cookies and tracking technologies to provide surveys.
-      By continuing, you agree to their data processing policy.
-    </p>
+<p>
+CPX Research uses cookies and tracking technologies to deliver surveys.
+By accepting, you agree to data processing.
+</p>
 
-    <p>
-      <a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank">
-      Privacy
-      </a>
+<p>
 
-      |
+<a href="https://www.cpx-research.com/main/en/privacy.php"
+target="_blank">
 
-      <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank">
-      Terms
-      </a>
-    </p>
+CPX Privacy
 
-    <button class="accept" id="acceptConsent">
-      Accept
-    </button>
+</a>
 
-    <button class="reject" id="rejectConsent">
-      Reject
-    </button>
+|
 
-  </div>
+<a href="https://cpx-research.com/main/en/terms-user.php"
+target="_blank">
+
+CPX Terms
+
+</a>
+
+</p>
+
+<button class="accept"
+id="acceptConsent">
+
+Accept
+
+</button>
+
+<button class="reject"
+id="rejectConsent">
+
+Reject
+
+</button>
+
+</div>
 
 </div>
 
 <!-- BOTTOM NAV -->
+
 <div class="bottom-nav">
 
-  <a href="withdraw.html">
-    <i class="fa fa-money-bill-wave"></i>
-    Cash Out
-  </a>
+<a href="withdraw.html">
 
-  <a href="referrals.html">
-    <i class="fa fa-users"></i>
-    Referrals
-  </a>
+<i class="fa fa-money-bill-wave"></i>
 
-  <a href="game.html">
-    <i class="fa fa-gamepad"></i>
-    Games
-  </a>
+Cash Out
 
-  <a href="#" id="logoutBtn">
-    <i class="fa fa-sign-out-alt"></i>
-    Logout
-  </a>
+</a>
+
+<a href="referrals.html">
+
+<i class="fa fa-users"></i>
+
+Referrals
+
+</a>
+
+<a href="game.html">
+
+<i class="fa fa-gamepad"></i>
+
+Games
+
+</a>
+
+<a href="#"
+id="logoutBtn">
+
+<i class="fa fa-sign-out-alt"></i>
+
+Logout
+
+</a>
 
 </div>
 
 <script type="module">
 
-import { createClient }
-from "https://esm.sh/@supabase/supabase-js@2";
+import {
+createClient
+} from
+"https://esm.sh/@supabase/supabase-js@2";
 
-const supabase = createClient(
+const supabase =
+createClient(
 "https://xkshzlfducmnglxfnxzk.supabase.co",
 "YOUR_ANON_KEY"
 );
@@ -599,7 +599,7 @@ const supabase = createClient(
 /* AUTH */
 
 const {
-data:{ session }
+data:{session}
 } = await supabase.auth.getSession();
 
 if(!session){
@@ -608,7 +608,7 @@ location.href = "login.html";
 
 /* MENU */
 
-window.toggleMenu = () => {
+window.toggleMenu = ()=>{
 
 const menu =
 document.getElementById("menu");
@@ -639,7 +639,8 @@ headers:{
 }
 );
 
-const data = await res.json();
+const data =
+await res.json();
 
 if(!data.success){
 return;
@@ -658,25 +659,8 @@ document.getElementById(
 "userBalance"
 ).textContent =
 "₦" +
-Number(data.balance || 0)
-.toLocaleString();
-
-/* TOTAL EARNED */
-
-document.getElementById(
-"totalEarned"
-).textContent =
-"₦" +
-Number(data.total_earned || 0)
-.toLocaleString();
-
-/* SURVEYS */
-
-document.getElementById(
-"completedSurveys"
-).textContent =
 Number(
-data.completed_surveys || 0
+data.balance || 0
 ).toLocaleString();
 
 }catch(err){
@@ -689,7 +673,7 @@ console.log(err);
 
 loadDashboard();
 
-/* SURVEYS */
+/* TABS */
 
 let activeVendor = "cpx";
 
@@ -713,6 +697,8 @@ loadSurveys();
 };
 
 });
+
+/* SURVEYS */
 
 function loadSurveys(){
 
@@ -752,8 +738,8 @@ return;
 }
 
 c.innerHTML = `
-<div class="card">
-Surveys for ${activeVendor}
+<div class="balance-card">
+Wannads coming soon
 </div>
 `;
 
@@ -793,7 +779,7 @@ document.getElementById(
 document.getElementById(
 "surveyContent"
 ).innerHTML = `
-<div class="card">
+<div class="balance-card">
 You rejected cookies.
 CPX surveys cannot be shown.
 </div>
