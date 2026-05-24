@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<link rel="manifest" href="/manifest.json">
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Iyal Surveys – Dashboard</title>
+<title>NaijaKolo Dashboard</title>
 
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -18,63 +17,66 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
-font-family:'Segoe UI',sans-serif;
-background:#050816;
-color:#fff;
+background:#08140d;
+color:white;
+min-height:100vh;
 overflow-x:hidden;
 }
 
 /* BACKGROUND */
 
-.bg-blur{
+.bg{
 position:fixed;
-width:400px;
-height:400px;
+inset:0;
+z-index:-2;
+background:
+radial-gradient(circle at top left,#16a34a55,transparent 35%),
+radial-gradient(circle at bottom right,#22c55e44,transparent 35%),
+#08140d;
+}
+
+.blur{
+position:fixed;
+width:300px;
+height:300px;
 border-radius:50%;
-filter:blur(120px);
-opacity:.18;
+background:#22c55e22;
+filter:blur(90px);
 z-index:-1;
-animation:float 8s ease-in-out infinite;
+animation:float 8s infinite ease-in-out;
 }
 
-.bg1{
-background:#00ffae;
-top:-120px;
-left:-120px;
+.blur1{
+top:-80px;
+left:-80px;
 }
 
-.bg2{
-background:#0066ff;
-bottom:-120px;
-right:-120px;
-animation-delay:2s;
+.blur2{
+bottom:-100px;
+right:-100px;
+animation-delay:3s;
 }
 
 @keyframes float{
 0%,100%{
-transform:translateY(0);
+transform:translateY(0px);
 }
 50%{
-transform:translateY(25px);
+transform:translateY(30px);
 }
 }
 
 /* HEADER */
 
 header{
-padding:18px;
+padding:20px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-position:sticky;
-top:0;
-z-index:100;
-background:rgba(5,8,22,.8);
-backdrop-filter:blur(18px);
-border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .logo{
@@ -84,276 +86,90 @@ gap:12px;
 }
 
 .logo img{
-width:48px;
-height:48px;
+width:52px;
+height:52px;
 border-radius:50%;
+border:2px solid #22c55e;
 object-fit:cover;
-border:2px solid rgba(255,255,255,.12);
 }
 
-.logo span{
-font-size:1.1rem;
+.logo h1{
+font-size:1.2rem;
 font-weight:700;
 }
 
-.menu-toggle{
-width:42px;
-height:42px;
+.menu-btn{
+width:45px;
+height:45px;
+border-radius:14px;
+background:#ffffff10;
 display:flex;
 align-items:center;
 justify-content:center;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.08);
-border-radius:14px;
+backdrop-filter:blur(12px);
 cursor:pointer;
-transition:.3s;
-}
-
-.menu-toggle:hover{
-background:rgba(255,255,255,.1);
+font-size:1.2rem;
 }
 
 nav{
 position:absolute;
-top:75px;
-right:18px;
+top:80px;
+right:20px;
+background:#0f1d14ee;
+backdrop-filter:blur(18px);
+padding:15px;
+border-radius:20px;
 display:none;
 flex-direction:column;
+gap:14px;
 width:220px;
-padding:10px;
-border-radius:20px;
-background:#0f172a;
-border:1px solid rgba(255,255,255,.08);
-box-shadow:0 10px 35px rgba(0,0,0,.35);
+border:1px solid #ffffff10;
+z-index:100;
 }
 
 nav a{
-color:#fff;
 text-decoration:none;
-padding:14px;
-border-radius:14px;
-transition:.3s;
+color:#d1fae5;
 font-size:.95rem;
 }
 
-nav a:hover{
-background:rgba(255,255,255,.06);
-}
+/* CONTAINER */
 
-/* CONTENT */
-
-.content{
+.container{
 padding:20px;
 padding-bottom:120px;
 }
 
 /* HELLO */
 
-.welcome{
-margin-bottom:20px;
-animation:fadeUp .6s ease;
+.hello-box{
+margin-top:10px;
+margin-bottom:22px;
+animation:fadeUp .5s ease;
 }
 
-.welcome h1{
-font-size:1.8rem;
-font-weight:800;
-margin-bottom:5px;
+.hello-box h2{
+font-size:1.6rem;
+margin-bottom:8px;
 }
 
-.welcome p{
-color:#94a3b8;
+.hello-box p{
+color:#bbf7d0;
 font-size:.95rem;
 }
 
-/* BALANCE */
+/* CARD */
 
-.balance-card{
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.08);
-backdrop-filter:blur(16px);
-border-radius:28px;
-padding:24px;
-margin-bottom:22px;
-box-shadow:0 10px 30px rgba(0,0,0,.25);
-animation:fadeUp .7s ease;
-}
-
-.balance-top{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:15px;
-}
-
-.balance-top h3{
-font-size:1rem;
-color:#94a3b8;
-font-weight:500;
-}
-
-.balance-icon{
-width:52px;
-height:52px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:18px;
-background:rgba(0,255,174,.12);
-color:#00ffae;
-font-size:1.3rem;
-}
-
-.balance-amount{
-font-size:2.1rem;
-font-weight:800;
-}
-
-/* TABS */
-
-.tabs{
-display:flex;
-gap:12px;
-margin-bottom:20px;
-overflow-x:auto;
-padding-bottom:5px;
-}
-
-.tabs::-webkit-scrollbar{
-display:none;
-}
-
-.tab{
-flex-shrink:0;
-padding:14px 20px;
-border-radius:18px;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.08);
-font-weight:600;
-cursor:pointer;
-transition:.3s;
-}
-
-.tab.active{
-background:linear-gradient(
-135deg,
-#00ffae,
-#00bfff
-);
-color:#000;
-border:none;
-}
-
-/* SURVEYS */
-
-#surveyContent{
-animation:fadeUp .7s ease;
-}
-
-iframe{
-width:100%;
-height:72vh;
-border:none;
-border-radius:25px;
-background:#fff;
-}
-
-/* CONSENT */
-
-#consentModal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.75);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:999;
-padding:20px;
-}
-
-#consentBox{
-background:#0f172a;
-padding:28px;
-border-radius:26px;
-max-width:420px;
-border:1px solid rgba(255,255,255,.08);
-text-align:center;
-}
-
-#consentBox p{
-line-height:1.6;
-margin-bottom:18px;
-color:#cbd5e1;
-}
-
-#consentBox a{
-color:#00ffae;
-text-decoration:none;
-}
-
-#consentBox button{
-padding:13px 18px;
-border:none;
-border-radius:15px;
-font-weight:700;
-cursor:pointer;
-margin:8px;
-transition:.3s;
-}
-
-.accept{
-background:linear-gradient(
-135deg,
-#00ffae,
-#00bfff
-);
-color:#000;
-}
-
-.reject{
-background:#1e293b;
-color:#fff;
-}
-
-/* BOTTOM NAV */
-
-.bottom-nav{
-position:fixed;
-bottom:18px;
-left:50%;
-transform:translateX(-50%);
-width:92%;
-background:rgba(15,23,42,.92);
+.card{
+background:#ffffff10;
 backdrop-filter:blur(18px);
-border:1px solid rgba(255,255,255,.08);
-border-radius:26px;
-display:flex;
-justify-content:space-around;
-padding:14px 10px;
-box-shadow:0 10px 35px rgba(0,0,0,.35);
-z-index:100;
+border:1px solid #ffffff12;
+border-radius:30px;
+padding:24px;
+margin-bottom:24px;
+box-shadow:0 10px 40px rgba(0,0,0,.25);
+animation:fadeUp .6s ease;
 }
-
-.bottom-nav a{
-text-decoration:none;
-color:#cbd5e1;
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:5px;
-font-size:.82rem;
-transition:.3s;
-}
-
-.bottom-nav a:hover{
-color:#00ffae;
-transform:translateY(-3px);
-}
-
-.bottom-nav i{
-font-size:1.15rem;
-}
-
-/* ANIMATION */
 
 @keyframes fadeUp{
 from{
@@ -366,249 +182,314 @@ transform:translateY(0);
 }
 }
 
-</style>
+/* BALANCE */
 
+.balance-label{
+font-size:.95rem;
+color:#bbf7d0;
+margin-bottom:12px;
+}
+
+.balance{
+font-size:2.3rem;
+font-weight:800;
+margin-bottom:18px;
+}
+
+.balance-buttons{
+display:flex;
+gap:12px;
+}
+
+.balance-buttons button{
+flex:1;
+padding:14px;
+border:none;
+border-radius:18px;
+font-size:.95rem;
+font-weight:700;
+cursor:pointer;
+transition:.3s;
+}
+
+.withdraw-btn{
+background:linear-gradient(135deg,#16a34a,#22c55e);
+color:white;
+}
+
+.history-btn{
+background:#ffffff10;
+color:white;
+border:1px solid #ffffff10;
+}
+
+.balance-buttons button:hover{
+transform:translateY(-2px);
+}
+
+/* OFFERWALLS */
+
+.section-title{
+font-size:1rem;
+margin-bottom:16px;
+color:#86efac;
+}
+
+.offerwalls{
+display:grid;
+grid-template-columns:1fr;
+gap:16px;
+}
+
+.offer-btn{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:18px;
+border-radius:22px;
+background:#ffffff08;
+border:1px solid #ffffff10;
+text-decoration:none;
+color:white;
+transition:.3s;
+}
+
+.offer-btn:hover{
+transform:translateY(-3px);
+background:#ffffff12;
+}
+
+.offer-left{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.offer-icon{
+width:52px;
+height:52px;
+border-radius:16px;
+background:linear-gradient(135deg,#16a34a,#22c55e);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:1.2rem;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#0b1610ee;
+backdrop-filter:blur(18px);
+display:flex;
+justify-content:space-around;
+padding:14px 0;
+border-top:1px solid #ffffff10;
+z-index:999;
+}
+
+.bottom-nav a{
+color:white;
+text-decoration:none;
+font-size:.8rem;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:5px;
+}
+
+.bottom-nav i{
+font-size:1.1rem;
+}
+
+.active-nav{
+color:#22c55e !important;
+}
+
+/* LOADER */
+
+.loader{
+width:24px;
+height:24px;
+border:3px solid #ffffff20;
+border-top:3px solid #22c55e;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+}
+
+@keyframes spin{
+to{
+transform:rotate(360deg);
+}
+}
+
+</style>
 </head>
 
 <body>
 
-<!-- BACKGROUND -->
-
-<div class="bg-blur bg1"></div>
-<div class="bg-blur bg2"></div>
-
-<!-- HEADER -->
+<div class="bg"></div>
+<div class="blur blur1"></div>
+<div class="blur blur2"></div>
 
 <header>
 
 <div class="logo">
-
-<img src="iyallogo.png">
-
-<span>Iyal Surveys</span>
-
+<img src="logo.png">
+<h1>NaijaKolo</h1>
 </div>
 
-<div class="menu-toggle" onclick="toggleMenu()">
-<i class="fa fa-bars"></i>
+<div class="menu-btn" onclick="toggleMenu()">
+<i class="fas fa-bars"></i>
 </div>
 
 <nav id="menu">
-
-<a href="terms.html">
-Terms & Conditions
-</a>
-
-<a href="privacy.html">
-Privacy Policy
-</a>
-
-<a href="about.html">
-About Us
-</a>
-
-<a href="support.html">
-Support
-</a>
-
-<a href="settings.html">
-Settings
-</a>
-
+<a href="dashboard.html">Dashboard</a>
+<a href="referral.html">Referral</a>
+<a href="withdraw.html">Withdraw</a>
+<a href="history.html">History</a>
+<a href="#" onclick="logout()">Logout</a>
 </nav>
 
 </header>
 
-<!-- CONTENT -->
+<div class="container">
 
-<div class="content">
-
-<!-- HELLO -->
-
-<div class="welcome">
-
-<h1 id="helloUser">
-Hello User 👋
-</h1>
-
-<p>
-Complete surveys and earn rewards daily
-</p>
-
+<div class="hello-box">
+<h2 id="helloUser">Hello, User</h2>
+<p>Welcome back to your earning dashboard.</p>
 </div>
 
-<!-- BALANCE -->
+<div class="card">
 
-<div class="balance-card">
+<div class="balance-label">
+Available Balance
+</div>
 
-<div class="balance-top">
+<div class="balance" id="balance">
+<div class="loader"></div>
+</div>
 
-<h3>
-Wallet Balance
-</h3>
+<div class="balance-buttons">
+<button class="withdraw-btn">
+Withdraw
+</button>
 
-<div class="balance-icon">
-<i class="fa fa-wallet"></i>
+<button class="history-btn">
+History
+</button>
 </div>
 
 </div>
 
-<div class="balance-amount"
-id="userBalance">
+<div class="card">
 
-₦0
-
+<div class="section-title">
+Offerwalls
 </div>
 
+<div class="offerwalls">
+
+<a href="cpx.html" class="offer-btn">
+
+<div class="offer-left">
+<div class="offer-icon">
+<i class="fas fa-coins"></i>
 </div>
 
-<!-- TABS -->
-
-<div class="tabs">
-
-<div class="tab active"
-data-vendor="cpx">
-
-CPX Research
-
+<div>
+<h3>CPX Research</h3>
+<p>Complete surveys</p>
+</div>
 </div>
 
-<div class="tab"
-data-vendor="bitlab">
-
-BitLabs
-
-</div>
-
-<div class="tab"
-data-vendor="wannads">
-
-Wannads
-
-</div>
-
-</div>
-
-<!-- SURVEY CONTENT -->
-
-<div id="surveyContent"></div>
-
-</div>
-
-<!-- CONSENT -->
-
-<div id="consentModal">
-
-<div id="consentBox">
-
-<p>
-CPX Research uses cookies and tracking technologies to deliver surveys.
-By accepting, you agree to data processing.
-</p>
-
-<p>
-
-<a href="https://www.cpx-research.com/main/en/privacy.php"
-target="_blank">
-
-CPX Privacy
+<i class="fas fa-chevron-right"></i>
 
 </a>
 
-|
+<a href="bitlabs.html" class="offer-btn">
 
-<a href="https://cpx-research.com/main/en/terms-user.php"
-target="_blank">
+<div class="offer-left">
+<div class="offer-icon">
+<i class="fas fa-bolt"></i>
+</div>
 
-CPX Terms
+<div>
+<h3>BitLabs</h3>
+<p>Earn rewards daily</p>
+</div>
+</div>
+
+<i class="fas fa-chevron-right"></i>
 
 </a>
 
-</p>
+<a href="wannads.html" class="offer-btn">
 
-<button class="accept"
-id="acceptConsent">
+<div class="offer-left">
+<div class="offer-icon">
+<i class="fas fa-wallet"></i>
+</div>
 
-Accept
+<div>
+<h3>Wannads</h3>
+<p>Tasks & surveys</p>
+</div>
+</div>
 
-</button>
+<i class="fas fa-chevron-right"></i>
 
-<button class="reject"
-id="rejectConsent">
+</a>
 
-Reject
-
-</button>
-
+</div>
 </div>
 
 </div>
-
-<!-- BOTTOM NAV -->
 
 <div class="bottom-nav">
 
+<a href="dashboard.html" class="active-nav">
+<i class="fas fa-home"></i>
+<span>Home</span>
+</a>
+
+<a href="referral.html">
+<i class="fas fa-users"></i>
+<span>Referral</span>
+</a>
+
 <a href="withdraw.html">
-
-<i class="fa fa-money-bill-wave"></i>
-
-Cash Out
-
+<i class="fas fa-money-bill-wave"></i>
+<span>Withdraw</span>
 </a>
 
-<a href="referrals.html">
-
-<i class="fa fa-users"></i>
-
-Referrals
-
-</a>
-
-<a href="game.html">
-
-<i class="fa fa-gamepad"></i>
-
-Games
-
-</a>
-
-<a href="#"
-id="logoutBtn">
-
-<i class="fa fa-sign-out-alt"></i>
-
-Logout
-
+<a href="profile.html">
+<i class="fas fa-user"></i>
+<span>Profile</span>
 </a>
 
 </div>
 
-<script type="module">
+<script>
 
-import {
-createClient
-} from
-"https://esm.sh/@supabase/supabase-js@2";
+/* SUPABASE */
 
-const supabase =
-createClient(
-"https://xkshzlfducmnglxfnxzk.supabase.co",
-"YOUR_ANON_KEY"
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+const supabase = window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
 );
-
-/* AUTH */
-
-const {
-data:{session}
-} = await supabase.auth.getSession();
-
-if(!session){
-location.href = "login.html";
-}
 
 /* MENU */
 
-window.toggleMenu = ()=>{
+function toggleMenu(){
 
 const menu =
 document.getElementById("menu");
@@ -617,8 +498,7 @@ menu.style.display =
 menu.style.display === "flex"
 ? "none"
 : "flex";
-
-};
+}
 
 /* LOAD DASHBOARD */
 
@@ -626,23 +506,41 @@ async function loadDashboard(){
 
 try{
 
-const res = await fetch(
-"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard",
+const {
+data: { session }
+} = await supabase.auth.getSession();
+
+if(!session){
+
+window.location.href =
+"login.html";
+
+return;
+}
+
+const response = await fetch(
+"YOUR_FUNCTION_URL",
 {
 method:"POST",
 
 headers:{
+"Content-Type":"application/json",
 "Authorization":
-`Bearer ${session.access_token}`,
-"Content-Type":"application/json"
+`Bearer ${session.access_token}`
 }
 }
 );
 
-const data =
-await res.json();
+const data = await response.json();
+
+console.log(data);
 
 if(!data.success){
+
+document.getElementById(
+"balance"
+).innerHTML = "₦0.00";
+
 return;
 }
 
@@ -650,156 +548,39 @@ return;
 
 document.getElementById(
 "helloUser"
-).textContent =
-`Hello ${data.username} 👋`;
+).innerText =
+`Hello, ${data.username}`;
 
 /* BALANCE */
 
 document.getElementById(
-"userBalance"
-).textContent =
-"₦" +
-Number(
+"balance"
+).innerText =
+`₦${Number(
 data.balance || 0
-).toLocaleString();
+).toFixed(2)}`;
 
 }catch(err){
 
 console.log(err);
 
+document.getElementById(
+"balance"
+).innerHTML = "₦0.00";
 }
-
 }
 
 loadDashboard();
 
-/* TABS */
-
-let activeVendor = "cpx";
-
-document.querySelectorAll(".tab")
-.forEach(tab=>{
-
-tab.onclick = ()=>{
-
-document.querySelectorAll(".tab")
-.forEach(t=>
-t.classList.remove("active")
-);
-
-tab.classList.add("active");
-
-activeVendor =
-tab.dataset.vendor;
-
-loadSurveys();
-
-};
-
-});
-
-/* SURVEYS */
-
-function loadSurveys(){
-
-const c =
-document.getElementById(
-"surveyContent"
-);
-
-c.innerHTML = "";
-
-if(activeVendor === "cpx"){
-
-document.getElementById(
-"consentModal"
-).style.display = "flex";
-
-return;
-
-}
-
-if(activeVendor === "bitlab"){
-
-const userId =
-session.user.id;
-
-const bitlabToken =
-"5f6cc641-dd5c-4551-a948-5c526d61d97a";
-
-const iframeSrc =
-`https://web.bitlabs.ai/?token=${bitlabToken}&uid=${userId}`;
-
-c.innerHTML =
-`<iframe src="${iframeSrc}"></iframe>`;
-
-return;
-
-}
-
-c.innerHTML = `
-<div class="balance-card">
-Wannads coming soon
-</div>
-`;
-
-}
-
-/* CPX */
-
-document.getElementById(
-"acceptConsent"
-).onclick = ()=>{
-
-document.getElementById(
-"consentModal"
-).style.display = "none";
-
-const userId =
-session.user.id;
-
-const iframeSrc =
-`https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${userId}`;
-
-document.getElementById(
-"surveyContent"
-).innerHTML =
-`<iframe src="${iframeSrc}"></iframe>`;
-
-};
-
-document.getElementById(
-"rejectConsent"
-).onclick = ()=>{
-
-document.getElementById(
-"consentModal"
-).style.display = "none";
-
-document.getElementById(
-"surveyContent"
-).innerHTML = `
-<div class="balance-card">
-You rejected cookies.
-CPX surveys cannot be shown.
-</div>
-`;
-
-};
-
-loadSurveys();
-
 /* LOGOUT */
 
-document.getElementById(
-"logoutBtn"
-).onclick = async ()=>{
+async function logout(){
 
 await supabase.auth.signOut();
 
-location.href = "login.html";
-
-};
+window.location.href =
+"login.html";
+}
 
 </script>
 
