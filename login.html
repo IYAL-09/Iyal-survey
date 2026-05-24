@@ -294,23 +294,53 @@ window.forgotPassword = async function () {
     return;
   }
 
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    status.textContent = "⚠️ Enter a valid email address";
+    return;
+  }
+
   // Get current domain for dynamic redirect URL
   const resetUrl = window.location.origin + "/reset-password.html";
 
+  // Show loading state
+  status.textContent = "⏳ Sending reset email...";
+  status.style.color = "#666";
+
   try {
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: resetUrl
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error("Supabase error:", error);
+      throw error;
+    }
 
-    status.style.color = "green";
-    status.textContent = "✅ Reset email sent - Check your inbox";
+    // Check if data is returned (means email was sent)
+    if (data) {
+      status.style.color = "green";
+      status.textContent = "✅ Reset email sent - Check your inbox";
+    } else {
+      // Even with no data, Supabase may return success for security
+      // Show the same message to not reveal if email exists
+      status.style.color = "green";
+      status.textContent = "✅ If this email exists, a reset link has been sent";
+    }
 
   } catch (err) {
+    console.error("Full error:", err);
     status.style.color = "red";
-    status.textContent = err.message || "Reset failed";
+    // Provide more specific error messages
+    if (err.message === "User not found") {
+      status.textContent = "⚠️ No account with this email";
+    } else if (err.message && err.message.includes("rate limit")) {
+      status.textContent = "⚠️ Too many attempts. Please try again later";
+    } else {
+      status.textContent = err.message || "Failed to send reset email";
+    }
   }
 };
 </script>
