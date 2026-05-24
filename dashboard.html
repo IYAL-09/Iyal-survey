@@ -1,149 +1,391 @@
-import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+<!-- DASHBOARD PAGE -->
 
-serve(async (req) => {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  const headers = {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-  };
+<title>Dashboard</title>
 
-  /* CORS */
-  if (req.method === "OPTIONS") {
-    return new Response(null, {
-      status: 204,
-      headers,
-    });
-  }
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 
-  try {
+<style>
 
-    /* ---------------- AUTH TOKEN ---------------- */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-    const authHeader = req.headers.get("Authorization");
+body{
+font-family:Inter,sans-serif;
+background:#050816;
+color:white;
+overflow-x:hidden;
+}
 
-    if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "Missing token"
-        }),
-        {
-          status: 401,
-          headers
-        }
-      );
-    }
+/* BACKGROUND */
 
-    const token = authHeader.replace("Bearer ", "");
+.bg-blur{
+position:fixed;
+width:500px;
+height:500px;
+border-radius:50%;
+filter:blur(120px);
+opacity:.25;
+z-index:-1;
+animation:float 8s ease-in-out infinite;
+}
 
-    /* ---------------- VERIFY USER ---------------- */
+.bg1{
+background:#00ffae;
+top:-150px;
+left:-100px;
+}
 
-    const supabaseAuth = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      {
-        global: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    );
+.bg2{
+background:#0066ff;
+bottom:-150px;
+right:-100px;
+animation-delay:2s;
+}
 
-    const {
-      data: authData,
-      error: authError
-    } = await supabaseAuth.auth.getUser();
+@keyframes float{
+0%,100%{
+transform:translateY(0px);
+}
+50%{
+transform:translateY(30px);
+}
+}
 
-    if (authError || !authData?.user) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "Invalid session"
-        }),
-        {
-          status: 401,
-          headers
-        }
-      );
-    }
+/* GLASS */
 
-    const userId = authData.user.id;
+.glass{
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,.08);
+box-shadow:0 8px 32px rgba(0,0,0,.3);
+}
 
-    /* ---------------- ADMIN CLIENT ---------------- */
+/* ANIMATION */
 
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
+.fade-up{
+animation:fadeUp .6s ease;
+}
 
-    /* ---------------- UPDATE LAST VISIT ---------------- */
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
 
-    await supabaseAdmin
-      .from("users")
-      .update({
-        last_visit: new Date().toISOString()
-      })
-      .eq("id", userId);
+.card-hover{
+transition:.3s;
+}
 
-    /* ---------------- GET USER DATA ---------------- */
+.card-hover:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 30px rgba(0,255,174,.15);
+}
 
-    const {
-      data: user,
-      error
-    } = await supabaseAdmin
-      .from("users")
-      .select(`
-        username,
-        balance,
-        total_earned,
-        completed_surveys
-      `)
-      .eq("id", userId)
-      .single();
+</style>
 
-    if (error) {
-      throw error;
-    }
+</head>
+<body>
 
-    /* ---------------- RESPONSE ---------------- */
+<!-- BACKGROUND -->
+<div class="bg-blur bg1"></div>
+<div class="bg-blur bg2"></div>
 
-    return new Response(
-      JSON.stringify({
-        success: true,
+<!-- MAIN -->
+<div class="max-w-7xl mx-auto p-5">
 
-        username: user.username || "User",
+  <!-- TOP BAR -->
+  <div class="flex items-center justify-between mb-8 fade-up">
 
-        balance: Number(user.balance || 0),
+    <div>
+      <h1 id="welcomeText"
+      class="text-3xl md:text-4xl font-bold">
+      Hello User 👋
+      </h1>
 
-        total_earned: Number(user.total_earned || 0),
+      <p class="text-gray-400 mt-2">
+      Welcome back to your dashboard
+      </p>
+    </div>
 
-        completed_surveys: Number(
-          user.completed_surveys || 0
-        )
-      }),
-      {
-        status: 200,
-        headers
-      }
-    );
+    <div class="glass p-4 rounded-2xl">
+      <i data-lucide="wallet"
+      class="w-7 h-7 text-green-400"></i>
+    </div>
 
-  } catch (err) {
+  </div>
 
-    console.error(err);
+  <!-- STATS -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
 
-    return new Response(
-      JSON.stringify({
-        success: false,
-        message: err.message || "Server error"
-      }),
-      {
-        status: 500,
-        headers
-      }
-    );
-  }
-});
+    <!-- BALANCE -->
+    <div class="glass rounded-3xl p-6 card-hover fade-up">
+
+      <div class="flex items-center justify-between mb-4">
+
+        <div>
+          <p class="text-gray-400 text-sm">
+          Wallet Balance
+          </p>
+
+          <h2 id="balance"
+          class="text-3xl font-bold mt-2">
+          ₦0
+          </h2>
+        </div>
+
+        <div class="bg-green-500/10 p-3 rounded-2xl">
+          <i data-lucide="credit-card"
+          class="text-green-400"></i>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TOTAL EARNED -->
+    <div class="glass rounded-3xl p-6 card-hover fade-up">
+
+      <div class="flex items-center justify-between mb-4">
+
+        <div>
+          <p class="text-gray-400 text-sm">
+          Total Earned
+          </p>
+
+          <h2 id="earned"
+          class="text-3xl font-bold mt-2">
+          ₦0
+          </h2>
+        </div>
+
+        <div class="bg-blue-500/10 p-3 rounded-2xl">
+          <i data-lucide="trending-up"
+          class="text-blue-400"></i>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SURVEYS -->
+    <div class="glass rounded-3xl p-6 card-hover fade-up">
+
+      <div class="flex items-center justify-between mb-4">
+
+        <div>
+          <p class="text-gray-400 text-sm">
+          Surveys Completed
+          </p>
+
+          <h2 id="surveys"
+          class="text-3xl font-bold mt-2">
+          0
+          </h2>
+        </div>
+
+        <div class="bg-purple-500/10 p-3 rounded-2xl">
+          <i data-lucide="clipboard-list"
+          class="text-purple-400"></i>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="glass rounded-3xl p-6 mb-8 fade-up">
+
+    <div class="flex items-center justify-between mb-6">
+
+      <h2 class="text-xl font-semibold">
+      Quick Actions
+      </h2>
+
+      <i data-lucide="sparkles"
+      class="text-green-400"></i>
+
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+      <a href="survey.html"
+      class="bg-white/5 hover:bg-green-500/20 transition rounded-2xl p-5 text-center">
+
+        <i data-lucide="layout-dashboard"
+        class="mx-auto mb-3 text-green-400"></i>
+
+        <p class="font-medium">
+        Start Survey
+        </p>
+
+      </a>
+
+      <a href="withdraw.html"
+      class="bg-white/5 hover:bg-blue-500/20 transition rounded-2xl p-5 text-center">
+
+        <i data-lucide="banknote"
+        class="mx-auto mb-3 text-blue-400"></i>
+
+        <p class="font-medium">
+        Withdraw
+        </p>
+
+      </a>
+
+      <a href="referral.html"
+      class="bg-white/5 hover:bg-purple-500/20 transition rounded-2xl p-5 text-center">
+
+        <i data-lucide="users"
+        class="mx-auto mb-3 text-purple-400"></i>
+
+        <p class="font-medium">
+        Referrals
+        </p>
+
+      </a>
+
+      <a href="profile.html"
+      class="bg-white/5 hover:bg-yellow-500/20 transition rounded-2xl p-5 text-center">
+
+        <i data-lucide="user"
+        class="mx-auto mb-3 text-yellow-400"></i>
+
+        <p class="font-medium">
+        Profile
+        </p>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+lucide.createIcons();
+
+/* SUPABASE */
+
+const SUPABASE_URL =
+"YOUR_SUPABASE_URL";
+
+const SUPABASE_ANON_KEY =
+"YOUR_SUPABASE_ANON_KEY";
+
+const supabase =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+);
+
+/* LOAD DASHBOARD */
+
+async function loadDashboard(){
+
+try{
+
+const {
+data:{session}
+} = await supabase.auth.getSession();
+
+if(!session){
+
+window.location.href = "login.html";
+return;
+
+}
+
+/* FUNCTION */
+
+const response = await fetch(
+`${SUPABASE_URL}/functions/v1/dashboard`,
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"Authorization":
+`Bearer ${session.access_token}`
+}
+}
+);
+
+const result = await response.json();
+
+if(!result.success){
+
+alert(result.message || "Failed");
+return;
+
+}
+
+/* USERNAME */
+
+document.getElementById(
+"welcomeText"
+).innerHTML =
+`Hello ${result.username} 👋`;
+
+/* BALANCE */
+
+document.getElementById(
+"balance"
+).innerText =
+`₦${Number(result.balance)
+.toLocaleString()}`;
+
+/* TOTAL EARNED */
+
+document.getElementById(
+"earned"
+).innerText =
+`₦${Number(result.total_earned)
+.toLocaleString()}`;
+
+/* SURVEYS */
+
+document.getElementById(
+"surveys"
+).innerText =
+Number(
+result.completed_surveys
+).toLocaleString();
+
+}catch(err){
+
+console.log(err);
+
+alert("Something went wrong");
+
+}
+
+}
+
+loadDashboard();
+
+</script>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</body>
+</html>
