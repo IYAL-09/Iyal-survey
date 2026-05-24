@@ -312,7 +312,9 @@ window.forgotPassword = async function () {
   try {
 
     // Try WITHOUT redirectTo first - let Supabase use Site URL
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+  redirectTo: "https://iyal-survey.vercel.app/reset-password.html"
+});
 
     console.log("Reset password response:", { data, error });
 
