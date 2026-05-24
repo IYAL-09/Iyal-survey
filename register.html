@@ -590,23 +590,19 @@ form.addEventListener("submit", async (e) => {
 
 });
 
-
 /* GET REF CODE FROM URL */
 
-const params =
-new URLSearchParams(window.location.search);
-
-const ref =
-params.get("ref");
+const params = new URLSearchParams(window.location.search);
+const ref = params.get("ref");
 
 /* AUTO FILL INPUT */
 
-if(ref){
-
-document.getElementById("referral_Code").value = ref;
-
+if (ref) {
+  const input = document.getElementById("referral_code");
+  if (input) {
+    input.value = ref;
+  }
 }
-
 
 </script>
 
