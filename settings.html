@@ -1,284 +1,617 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<link rel="manifest" href="/manifest.json">
+
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Change Password – Iyal Surveys</title>
+
+<title>Iyal Surveys – Settings</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
 body{
-  font-family:'Segoe UI',sans-serif;
-  margin:0;
-  background:#f1f8e9;
-  color:#2e7d32;
+background:#07140d;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
 }
+
+/* ANIMATED BG */
+.bg{
+position:fixed;
+inset:0;
+z-index:-1;
+background:
+radial-gradient(circle at top left,#00ff9950,transparent 30%),
+radial-gradient(circle at bottom right,#00ff8840,transparent 30%),
+#07140d;
+animation:bgMove 8s infinite alternate ease-in-out;
+}
+
+@keyframes bgMove{
+from{transform:scale(1);}
+to{transform:scale(1.06);}
+}
+
+/* HEADER */
 header{
-  background:#2e7d32;
-  color:white;
-  padding:15px;
-  display:flex;
-  align-items:center;
+position:sticky;
+top:0;
+z-index:1000;
+backdrop-filter:blur(18px);
+background:rgba(8,20,13,.85);
+border-bottom:1px solid rgba(255,255,255,.06);
+padding:14px 18px;
+display:flex;
+align-items:center;
+justify-content:space-between;
 }
+
+.left{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
 .logo{
-  display:flex;
-  align-items:center;
-}
-.logo img{
-  width:45px;height:45px;
-  border-radius:50%;
-  border:3px solid white;
-  margin-right:10px;
-}
-.logo span{font-weight:bold;font-size:1.2em;}
-
-.content{
-  padding:20px;
-  max-width:440px;
-  margin:auto;
+width:48px;
+height:48px;
+border-radius:50%;
+border:2px solid #00ff99;
+object-fit:cover;
+box-shadow:0 0 18px #00ff9950;
 }
 
+.brand{
+font-size:1.15rem;
+font-weight:700;
+background:linear-gradient(90deg,#00ff99,#7dffcb);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.menu-btn{
+width:45px;
+height:45px;
+border-radius:14px;
+border:none;
+background:rgba(255,255,255,.06);
+color:#00ff99;
+font-size:1.2rem;
+cursor:pointer;
+transition:.3s;
+}
+
+.menu-btn:hover{
+transform:scale(1.05);
+background:rgba(0,255,153,.15);
+}
+
+/* SIDEBAR */
+.sidebar{
+position:fixed;
+top:0;
+left:-270px;
+width:270px;
+height:100%;
+background:#081811;
+backdrop-filter:blur(20px);
+z-index:2000;
+padding:22px;
+transition:.4s;
+border-right:1px solid rgba(255,255,255,.06);
+}
+
+.sidebar.active{
+left:0;
+}
+
+.sidebar .top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:30px;
+}
+
+.sidebar .top h2{
+color:#00ff99;
+font-size:1.2rem;
+}
+
+.close-btn{
+background:none;
+border:none;
+font-size:1.4rem;
+color:white;
+cursor:pointer;
+}
+
+.nav{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.nav a{
+text-decoration:none;
+color:#d8ffe8;
+padding:14px;
+border-radius:14px;
+transition:.3s;
+background:rgba(255,255,255,.03);
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.nav a:hover{
+background:rgba(0,255,153,.12);
+transform:translateX(4px);
+}
+
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.5);
+z-index:1500;
+display:none;
+}
+
+.overlay.show{
+display:block;
+}
+
+/* CONTENT */
+.container{
+padding:25px 18px 120px;
+max-width:500px;
+margin:auto;
+}
+
+/* CARD */
 .card{
-  background:white;
-  border-radius:16px;
-  padding:22px;
-  box-shadow:0 6px 15px rgba(0,0,0,.1);
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(16px);
+border:1px solid rgba(255,255,255,.06);
+border-radius:28px;
+padding:24px;
+box-shadow:0 8px 30px rgba(0,0,0,.35);
+animation:fade .5s ease;
 }
 
-h2{
-  margin-top:0;
-  font-size:1.25em;
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
-/* INPUT BLOCK */
-.section{
-  border:1px solid #ddd;
-  border-radius:12px;
-  padding:15px;
-  margin-bottom:15px;
+.title{
+font-size:1.4rem;
+font-weight:700;
+margin-bottom:20px;
+color:#00ff99;
 }
 
+/* INPUTS */
 .input-group{
-  position:relative;
-  margin-bottom:12px;
+margin-bottom:18px;
+position:relative;
 }
+
 .input-group input{
-  width:80%;
-  padding:12px 42px 12px 12px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  font-size:1em;
+width:100%;
+padding:15px 50px 15px 15px;
+border:none;
+outline:none;
+border-radius:16px;
+background:rgba(255,255,255,.05);
+color:white;
+font-size:1rem;
+border:1px solid rgba(255,255,255,.05);
+transition:.3s;
 }
+
+.input-group input:focus{
+border-color:#00ff99;
+box-shadow:0 0 12px rgba(0,255,153,.2);
+}
+
 .toggle{
-  position:absolute;
-  right:12px;
-  top:50%;
-  transform:translateY(-50%);
-  cursor:pointer;
-  color:#666;
+position:absolute;
+right:18px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+color:#9effcf;
 }
 
 /* STRENGTH */
 .strength{
-  height:7px;
-  background:#eee;
-  border-radius:4px;
-  overflow:hidden;
+height:8px;
+background:rgba(255,255,255,.06);
+border-radius:20px;
+overflow:hidden;
+margin-bottom:18px;
 }
+
 .strength div{
-  height:100%;
-  width:0;
-  transition:.3s;
+height:100%;
+width:0;
+transition:.3s;
+border-radius:20px;
 }
 
 /* RULES */
 .rules{
-  font-size:.9em;
-  margin-top:10px;
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-bottom:18px;
 }
+
 .rules div{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:6px;
+font-size:.92rem;
+display:flex;
+align-items:center;
+gap:10px;
 }
-.rules i{
-  font-size:.9em;
+
+.bad{
+color:#ff7272;
 }
-.bad{color:#e53935;}
-.good{color:#2e7d32;}
+
+.good{
+color:#00ff99;
+}
 
 /* BUTTON */
 button{
-  width:100%;
-  padding:13px;
-  background:#2e7d32;
-  color:white;
-  border:none;
-  border-radius:12px;
-  font-weight:bold;
-  font-size:1em;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
+width:100%;
+padding:16px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#00ff99,#00c26e);
+color:#07140d;
+font-size:1rem;
+font-weight:700;
+cursor:pointer;
+transition:.3s;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
 }
+
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 25px rgba(0,255,153,.35);
+}
+
 button:disabled{
-  background:#c8e6c9;
-  cursor:not-allowed;
+opacity:.6;
+cursor:not-allowed;
 }
 
 .spinner{
-  width:18px;height:18px;
-  border:3px solid #c8e6c9;
-  border-top:3px solid white;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
+width:18px;
+height:18px;
+border:3px solid rgba(255,255,255,.3);
+border-top:3px solid #07140d;
+border-radius:50%;
+animation:spin 1s linear infinite;
+display:none;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
+
+@keyframes spin{
+to{
+transform:rotate(360deg);
+}
+}
 
 #message{
-  text-align:center;
-  margin-top:15px;
-  font-weight:bold;
+margin-top:18px;
+text-align:center;
+font-weight:600;
+}
+
+/* SUPPORT BUTTON */
+.support-btn{
+position:fixed;
+left:18px;
+bottom:18px;
+width:62px;
+height:62px;
+border-radius:50%;
+background:linear-gradient(135deg,#00ff99,#00c26e);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#07140d;
+font-size:1.4rem;
+text-decoration:none;
+box-shadow:0 0 25px rgba(0,255,153,.4);
+z-index:999;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.08);}
+100%{transform:scale(1);}
+}
+
+@media(max-width:480px){
+.brand{
+font-size:1rem;
+}
 }
 </style>
 </head>
 
 <body>
 
+<div class="bg"></div>
+
+<!-- HEADER -->
 <header>
-  <div class="logo">
-    <img src="iyallogo.png">
-    <span>Iyal Surveys</span>
-  </div>
+<div class="left">
+<button class="menu-btn" id="menuBtn">
+<i class="fa fa-bars"></i>
+</button>
+
+<img src="iyallogo.png" class="logo">
+
+<div class="brand">Iyal Surveys</div>
+</div>
 </header>
 
-<div class="content">
-  <div class="card">
-    <h2>Change Password</h2>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
 
-    <div class="section">
-      <div class="input-group">
-        <input type="password" id="oldPassword" placeholder="Current password">
-        <i class="fa fa-eye toggle" onclick="toggle('oldPassword',this)"></i>
-      </div>
+<div class="top">
+<h2>Menu</h2>
 
-      <div class="input-group">
-        <input type="password" id="newPassword" placeholder="New password">
-        <i class="fa fa-eye toggle" onclick="toggle('newPassword',this)"></i>
-      </div>
-
-      <div class="strength"><div id="strengthBar"></div></div>
-
-      <div class="rules">
-        <div id="rLen" class="bad"><i class="fa fa-times-circle"></i> Minimum 6 characters</div>
-        <div id="rUp" class="bad"><i class="fa fa-times-circle"></i> One uppercase letter</div>
-        <div id="rNum" class="bad"><i class="fa fa-times-circle"></i> One number</div>
-        <div id="rSpec" class="bad"><i class="fa fa-times-circle"></i> One special character</div>
-      </div>
-
-      <div class="input-group" style="margin-top:12px">
-        <input type="password" id="confirmPassword" placeholder="Confirm new password">
-        <i class="fa fa-eye toggle" onclick="toggle('confirmPassword',this)"></i>
-      </div>
-    </div>
-
-    <button id="updateBtn" disabled>
-      Update Password
-      <span class="spinner" style="display:none"></span>
-    </button>
-
-    <div id="message"></div>
-  </div>
+<button class="close-btn" id="closeBtn">
+<i class="fa fa-times"></i>
+</button>
 </div>
+
+<div class="nav">
+<a href="dashboard.html">
+<i class="fa fa-home"></i>
+Dashboard
+</a>
+
+<a href="withdraw.html">
+<i class="fa fa-wallet"></i>
+Withdraw
+</a>
+
+<a href="settings.html">
+<i class="fa fa-gear"></i>
+Settings
+</a>
+</div>
+
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- CONTENT -->
+<div class="container">
+
+<div class="card">
+
+<div class="title">
+Change Password
+</div>
+
+<div class="input-group">
+<input type="password" id="newPassword" placeholder="New Password">
+<i class="fa fa-eye toggle" onclick="togglePassword('newPassword',this)"></i>
+</div>
+
+<div class="strength">
+<div id="strengthBar"></div>
+</div>
+
+<div class="rules">
+<div id="rLen" class="bad">
+<i class="fa fa-times-circle"></i>
+Minimum 6 characters
+</div>
+
+<div id="rUp" class="bad">
+<i class="fa fa-times-circle"></i>
+One uppercase letter
+</div>
+
+<div id="rNum" class="bad">
+<i class="fa fa-times-circle"></i>
+One number
+</div>
+
+<div id="rSpec" class="bad">
+<i class="fa fa-times-circle"></i>
+One special character
+</div>
+</div>
+
+<div class="input-group">
+<input type="password" id="confirmPassword" placeholder="Confirm Password">
+<i class="fa fa-eye toggle" onclick="togglePassword('confirmPassword',this)"></i>
+</div>
+
+<button id="updateBtn" disabled>
+Update Password
+<div class="spinner"></div>
+</button>
+
+<div id="message"></div>
+
+</div>
+
+</div>
+
+<!-- SUPPORT -->
+<a href="support.html" class="support-btn">
+<i class="fa fa-headset"></i>
+</a>
 
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase=createClient(
-  "https://xkshzlfducmnglxfnxzk.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
+"https://xkshzlfducmnglxfnxzk.supabase.co",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhc2UiLCJyZWYiOiJ4a3NoemxmZHVjbW5nbHhmbnh6ayIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzY1NDI5MTQ0LCJleHAiOjIwODEwMDUxNDR9.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
 );
 
 /* AUTH */
-const { data:{session} }=await supabase.auth.getSession();
-if(!session) location.href="login.html";
+const { data:{session} } = await supabase.auth.getSession();
+
+if(!session){
+location.href="login.html";
+}
+
+/* SIDEBAR */
+const sidebar=document.getElementById("sidebar");
+const overlay=document.getElementById("overlay");
+
+menuBtn.onclick=()=>{
+sidebar.classList.add("active");
+overlay.classList.add("show");
+};
+
+closeBtn.onclick=closeMenu;
+overlay.onclick=closeMenu;
+
+function closeMenu(){
+sidebar.classList.remove("active");
+overlay.classList.remove("show");
+}
 
 /* TOGGLE */
-window.toggle=(id,el)=>{
-  const i=document.getElementById(id);
-  i.type=i.type==="password"?"text":"password";
-  el.classList.toggle("fa-eye-slash");
+window.togglePassword=(id,el)=>{
+const input=document.getElementById(id);
+
+input.type=input.type==="password"?"text":"password";
+
+el.classList.toggle("fa-eye-slash");
 };
 
-/* PASSWORD VALIDATION */
+/* PASSWORD RULES */
 const rules={
-  len:v=>v.length>=6,
-  up:v=>/[A-Z]/.test(v),
-  num:v=>/[0-9]/.test(v),
-  spec:v=>/[^A-Za-z0-9]/.test(v)
+len:v=>v.length>=6,
+up:v=>/[A-Z]/.test(v),
+num:v=>/[0-9]/.test(v),
+spec:v=>/[^A-Za-z0-9]/.test(v)
 };
 
-const bar=document.getElementById("strengthBar");
+const strengthBar=document.getElementById("strengthBar");
 const btn=document.getElementById("updateBtn");
 
 newPassword.oninput=()=>{
-  const v=newPassword.value;
-  let score=0;
+const v=newPassword.value;
 
-  updateRule("rLen",rules.len(v)); if(rules.len(v)) score++;
-  updateRule("rUp",rules.up(v)); if(rules.up(v)) score++;
-  updateRule("rNum",rules.num(v)); if(rules.num(v)) score++;
-  updateRule("rSpec",rules.spec(v)); if(rules.spec(v)) score++;
+let score=0;
 
-  const widths=[0,25,50,75,100];
-  bar.style.width=widths[score]+"%";
-  bar.style.background=["#ccc","#f44336","#ff9800","#8bc34a","#2e7d32"][score];
+updateRule("rLen",rules.len(v));
+if(rules.len(v)) score++;
 
-  btn.disabled=!(score===4 && confirmPassword.value===v);
+updateRule("rUp",rules.up(v));
+if(rules.up(v)) score++;
+
+updateRule("rNum",rules.num(v));
+if(rules.num(v)) score++;
+
+updateRule("rSpec",rules.spec(v));
+if(rules.spec(v)) score++;
+
+const widths=[0,25,50,75,100];
+
+strengthBar.style.width=widths[score]+"%";
+
+strengthBar.style.background=[
+"#444",
+"#ff4d4d",
+"#ff9800",
+"#8bc34a",
+"#00ff99"
+][score];
+
+validate();
 };
 
-confirmPassword.oninput=()=>{
-  btn.disabled=confirmPassword.value!==newPassword.value;
-};
+confirmPassword.oninput=validate;
 
-function updateRule(id,ok){
-  const el=document.getElementById(id);
-  el.className=ok?"good":"bad";
-  el.querySelector("i").className=ok?"fa fa-check-circle":"fa fa-times-circle";
+function validate(){
+btn.disabled=!(
+confirmPassword.value===newPassword.value &&
+rules.len(newPassword.value) &&
+rules.up(newPassword.value) &&
+rules.num(newPassword.value) &&
+rules.spec(newPassword.value)
+);
 }
 
-/* UPDATE */
+function updateRule(id,ok){
+const el=document.getElementById(id);
+
+el.className=ok?"good":"bad";
+
+el.querySelector("i").className=
+ok?"fa fa-check-circle":"fa fa-times-circle";
+}
+
+/* UPDATE PASSWORD */
 updateBtn.onclick=async()=>{
-  const msg=document.getElementById("message");
-  const spin=updateBtn.querySelector(".spinner");
 
-  msg.textContent="";
-  updateBtn.disabled=true; spin.style.display="inline-block";
+const spinner=document.querySelector(".spinner");
+const message=document.getElementById("message");
 
-  const { error } = await supabase.auth.updateUser({ password:newPassword.value });
+spinner.style.display="block";
+btn.disabled=true;
+message.innerHTML="";
 
-  spin.style.display="none";
+const { error } = await supabase.auth.updateUser({
+password:newPassword.value
+});
 
-  if(error){
-    msg.style.color="red";
-    msg.textContent="❌ "+error.message;
-    updateBtn.disabled=false;
-  }else{
-    msg.style.color="green";
-    msg.textContent="✅ Password updated successfully";
-    oldPassword.value=newPassword.value=confirmPassword.value="";
-    bar.style.width="0";
-  }
+spinner.style.display="none";
+
+if(error){
+
+message.style.color="#ff7272";
+message.innerHTML="❌ "+error.message;
+btn.disabled=false;
+
+}else{
+
+message.style.color="#00ff99";
+message.innerHTML="✅ Password updated successfully";
+
+newPassword.value="";
+confirmPassword.value="";
+strengthBar.style.width="0";
+
+btn.disabled=true;
+}
 };
 </script>
 
 </body>
 </html>
-
-
-
-
