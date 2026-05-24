@@ -64,6 +64,7 @@ h2 {
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1em;
+  box-sizing: border-box;
 }
 
 .eye-toggle {
@@ -129,7 +130,7 @@ button:disabled {
   margin-top: 10px;
 }
 
-/* 🔥 IMPROVED RECAPTCHA UI (same function, better look) */
+/* IMPROVED RECAPTCHA */
 .g-recaptcha {
   margin-bottom: 15px;
   display: flex;
@@ -140,7 +141,7 @@ button:disabled {
   border: 1px solid #ddd;
 }
 
-/* 🔵 SUPPORT BUTTON */
+/* SUPPORT BUTTON */
 .support-btn {
   position: fixed;
   bottom: 18px;
@@ -155,7 +156,6 @@ button:disabled {
   color: white;
   font-size: 20px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-  cursor: pointer;
   text-decoration: none;
 }
 </style>
@@ -184,7 +184,6 @@ button:disabled {
     </span>
   </div>
 
-  <!-- reCAPTCHA (clean UI only improved, logic unchanged) -->
   <div class="g-recaptcha" data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
 
   <button onclick="login()" id="loginBtn">
@@ -201,7 +200,7 @@ button:disabled {
 
 </div>
 
-<!-- 🔵 SUPPORT BUTTON -->
+<!-- SUPPORT BUTTON -->
 <a href="support.html" class="support-btn" title="Do you need support?">
   <i class="fa fa-headset"></i>
 </a>
@@ -210,7 +209,7 @@ button:disabled {
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_ANON_KEY_HERE"; // keep your existing key if already working
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -219,7 +218,6 @@ const spinner = document.getElementById("spinner");
 const btnText = document.getElementById("btnText");
 const button = document.getElementById("loginBtn");
 
-/* PASSWORD TOGGLE */
 window.togglePassword = function () {
   const input = document.getElementById("password");
   const icon = document.getElementById("eyeIcon");
@@ -233,8 +231,8 @@ window.togglePassword = function () {
   }
 };
 
-/* LOGIN */
 window.login = async function () {
+
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   const recaptchaToken = grecaptcha.getResponse();
@@ -254,6 +252,7 @@ window.login = async function () {
   button.disabled = true;
 
   try {
+
     const captchaRes = await fetch(
       "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smooth-processor",
       {
@@ -287,31 +286,27 @@ window.login = async function () {
   }
 };
 
-/* FORGOT PASSWORD (FIXED - NO MORE {}) */
 window.forgotPassword = async function () {
 
   const email = document.getElementById("email").value.trim();
 
   if (!email) {
-    status.style.color = "red";
-    status.textContent = "⚠️ Enter your email first";
+    status.textContent = "⚠️ Enter email first";
     return;
   }
 
   try {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: "https://iyalsurvey.online/reset-password.html"
     });
-
-    console.log("RESET RESPONSE:", data, error);
 
     if (error) throw error;
 
     status.style.color = "green";
-    status.textContent = "✅ Reset link sent. Check email & spam folder.";
+    status.textContent = "✅ Reset email sent";
 
   } catch (err) {
-    console.log(err);
     status.style.color = "red";
     status.textContent = err.message || "Reset failed";
   }
