@@ -592,34 +592,29 @@ Logout
 
 <script type="module">
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 const supabase = createClient(
 "https://xkshzlfducmnglxfnxzk.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
+"YOUR_REAL_SUPABASE_ANON_KEY"
 );
 
-/* AUTH */
+/* =========================
+   CHECK USER SESSION
+========================= */
 
-const { data:{ session } } = await supabase.auth.getSession();
+const {
+data:{ session }
+} = await supabase.auth.getSession();
 
 if(!session){
-location.href = "login.html";
+window.location.href = "login.html";
+throw new Error("No session");
 }
 
-/* MENU */
-
-window.toggleMenu = () => {
-
-const menu = document.getElementById("menu");
-
-menu.style.display =
-menu.style.display === "flex"
-? "none"
-: "flex";
-};
-
-/* LOAD USER */
+/* =========================
+   LOAD DASHBOARD DATA
+========================= */
 
 async function loadDashboard(){
 
@@ -632,24 +627,58 @@ method:"POST",
 headers:{
 Authorization:`Bearer ${session.access_token}`,
 "Content-Type":"application/json"
-}
+},
+body: JSON.stringify({
+action:"dashboard"
+})
 }
 );
 
 const data = await res.json();
 
-console.log(data);
+console.log("Dashboard Data:", data);
 
-if(!data.success){
-throw new Error(data.message);
-}
+/* =========================
+   USERNAME
+========================= */
 
 document.getElementById("username").textContent =
-data.username || "User";
+data.username || data.name || "User";
+
+/* =========================
+   BALANCE
+========================= */
 
 animateBalance(
 Number(data.balance || 0)
 );
+
+/* =========================
+   TOTAL EARNED
+========================= */
+
+if(document.getElementById("totalEarned")){
+document.getElementById("totalEarned").textContent =
+`₦${Number(data.total_earned || 0).toLocaleString()}`;
+}
+
+/* =========================
+   TOTAL WITHDRAWN
+========================= */
+
+if(document.getElementById("totalWithdrawn")){
+document.getElementById("totalWithdrawn").textContent =
+`₦${Number(data.total_withdrawn || 0).toLocaleString()}`;
+}
+
+/* =========================
+   REFERRALS
+========================= */
+
+if(document.getElementById("referralCount")){
+document.getElementById("referralCount").textContent =
+data.referral_count || 0;
+}
 
 }catch(err){
 
@@ -665,136 +694,54 @@ document.getElementById("userBalance").textContent =
 
 }
 
-/* SURVEY SWITCH */
+/* =========================
+   ANIMATE BALANCE
+========================= */
 
-let activeVendor = "cpx";
+function animateBalance(balance){
 
-document.querySelectorAll(".vendor-btn").forEach(btn=>{
+const balanceElement =
+document.getElementById("userBalance");
 
-btn.onclick = ()=>{
+let start = 0;
 
-document.querySelectorAll(".vendor-btn")
-.forEach(b=>b.classList.remove("active"));
+const duration = 1200;
 
-btn.classList.add("active");
+const increment = balance / 60;
 
-activeVendor = btn.dataset.vendor;
+const timer = setInterval(()=>{
 
-loadSurveys();
+start += increment;
 
-};
+if(start >= balance){
+start = balance;
+clearInterval(timer);
+}
 
-});
+balanceElement.textContent =
+`₦${Math.floor(start).toLocaleString()}`;
 
-/* LOAD SURVEYS */
-
-function loadSurveys(){
-
-const container =
-document.getElementById("surveyContent");
-
-container.innerHTML = `
-<div class="loader-wrap">
-<div class="loader"></div>
-</div>
-`;
-
-if(activeVendor === "cpx"){
-
-document.getElementById("consentModal")
-.style.display = "flex";
-
-return;
+}, duration / 60);
 
 }
 
-if(activeVendor === "bitlab"){
+/* =========================
+   LOGOUT
+========================= */
 
-const userId = session.user.id;
-
-const bitlabToken =
-"5f6cc641-dd5c-4551-a948-5c526d61d97a";
-
-const iframeSrc =
-`https://web.bitlabs.ai/?token=${bitlabToken}&uid=${userId}`;
-
-setTimeout(()=>{
-
-container.innerHTML = `
-<iframe src="${iframeSrc}"></iframe>
-`;
-
-},600);
-
-return;
-
-}
-
-if(activeVendor === "wannads"){
-
-setTimeout(()=>{
-
-container.innerHTML = `
-<div style="padding:30px;text-align:center;color:#bbf7d0;">
-Wannads integration coming soon.
-</div>
-`;
-
-},600);
-
-}
-
-}
-
-/* CPX CONSENT */
-
-document.getElementById("acceptConsent")
-.onclick = ()=>{
-
-document.getElementById("consentModal")
-.style.display = "none";
-
-const userId = session.user.id;
-
-const iframeSrc =
-`https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${userId}`;
-
-document.getElementById("surveyContent")
-.innerHTML = `
-<iframe src="${iframeSrc}"></iframe>
-`;
-
-};
-
-document.getElementById("rejectConsent")
-.onclick = ()=>{
-
-document.getElementById("consentModal")
-.style.display = "none";
-
-document.getElementById("surveyContent")
-.innerHTML = `
-<div style="padding:30px;text-align:center;color:#bbf7d0;">
-You rejected cookies. CPX surveys cannot be shown.
-</div>
-`;
-
-};
-
-/* LOAD DEFAULT */
-
-loadSurveys();
-
-/* LOGOUT */
-
-document.getElementById("logoutBtn")
-.onclick = async ()=>{
+window.logout = async function(){
 
 await supabase.auth.signOut();
 
-location.href = "login.html";
+window.location.href = "login.html";
 
-};
+}
+
+/* =========================
+   START
+========================= */
+
+loadDashboard();
 
 </script>
 
