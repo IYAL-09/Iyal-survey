@@ -596,7 +596,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase = createClient(
 "https://xkshzlfducmnglxfnxzk.supabase.co",
-"YOUR_SUPABASE_ANON_KEY"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
 );
 
 /* AUTH */
@@ -630,13 +630,19 @@ const res = await fetch(
 {
 method:"POST",
 headers:{
-"Authorization":`Bearer ${session.access_token}`,
+Authorization:`Bearer ${session.access_token}`,
 "Content-Type":"application/json"
 }
 }
 );
 
 const data = await res.json();
+
+console.log(data);
+
+if(!data.success){
+throw new Error(data.message);
+}
 
 document.getElementById("username").textContent =
 data.username || "User";
@@ -647,40 +653,17 @@ Number(data.balance || 0)
 
 }catch(err){
 
-document.getElementById("userBalance").textContent = "₦0";
+console.error(err);
+
+document.getElementById("username").textContent =
+"User";
+
+document.getElementById("userBalance").textContent =
+"₦0";
 
 }
 
 }
-
-function animateBalance(amount){
-
-let current = 0;
-
-const el = document.getElementById("userBalance");
-
-const increment = amount / 50;
-
-const timer = setInterval(()=>{
-
-current += increment;
-
-if(current >= amount){
-
-current = amount;
-
-clearInterval(timer);
-
-}
-
-el.textContent =
-"₦" + Math.floor(current).toLocaleString();
-
-},20);
-
-}
-
-loadDashboard();
 
 /* SURVEY SWITCH */
 
