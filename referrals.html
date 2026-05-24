@@ -3,385 +3,721 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Iyal Surveys • Referrals</title>
 
-<title>NaijaKolo | Referrals</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
 body{
-  background:#050816;
-  overflow-x:hidden;
-  font-family:Inter,sans-serif;
+background:#08140d;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
 }
 
-.glass{
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(18px);
-  border:1px solid rgba(255,255,255,0.08);
+/* BACKGROUND */
+
+.bg{
+position:fixed;
+inset:0;
+z-index:-2;
+background:
+radial-gradient(circle at top left,#16a34a55,transparent 35%),
+radial-gradient(circle at bottom right,#22c55e44,transparent 35%),
+#08140d;
 }
 
-.glow{
-  box-shadow:0 0 30px rgba(139,92,246,0.35);
+.blur{
+position:fixed;
+width:300px;
+height:300px;
+border-radius:50%;
+background:#22c55e22;
+filter:blur(90px);
+z-index:-1;
+animation:float 8s infinite ease-in-out;
 }
 
-.animate-float{
-  animation:float 6s ease-in-out infinite;
+.blur1{
+top:-80px;
+left:-80px;
+}
+
+.blur2{
+bottom:-100px;
+right:-100px;
+animation-delay:3s;
 }
 
 @keyframes float{
-  0%{transform:translateY(0px);}
-  50%{transform:translateY(-10px);}
-  100%{transform:translateY(0px);}
+0%,100%{transform:translateY(0px);}
+50%{transform:translateY(30px);}
 }
 
-::-webkit-scrollbar{
-  width:5px;
+/* HEADER */
+
+header{
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-::-webkit-scrollbar-thumb{
-  background:#7c3aed;
-  border-radius:20px;
+.logo{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo img{
+width:52px;
+height:52px;
+border-radius:50%;
+border:2px solid #22c55e;
+object-fit:cover;
+}
+
+.logo h1{
+font-size:1.2rem;
+font-weight:700;
+}
+
+.menu-btn{
+width:45px;
+height:45px;
+border-radius:14px;
+background:#ffffff10;
+display:flex;
+align-items:center;
+justify-content:center;
+backdrop-filter:blur(12px);
+cursor:pointer;
+font-size:1.2rem;
+}
+
+nav{
+position:absolute;
+top:80px;
+right:20px;
+background:#0f1d14ee;
+backdrop-filter:blur(18px);
+padding:15px;
+border-radius:20px;
+display:none;
+flex-direction:column;
+gap:14px;
+width:220px;
+border:1px solid #ffffff10;
+z-index:100;
+}
+
+nav a{
+text-decoration:none;
+color:#d1fae5;
+font-size:.95rem;
+}
+
+/* CONTENT */
+
+.container{
+padding:20px;
+padding-bottom:120px;
+}
+
+/* REWARD BANNER */
+
+.reward-banner{
+background:linear-gradient(135deg,#16a34a,#22c55e);
+padding:22px;
+border-radius:28px;
+margin-bottom:22px;
+box-shadow:0 10px 40px rgba(34,197,94,.25);
+animation:fadeUp .6s ease;
+position:relative;
+overflow:hidden;
+}
+
+.reward-banner::before{
+content:'';
+position:absolute;
+top:-40px;
+right:-40px;
+width:140px;
+height:140px;
+background:#ffffff15;
+border-radius:50%;
+}
+
+.reward-banner h2{
+font-size:1.3rem;
+margin-bottom:10px;
+}
+
+.reward-banner p{
+font-size:.95rem;
+line-height:1.6;
+color:#ecfdf5;
+}
+
+.reward-amount{
+display:inline-block;
+margin-top:14px;
+background:#ffffff18;
+padding:12px 18px;
+border-radius:18px;
+font-weight:700;
+font-size:1rem;
+backdrop-filter:blur(10px);
+}
+
+/* CARDS */
+
+.card{
+background:#ffffff10;
+backdrop-filter:blur(18px);
+border:1px solid #ffffff12;
+border-radius:28px;
+padding:22px;
+margin-bottom:22px;
+box-shadow:0 10px 40px rgba(0,0,0,.25);
+animation:fadeUp .6s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.card h2{
+font-size:1rem;
+margin-bottom:18px;
+color:#86efac;
+}
+
+/* STATS */
+
+.stats{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+margin-bottom:20px;
+}
+
+.stat{
+background:#ffffff08;
+border-radius:22px;
+padding:18px;
+}
+
+.stat span{
+font-size:.85rem;
+color:#d1fae5;
+display:block;
+margin-bottom:8px;
+}
+
+.stat h3{
+font-size:1.4rem;
+}
+
+/* REF LINK */
+
+.ref-box{
+background:#0f1d14;
+padding:15px;
+border-radius:18px;
+word-break:break-all;
+font-size:.9rem;
+margin-bottom:14px;
+border:1px solid #ffffff10;
+}
+
+.copy-btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#16a34a,#22c55e);
+color:white;
+font-size:1rem;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+}
+
+.copy-btn:hover{
+transform:translateY(-2px);
+}
+
+/* HISTORY */
+
+.history-item{
+background:#ffffff08;
+padding:16px;
+border-radius:18px;
+margin-bottom:14px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+}
+
+.history-left h4{
+font-size:.95rem;
+margin-bottom:5px;
+}
+
+.history-left p{
+font-size:.8rem;
+color:#bbf7d0;
+}
+
+.badge{
+padding:8px 12px;
+border-radius:999px;
+font-size:.75rem;
+font-weight:700;
+background:#22c55e22;
+color:#86efac;
+}
+
+/* SUPPORT BUTTON */
+
+.support-btn{
+position:fixed;
+bottom:95px;
+right:20px;
+width:65px;
+height:65px;
+border-radius:50%;
+background:linear-gradient(135deg,#16a34a,#22c55e);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:1.4rem;
+color:white;
+text-decoration:none;
+box-shadow:0 10px 25px rgba(34,197,94,.4);
+z-index:100;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.08);}
+100%{transform:scale(1);}
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#0b1610ee;
+backdrop-filter:blur(18px);
+display:flex;
+justify-content:space-around;
+padding:14px 0;
+border-top:1px solid #ffffff10;
+z-index:999;
+}
+
+.bottom-nav a{
+color:white;
+text-decoration:none;
+font-size:.8rem;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:5px;
+}
+
+.bottom-nav i{
+font-size:1.1rem;
+}
+
+/* LOADER */
+
+.loader{
+width:22px;
+height:22px;
+border:3px solid #ffffff20;
+border-top:3px solid #22c55e;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+}
+
+@keyframes spin{
+to{
+transform:rotate(360deg);
+}
+}
+
+.empty{
+text-align:center;
+padding:20px;
+color:#bbf7d0;
 }
 </style>
 </head>
 
-<body class="text-white min-h-screen">
+<body>
 
-<!-- Background -->
-<div class="fixed inset-0 overflow-hidden -z-10">
-  <div class="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 blur-[140px] rounded-full"></div>
-  <div class="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/20 blur-[140px] rounded-full"></div>
+<div class="bg"></div>
+<div class="blur blur1"></div>
+<div class="blur blur2"></div>
+
+<header>
+
+<div class="logo">
+<img src="iyallogo.png">
+<h1>Iyal Surveys</h1>
 </div>
 
-<div class="max-w-7xl mx-auto px-4 py-8">
+<div class="menu-btn" onclick="toggleMenu()">
+<i class="fa fa-bars"></i>
+</div>
 
-  <!-- Top -->
-  <div class="flex items-center justify-between mb-8">
-    <div>
-      <h1 class="text-3xl md:text-4xl font-black tracking-tight">
-        Referral Center
-      </h1>
-      <p class="text-gray-400 mt-2">
-        Invite friends and grow your earnings.
-      </p>
-    </div>
+<nav id="menu">
+<a href="dashboard.html">Dashboard</a>
+<a href="withdraw.html">Withdraw</a>
+<a href="settings.html">Settings</a>
+<a href="support.html">Support</a>
+<a href="terms.html">Terms</a>
+<a href="privacy.html">Privacy</a>
+</nav>
 
-    <button class="glass px-5 py-3 rounded-2xl hover:scale-105 transition-all duration-300">
-      <i data-lucide="arrow-left" class="w-5 h-5"></i>
-    </button>
-  </div>
+</header>
 
-  <!-- Reward Banner -->
-  <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-purple-600/20 via-pink-500/10 to-cyan-500/20 p-6 backdrop-blur-xl shadow-2xl mb-8">
+<div class="container">
 
-    <div class="absolute -top-10 -right-10 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl"></div>
-    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl"></div>
+<!-- REWARD BANNER -->
 
-    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+<div class="reward-banner">
 
-      <div>
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-sm text-purple-200 mb-4">
-          <i data-lucide="gift" class="w-4 h-4"></i>
-          Referral Reward Program
-        </div>
+<h2>
+<i class="fa fa-gift"></i>
+ Earn Referral Rewards
+</h2>
 
-        <h2 class="text-2xl md:text-3xl font-bold text-white leading-tight">
-          Invite Friends & Earn Instantly 🚀
-        </h2>
+<p>
+Invite your friends to join Iyal Surveys using your referral link.
+Once a new user signs up successfully with your link,
+you instantly earn a referral bonus.
+</p>
 
-        <p class="text-gray-300 mt-3 text-base leading-relaxed max-w-2xl">
-          Share your referral link with friends. 
-          Every successful signup earns you 
-          <span class="font-bold text-green-400 text-lg">₦40</span> instantly added to your balance.
-        </p>
-
-        <div class="flex flex-wrap gap-4 mt-5">
-
-          <div class="px-4 py-3 rounded-2xl bg-white/5 border border-white/10">
-            <p class="text-xs text-gray-400">Reward Per Referral</p>
-            <h4 class="text-lg font-bold text-green-400">₦40</h4>
-          </div>
-
-          <div class="px-4 py-3 rounded-2xl bg-white/5 border border-white/10">
-            <p class="text-xs text-gray-400">Instant Credit</p>
-            <h4 class="text-lg font-bold text-cyan-400">Automatic</h4>
-          </div>
-
-          <div class="px-4 py-3 rounded-2xl bg-white/5 border border-white/10">
-            <p class="text-xs text-gray-400">Unlimited Invites</p>
-            <h4 class="text-lg font-bold text-pink-400">∞</h4>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="flex items-center justify-center">
-        <div class="relative animate-float">
-          <div class="absolute inset-0 bg-gradient-to-r from-purple-500 to-cyan-500 blur-2xl opacity-40 rounded-full"></div>
-
-          <div class="relative w-28 h-28 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-xl shadow-2xl">
-            <i data-lucide="users" class="w-14 h-14 text-white"></i>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Stats -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-
-    <div class="glass rounded-3xl p-6 glow">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-gray-400 text-sm">Total Referrals</p>
-          <h2 id="refCount" class="text-4xl font-black mt-2">0</h2>
-        </div>
-
-        <div class="w-14 h-14 rounded-2xl bg-purple-500/20 flex items-center justify-center">
-          <i data-lucide="users" class="w-7 h-7 text-purple-400"></i>
-        </div>
-      </div>
-    </div>
-
-    <div class="glass rounded-3xl p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-gray-400 text-sm">Referral Earnings</p>
-          <h2 id="refEarn" class="text-4xl font-black mt-2">₦0</h2>
-        </div>
-
-        <div class="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center">
-          <i data-lucide="wallet" class="w-7 h-7 text-green-400"></i>
-        </div>
-      </div>
-    </div>
-
-    <div class="glass rounded-3xl p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-gray-400 text-sm">Referral Code</p>
-          <h2 id="refCode" class="text-2xl font-black mt-2">Loading...</h2>
-        </div>
-
-        <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 flex items-center justify-center">
-          <i data-lucide="badge-percent" class="w-7 h-7 text-cyan-400"></i>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Share Box -->
-  <div class="glass rounded-3xl p-6 mb-8">
-
-    <div class="flex items-center gap-3 mb-5">
-      <div class="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center">
-        <i data-lucide="share-2" class="w-6 h-6 text-purple-400"></i>
-      </div>
-
-      <div>
-        <h3 class="text-xl font-bold">Share Referral Link</h3>
-        <p class="text-gray-400 text-sm">
-          Copy and share your referral link.
-        </p>
-      </div>
-    </div>
-
-    <div class="flex flex-col md:flex-row gap-4">
-      <input 
-        id="refLink"
-        type="text"
-        readonly
-        class="flex-1 bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none text-gray-300"
-      />
-
-      <button 
-        onclick="copyReferral()"
-        class="bg-gradient-to-r from-purple-600 to-cyan-500 px-6 py-4 rounded-2xl font-semibold hover:scale-105 transition-all duration-300 shadow-2xl shadow-purple-500/20"
-      >
-        Copy Link
-      </button>
-    </div>
-
-  </div>
-
-  <!-- Referral History -->
-  <div class="glass rounded-3xl p-6">
-
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h3 class="text-2xl font-bold">
-          Referral History
-        </h3>
-        <p class="text-gray-400 text-sm mt-1">
-          Users you successfully referred.
-        </p>
-      </div>
-
-      <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center">
-        <i data-lucide="history" class="w-6 h-6 text-gray-300"></i>
-      </div>
-    </div>
-
-    <div id="historyContainer" class="space-y-4">
-
-      <!-- Dynamic Content -->
-
-    </div>
-
-  </div>
+<div class="reward-amount">
+Earn ₦40 Per Successful Referral
+</div>
 
 </div>
 
-<!-- Support Button -->
-<button class="fixed bottom-6 left-6 w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 shadow-2xl shadow-purple-500/40 flex items-center justify-center hover:scale-110 transition-all duration-300 z-50">
-  <i data-lucide="message-circle-heart" class="w-7 h-7 text-white"></i>
+<!-- STATS -->
+
+<div class="stats">
+
+<div class="stat">
+<span>Total Referrals</span>
+<h3 id="totalReferrals">
+<div class="loader"></div>
+</h3>
+</div>
+
+<div class="stat">
+<span>Total Earned</span>
+<h3 id="earned">
+<div class="loader"></div>
+</h3>
+</div>
+
+<div class="stat">
+<span>Balance</span>
+<h3 id="balance">
+<div class="loader"></div>
+</h3>
+</div>
+
+<div class="stat">
+<span>Referral Code</span>
+<h3 id="refCode">
+<div class="loader"></div>
+</h3>
+</div>
+
+</div>
+
+<!-- REFERRAL LINK -->
+
+<div class="card">
+
+<h2>
+<i class="fa fa-link"></i>
+ Referral Link
+</h2>
+
+<div class="ref-box" id="refLink">
+Loading...
+</div>
+
+<button class="copy-btn" onclick="copyReferral()">
+<i class="fa fa-copy"></i>
+ Copy Referral Link
 </button>
+
+</div>
+
+<!-- REFERRAL HISTORY -->
+
+<div class="card">
+
+<h2>
+<i class="fa fa-users"></i>
+ Referral History
+</h2>
+
+<div id="history">
+<div class="loader"></div>
+</div>
+
+</div>
+
+</div>
+
+<!-- SUPPORT BUTTON -->
+
+<a href="support.html" class="support-btn">
+<i class="fa fa-headset"></i>
+</a>
+
+<!-- BOTTOM NAV -->
+
+<div class="bottom-nav">
+
+<a href="dashboard.html">
+<i class="fa fa-home"></i>
+Home
+</a>
+
+<a href="referrals.html">
+<i class="fa fa-users"></i>
+Referrals
+</a>
+
+<a href="withdraw.html">
+<i class="fa fa-wallet"></i>
+Withdraw
+</a>
+
+<a href="#" id="logoutBtn">
+<i class="fa fa-sign-out-alt"></i>
+Logout
+</a>
+
+</div>
 
 <script type="module">
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient }
+from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase = createClient(
-  "https://xkshzlfducmnglxfnxzk.supabase.co",
-  "YOUR_SUPABASE_ANON_KEY"
+"https://xkshzlfducmnglxfnxzk.supabase.co",
+"YOUR_SUPABASE_ANON_KEY"
 );
 
-async function loadReferralData(){
+/* MENU */
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
+window.toggleMenu = () => {
 
-  if(!user){
-    window.location.href = "/login.html";
-    return;
-  }
+const menu = document.getElementById("menu");
 
-  // Get user profile
-  const { data: profile } = await supabase
-    .from("users")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+menu.style.display =
+menu.style.display === "flex"
+? "none"
+: "flex";
 
-  if(profile){
-
-    const referralLink =
-      `${window.location.origin}/register.html?ref=${profile.referral_code}`;
-
-    document.getElementById("refCode").innerText =
-      profile.referral_code || "N/A";
-
-    document.getElementById("refLink").value =
-      referralLink;
-  }
-
-  // Get referrals
-  const { data: referrals } = await supabase
-    .from("referrals")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
-
-  let totalEarned = 0;
-
-  document.getElementById("refCount").innerText =
-    referrals?.length || 0;
-
-  const historyContainer =
-    document.getElementById("historyContainer");
-
-  historyContainer.innerHTML = "";
-
-  if(referrals && referrals.length > 0){
-
-    referrals.forEach(ref => {
-
-      totalEarned += Number(ref.reward_amount || 0);
-
-      historyContainer.innerHTML += `
-        <div class="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/[0.07] transition-all duration-300">
-
-          <div class="flex items-center justify-between">
-
-            <div class="flex items-center gap-4">
-
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-r from-purple-500/20 to-cyan-500/20 flex items-center justify-center">
-                <i data-lucide="user-plus" class="w-5 h-5 text-white"></i>
-              </div>
-
-              <div>
-                <h4 class="font-semibold text-white">
-                  ${ref.referred_email || "Unknown User"}
-                </h4>
-
-                <p class="text-sm text-gray-400">
-                  ${new Date(ref.created_at).toLocaleDateString()}
-                </p>
-              </div>
-
-            </div>
-
-            <div class="text-right">
-
-              <h4 class="text-green-400 font-bold text-lg">
-                ₦${ref.reward_amount}
-              </h4>
-
-              <span class="text-xs px-3 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
-                ${ref.status}
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-      `;
-    });
-
-  } else {
-
-    historyContainer.innerHTML = `
-      <div class="text-center py-16">
-
-        <div class="w-24 h-24 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-5">
-          <i data-lucide="users" class="w-10 h-10 text-gray-500"></i>
-        </div>
-
-        <h3 class="text-2xl font-bold mb-2">
-          No referrals yet
-        </h3>
-
-        <p class="text-gray-400 max-w-md mx-auto">
-          Share your referral link and start earning ₦40 for every successful signup.
-        </p>
-
-      </div>
-    `;
-  }
-
-  document.getElementById("refEarn").innerText =
-    `₦${totalEarned}`;
-}
-
-window.copyReferral = async function(){
-
-  const link =
-    document.getElementById("refLink");
-
-  await navigator.clipboard.writeText(link.value);
-
-  alert("Referral link copied successfully!");
 };
 
-loadReferralData();
+/* COPY */
 
-lucide.createIcons();
+window.copyReferral = async () => {
+
+const text =
+document.getElementById("refLink").innerText;
+
+await navigator.clipboard.writeText(text);
+
+alert("Referral link copied!");
+
+};
+
+/* SESSION */
+
+const {
+data:{ session }
+}
+= await supabase.auth.getSession();
+
+if(!session){
+
+window.location.href = "login.html";
+
+}
+
+/* LOAD DATA */
+
+async function loadReferrals(){
+
+try{
+
+const res = await fetch(
+"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/bright-worker",
+{
+method:"POST",
+headers:{
+"Authorization":
+`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+}
+}
+);
+
+const data = await res.json();
+
+if(!data.success){
+
+alert(data.message || "Failed to load");
+
+return;
+
+}
+
+/* STATS */
+
+document.getElementById("balance")
+.innerText =
+"₦" + Number(data.balance).toLocaleString();
+
+document.getElementById("earned")
+.innerText =
+"₦" + Number(data.total_referral_earned)
+.toLocaleString();
+
+document.getElementById("totalReferrals")
+.innerText =
+data.total_referrals;
+
+document.getElementById("refCode")
+.innerText =
+data.referral_code;
+
+document.getElementById("refLink")
+.innerText =
+data.referral_link;
+
+/* HISTORY */
+
+const history =
+document.getElementById("history");
+
+history.innerHTML = "";
+
+if(data.referrals.length === 0){
+
+history.innerHTML = `
+<div class="empty">
+No referrals yet
+</div>
+`;
+
+return;
+
+}
+
+data.referrals.forEach(ref => {
+
+const item =
+document.createElement("div");
+
+item.className = "history-item";
+
+item.innerHTML = `
+
+<div class="history-left">
+
+<h4>
+${ref.referred_email}
+</h4>
+
+<p>
+₦${Number(ref.reward_amount)
+.toLocaleString()}
+ Reward
+</p>
+
+</div>
+
+<div class="badge">
+${ref.status}
+</div>
+
+`;
+
+history.appendChild(item);
+
+});
+
+}catch(err){
+
+console.error(err);
+
+alert("Something went wrong");
+
+}
+
+}
+
+loadReferrals();
+
+/* LOGOUT */
+
+document
+.getElementById("logoutBtn")
+.onclick = async () => {
+
+await supabase.auth.signOut();
+
+window.location.href = "login.html";
+
+};
+
+/* AUTH STATE */
+
+supabase.auth.onAuthStateChange((event)=>{
+
+if(event === "SIGNED_OUT"){
+
+window.location.href = "login.html";
+
+}
+
+});
 
 </script>
 
