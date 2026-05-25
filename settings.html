@@ -486,29 +486,29 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase=createClient(
 "https://xkshzlfducmnglxfnxzk.supabase.co",
-"YOUR_ANON_KEY"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhc2UiLCJyZWYiOiJ4a3NoemxmZHVjbW5nbHhmbnh6ayIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzY1NDI5MTQ0LCJleHAiOjIwODEwMDUxNDR9.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
 );
 
 /* AUTH */
-const { data:{session} } = await supabase.auth.getSession();
+const { data:{ session } } = await supabase.auth.getSession();
 
 if(!session){
-location.href="login.html";
+location.href = "login.html";
 }
 
 /* SIDEBAR */
-const sidebar=document.getElementById("sidebar");
-const overlay=document.getElementById("overlay");
-const menuBtn=document.getElementById("menuBtn");
-const closeBtn=document.getElementById("closeBtn");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+const menuBtn = document.getElementById("menuBtn");
+const closeBtn = document.getElementById("closeBtn");
 
-menuBtn.onclick=()=>{
+menuBtn.onclick = () => {
 sidebar.classList.add("active");
 overlay.classList.add("show");
 };
 
-closeBtn.onclick=closeMenu;
-overlay.onclick=closeMenu;
+closeBtn.onclick = closeMenu;
+overlay.onclick = closeMenu;
 
 function closeMenu(){
 sidebar.classList.remove("active");
@@ -516,57 +516,65 @@ overlay.classList.remove("show");
 }
 
 /* TOGGLE PASSWORD */
-window.togglePassword=(id,el)=>{
+window.togglePassword = (id,el) => {
 
-const input=document.getElementById(id);
+const input = document.getElementById(id);
 
-input.type=input.type==="password"
+input.type =
+input.type === "password"
 ? "text"
 : "password";
 
+el.classList.toggle("fa-eye");
 el.classList.toggle("fa-eye-slash");
+
 };
 
 /* RULES */
-const rules={
-len:v=>v.length>=6,
-up:v=>/[A-Z]/.test(v),
-num:v=>/[0-9]/.test(v),
-spec:v=>/[^A-Za-z0-9]/.test(v)
+const rules = {
+len:v => v.length >= 6,
+up:v => /[A-Z]/.test(v),
+num:v => /[0-9]/.test(v),
+spec:v => /[^A-Za-z0-9]/.test(v)
 };
 
-const currentPassword=document.getElementById("currentPassword");
-const newPassword=document.getElementById("newPassword");
-const confirmPassword=document.getElementById("confirmPassword");
+const currentPassword = document.getElementById("currentPassword");
+const newPassword = document.getElementById("newPassword");
+const confirmPassword = document.getElementById("confirmPassword");
 
-const strengthBar=document.getElementById("strengthBar");
-const btn=document.getElementById("updateBtn");
+const strengthBar = document.getElementById("strengthBar");
 
-/* PASSWORD INPUT */
-newPassword.oninput=()=>{
+const btn = document.getElementById("updateBtn");
 
-const v=newPassword.value;
+const spinner = document.querySelector(".spinner");
 
-let score=0;
+const message = document.getElementById("message");
 
-updateRule("rLen",rules.len(v));
+/* PASSWORD CHECK */
+newPassword.oninput = () => {
+
+const v = newPassword.value;
+
+let score = 0;
+
+updateRule("rLen", rules.len(v));
 if(rules.len(v)) score++;
 
-updateRule("rUp",rules.up(v));
+updateRule("rUp", rules.up(v));
 if(rules.up(v)) score++;
 
-updateRule("rNum",rules.num(v));
+updateRule("rNum", rules.num(v));
 if(rules.num(v)) score++;
 
-updateRule("rSpec",rules.spec(v));
+updateRule("rSpec", rules.spec(v));
 if(rules.spec(v)) score++;
 
-const widths=[0,25,50,75,100];
+const widths = [0,25,50,75,100];
 
-strengthBar.style.width=widths[score]+"%";
+strengthBar.style.width = widths[score] + "%";
 
-strengthBar.style.background=[
-"#444",
+strengthBar.style.background = [
+"#333",
 "#ff4d4d",
 "#ff9800",
 "#8bc34a",
@@ -574,52 +582,85 @@ strengthBar.style.background=[
 ][score];
 
 validate();
+
 };
 
-confirmPassword.oninput=validate;
-currentPassword.oninput=validate;
+confirmPassword.oninput = validate;
+currentPassword.oninput = validate;
 
+/* VALIDATION */
 function validate(){
 
-btn.disabled = !(
-
-currentPassword.value.length > 0 &&
-
-confirmPassword.value === newPassword.value &&
+const validPassword =
 
 rules.len(newPassword.value) &&
 rules.up(newPassword.value) &&
 rules.num(newPassword.value) &&
-rules.spec(newPassword.value)
+rules.spec(newPassword.value);
+
+const passwordsMatch =
+newPassword.value === confirmPassword.value;
+
+const currentFilled =
+currentPassword.value.length > 0;
+
+btn.disabled = !(
+
+validPassword &&
+passwordsMatch &&
+currentFilled
 
 );
+
+if(confirmPassword.value.length > 0){
+
+if(passwordsMatch){
+
+confirmPassword.style.borderColor = "#00ff99";
+
+}else{
+
+confirmPassword.style.borderColor = "#ff4d4d";
+
 }
 
+}else{
+
+confirmPassword.style.borderColor =
+"rgba(255,255,255,.05)";
+
+}
+
+}
+
+/* UPDATE RULE */
 function updateRule(id,ok){
 
-const el=document.getElementById(id);
+const el = document.getElementById(id);
 
-el.className=ok?"good":"bad";
+el.className = ok
+? "good"
+: "bad";
 
-el.querySelector("i").className=
+el.querySelector("i").className =
 ok
 ? "fa fa-check-circle"
 : "fa fa-times-circle";
+
 }
 
 /* UPDATE PASSWORD */
-updateBtn.onclick = async () => {
+btn.onclick = async () => {
 
-const spinner = document.querySelector(".spinner");
-const message = document.getElementById("message");
+const currentPass = currentPassword.value.trim();
 
-const currentPass = currentPassword.value;
-const newPass = newPassword.value;
-
-spinner.style.display = "block";
-btn.disabled = true;
+const newPass = newPassword.value.trim();
 
 message.innerHTML = "";
+
+spinner.style.display = "block";
+
+btn.disabled = true;
 
 /* VERIFY CURRENT PASSWORD */
 const { error: loginError } =
@@ -635,16 +676,22 @@ if(loginError){
 spinner.style.display = "none";
 
 message.style.color = "#ff7272";
-message.innerHTML = "❌ Current password is incorrect";
 
-btn.disabled = false;
+message.innerHTML =
+"❌ Current password is incorrect";
+
+validate();
 
 return;
+
 }
 
 /* UPDATE PASSWORD */
-const { error } = await supabase.auth.updateUser({
+const { error } =
+await supabase.auth.updateUser({
+
 password:newPass
+
 });
 
 spinner.style.display = "none";
@@ -652,23 +699,40 @@ spinner.style.display = "none";
 if(error){
 
 message.style.color = "#ff7272";
-message.innerHTML = "❌ " + error.message;
 
-btn.disabled = false;
+message.innerHTML =
+"❌ " + error.message;
+
+validate();
 
 }else{
 
 message.style.color = "#00ff99";
-message.innerHTML = "✅ Password updated successfully";
 
-currentPassword.value="";
-newPassword.value="";
-confirmPassword.value="";
+message.innerHTML =
+"✅ Password updated successfully";
 
-strengthBar.style.width="0";
+currentPassword.value = "";
+newPassword.value = "";
+confirmPassword.value = "";
 
-btn.disabled=true;
+strengthBar.style.width = "0";
+
+strengthBar.style.background = "#333";
+
+/* RESET RULES */
+["rLen","rUp","rNum","rSpec"]
+.forEach(id => {
+updateRule(id,false);
+});
+
+confirmPassword.style.borderColor =
+"rgba(255,255,255,.05)";
+
+btn.disabled = true;
+
 }
+
 };
 
 </script>
