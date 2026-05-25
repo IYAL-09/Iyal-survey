@@ -541,14 +541,10 @@ Update Password
 import { createClient }
 from "https://esm.sh/@supabase/supabase-js@2";
 
-const supabase = createClient(
-
+const supabase=createClient(
 "https://xkshzlfducmnglxfnxzk.supabase.co",
-
-"YOUR_SUPABASE_ANON_KEY"
-
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhc2UiLCJyZWYiOiJ4a3NoemxmZHVjbW5nbHhmbnh6ayIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzY1NDI5MTQ0LCJleHAiOjIwODEwMDUxNDR9.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
 );
-
 /* AUTH */
 
 const { data:{ session } } =
