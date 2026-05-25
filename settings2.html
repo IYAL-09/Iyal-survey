@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link rel="manifest" href="/manifest.json">
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Iyal Surveys – Change Password</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#07140d;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* BG */
+
+.bg{
+position:fixed;
+inset:0;
+z-index:-1;
+
+background:
+radial-gradient(circle at top left,#00ff9950,transparent 30%),
+radial-gradient(circle at bottom right,#00ff8840,transparent 30%),
+#07140d;
+
+animation:bgMove 8s infinite alternate ease-in-out;
+}
+
+@keyframes bgMove{
+
+from{
+transform:scale(1);
+}
+
+to{
+transform:scale(1.06);
+}
+
+}
+
+/* HEADER */
+
+header{
+position:sticky;
+top:0;
+z-index:1000;
+
+backdrop-filter:blur(18px);
+
+background:rgba(8,20,13,.85);
+
+border-bottom:1px solid rgba(255,255,255,.06);
+
+padding:14px 18px;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.left{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.logo{
+width:48px;
+height:48px;
+border-radius:50%;
+border:2px solid #00ff99;
+object-fit:cover;
+box-shadow:0 0 18px #00ff9950;
+}
+
+.brand{
+font-size:1.15rem;
+font-weight:700;
+
+background:linear-gradient(90deg,#00ff99,#7dffcb);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.menu-btn{
+width:45px;
+height:45px;
+border-radius:14px;
+border:none;
+
+background:rgba(255,255,255,.06);
+
+color:#00ff99;
+
+font-size:1.2rem;
+cursor:pointer;
+transition:.3s;
+}
+
+.menu-btn:hover{
+transform:scale(1.05);
+background:rgba(0,255,153,.15);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:fixed;
+top:0;
+left:-270px;
+
+width:270px;
+height:100%;
+
+background:#081811;
+
+backdrop-filter:blur(20px);
+
+z-index:2000;
+
+padding:22px;
+
+transition:.4s;
+
+border-right:1px solid rgba(255,255,255,.06);
+}
+
+.sidebar.active{
+left:0;
+}
+
+.sidebar .top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:30px;
+}
+
+.sidebar .top h2{
+color:#00ff99;
+font-size:1.2rem;
+}
+
+.close-btn{
+background:none;
+border:none;
+font-size:1.4rem;
+color:white;
+cursor:pointer;
+}
+
+.nav{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.nav a{
+text-decoration:none;
+color:#d8ffe8;
+
+padding:14px;
+
+border-radius:14px;
+
+transition:.3s;
+
+background:rgba(255,255,255,.03);
+
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.nav a:hover{
+background:rgba(0,255,153,.12);
+transform:translateX(4px);
+}
+
+.overlay{
+position:fixed;
+inset:0;
+
+background:rgba(0,0,0,.5);
+
+z-index:1500;
+
+display:none;
+}
+
+.overlay.show{
+display:block;
+}
+
+/* CONTENT */
+
+.container{
+padding:25px 18px 120px;
+max-width:500px;
+margin:auto;
+}
+
+/* CARD */
+
+.card{
+background:rgba(255,255,255,.05);
+
+backdrop-filter:blur(16px);
+
+border:1px solid rgba(255,255,255,.06);
+
+border-radius:28px;
+
+padding:24px;
+
+box-shadow:0 8px 30px rgba(0,0,0,.35);
+
+animation:fade .5s ease;
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.title{
+font-size:1.4rem;
+font-weight:700;
+margin-bottom:20px;
+color:#00ff99;
+}
+
+/* INPUTS */
+
+.input-group{
+margin-bottom:18px;
+position:relative;
+}
+
+.input-group input{
+width:100%;
+
+padding:15px 50px 15px 15px;
+
+border:none;
+outline:none;
+
+border-radius:16px;
+
+background:rgba(255,255,255,.08);
+
+color:#fff;
+
+font-size:1rem;
+
+border:1px solid rgba(255,255,255,.05);
+
+transition:
+border-color .3s,
+box-shadow .3s,
+background .3s;
+
+-webkit-text-fill-color:white !important;
+}
+
+/* FIX CURRENT PASSWORD ISSUE */
+
+#currentPassword{
+-webkit-text-fill-color:white !important;
+}
+
+.input-group input::placeholder{
+color:#b7d9c7;
+opacity:.8;
+}
+
+.input-group input:focus{
+border-color:#00ff99;
+box-shadow:0 0 12px rgba(0,255,153,.2);
+}
+
+/* AUTOFILL FIX */
+
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover,
+.input-group input:-webkit-autofill:focus,
+.input-group input:-webkit-autofill:active{
+
+-webkit-box-shadow:
+0 0 0 1000px rgba(255,255,255,.08) inset !important;
+
+-webkit-text-fill-color:white !important;
+
+caret-color:white !important;
+
+transition:background-color 9999s ease-in-out 0s;
+
+}
+
+.toggle{
+position:absolute;
+right:18px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+color:#9effcf;
+}
+
+/* STRENGTH */
+
+.strength{
+height:8px;
+background:rgba(255,255,255,.06);
+border-radius:20px;
+overflow:hidden;
+margin-bottom:18px;
+}
+
+.strength div{
+height:100%;
+width:0;
+transition:.3s;
+border-radius:20px;
+}
+
+/* RULES */
+
+.rules{
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-bottom:18px;
+}
+
+.rules div{
+font-size:.92rem;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.bad{
+color:#ff7272;
+}
+
+.good{
+color:#00ff99;
+}
+
+/* BUTTON */
+
+button{
+width:100%;
+
+padding:16px;
+
+border:none;
+
+border-radius:18px;
+
+background:linear-gradient(135deg,#00ff99,#00c26e);
+
+color:#07140d;
+
+font-size:1rem;
+font-weight:700;
+
+cursor:pointer;
+
+transition:.3s;
+
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+}
+
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 25px rgba(0,255,153,.35);
+}
+
+button:disabled{
+opacity:.6;
+cursor:not-allowed;
+}
+
+.spinner{
+width:18px;
+height:18px;
+
+border:3px solid rgba(255,255,255,.3);
+
+border-top:3px solid #07140d;
+
+border-radius:50%;
+
+animation:spin 1s linear infinite;
+
+display:none;
+}
+
+@keyframes spin{
+to{
+transform:rotate(360deg);
+}
+}
+
+#message{
+margin-top:18px;
+text-align:center;
+font-weight:600;
+}
+
+/* SUPPORT */
+
+.support-btn{
+position:fixed;
+left:18px;
+bottom:18px;
+
+width:62px;
+height:62px;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#00ff99,#00c26e);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+color:#07140d;
+
+font-size:1.4rem;
+
+text-decoration:none;
+
+box-shadow:0 0 25px rgba(0,255,153,.4);
+
+z-index:999;
+
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.08);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+@media(max-width:480px){
+
+.brand{
+font-size:1rem;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<header>
+
+<div class="left">
+
+<button class="menu-btn" id="menuBtn">
+<i class="fa fa-bars"></i>
+</button>
+
+<img src="iyallogo.png" class="logo">
+
+<div class="brand">Iyal Surveys</div>
+
+</div>
+
+</header>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar" id="sidebar">
+
+<div class="top">
+
+<h2>Menu</h2>
+
+<button class="close-btn" id="closeBtn">
+<i class="fa fa-times"></i>
+</button>
+
+</div>
+
+<div class="nav">
+
+<a href="dashboard.html">
+<i class="fa fa-home"></i>
+Dashboard
+</a>
+
+<a href="withdraw.html">
+<i class="fa fa-wallet"></i>
+Withdraw
+</a>
+
+<a href="settings.html">
+<i class="fa fa-gear"></i>
+Settings
+</a>
+
+</div>
+
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- CONTENT -->
+
+<div class="container">
+
+<div class="card">
+
+<div class="title">
+Change Password
+</div>
+
+<!-- CURRENT PASSWORD -->
+
+<div class="input-group">
+
+<input
+type="password"
+id="currentPassword"
+name="current-password"
+placeholder="Current Password"
+autocomplete="off"
+spellcheck="false"
+autocapitalize="off"
+autocorrect="off"
+>
+
+<i class="fa fa-eye toggle"
+onclick="togglePassword('currentPassword',this)">
+</i>
+
+</div>
+
+<!-- NEW PASSWORD -->
+
+<div class="input-group">
+
+<input
+type="password"
+id="newPassword"
+placeholder="New Password"
+autocomplete="new-password"
+>
+
+<i class="fa fa-eye toggle"
+onclick="togglePassword('newPassword',this)">
+</i>
+
+</div>
+
+<div class="strength">
+<div id="strengthBar"></div>
+</div>
+
+<div class="rules">
+
+<div id="rLen" class="bad">
+<i class="fa fa-times-circle"></i>
+Minimum 8 characters
+</div>
+
+<div id="rUp" class="bad">
+<i class="fa fa-times-circle"></i>
+One uppercase letter
+</div>
+
+<div id="rNum" class="bad">
+<i class="fa fa-times-circle"></i>
+One number
+</div>
+
+<div id="rSpec" class="bad">
+<i class="fa fa-times-circle"></i>
+One special character
+</div>
+
+</div>
+
+<!-- CONFIRM -->
+
+<div class="input-group">
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm Password"
+autocomplete="new-password"
+>
+
+<i class="fa fa-eye toggle"
+onclick="togglePassword('confirmPassword',this)">
+</i>
+
+</div>
+
+<button id="updateBtn" disabled>
+
+Update Password
+
+<div class="spinner"></div>
+
+</button>
+
+<div id="message"></div>
+
+</div>
+
+</div>
+
+<a href="support.html" class="support-btn">
+<i class="fa fa-headset"></i>
+</a>
+
+<script type="module">
+
+import { createClient }
+from "https://esm.sh/@supabase/supabase-js@2";
+
+const supabase=createClient(
+"https://xkshzlfducmnglxfnxzk.supabase.co",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhc2UiLCJyZWYiOiJ4a3NoemxmZHVjbW5nbHhmbnh6ayIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzY1NDI5MTQ0LCJleHAiOjIwODEwMDUxNDR9.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
+);
+
+/* AUTH */
+
+const { data:{ session } } =
+await supabase.auth.getSession();
+
+if(!session){
+
+location.href = "login.html";
+
+}
+
+/* SIDEBAR */
+
+const sidebar =
+document.getElementById("sidebar");
+
+const overlay =
+document.getElementById("overlay");
+
+const menuBtn =
+document.getElementById("menuBtn");
+
+const closeBtn =
+document.getElementById("closeBtn");
+
+menuBtn.onclick = () => {
+
+sidebar.classList.add("active");
+overlay.classList.add("show");
+
+};
+
+closeBtn.onclick = closeMenu;
+overlay.onclick = closeMenu;
+
+function closeMenu(){
+
+sidebar.classList.remove("active");
+overlay.classList.remove("show");
+
+}
+
+/* TOGGLE PASSWORD */
+
+window.togglePassword = (id,el) => {
+
+const input =
+document.getElementById(id);
+
+input.type =
+input.type === "password"
+? "text"
+: "password";
+
+el.classList.toggle("fa-eye");
+el.classList.toggle("fa-eye-slash");
+
+};
+
+/* RULES */
+
+const rules = {
+
+len:v => v.length >= 8,
+up:v => /[A-Z]/.test(v),
+num:v => /[0-9]/.test(v),
+spec:v => /[^A-Za-z0-9]/.test(v)
+
+};
+
+const currentPassword =
+document.getElementById("currentPassword");
+
+const newPassword =
+document.getElementById("newPassword");
+
+const confirmPassword =
+document.getElementById("confirmPassword");
+
+const strengthBar =
+document.getElementById("strengthBar");
+
+const btn =
+document.getElementById("updateBtn");
+
+const spinner =
+document.querySelector(".spinner");
+
+const message =
+document.getElementById("message");
+
+/* PASSWORD CHECK */
+
+newPassword.oninput = () => {
+
+const v = newPassword.value;
+
+let score = 0;
+
+updateRule("rLen", rules.len(v));
+if(rules.len(v)) score++;
+
+updateRule("rUp", rules.up(v));
+if(rules.up(v)) score++;
+
+updateRule("rNum", rules.num(v));
+if(rules.num(v)) score++;
+
+updateRule("rSpec", rules.spec(v));
+if(rules.spec(v)) score++;
+
+const widths = [0,25,50,75,100];
+
+strengthBar.style.width =
+widths[score] + "%";
+
+strengthBar.style.background = [
+
+"#333",
+"#ff4d4d",
+"#ff9800",
+"#8bc34a",
+"#00ff99"
+
+][score];
+
+validate();
+
+};
+
+confirmPassword.oninput = validate;
+currentPassword.oninput = validate;
+
+/* VALIDATE */
+
+function validate(){
+
+const validPassword =
+
+rules.len(newPassword.value) &&
+rules.up(newPassword.value) &&
+rules.num(newPassword.value) &&
+rules.spec(newPassword.value);
+
+const passwordsMatch =
+
+newPassword.value ===
+confirmPassword.value;
+
+const currentFilled =
+currentPassword.value.length > 0;
+
+btn.disabled = !(
+
+validPassword &&
+passwordsMatch &&
+currentFilled
+
+);
+
+if(confirmPassword.value.length > 0){
+
+if(passwordsMatch){
+
+confirmPassword.style.borderColor =
+"#00ff99";
+
+}else{
+
+confirmPassword.style.borderColor =
+"#ff4d4d";
+
+}
+
+}else{
+
+confirmPassword.style.borderColor =
+"rgba(255,255,255,.05)";
+
+}
+
+}
+
+/* UPDATE RULE */
+
+function updateRule(id,ok){
+
+const el =
+document.getElementById(id);
+
+el.className =
+ok
+? "good"
+: "bad";
+
+el.querySelector("i").className =
+
+ok
+? "fa fa-check-circle"
+: "fa fa-times-circle";
+
+}
+
+/* UPDATE PASSWORD */
+
+btn.onclick = async () => {
+
+const currentPass =
+currentPassword.value;
+
+const newPass =
+newPassword.value;
+
+message.innerHTML = "";
+
+spinner.style.display = "block";
+
+btn.disabled = true;
+
+btn.style.opacity = ".7";
+btn.style.pointerEvents = "none";
+
+/* SAME PASSWORD CHECK */
+
+if(currentPass === newPass){
+
+spinner.style.display = "none";
+
+btn.style.opacity = "1";
+btn.style.pointerEvents = "auto";
+
+message.style.color = "#ff7272";
+
+message.innerHTML =
+"❌ New password must be different";
+
+validate();
+
+return;
+
+}
+
+/* VERIFY CURRENT PASSWORD */
+
+const { error: loginError } =
+
+await supabase.auth.signInWithPassword({
+
+email: session.user.email,
+password: currentPass
+
+});
+
+if(loginError){
+
+spinner.style.display = "none";
+
+btn.style.opacity = "1";
+btn.style.pointerEvents = "auto";
+
+message.style.color = "#ff7272";
+
+message.innerHTML =
+"❌ Current password is incorrect";
+
+validate();
+
+return;
+
+}
+
+/* UPDATE PASSWORD */
+
+const { error } =
+
+await supabase.auth.updateUser({
+
+password:newPass
+
+});
+
+spinner.style.display = "none";
+
+btn.style.opacity = "1";
+btn.style.pointerEvents = "auto";
+
+if(error){
+
+message.style.color = "#ff7272";
+
+message.innerHTML =
+"❌ " + error.message;
+
+validate();
+
+}else{
+
+message.style.color = "#00ff99";
+
+message.innerHTML =
+"✅ Password updated successfully";
+
+currentPassword.value = "";
+newPassword.value = "";
+confirmPassword.value = "";
+
+strengthBar.style.width = "0";
+
+strengthBar.style.background = "#333";
+
+["rLen","rUp","rNum","rSpec"]
+.forEach(id => {
+
+updateRule(id,false);
+
+});
+
+confirmPassword.style.borderColor =
+"rgba(255,255,255,.05)";
+
+btn.disabled = true;
+
+/* SIGN OUT */
+
+setTimeout(async()=>{
+
+await supabase.auth.signOut();
+
+location.href = "login.html";
+
+},1500);
+
+}
+
+};
+
+</script>
+
+</body>
+</html>
