@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <link rel="manifest" href="/manifest.json">
 
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Iyal Surveys – Change Password</title>
+<title>Iyal Surveys – Settings</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
 
@@ -26,7 +28,7 @@ min-height:100vh;
 overflow-x:hidden;
 }
 
-/* BG */
+/* BACKGROUND */
 .bg{
 position:fixed;
 inset:0;
@@ -39,8 +41,12 @@ animation:bgMove 8s infinite alternate ease-in-out;
 }
 
 @keyframes bgMove{
-from{transform:scale(1);}
-to{transform:scale(1.06);}
+from{
+transform:scale(1);
+}
+to{
+transform:scale(1.06);
+}
 }
 
 /* HEADER */
@@ -223,11 +229,7 @@ background:rgba(255,255,255,.05);
 color:white;
 font-size:1rem;
 border:1px solid rgba(255,255,255,.05);
-
-transition:
-border-color .3s,
-box-shadow .3s,
-background .3s;
+transition:.3s;
 }
 
 .input-group input:focus{
@@ -311,6 +313,7 @@ opacity:.6;
 cursor:not-allowed;
 }
 
+/* SPINNER */
 .spinner{
 width:18px;
 height:18px;
@@ -354,9 +357,15 @@ animation:pulse 2s infinite;
 }
 
 @keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.08);}
-100%{transform:scale(1);}
+0%{
+transform:scale(1);
+}
+50%{
+transform:scale(1.08);
+}
+100%{
+transform:scale(1);
+}
 }
 
 @media(max-width:480px){
@@ -384,14 +393,15 @@ font-size:1rem;
 
 <img src="iyallogo.png" class="logo">
 
-<div class="brand">Iyal Surveys</div>
+<div class="brand">
+Iyal Surveys
+</div>
 
 </div>
 
 </header>
 
 <!-- SIDEBAR -->
-
 <div class="sidebar" id="sidebar">
 
 <div class="top">
@@ -428,7 +438,6 @@ Settings
 <div class="overlay" id="overlay"></div>
 
 <!-- CONTENT -->
-
 <div class="container">
 
 <div class="card">
@@ -437,49 +446,47 @@ Settings
 Change Password
 </div>
 
-<!-- CURRENT -->
-
+<!-- CURRENT PASSWORD -->
 <div class="input-group">
 
 <input
 type="password"
 id="currentPassword"
-placeholder="Current Password"
-autocomplete="current-password"
->
+placeholder="Current Password">
 
-<i class="fa fa-eye toggle"
+<i
+class="fa fa-eye toggle"
 onclick="togglePassword('currentPassword',this)">
 </i>
 
 </div>
 
-<!-- NEW -->
-
+<!-- NEW PASSWORD -->
 <div class="input-group">
 
 <input
 type="password"
 id="newPassword"
-placeholder="New Password"
-autocomplete="new-password"
->
+placeholder="New Password">
 
-<i class="fa fa-eye toggle"
+<i
+class="fa fa-eye toggle"
 onclick="togglePassword('newPassword',this)">
 </i>
 
 </div>
 
+<!-- STRENGTH -->
 <div class="strength">
 <div id="strengthBar"></div>
 </div>
 
+<!-- RULES -->
 <div class="rules">
 
 <div id="rLen" class="bad">
 <i class="fa fa-times-circle"></i>
-Minimum 8 characters
+Minimum 6 characters
 </div>
 
 <div id="rUp" class="bad">
@@ -500,22 +507,21 @@ One special character
 </div>
 
 <!-- CONFIRM -->
-
 <div class="input-group">
 
 <input
 type="password"
 id="confirmPassword"
-placeholder="Confirm Password"
-autocomplete="new-password"
->
+placeholder="Confirm Password">
 
-<i class="fa fa-eye toggle"
+<i
+class="fa fa-eye toggle"
 onclick="togglePassword('confirmPassword',this)">
 </i>
 
 </div>
 
+<!-- BUTTON -->
 <button id="updateBtn" disabled>
 
 Update Password
@@ -531,7 +537,6 @@ Update Password
 </div>
 
 <!-- SUPPORT -->
-
 <a href="support.html" class="support-btn">
 <i class="fa fa-headset"></i>
 </a>
@@ -545,159 +550,142 @@ const supabase=createClient(
 "https://xkshzlfducmnglxfnxzk.supabase.co",
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhc2UiLCJyZWYiOiJ4a3NoemxmZHVjbW5nbHhmbnh6ayIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzY1NDI5MTQ0LCJleHAiOjIwODEwMDUxNDR9.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
 );
-/* AUTH */
 
-const { data:{ session } } =
+/* AUTH */
+const { data:{session} } =
 await supabase.auth.getSession();
 
 if(!session){
-
-location.href = "login.html";
-
+location.href="login.html";
 }
 
 /* SIDEBAR */
+const sidebar=document.getElementById("sidebar");
+const overlay=document.getElementById("overlay");
+const menuBtn=document.getElementById("menuBtn");
+const closeBtn=document.getElementById("closeBtn");
 
-const sidebar =
-document.getElementById("sidebar");
-
-const overlay =
-document.getElementById("overlay");
-
-const menuBtn =
-document.getElementById("menuBtn");
-
-const closeBtn =
-document.getElementById("closeBtn");
-
-menuBtn.onclick = () => {
-
+menuBtn.onclick=()=>{
 sidebar.classList.add("active");
 overlay.classList.add("show");
-
 };
 
-closeBtn.onclick = closeMenu;
-overlay.onclick = closeMenu;
+closeBtn.onclick=closeMenu;
+overlay.onclick=closeMenu;
 
 function closeMenu(){
-
 sidebar.classList.remove("active");
 overlay.classList.remove("show");
-
 }
 
-/* TOGGLE PASSWORD */
+/* TOGGLE */
+window.togglePassword=(id,el)=>{
 
-window.togglePassword = (id,el) => {
+const input=document.getElementById(id);
 
-const input =
-document.getElementById(id);
-
-input.type =
-input.type === "password"
-? "text"
-: "password";
-
-el.classList.toggle("fa-eye");
-el.classList.toggle("fa-eye-slash");
+if(input.type==="password"){
+input.type="text";
+el.classList.replace("fa-eye","fa-eye-slash");
+}else{
+input.type="password";
+el.classList.replace("fa-eye-slash","fa-eye");
+}
 
 };
 
-/* RULES */
-
-const rules = {
-
-len:v => v.length >= 8,
-up:v => /[A-Z]/.test(v),
-num:v => /[0-9]/.test(v),
-spec:v => /[^A-Za-z0-9]/.test(v)
-
-};
-
-const currentPassword =
+/* INPUTS */
+const currentPassword=
 document.getElementById("currentPassword");
 
-const newPassword =
+const newPassword=
 document.getElementById("newPassword");
 
-const confirmPassword =
+const confirmPassword=
 document.getElementById("confirmPassword");
 
-const strengthBar =
+const strengthBar=
 document.getElementById("strengthBar");
 
-const btn =
+const btn=
 document.getElementById("updateBtn");
 
-const spinner =
+const spinner=
 document.querySelector(".spinner");
 
-const message =
+const message=
 document.getElementById("message");
 
-/* PASSWORD CHECK */
+/* RULES */
+const rules={
 
-newPassword.oninput = () => {
+len:v=>v.length>=6,
 
-const v = newPassword.value;
+up:v=>/[A-Z]/.test(v),
 
-let score = 0;
+num:v=>/[0-9]/.test(v),
 
-updateRule("rLen", rules.len(v));
+spec:v=>/[^A-Za-z0-9]/.test(v)
+
+};
+
+/* PASSWORD INPUT */
+newPassword.oninput=()=>{
+
+const v=newPassword.value;
+
+let score=0;
+
+updateRule("rLen",rules.len(v));
 if(rules.len(v)) score++;
 
-updateRule("rUp", rules.up(v));
+updateRule("rUp",rules.up(v));
 if(rules.up(v)) score++;
 
-updateRule("rNum", rules.num(v));
+updateRule("rNum",rules.num(v));
 if(rules.num(v)) score++;
 
-updateRule("rSpec", rules.spec(v));
+updateRule("rSpec",rules.spec(v));
 if(rules.spec(v)) score++;
 
-const widths = [0,25,50,75,100];
+const widths=[0,25,50,75,100];
 
-strengthBar.style.width =
-widths[score] + "%";
+strengthBar.style.width=
+widths[score]+"%";
 
-strengthBar.style.background = [
-
-"#333",
+strengthBar.style.background=[
+"#444",
 "#ff4d4d",
 "#ff9800",
 "#8bc34a",
 "#00ff99"
-
 ][score];
 
 validate();
 
 };
 
-confirmPassword.oninput = validate;
-currentPassword.oninput = validate;
+confirmPassword.oninput=validate;
+currentPassword.oninput=validate;
 
-/* VALIDATION */
-
+/* VALIDATE */
 function validate(){
 
-const validPassword =
+const validPassword=
 
 rules.len(newPassword.value) &&
 rules.up(newPassword.value) &&
 rules.num(newPassword.value) &&
 rules.spec(newPassword.value);
 
-const passwordsMatch =
+const passwordsMatch=
 
-newPassword.value ===
+newPassword.value===
 confirmPassword.value;
 
-const currentFilled =
-currentPassword.value.length > 0;
+const currentFilled=
+currentPassword.value.length>0;
 
-btn.disabled = !(
+btn.disabled=!(
 
 validPassword &&
 passwordsMatch &&
@@ -705,23 +693,23 @@ currentFilled
 
 );
 
-if(confirmPassword.value.length > 0){
+if(confirmPassword.value.length>0){
 
 if(passwordsMatch){
 
-confirmPassword.style.borderColor =
+confirmPassword.style.borderColor=
 "#00ff99";
 
 }else{
 
-confirmPassword.style.borderColor =
+confirmPassword.style.borderColor=
 "#ff4d4d";
 
 }
 
 }else{
 
-confirmPassword.style.borderColor =
+confirmPassword.style.borderColor=
 "rgba(255,255,255,.05)";
 
 }
@@ -729,18 +717,16 @@ confirmPassword.style.borderColor =
 }
 
 /* UPDATE RULE */
-
 function updateRule(id,ok){
 
-const el =
-document.getElementById(id);
+const el=document.getElementById(id);
 
-el.className =
+el.className=
 ok
 ? "good"
 : "bad";
 
-el.querySelector("i").className =
+el.querySelector("i").className=
 
 ok
 ? "fa fa-check-circle"
@@ -749,65 +735,37 @@ ok
 }
 
 /* UPDATE PASSWORD */
+btn.onclick=async()=>{
 
-btn.onclick = async () => {
+message.innerHTML="";
 
-const currentPass =
-currentPassword.value;
+spinner.style.display="block";
 
-const newPass =
-newPassword.value;
+btn.disabled=true;
 
-message.innerHTML = "";
+const currentPass=
+currentPassword.value.trim();
 
-spinner.style.display = "block";
-
-btn.disabled = true;
-
-btn.style.opacity = ".7";
-btn.style.pointerEvents = "none";
-
-/* CHECK SAME PASSWORD */
-
-if(currentPass === newPass){
-
-spinner.style.display = "none";
-
-btn.style.opacity = "1";
-btn.style.pointerEvents = "auto";
-
-message.style.color = "#ff7272";
-
-message.innerHTML =
-"❌ New password must be different";
-
-validate();
-
-return;
-
-}
+const newPass=
+newPassword.value.trim();
 
 /* VERIFY CURRENT PASSWORD */
-
-const { error: loginError } =
+const { error:loginError }=
 
 await supabase.auth.signInWithPassword({
 
-email: session.user.email,
-password: currentPass
+email:session.user.email,
+password:currentPass
 
 });
 
 if(loginError){
 
-spinner.style.display = "none";
+spinner.style.display="none";
 
-btn.style.opacity = "1";
-btn.style.pointerEvents = "auto";
+message.style.color="#ff7272";
 
-message.style.color = "#ff7272";
-
-message.innerHTML =
+message.innerHTML=
 "❌ Current password is incorrect";
 
 validate();
@@ -817,8 +775,7 @@ return;
 }
 
 /* UPDATE PASSWORD */
-
-const { error } =
+const { error }=
 
 await supabase.auth.updateUser({
 
@@ -826,58 +783,41 @@ password:newPass
 
 });
 
-spinner.style.display = "none";
-
-btn.style.opacity = "1";
-btn.style.pointerEvents = "auto";
+spinner.style.display="none";
 
 if(error){
 
-message.style.color = "#ff7272";
+message.style.color="#ff7272";
 
-message.innerHTML =
-"❌ " + error.message;
+message.innerHTML=
+"❌ "+error.message;
 
 validate();
 
 }else{
 
-message.style.color = "#00ff99";
+message.style.color="#00ff99";
 
-message.innerHTML =
+message.innerHTML=
 "✅ Password updated successfully";
 
-currentPassword.value = "";
-newPassword.value = "";
-confirmPassword.value = "";
+/* RESET */
+currentPassword.value="";
+newPassword.value="";
+confirmPassword.value="";
 
-strengthBar.style.width = "0";
-
-strengthBar.style.background = "#333";
-
-/* RESET RULES */
+strengthBar.style.width="0";
+strengthBar.style.background="#444";
 
 ["rLen","rUp","rNum","rSpec"]
-.forEach(id => {
-
+.forEach(id=>{
 updateRule(id,false);
-
 });
 
-confirmPassword.style.borderColor =
+confirmPassword.style.borderColor=
 "rgba(255,255,255,.05)";
 
-btn.disabled = true;
-
-/* SIGN OUT */
-
-setTimeout(async()=>{
-
-await supabase.auth.signOut();
-
-location.href = "login.html";
-
-},1500);
+btn.disabled=true;
 
 }
 
