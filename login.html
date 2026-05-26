@@ -262,25 +262,23 @@ window.login = async function () {
       }
     );
 
-   const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
   email,
   password
 });
 
 if (error) {
+  throw new Error("Invalid email or password");
+}
 
-  console.log(error);
+// CHECK EMAIL VERIFIED
+if (!data.user.email_confirmed_at) {
 
-  if (
-    error.message.includes("Email not confirmed") ||
-    error.message.includes("email_not_confirmed")
-  ) {
-    throw new Error(
-      "Please verify your email before logging in."
-    );
-  }
+  await supabase.auth.signOut();
 
-  throw new Error(error.message);
+  throw new Error(
+    "Please verify your email before logging in."
+  );
 }
 
 status.style.color = "green";
@@ -289,7 +287,6 @@ status.textContent = "✅ Login successful";
 setTimeout(() => {
   window.location.href = "dashboard.html";
 }, 1000);
-
   } catch (err) {
     status.style.color = "red";
     status.textContent = err.message || "Login failed";
