@@ -558,24 +558,24 @@ form.addEventListener("submit", async (e) => {
 
     });
 
-    const data = await res.json();
-
-    if(!data.success){
-      throw new Error(data.message);
-    }
-
     messageBox.textContent =
-    "✅ Registration successful! Redirecting...";
+"✅ Registration successful! Please check your email to confirm your account before logging in.";
 
-    messageBox.className =
-    "message success";
+messageBox.className =
+"message success";
 
-    setTimeout(() => {
+/* CLEAR FORM */
+form.reset();
 
-      location.href = "login.html";
+/* RESET RECAPTCHA */
+grecaptcha.reset();
 
-    },1500);
+/* REDIRECT TO LOGIN */
+setTimeout(() => {
 
+  location.href = "login.html";
+
+},4000);
   }catch(err){
 
     messageBox.textContent =
