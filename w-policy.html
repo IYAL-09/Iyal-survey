@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Iyal Surveys – Withdrawal Policy</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9);
+  color: #1b1b1b;
+}
+
+/* HEADER */
+.header {
+  background: #2e7d32;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/* TITLE */
+h1 {
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* CARD GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border-left: 5px solid #2e7d32;
+  transition: 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #2e7d32;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card p {
+  color: #444;
+  line-height: 1.6;
+}
+
+/* WARNING CARD */
+.warning {
+  border-left-color: #ff9800;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  color: #555;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="brand">
+    <img src="iyallogo.png" alt="logo">
+    <strong>Iyal Surveys</strong>
+  </div>
+
+  <a href="dashboard.html" style="color:white;text-decoration:none;">
+    <i class="fa fa-home"></i> Dashboard
+  </a>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <h1><i class="fa fa-wallet"></i> Withdrawal Policy</h1>
+  <p class="subtitle">
+    Transparent payout system for all Iyal Surveys users
+  </p>
+
+  <div class="grid">
+
+    <!-- MINIMUM -->
+    <div class="card">
+      <h3><i class="fa fa-coins"></i> Minimum Withdrawal</h3>
+      <p>
+        Users must reach the minimum withdrawal threshold before requesting payout.
+        The minimum amount is displayed inside the withdrawal dashboard and may vary
+        depending on rewards and platform updates.
+      </p>
+    </div>
+
+    <!-- PROCESS -->
+    <div class="card">
+      <h3><i class="fa fa-clock"></i> Processing Time</h3>
+      <p>
+        All withdrawal requests are reviewed manually by our admin system.
+        Processing typically takes <strong>24–72 hours</strong> depending on request volume.
+      </p>
+    </div>
+
+    <!-- APPROVAL -->
+    <div class="card">
+      <h3><i class="fa fa-check-circle"></i> Approval System</h3>
+      <p>
+        Each withdrawal is subject to verification to ensure fairness, fraud prevention,
+        and system integrity. Approved requests are processed automatically to the user’s account.
+      </p>
+    </div>
+
+    <!-- METHODS -->
+    <div class="card">
+      <h3><i class="fa fa-bank"></i> Payment Methods</h3>
+      <p>
+        Supported withdrawal methods include bank transfer and other supported digital payment systems
+        as listed in the dashboard.
+      </p>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="card warning">
+      <h3><i class="fa fa-shield-alt"></i> Fraud Protection</h3>
+      <p>
+        Any attempt to exploit, manipulate, or abuse the reward system will result in account suspension.
+        We monitor IP activity, device behavior, and suspicious actions.
+      </p>
+    </div>
+
+    <!-- NOTES -->
+    <div class="card">
+      <h3><i class="fa fa-info-circle"></i> Important Notice</h3>
+      <p>
+        Withdrawal requests may be delayed during system maintenance or high traffic periods.
+        Users are advised to ensure their account details are correct before submitting requests.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 Iyal Surveys. All rights reserved.
+</div>
+
+</body>
+</html>
