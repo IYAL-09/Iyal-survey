@@ -638,26 +638,43 @@ menu.style.display = "flex";
 
 };
 
-  async function updateLastVisit(){
+async function updateLastVisit() {
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
 
-const now = new Date().toISOString();
+  if (!session) return;
 
-const userEmail = session.user.email;
+  const userId = session.user.id;
 
-const { error } = await supabase
-.from("users")
-.update({
-last_visit: now
-})
-.eq("email", userEmail);
+  // Update last visit
+  const { error } = await supabase
+    .from('users')
+    .update({
+      last_visit: new Date().toISOString()
+    })
+    .eq('id', userId);
 
-if(error){
-console.error("Last visit update failed:", error);
-}else{
-console.log("Last visit updated");
+  if (error) {
+    console.error("Last visit update failed:", error);
+  } else {
+    console.log("Last visit updated");
+
+    // Fetch fresh updated data
+    const { data: freshUser, error: fetchError } = await supabase
+      .from('users')
+      .select('last_visit')
+      .eq('id', userId)
+      .single();
+
+    if (!fetchError) {
+      console.log("Fresh last visit:", freshUser.last_visit);
+    }
+  }
 }
 
-}
+updateLastVisit();
+
 
 /* =========================
    LOAD DASHBOARD DATA
