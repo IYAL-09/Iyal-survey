@@ -602,7 +602,30 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const supabase = createClient(
 "https://xkshzlfducmnglxfnxzk.supabase.co",
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
-);
+); 
+
+   <script>
+async function updateLastVisit() {
+
+const {
+data:{user}
+}=await supabase.auth.getUser();
+
+if(!user) return;
+
+const now=new Date().toISOString();
+
+await supabase
+.from("users")
+.update({
+last_visit:now
+})
+.eq("id",user.id);
+
+}
+
+updateLastVisit();
+</script>
 
 /* =========================
    CHECK USER SESSION
