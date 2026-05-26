@@ -667,19 +667,18 @@ item.innerHTML = `
 <div class="history-left">
 
 <h4>
-${ref.referred_email}
+${ref.email}
 </h4>
 
 <p>
-₦${Number(ref.reward_amount)
-.toLocaleString()}
- Reward
+₦0 Reward
 </p>
 
 </div>
 
 <div class="badge">
-${ref.status}
+${new Date(ref.created_at)
+.toLocaleDateString()}
 </div>
 
 `;
@@ -687,7 +686,6 @@ ${ref.status}
 history.appendChild(item);
 
 });
-
 }catch(err){
 
 console.error(err);
