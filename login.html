@@ -283,8 +283,8 @@ if (error) {
 
   }
 
-  throw new Error("Invalid email or password");
-}
+ console.log(error);
+throw new Error(error.message);
     status.style.color = "green";
     status.textContent = "✅ Login successful";
 
