@@ -1,15 +1,15 @@
 {
   "name": "Iyal Surveys",
-  "short_name": "Iyal Surveys",
-  "id": "iyal-surveys",
-  "start_url": "/dashboard.html",
+  "short_name": "Iyal",
+  "id": "/",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "description": "A survey platform where users perform tasks and games to earn and get paid.",
-  "orientation": "any",
-  "categories": ["finance", "productivity"],
+  "background_color": "#0f172a",
+  "theme_color": "#16a34a",
+  "description": "Earn money online with surveys, offers, games and rewards on Iyal Surveys.",
+  "orientation": "portrait",
+  "categories": ["finance", "business", "productivity"],
   "icons": [
     {
       "src": "/iyallogo192.png",
@@ -18,10 +18,10 @@
       "purpose": "any"
     },
     {
-      "src": "/iyallogo.png",
+      "src": "/iyallogo512.png",
       "sizes": "512x512",
-      "type": "image/jpeg",
-      "purpose": "any"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
