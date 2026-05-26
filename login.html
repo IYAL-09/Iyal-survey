@@ -265,9 +265,26 @@ window.login = async function () {
     const captchaData = await captchaRes.json();
     if (!captchaData.success) throw new Error("Captcha failed");
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
+   const { data, error } = await supabase.auth.signInWithPassword({
+  email,
+  password
+});
 
+if (error) {
+
+  if (
+    error.message.includes("Email not confirmed") ||
+    error.message.includes("email_not_confirmed")
+  ) {
+
+    throw new Error(
+      "Please verify your email before logging in."
+    );
+
+  }
+
+  throw new Error("Invalid email or password");
+}
     status.style.color = "green";
     status.textContent = "✅ Login successful";
 
