@@ -620,7 +620,7 @@ throw new Error("No session");
 }
    /* UPDATE LAST VISIT */
 
-updateLastVisit(session.user.id);
+updateLastVisit();
 
 /* =========================
    MENU TOGGLE
@@ -638,19 +638,23 @@ menu.style.display = "flex";
 
 };
 
-   async function updateLastVisit(userId){
+  async function updateLastVisit(){
 
 const now = new Date().toISOString();
+
+const userEmail = session.user.email;
 
 const { error } = await supabase
 .from("users")
 .update({
 last_visit: now
 })
-.eq("id", userId);
+.eq("email", userEmail);
 
 if(error){
 console.error("Last visit update failed:", error);
+}else{
+console.log("Last visit updated");
 }
 
 }
