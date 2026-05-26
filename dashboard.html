@@ -618,6 +618,9 @@ if(!session){
 window.location.href = "login.html";
 throw new Error("No session");
 }
+   /* UPDATE LAST VISIT */
+
+updateLastVisit(session.user.id);
 
 /* =========================
    MENU TOGGLE
