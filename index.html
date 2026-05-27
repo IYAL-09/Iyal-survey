@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 
+<!-- PWA -->
 <link rel="manifest" href="/manifest.json">
 
 <meta charset="UTF-8">
@@ -19,7 +20,7 @@
 
 <link rel="canonical" href="https://iyalsurveys.online">
 
-<!-- Open Graph / Social Preview -->
+<!-- Open Graph -->
 <meta property="og:title" content="Iyal Surveys - Earn Money Online">
 
 <meta property="og:description" content="Earn money online with Iyal Surveys by completing surveys, offers, and digital tasks. Fast payouts, secure accounts, and trusted rewards experience.">
@@ -32,7 +33,7 @@
 
 <meta property="og:site_name" content="Iyal Surveys">
 
-<!-- Twitter / X Preview -->
+<!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 
 <meta name="twitter:title" content="Iyal Surveys - Earn Money Online">
@@ -55,8 +56,8 @@
 <!-- Fonts / Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-
- <script type="application/ld+json">
+<!-- Structured Data -->
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -65,7 +66,7 @@
   "logo": "https://iyalsurveys.online/iyallogo.png"
 }
 </script>
- 
+
 <style>
 
 *{
@@ -78,7 +79,7 @@ font-family:'Segoe UI',sans-serif;
 body{
 background:#07140d;
 min-height:100vh;
-overflow:hidden;
+overflow-x:hidden;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -87,7 +88,7 @@ position:relative;
 color:white;
 }
 
-/* ANIMATED BACKGROUND */
+/* BACKGROUND */
 
 .bg{
 position:absolute;
@@ -138,7 +139,7 @@ transform:translateY(-20px) translateX(15px) scale(1.08);
 }
 }
 
-/* MAIN CARD */
+/* MAIN CONTAINER */
 
 .container{
 width:100%;
@@ -310,6 +311,67 @@ display:block;
 line-height:1.4;
 }
 
+/* TRUST SECTION */
+
+.trust-section{
+margin-top:30px;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:18px;
+}
+
+.about-btn{
+display:inline-flex;
+align-items:center;
+gap:10px;
+padding:14px 28px;
+border-radius:14px;
+background:linear-gradient(135deg,#15803d,#22c55e);
+color:white;
+text-decoration:none;
+font-weight:600;
+font-size:16px;
+box-shadow:0 8px 25px rgba(34,197,94,0.25);
+transition:0.3s ease;
+}
+
+.about-btn:hover{
+transform:translateY(-3px);
+box-shadow:0 12px 30px rgba(34,197,94,0.35);
+}
+
+.social-icons{
+display:flex;
+gap:14px;
+}
+
+.social-btn{
+width:52px;
+height:52px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+text-decoration:none;
+color:white;
+font-size:22px;
+transition:0.3s ease;
+box-shadow:0 6px 18px rgba(0,0,0,0.15);
+}
+
+.social-btn:hover{
+transform:translateY(-4px) scale(1.06);
+}
+
+.facebook{
+background:linear-gradient(135deg,#1877f2,#0d5ddb);
+}
+
+.whatsapp{
+background:linear-gradient(135deg,#25d366,#16a34a);
+}
+
 /* FOOTER */
 
 .footer{
@@ -345,70 +407,6 @@ font-size:.78rem;
 
 }
 
- /* TRUST SECTION */
-.trust-section{
-  margin-top:20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:18px;
-}
-
-/* ABOUT BUTTON */
-.about-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:14px 18px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#15803d,#22c55e);
-  color:white;
-  text-decoration:none;
-  font-weight:600;
-  font-size:16px;
-  box-shadow:0 8px 25px rgba(34,197,94,0.25);
-  transition:0.3s ease;
-}
-
-.about-btn:hover{
-  transform:translateY(-3px);
-  box-shadow:0 12px 30px rgba(34,197,94,0.35);
-}
-
-/* SOCIAL ICONS */
-.social-icons{
-  display:flex;
-  gap:14px;
-}
-
-.social-btn{
-  width:25px;
-  height:25px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-decoration:none;
-  color:white;
-  font-size:22px;
-  transition:0.3s ease;
-  box-shadow:0 6px 18px rgba(0,0,0,0.15);
-}
-
-.social-btn:hover{
-  transform:translateY(-4px) scale(1.06);
-}
-
-/* FACEBOOK */
-.facebook{
-  background:linear-gradient(135deg,#1877f2,#0d5ddb);
-}
-
-/* WHATSAPP */
-.whatsapp{
-  background:linear-gradient(135deg,#25d366,#16a34a);
-}
-
 </style>
 
 <script type="module">
@@ -417,18 +415,18 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase=createClient(
 "https://xkshzlfducmnglxfnxzk.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
+"YOUR_SUPABASE_ANON_KEY"
 );
 
 const { data:{ session } } = await supabase.auth.getSession();
 
 if(session){
-window.location.href="#";
+window.location.href="dashboard.html";
 }
 
 </script>
 
- <script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
 
 </head>
 
@@ -447,7 +445,8 @@ window.location.href="#";
 <div class="logo-wrap">
 <div class="logo-ring"></div>
 
-<img src="iyallogo.png" class="logo">
+<img src="iyallogo.png" class="logo" alt="Iyal Surveys Logo">
+
 </div>
 
 <h1>Iyal Surveys</h1>
@@ -489,32 +488,28 @@ Login
 
 </div>
 
- 
-<!-- ABOUT + SOCIAL SECTION -->
+<!-- ABOUT + SOCIAL -->
 <div class="trust-section">
 
-  <!-- ABOUT BUTTON -->
-  <a href="about.html" class="about-btn">
-    <i class="fa fa-circle-info"></i>
-    About Us
-  </a>
+<a href="about.html" class="about-btn">
+<i class="fa fa-circle-info"></i>
+About Us
+</a>
 
-  <!-- SOCIAL ICONS -->
-  <div class="social-icons">
+<div class="social-icons">
 
-    <!-- FACEBOOK -->
-    <a href="YOUR_FACEBOOK_LINK" target="_blank" class="social-btn facebook">
-      <i class="fab fa-facebook-f"></i>
-    </a>
+<a href="https://facebook.com/YOUR_PAGE" target="_blank" class="social-btn facebook">
+<i class="fab fa-facebook-f"></i>
+</a>
 
-    <!-- WHATSAPP CHANNEL -->
-    <a href="YOUR_WHATSAPP_CHANNEL_LINK" target="_blank" class="social-btn whatsapp">
-      <i class="fab fa-whatsapp"></i>
-    </a>
-
-  </div>
+<a href="https://whatsapp.com/channel/YOUR_CHANNEL" target="_blank" class="social-btn whatsapp">
+<i class="fab fa-whatsapp"></i>
+</a>
 
 </div>
+
+</div>
+
 <div class="footer">
 © 2026 Iyal Surveys • Premium Survey Platform
 </div>
