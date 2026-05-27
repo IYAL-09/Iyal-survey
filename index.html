@@ -2,10 +2,16 @@
 <html lang="en">
 <head>
 
-<!-- PWA -->
+<!-- ========================================= -->
+<!-- PWA MANIFEST -->
+<!-- ========================================= -->
 <link rel="manifest" href="/manifest.json">
 
+<!-- ========================================= -->
+<!-- BASIC SEO -->
+<!-- ========================================= -->
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Iyal Surveys - Earn Money Online</title>
@@ -20,7 +26,10 @@
 
 <link rel="canonical" href="https://iyalsurveys.online">
 
-<!-- Open Graph -->
+<!-- ========================================= -->
+<!-- OPEN GRAPH / SOCIAL SEO -->
+<!-- ========================================= -->
+
 <meta property="og:title" content="Iyal Surveys - Earn Money Online">
 
 <meta property="og:description" content="Earn money online with Iyal Surveys by completing surveys, offers, and digital tasks. Fast payouts, secure accounts, and trusted rewards experience.">
@@ -33,7 +42,10 @@
 
 <meta property="og:site_name" content="Iyal Surveys">
 
-<!-- Twitter / X -->
+<!-- ========================================= -->
+<!-- TWITTER / X SEO -->
+<!-- ========================================= -->
+
 <meta name="twitter:card" content="summary_large_image">
 
 <meta name="twitter:title" content="Iyal Surveys - Earn Money Online">
@@ -42,7 +54,10 @@
 
 <meta name="twitter:image" content="https://iyalsurveys.online/iyallogo.png">
 
-<!-- Favicon -->
+<!-- ========================================= -->
+<!-- FAVICON -->
+<!-- ========================================= -->
+
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -53,10 +68,16 @@
 
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 
-<!-- Fonts / Icons -->
+<!-- ========================================= -->
+<!-- FONT AWESOME -->
+<!-- ========================================= -->
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-<!-- Structured Data -->
+<!-- ========================================= -->
+<!-- STRUCTURED DATA / SCHEMA -->
+<!-- ========================================= -->
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -67,7 +88,15 @@
 }
 </script>
 
+<!-- ========================================= -->
+<!-- STYLES -->
+<!-- ========================================= -->
+
 <style>
+
+/* ========================================= */
+/* GLOBAL RESET */
+/* ========================================= */
 
 *{
 margin:0;
@@ -75,6 +104,10 @@ padding:0;
 box-sizing:border-box;
 font-family:'Segoe UI',sans-serif;
 }
+
+/* ========================================= */
+/* BODY */
+/* ========================================= */
 
 body{
 background:#07140d;
@@ -90,7 +123,9 @@ position:relative;
 color:white;
 }
 
-/* BACKGROUND */
+/* ========================================= */
+/* ANIMATED BACKGROUND */
+/* ========================================= */
 
 .bg{
 position:absolute;
@@ -132,6 +167,8 @@ left:55%;
 animation-delay:4s;
 }
 
+/* FLOAT ANIMATION */
+
 @keyframes float{
 from{
 transform:translateY(0) translateX(0) scale(1);
@@ -141,7 +178,9 @@ transform:translateY(-20px) translateX(15px) scale(1.08);
 }
 }
 
+/* ========================================= */
 /* MAIN CONTAINER */
+/* ========================================= */
 
 .container{
 width:100%;
@@ -158,6 +197,8 @@ position:relative;
 overflow:hidden;
 }
 
+/* TOP GLOW EFFECT */
+
 .container::before{
 content:'';
 position:absolute;
@@ -170,6 +211,8 @@ right:-70px;
 filter:blur(10px);
 }
 
+/* CARD ANIMATION */
+
 @keyframes fadeUp{
 from{
 opacity:0;
@@ -181,7 +224,9 @@ transform:translateY(0);
 }
 }
 
-/* LOGO */
+/* ========================================= */
+/* LOGO SECTION */
+/* ========================================= */
 
 .logo-wrap{
 position:relative;
@@ -200,6 +245,8 @@ transform:translate(-50%,-50%);
 animation:rotate 10s linear infinite;
 }
 
+/* ROTATE ANIMATION */
+
 @keyframes rotate{
 to{
 transform:translate(-50%,-50%) rotate(360deg);
@@ -217,7 +264,9 @@ position:relative;
 z-index:2;
 }
 
-/* TEXT */
+/* ========================================= */
+/* TEXTS */
+/* ========================================= */
 
 h1{
 font-size:2.2rem;
@@ -235,7 +284,9 @@ line-height:1.6;
 margin-bottom:35px;
 }
 
+/* ========================================= */
 /* BUTTONS */
+/* ========================================= */
 
 .buttons{
 display:flex;
@@ -257,6 +308,8 @@ gap:12px;
 transition:.35s;
 }
 
+/* PRIMARY BUTTON */
+
 .btn-primary{
 background:linear-gradient(135deg,#00ff99,#00c26e);
 color:#07140d;
@@ -267,6 +320,8 @@ box-shadow:0 8px 25px rgba(0,255,153,.25);
 transform:translateY(-3px);
 box-shadow:0 12px 35px rgba(0,255,153,.45);
 }
+
+/* SECONDARY BUTTON */
 
 .btn-secondary{
 background:rgba(255,255,255,.05);
@@ -279,7 +334,9 @@ background:rgba(0,255,153,.12);
 transform:translateY(-2px);
 }
 
+/* ========================================= */
 /* FEATURES */
+/* ========================================= */
 
 .features{
 display:grid;
@@ -313,7 +370,9 @@ display:block;
 line-height:1.4;
 }
 
+/* ========================================= */
 /* TRUST SECTION */
+/* ========================================= */
 
 .trust-section{
 margin-top:30px;
@@ -322,6 +381,8 @@ flex-direction:column;
 align-items:center;
 gap:18px;
 }
+
+/* ABOUT BUTTON */
 
 .about-btn{
 display:inline-flex;
@@ -342,6 +403,8 @@ transition:0.3s ease;
 transform:translateY(-3px);
 box-shadow:0 12px 30px rgba(34,197,94,0.35);
 }
+
+/* SOCIAL ICONS */
 
 .social-icons{
 display:flex;
@@ -366,15 +429,21 @@ box-shadow:0 6px 18px rgba(0,0,0,0.15);
 transform:translateY(-4px) scale(1.06);
 }
 
+/* FACEBOOK */
+
 .facebook{
 background:linear-gradient(135deg,#1877f2,#0d5ddb);
 }
+
+/* WHATSAPP */
 
 .whatsapp{
 background:linear-gradient(135deg,#25d366,#16a34a);
 }
 
+/* ========================================= */
 /* FOOTER */
+/* ========================================= */
 
 .footer{
 margin-top:28px;
@@ -382,7 +451,52 @@ font-size:.82rem;
 color:#8eb7a1;
 }
 
+/* ========================================= */
+/* FLOATING SUPPORT BUTTON */
+/* ========================================= */
+
+.floating-support{
+position:fixed;
+bottom:22px;
+right:22px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:linear-gradient(135deg,#00ff99,#00c26e);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#07140d;
+font-size:24px;
+text-decoration:none;
+box-shadow:0 10px 25px rgba(0,255,153,.35);
+z-index:999;
+transition:.3s ease;
+animation:pulse 2s infinite;
+}
+
+.floating-support:hover{
+transform:scale(1.08) translateY(-3px);
+box-shadow:0 14px 35px rgba(0,255,153,.5);
+}
+
+/* SUPPORT PULSE */
+
+@keyframes pulse{
+0%{
+box-shadow:0 0 0 0 rgba(0,255,153,.45);
+}
+70%{
+box-shadow:0 0 0 18px rgba(0,255,153,0);
+}
+100%{
+box-shadow:0 0 0 0 rgba(0,255,153,0);
+}
+}
+
+/* ========================================= */
 /* MOBILE */
+/* ========================================= */
 
 @media(max-width:480px){
 
@@ -411,6 +525,10 @@ font-size:.78rem;
 
 </style>
 
+<!-- ========================================= -->
+<!-- SUPABASE SESSION CHECK -->
+<!-- ========================================= -->
+
 <script type="module">
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -420,7 +538,11 @@ const supabase=createClient(
 "YOUR_SUPABASE_ANON_KEY"
 );
 
+/* CHECK IF USER IS LOGGED IN */
+
 const { data:{ session } } = await supabase.auth.getSession();
+
+/* REDIRECT USER */
 
 if(session){
 window.location.href="dashboard.html";
@@ -428,34 +550,61 @@ window.location.href="dashboard.html";
 
 </script>
 
+<!-- ========================================= -->
+<!-- VERCEL ANALYTICS -->
+<!-- ========================================= -->
+
 <script defer src="/_vercel/insights/script.js"></script>
 
 </head>
 
 <body>
 
+<!-- ========================================= -->
 <!-- BACKGROUND -->
+<!-- ========================================= -->
+
 <div class="bg">
 <div class="glow glow1"></div>
 <div class="glow glow2"></div>
 <div class="glow glow3"></div>
 </div>
 
-<!-- MAIN -->
+<!-- ========================================= -->
+<!-- MAIN CONTAINER -->
+<!-- ========================================= -->
+
 <div class="container">
 
+<!-- ========================================= -->
+<!-- LOGO -->
+<!-- ========================================= -->
+
 <div class="logo-wrap">
+
 <div class="logo-ring"></div>
 
 <img src="iyallogo.png" class="logo" alt="Iyal Surveys Logo">
 
 </div>
 
+<!-- ========================================= -->
+<!-- TITLE -->
+<!-- ========================================= -->
+
 <h1>Iyal Surveys</h1>
+
+<!-- ========================================= -->
+<!-- SUBTITLE -->
+<!-- ========================================= -->
 
 <div class="subtitle">
 Complete surveys, earn rewards, and withdraw instantly with a premium experience built for Nigerian users.
 </div>
+
+<!-- ========================================= -->
+<!-- ACTION BUTTONS -->
+<!-- ========================================= -->
 
 <div class="buttons">
 
@@ -470,6 +619,10 @@ Login
 </a>
 
 </div>
+
+<!-- ========================================= -->
+<!-- FEATURES -->
+<!-- ========================================= -->
 
 <div class="features">
 
@@ -490,33 +643,64 @@ Login
 
 </div>
 
-<!-- ABOUT + SOCIAL -->
+<!-- ========================================= -->
+<!-- ABOUT + SOCIAL SECTION -->
+<!-- ========================================= -->
+
 <div class="trust-section">
+
+<!-- ABOUT PAGE BUTTON -->
 
 <a href="about.html" class="about-btn">
 <i class="fa fa-circle-info"></i>
 About Us
 </a>
 
+<!-- SOCIAL ICONS -->
+
 <div class="social-icons">
 
-<a href="https://facebook.com/YOUR_PAGE" target="_blank" class="social-btn facebook">
+<!-- FACEBOOK PAGE -->
+
+<a href="https://facebook.com/YOUR_PAGE"
+target="_blank"
+class="social-btn facebook">
+
 <i class="fab fa-facebook-f"></i>
+
 </a>
 
-<a href="https://whatsapp.com/channel/YOUR_CHANNEL" target="_blank" class="social-btn whatsapp">
+<!-- WHATSAPP CHANNEL -->
+
+<a href="https://whatsapp.com/channel/0029VbAxR1l545un6F9yyJ1d"
+target="_blank"
+class="social-btn whatsapp">
+
 <i class="fab fa-whatsapp"></i>
+
 </a>
 
 </div>
 
 </div>
+
+<!-- ========================================= -->
+<!-- FOOTER -->
+<!-- ========================================= -->
 
 <div class="footer">
 © 2026 Iyal Surveys • Premium Survey Platform
 </div>
 
 </div>
+
+<!-- ========================================= -->
+<!-- FLOATING SUPPORT BUTTON -->
+<!-- ========================================= -->
+
+<a href="support.html" class="floating-support">
+<i class="fas fa-headset"></i>
+</a>
 
 </body>
 </html>
