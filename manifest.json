@@ -2,7 +2,7 @@
   "name": "Iyal Surveys",
   "short_name": "Iyal Surveys",
   "id": "/",
-  "start_url": "/",
+  "start_url": "/dashboard.html",
   "scope": "/",
   "display": "standalone",
   "background_color": "#0f172a",
