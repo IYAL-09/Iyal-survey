@@ -1,258 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta name="6a97888e-site-verification" content="7775750457e86fcbc73fb355580889af">
-   
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Ads Center | Iyal Surveys</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Video.js -->
+<link href="https://vjs.zencdn.net/8.0.4/video-js.css" rel="stylesheet" />
+<script src="https://vjs.zencdn.net/8.0.4/video.min.js"></script>
+
+<!-- VAST plugin (browser-based) -->
+<script src="https://cdn.jsdelivr.net/npm/videojs-vast-vpaid/dist/videojs-vast-vpaid.min.js"></script>
 
 <style>
 
-/* =========================
-   GLOBAL STYLES
-========================= */
-
+/* ===== PAGE DESIGN (your style kept) ===== */
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
+font-family:Segoe UI,sans-serif;
 }
 
 body{
 background:#07140d;
 color:white;
 min-height:100vh;
-overflow-x:hidden;
 }
 
-/* =========================
-   BACKGROUND EFFECTS
-========================= */
-
-.bg{
-position:fixed;
-inset:0;
-z-index:-2;
-overflow:hidden;
-}
-
-.glow{
-position:absolute;
-border-radius:50%;
-filter:blur(100px);
-animation:float 12s ease-in-out infinite alternate;
-}
-
-.glow1{
-width:350px;
-height:350px;
-background:#00ff9950;
-top:-120px;
-left:-100px;
-}
-
-.glow2{
-width:280px;
-height:280px;
-background:#00ff8840;
-bottom:-120px;
-right:-120px;
-}
-
-.glow3{
-width:220px;
-height:220px;
-background:#00ffaa30;
-top:45%;
-left:50%;
-}
-
-@keyframes float{
-from{transform:translateY(0) translateX(0);}
-to{transform:translateY(-30px) translateX(25px);}
-}
-
-/* =========================
-   HEADER NAVIGATION
-========================= */
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 25px;
-position:sticky;
-top:0;
-backdrop-filter:blur(15px);
-background:rgba(0,0,0,.2);
-border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.logo{
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.logo img{
-width:45px;
-height:45px;
-border-radius:50%;
-border:2px solid #00ff99;
-}
-
-.logo h2{
-color:#00ff99;
-font-size:18px;
-}
-
-.nav a{
-margin-left:10px;
-padding:10px 14px;
-border-radius:12px;
-text-decoration:none;
-color:white;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.08);
-transition:.3s;
-font-size:14px;
-}
-
-.nav a:hover{
-background:rgba(0,255,153,.15);
-transform:translateY(-2px);
-}
-
-/* =========================
-   HERO SECTION
-========================= */
-
+/* HERO */
 .hero{
 text-align:center;
-padding:40px 20px 20px;
-}
-
-.hero-card{
-max-width:800px;
-margin:auto;
-padding:30px;
-border-radius:25px;
-background:rgba(255,255,255,.05);
-backdrop-filter:blur(18px);
-border:1px solid rgba(255,255,255,.08);
-box-shadow:0 15px 50px rgba(0,0,0,.4);
+padding:40px 20px;
 }
 
 .hero h1{
-font-size:2.3rem;
-background:linear-gradient(90deg,#00ff99,#7effc6);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+font-size:2rem;
+color:#00ff99;
 }
 
-.hero p{
-margin-top:10px;
-color:#cdeedd;
-line-height:1.6;
-}
-
-/* =========================
-   AD CONTAINER
-========================= */
-
+/* AD BOX */
 .ad-section{
 max-width:900px;
-margin:30px auto;
+margin:20px auto;
 padding:20px;
 }
 
 .ad-card{
-padding:25px;
-border-radius:25px;
 background:rgba(255,255,255,.05);
-backdrop-filter:blur(18px);
-border:1px solid rgba(255,255,255,.08);
-box-shadow:0 15px 50px rgba(0,0,0,.4);
-}
-
-#ad-container{
-margin-top:15px;
-padding:15px;
+padding:20px;
 border-radius:20px;
-background:#0d1b14;
-min-height:280px;
-display:flex;
-align-items:center;
-justify-content:center;
+backdrop-filter:blur(10px);
 }
 
-/* =========================
-   INFO BOXES
-========================= */
-
-.info{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
-margin-top:25px;
-}
-
-.card{
-padding:18px;
+/* VIDEO CONTAINER (Netflix style feel) */
+.video-js{
+width:100%;
+height:300px;
 border-radius:18px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.06);
-text-align:center;
+overflow:hidden;
 }
 
-.card i{
-color:#00ff99;
-font-size:20px;
-margin-bottom:10px;
+/* make controls modern */
+.video-js .vjs-control-bar {
+background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
 }
 
-/* =========================
-   FLOATING SUPPORT BUTTON
-========================= */
-
-.support{
-position:fixed;
-bottom:20px;
-right:20px;
-width:60px;
-height:60px;
+.video-js .vjs-big-play-button {
+background:#00ff99;
+border:none;
 border-radius:50%;
-background:linear-gradient(135deg,#00ff99,#00c26e);
-display:flex;
-align-items:center;
-justify-content:center;
-color:#07140d;
-font-size:24px;
-text-decoration:none;
-box-shadow:0 10px 30px rgba(0,255,153,.4);
-z-index:999;
-transition:.3s;
-}
-
-.support:hover{
-transform:scale(1.1);
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-text-align:center;
-padding:25px;
-color:#9fc7b1;
-font-size:14px;
 }
 
 </style>
@@ -260,88 +77,48 @@ font-size:14px;
 
 <body>
 
-<!-- BACKGROUND -->
-<div class="bg">
-<div class="glow glow1"></div>
-<div class="glow glow2"></div>
-<div class="glow glow3"></div>
-</div>
-
-<!-- HEADER -->
-<header>
-
-<div class="logo">
-<img src="iyallogo.png">
-<h2>Iyal Surveys</h2>
-</div>
-
-<div class="nav">
-<a href="dashboard.html"><i class="fas fa-home"></i> Home</a>
-<a href="offers.html"><i class="fas fa-gift"></i> Offers</a>
-<a href="withdraw.html"><i class="fas fa-wallet"></i> Withdraw</a>
-</div>
-
-</header>
-
 <!-- HERO -->
-<section class="hero">
-
-<div class="hero-card">
-
+<div class="hero">
 <h1>Ads Center</h1>
-
-<p>
-Sponsored content from our advertising partners. Ads help support Iyal Surveys and improve platform services.
-</p>
-
+<p>Sponsored Video Ads</p>
 </div>
 
-</section>
-
-<!-- ADS -->
-<section class="ad-section">
-
+<!-- ADS SECTION -->
+<div class="ad-section">
 <div class="ad-card">
 
-<div id="ad-container">
-<div id="ts_ad_video_qtqke"></div>
-</div>
-
-<div class="info">
-
-<div class="card">
-<i class="fas fa-shield"></i>
-<p>Safe & Filtered Ads</p>
-</div>
-
-<div class="card">
-<i class="fas fa-bolt"></i>
-<p>Fast Loading</p>
-</div>
-
-<div class="card">
-<i class="fas fa-heart"></i>
-<p>Supports Platform</p>
-</div>
+<!-- VIDEO PLAYER -->
+<video
+  id="ad-video"
+  class="video-js vjs-default-skin"
+  controls
+  playsinline
+  muted
+  preload="auto"
+>
+  <source src="https://stream.mux.com/BV3YZtogl89mg9VcNBhhnHm02Y34zI1nlMuMQfAbl3dM/highest.mp4" type="video/mp4" />
+</video>
 
 </div>
-
 </div>
 
-</section>
+<script>
+/* INIT VIDEO.JS */
+var player = videojs('ad-video', {
+  fluid: true,
+  controlBar: {
+    volumePanel: { inline: false }
+  }
+});
 
-<!-- FOOTER -->
-<footer>
-© 2026 Iyal Surveys • Ads Center
-</footer>
+/* VAST ADS */
+player.ready(function () {
+  player.vast({
+    url: "https://s.magsrv.com/v1/vast.php?idz=5938880"
+  });
+});
 
-<!-- SUPPORT BUTTON -->
-<a href="support.html" class="support">
-<i class="fas fa-headset"></i>
-</a>
-
-<!-- ADS SCRIPT -->
-
+</script>
 
 </body>
 </html>
