@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sponsored Ads | Iyal Surveys</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#07140d;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* BACKGROUND */
+
+.bg{
+position:fixed;
+inset:0;
+z-index:-2;
+overflow:hidden;
+}
+
+.glow{
+position:absolute;
+border-radius:50%;
+filter:blur(100px);
+animation:float 12s ease-in-out infinite alternate;
+}
+
+.glow1{
+width:350px;
+height:350px;
+background:#00ff9950;
+top:-120px;
+left:-100px;
+}
+
+.glow2{
+width:280px;
+height:280px;
+background:#00ff8840;
+bottom:-100px;
+right:-100px;
+}
+
+.glow3{
+width:220px;
+height:220px;
+background:#00ffaa35;
+top:40%;
+left:50%;
+}
+
+@keyframes float{
+from{
+transform:translateY(0) translateX(0);
+}
+to{
+transform:translateY(-30px) translateX(25px);
+}
+}
+
+/* HEADER */
+
+.header{
+padding:25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo img{
+width:48px;
+height:48px;
+border-radius:50%;
+border:2px solid #00ff99;
+}
+
+.logo h2{
+color:#00ff99;
+}
+
+/* NAV */
+
+.nav-buttons{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.nav-btn{
+padding:12px 18px;
+border-radius:14px;
+text-decoration:none;
+font-weight:600;
+color:white;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.08);
+transition:.3s;
+}
+
+.nav-btn:hover{
+background:rgba(0,255,153,.12);
+transform:translateY(-2px);
+}
+
+/* HERO */
+
+.hero{
+max-width:1000px;
+margin:auto;
+padding:20px;
+text-align:center;
+}
+
+.hero-card{
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:32px;
+padding:35px;
+box-shadow:0 15px 50px rgba(0,0,0,.35);
+}
+
+.hero h1{
+font-size:2.5rem;
+margin-bottom:15px;
+background:linear-gradient(90deg,#00ff99,#7effc6);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero p{
+color:#d8ffe8;
+line-height:1.8;
+font-size:1rem;
+}
+
+/* AD SECTION */
+
+.ad-section{
+max-width:900px;
+margin:35px auto;
+padding:20px;
+}
+
+.ad-card{
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:30px;
+padding:25px;
+box-shadow:0 15px 50px rgba(0,0,0,.35);
+}
+
+.ad-header{
+display:flex;
+align-items:center;
+gap:12px;
+margin-bottom:20px;
+}
+
+.ad-header i{
+font-size:1.5rem;
+color:#00ff99;
+}
+
+.ad-header h3{
+font-size:1.3rem;
+}
+
+/* VIDEO CONTAINER */
+
+#ad-container{
+border-radius:22px;
+overflow:hidden;
+background:#0d1b14;
+padding:15px;
+min-height:280px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* INFO CARDS */
+
+.info-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-top:25px;
+}
+
+.info-card{
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.06);
+padding:20px;
+border-radius:20px;
+text-align:center;
+}
+
+.info-card i{
+font-size:1.5rem;
+color:#00ff99;
+margin-bottom:10px;
+}
+
+.info-card h4{
+margin-bottom:8px;
+}
+
+/* FOOTER */
+
+.footer{
+text-align:center;
+padding:25px;
+color:#9fc7b1;
+font-size:.9rem;
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:2rem;
+}
+
+.header{
+flex-direction:column;
+gap:20px;
+}
+
+.nav-buttons{
+justify-content:center;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+<div class="glow glow3"></div>
+</div>
+
+<header class="header">
+
+<div class="logo">
+<img src="iyallogo.png">
+<h2>Iyal Surveys</h2>
+</div>
+
+<div class="nav-buttons">
+<a href="dashboard.html" class="nav-btn">
+<i class="fas fa-home"></i> Dashboard
+</a>
+
+<a href="offers.html" class="nav-btn">
+<i class="fas fa-gift"></i> Offers
+</a>
+
+<a href="withdraw.html" class="nav-btn">
+<i class="fas fa-wallet"></i> Withdraw
+</a>
+</div>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-card">
+
+<h1>Sponsored Ads</h1>
+
+<p>
+Advertisements help support the growth of Iyal Surveys and allow us to continue improving the platform for our users.
+</p>
+
+</div>
+
+</section>
+
+<section class="ad-section">
+
+<div class="ad-card">
+
+<div class="ad-header">
+<i class="fas fa-circle-play"></i>
+<h3>Featured Advertisement</h3>
+</div>
+
+<div id="ad-container">
+
+<div id="ts_ad_video_0puj8"></div>
+
+</div>
+
+<div class="info-grid">
+
+<div class="info-card">
+<i class="fas fa-shield-check"></i>
+<h4>Safe Experience</h4>
+<p>Content is filtered to maintain a quality experience.</p>
+</div>
+
+<div class="info-card">
+<i class="fas fa-bolt"></i>
+<h4>Fast Loading</h4>
+<p>Optimized ad delivery for smooth viewing.</p>
+</div>
+
+<div class="info-card">
+<i class="fas fa-heart"></i>
+<h4>Support Platform</h4>
+<p>Advertising helps keep Iyal Surveys growing.</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<footer class="footer">
+© 2026 Iyal Surveys • Sponsored Content
+</footer>
+
+<script src="//cdn.tsyndicate.com/sdk/v1/outstream.video.js"></script>
+
+<script>
+TSOutstreamVideo({
+spot:"16e96f82445343e687bbaaede63e00e6",
+containerId:"ts_ad_video_0puj8",
+cookieExpires:"4"
+});
+</script>
+
+</body>
+  </html>
