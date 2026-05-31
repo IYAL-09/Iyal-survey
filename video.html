@@ -3,66 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ads Player</title>
+<title>Video Ads Player</title>
 
 <!-- Video.js -->
-<link href="https://vjs.zencdn.net/8.0.4/video-js.css" rel="stylesheet" />
+<link href="https://vjs.zencdn.net/8.0.4/video-js.css" rel="stylesheet">
 <script src="https://vjs.zencdn.net/8.0.4/video.min.js"></script>
 
-<!-- Video.js Ads core -->
+<!-- Ads system -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/7.3.2/videojs-contrib-ads.min.js"></script>
 
-<!-- VAST plugin -->
 <script src="https://cdn.jsdelivr.net/npm/videojs-vast-vpaid/dist/videojs-vast-vpaid.min.js"></script>
 
 <style>
 body{
+margin:0;
 background:#07140d;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+font-family:Arial;
 }
 
+/* PLAYER */
 .video-js{
-width:100%;
-max-width:800px;
-height:350px;
-border-radius:18px;
+width:95%;
+max-width:850px;
+height:420px;
+border-radius:20px;
 overflow:hidden;
+box-shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* loading text */
+#status {
+position:absolute;
+top:20px;
+color:#00ff99;
+font-size:14px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- VIDEO PLAYER -->
+<div id="status">Loading player...</div>
+
+<!-- VIDEO -->
 <video
-  id="ad-video"
-  class="video-js vjs-default-skin"
-  controls
-  playsinline
-  muted
-  preload="auto"
+id="my-player"
+class="video-js vjs-default-skin"
+controls
+playsinline
+preload="auto"
+muted
 >
-  <source src="https://stream.mux.com/BV3YZtogl89mg9VcNBhhnHm02Y34zI1nlMuMQfAbl3dM/highest.mp4" type="video/mp4">
+<source src="https://stream.mux.com/BV3YZtogl89mg9VcNBhhnHm02Y34zI1nlMuMQfAbl3dM/highest.mp4" type="video/mp4">
 </video>
 
 <script>
-var player = videojs('ad-video');
+const VAST_URL = "https://s.magsrv.com/v1/vast.php?idz=5938880";
 
-/* IMPORTANT: initialize ads system */
+var player = videojs('my-player');
+
+document.getElementById("status").innerText = "Initializing ads...";
+
+/* Enable ads framework */
 player.ads();
 
-/* WAIT until player is ready */
-player.ready(function () {
+/* Force ad lifecycle */
+player.on('contentupdate', function () {
+  player.trigger('adsready');
+});
 
-  /* LOAD YOUR EXOCLICK VAST */
+/* When ready for ad */
+player.on('readyforpreroll', function () {
+
+  document.getElementById("status").innerText = "Loading ad...";
+
+  player.ads.startLinearAdMode();
+
   player.vast({
-    url: "https://s.magsrv.com/v1/vast.php?idz=5938880"
+    url: VAST_URL
   });
 
 });
+
+/* When ad fails or no ads */
+player.on('adserror', function () {
+  document.getElementById("status").innerText = "No ads available - playing video";
+  player.ads.endLinearAdMode();
+  player.play();
+});
+
+/* When video starts */
+player.on('playing', function () {
+  document.getElementById("status").style.display = "none";
+});
+
 </script>
 
 </body>
