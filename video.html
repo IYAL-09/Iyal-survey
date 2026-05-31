@@ -4,11 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sponsored Ads | Iyal Surveys</title>
+<title>Ads Center | Iyal Surveys</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+
+/* =========================
+   GLOBAL STYLES
+========================= */
 
 *{
 margin:0;
@@ -24,7 +28,9 @@ min-height:100vh;
 overflow-x:hidden;
 }
 
-/* BACKGROUND */
+/* =========================
+   BACKGROUND EFFECTS
+========================= */
 
 .bg{
 position:fixed;
@@ -52,206 +58,198 @@ left:-100px;
 width:280px;
 height:280px;
 background:#00ff8840;
-bottom:-100px;
-right:-100px;
+bottom:-120px;
+right:-120px;
 }
 
 .glow3{
 width:220px;
 height:220px;
-background:#00ffaa35;
-top:40%;
+background:#00ffaa30;
+top:45%;
 left:50%;
 }
 
 @keyframes float{
-from{
-transform:translateY(0) translateX(0);
-}
-to{
-transform:translateY(-30px) translateX(25px);
-}
+from{transform:translateY(0) translateX(0);}
+to{transform:translateY(-30px) translateX(25px);}
 }
 
-/* HEADER */
+/* =========================
+   HEADER NAVIGATION
+========================= */
 
-.header{
-padding:25px;
+header{
 display:flex;
 justify-content:space-between;
 align-items:center;
+padding:20px 25px;
+position:sticky;
+top:0;
+backdrop-filter:blur(15px);
+background:rgba(0,0,0,.2);
+border-bottom:1px solid rgba(255,255,255,.05);
 }
 
 .logo{
 display:flex;
 align-items:center;
-gap:12px;
+gap:10px;
 }
 
 .logo img{
-width:48px;
-height:48px;
+width:45px;
+height:45px;
 border-radius:50%;
 border:2px solid #00ff99;
 }
 
 .logo h2{
 color:#00ff99;
+font-size:18px;
 }
 
-/* NAV */
-
-.nav-buttons{
-display:flex;
-gap:12px;
-flex-wrap:wrap;
-}
-
-.nav-btn{
-padding:12px 18px;
-border-radius:14px;
+.nav a{
+margin-left:10px;
+padding:10px 14px;
+border-radius:12px;
 text-decoration:none;
-font-weight:600;
 color:white;
-background:rgba(255,255,255,.06);
+background:rgba(255,255,255,.05);
 border:1px solid rgba(255,255,255,.08);
 transition:.3s;
+font-size:14px;
 }
 
-.nav-btn:hover{
-background:rgba(0,255,153,.12);
+.nav a:hover{
+background:rgba(0,255,153,.15);
 transform:translateY(-2px);
 }
 
-/* HERO */
+/* =========================
+   HERO SECTION
+========================= */
 
 .hero{
-max-width:1000px;
-margin:auto;
-padding:20px;
 text-align:center;
+padding:40px 20px 20px;
 }
 
 .hero-card{
+max-width:800px;
+margin:auto;
+padding:30px;
+border-radius:25px;
 background:rgba(255,255,255,.05);
 backdrop-filter:blur(18px);
 border:1px solid rgba(255,255,255,.08);
-border-radius:32px;
-padding:35px;
-box-shadow:0 15px 50px rgba(0,0,0,.35);
+box-shadow:0 15px 50px rgba(0,0,0,.4);
 }
 
 .hero h1{
-font-size:2.5rem;
-margin-bottom:15px;
+font-size:2.3rem;
 background:linear-gradient(90deg,#00ff99,#7effc6);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
 .hero p{
-color:#d8ffe8;
-line-height:1.8;
-font-size:1rem;
+margin-top:10px;
+color:#cdeedd;
+line-height:1.6;
 }
 
-/* AD SECTION */
+/* =========================
+   AD CONTAINER
+========================= */
 
 .ad-section{
 max-width:900px;
-margin:35px auto;
+margin:30px auto;
 padding:20px;
 }
 
 .ad-card{
+padding:25px;
+border-radius:25px;
 background:rgba(255,255,255,.05);
 backdrop-filter:blur(18px);
 border:1px solid rgba(255,255,255,.08);
-border-radius:30px;
-padding:25px;
-box-shadow:0 15px 50px rgba(0,0,0,.35);
+box-shadow:0 15px 50px rgba(0,0,0,.4);
 }
-
-.ad-header{
-display:flex;
-align-items:center;
-gap:12px;
-margin-bottom:20px;
-}
-
-.ad-header i{
-font-size:1.5rem;
-color:#00ff99;
-}
-
-.ad-header h3{
-font-size:1.3rem;
-}
-
-/* VIDEO CONTAINER */
 
 #ad-container{
-border-radius:22px;
-overflow:hidden;
-background:#0d1b14;
+margin-top:15px;
 padding:15px;
+border-radius:20px;
+background:#0d1b14;
 min-height:280px;
 display:flex;
 align-items:center;
 justify-content:center;
 }
 
-/* INFO CARDS */
+/* =========================
+   INFO BOXES
+========================= */
 
-.info-grid{
+.info{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
 gap:15px;
 margin-top:25px;
 }
 
-.info-card{
+.card{
+padding:18px;
+border-radius:18px;
 background:rgba(255,255,255,.04);
 border:1px solid rgba(255,255,255,.06);
-padding:20px;
-border-radius:20px;
 text-align:center;
 }
 
-.info-card i{
-font-size:1.5rem;
+.card i{
 color:#00ff99;
+font-size:20px;
 margin-bottom:10px;
 }
 
-.info-card h4{
-margin-bottom:8px;
+/* =========================
+   FLOATING SUPPORT BUTTON
+========================= */
+
+.support{
+position:fixed;
+bottom:20px;
+right:20px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:linear-gradient(135deg,#00ff99,#00c26e);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#07140d;
+font-size:24px;
+text-decoration:none;
+box-shadow:0 10px 30px rgba(0,255,153,.4);
+z-index:999;
+transition:.3s;
 }
 
-/* FOOTER */
+.support:hover{
+transform:scale(1.1);
+}
 
-.footer{
+/* =========================
+   FOOTER
+========================= */
+
+footer{
 text-align:center;
 padding:25px;
 color:#9fc7b1;
-font-size:.9rem;
-}
-
-@media(max-width:768px){
-
-.hero h1{
-font-size:2rem;
-}
-
-.header{
-flex-direction:column;
-gap:20px;
-}
-
-.nav-buttons{
-justify-content:center;
-}
-
+font-size:14px;
 }
 
 </style>
@@ -259,82 +257,68 @@ justify-content:center;
 
 <body>
 
+<!-- BACKGROUND -->
 <div class="bg">
 <div class="glow glow1"></div>
 <div class="glow glow2"></div>
 <div class="glow glow3"></div>
 </div>
 
-<header class="header">
+<!-- HEADER -->
+<header>
 
 <div class="logo">
 <img src="iyallogo.png">
 <h2>Iyal Surveys</h2>
 </div>
 
-<div class="nav-buttons">
-<a href="dashboard.html" class="nav-btn">
-<i class="fas fa-home"></i> Dashboard
-</a>
-
-<a href="offers.html" class="nav-btn">
-<i class="fas fa-gift"></i> Offers
-</a>
-
-<a href="withdraw.html" class="nav-btn">
-<i class="fas fa-wallet"></i> Withdraw
-</a>
+<div class="nav">
+<a href="dashboard.html"><i class="fas fa-home"></i> Home</a>
+<a href="offers.html"><i class="fas fa-gift"></i> Offers</a>
+<a href="withdraw.html"><i class="fas fa-wallet"></i> Withdraw</a>
 </div>
 
 </header>
 
+<!-- HERO -->
 <section class="hero">
 
 <div class="hero-card">
 
-<h1>Sponsored Ads</h1>
+<h1>Ads Center</h1>
 
 <p>
-Advertisements help support the growth of Iyal Surveys and allow us to continue improving the platform for our users.
+Sponsored content from our advertising partners. Ads help support Iyal Surveys and improve platform services.
 </p>
 
 </div>
 
 </section>
 
+<!-- ADS -->
 <section class="ad-section">
 
 <div class="ad-card">
 
-<div class="ad-header">
-<i class="fas fa-circle-play"></i>
-<h3>Featured Advertisement</h3>
-</div>
-
 <div id="ad-container">
-
-<div id="ts_ad_video_0puj8"></div>
-
+<div id="ts_ad_video_qtqke"></div>
 </div>
 
-<div class="info-grid">
+<div class="info">
 
-<div class="info-card">
-<i class="fas fa-shield-check"></i>
-<h4>Safe Experience</h4>
-<p>Content is filtered to maintain a quality experience.</p>
+<div class="card">
+<i class="fas fa-shield"></i>
+<p>Safe & Filtered Ads</p>
 </div>
 
-<div class="info-card">
+<div class="card">
 <i class="fas fa-bolt"></i>
-<h4>Fast Loading</h4>
-<p>Optimized ad delivery for smooth viewing.</p>
+<p>Fast Loading</p>
 </div>
 
-<div class="info-card">
+<div class="card">
 <i class="fas fa-heart"></i>
-<h4>Support Platform</h4>
-<p>Advertising helps keep Iyal Surveys growing.</p>
+<p>Supports Platform</p>
 </div>
 
 </div>
@@ -343,19 +327,26 @@ Advertisements help support the growth of Iyal Surveys and allow us to continue 
 
 </section>
 
-<footer class="footer">
-© 2026 Iyal Surveys • Sponsored Content
+<!-- FOOTER -->
+<footer>
+© 2026 Iyal Surveys • Ads Center
 </footer>
 
+<!-- SUPPORT BUTTON -->
+<a href="support.html" class="support">
+<i class="fas fa-headset"></i>
+</a>
+
+<!-- ADS SCRIPT -->
 <script src="//cdn.tsyndicate.com/sdk/v1/outstream.video.js"></script>
 
 <script>
 TSOutstreamVideo({
-spot:"16e96f82445343e687bbaaede63e00e6",
-containerId:"ts_ad_video_0puj8",
-cookieExpires:"4"
+    spot: "029e35c5222148fcb3710a346e153ad4",
+    containerId: "ts_ad_video_qtqke",
+    cookieExpires: "4"
 });
 </script>
 
 </body>
-  </html>
+</html>
