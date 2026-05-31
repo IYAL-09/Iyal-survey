@@ -1,91 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ads Center | Iyal Surveys</title>
+<title>Ads Player</title>
 
 <!-- Video.js -->
 <link href="https://vjs.zencdn.net/8.0.4/video-js.css" rel="stylesheet" />
 <script src="https://vjs.zencdn.net/8.0.4/video.min.js"></script>
 
-<!-- VAST plugin (browser-based) -->
+<!-- Video.js Ads core -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/7.3.2/videojs-contrib-ads.min.js"></script>
+
+<!-- VAST plugin -->
 <script src="https://cdn.jsdelivr.net/npm/videojs-vast-vpaid/dist/videojs-vast-vpaid.min.js"></script>
 
 <style>
-
-/* ===== PAGE DESIGN (your style kept) ===== */
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
-}
-
 body{
 background:#07140d;
-color:white;
-min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
-/* HERO */
-.hero{
-text-align:center;
-padding:40px 20px;
-}
-
-.hero h1{
-font-size:2rem;
-color:#00ff99;
-}
-
-/* AD BOX */
-.ad-section{
-max-width:900px;
-margin:20px auto;
-padding:20px;
-}
-
-.ad-card{
-background:rgba(255,255,255,.05);
-padding:20px;
-border-radius:20px;
-backdrop-filter:blur(10px);
-}
-
-/* VIDEO CONTAINER (Netflix style feel) */
 .video-js{
 width:100%;
-height:300px;
+max-width:800px;
+height:350px;
 border-radius:18px;
 overflow:hidden;
 }
-
-/* make controls modern */
-.video-js .vjs-control-bar {
-background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-}
-
-.video-js .vjs-big-play-button {
-background:#00ff99;
-border:none;
-border-radius:50%;
-}
-
 </style>
 </head>
 
 <body>
-
-<!-- HERO -->
-<div class="hero">
-<h1>Ads Center</h1>
-<p>Sponsored Video Ads</p>
-</div>
-
-<!-- ADS SECTION -->
-<div class="ad-section">
-<div class="ad-card">
 
 <!-- VIDEO PLAYER -->
 <video
@@ -96,28 +45,24 @@ border-radius:50%;
   muted
   preload="auto"
 >
-  <source src="https://stream.mux.com/BV3YZtogl89mg9VcNBhhnHm02Y34zI1nlMuMQfAbl3dM/highest.mp4" type="video/mp4" />
+  <source src="https://stream.mux.com/BV3YZtogl89mg9VcNBhhnHm02Y34zI1nlMuMQfAbl3dM/highest.mp4" type="video/mp4">
 </video>
 
-</div>
-</div>
-
 <script>
-/* INIT VIDEO.JS */
-var player = videojs('ad-video', {
-  fluid: true,
-  controlBar: {
-    volumePanel: { inline: false }
-  }
-});
+var player = videojs('ad-video');
 
-/* VAST ADS */
+/* IMPORTANT: initialize ads system */
+player.ads();
+
+/* WAIT until player is ready */
 player.ready(function () {
+
+  /* LOAD YOUR EXOCLICK VAST */
   player.vast({
     url: "https://s.magsrv.com/v1/vast.php?idz=5938880"
   });
-});
 
+});
 </script>
 
 </body>
