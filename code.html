@@ -63,10 +63,8 @@ button {
 
 <script>
 const SUPABASE_URL = "https://dmnvkwagsnlfszoywduf.supabase.co";
-const SUPABASE_ANON_KEY = "PASTE_YOUR_ANON_KEY_HERE";
+const SUPABASE_ANON_KEY = " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtbnZrd2Fnc25sZnN6b3l3ZHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MzAxMTYsImV4cCI6MjA5NzMwNjExNn0.3riiDi_1WoGMsQ0lylZO7vwCAmBWDnrZJyybdwI2xDM";
 const PAYSTACK_PUBLIC_KEY = "pk_live_536ee53fe26447d609c6f8cf6b21dbe698c451ea";
-
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function pay() {
     const name = document.getElementById("name").value;
@@ -95,25 +93,36 @@ function pay() {
 }
 
 async function verifyPayment(reference, name, phone, email) {
-    const res = await fetch("https://dmnvkwagsnlfszoywduf.supabase.co/functions/v1/dynamic-service", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            reference,
-            name,
-            phone,
-            email
-        })
-    });
+    try {
+        const res = await fetch(
+            "https://dmnvkwagsnlfszoywduf.supabase.co/functions/v1/dynamic-service",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    reference,
+                    name,
+                    phone,
+                    email
+                })
+            }
+        );
 
-    const data = await res.json();
+        const data = await res.json();
 
-    if (data.success) {
-        document.getElementById("code").innerText = data.code;
-    } else {
-        alert(data.error);
+        console.log("SERVER RESPONSE:", data);
+
+        if (data.success) {
+            document.getElementById("code").innerText = data.code;
+        } else {
+            alert(data.error || "Payment verified but failed to generate code");
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Network error or function not reachable");
     }
 }
 </script>
