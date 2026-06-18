@@ -356,7 +356,7 @@
         actionButton.innerText = "Opening secure link...";
         actionButton.disabled = true;
 
-        const generatedEmail = `${phone.replace(/\s+/g, '')}@accesscodesaas.internal`;
+        const generatedEmail = `${phone.replace(/\s+/g, '')}@accesscodesaas.com`;
 
         let paymentHandler = PaystackPop.setup({
             key: PAYSTACK_PUBLIC_KEY,
