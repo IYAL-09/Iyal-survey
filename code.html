@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessCode SaaS — Secure Code Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        :root {
+            --bg-glow: radial-gradient(circle at 50% 30%, #1c1545 0%, #070510 100%);
+            --glass: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --accent-hover: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --success-glow: rgba(16, 185, 129, 0.15);
+            --error-glow: rgba(239, 68, 68, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-glow);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* Cinematic Background Elements */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: #6366f1;
+            filter: blur(150px);
+            opacity: 0.15;
+            top: 20%;
+            left: 25%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 460px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Glassmorphism Luxury Container Card */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 40px 32px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        /* Modern Agency Navigation Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 35px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(180deg, #ffffff 0%, #b5b5b5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* Form Controls */
+        .input-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            color: #a1a1aa;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Interaction Elements */
+        .btn {
+            width: 100%;
+            background: var(--accent);
+            border: none;
+            border-radius: 14px;
+            padding: 18px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Glassmorphism Code Presentation Block */
+        .code-display-box {
+            display: none;
+            background: rgba(99, 102, 241, 0.06);
+            border: 1px dashed rgba(99, 102, 241, 0.4);
+            border-radius: 18px;
+            padding: 24px;
+            margin-top: 25px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: background 0.2s ease;
+        }
+
+        .code-display-box:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .code-display-box label {
+            text-align: center;
+            color: #a855f7;
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+        }
+
+        .code-output {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            color: #ffffff;
+            margin: 8px 0;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .copy-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Micro-Interaction Status Banners */
+        .status-banner {
+            display: none;
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            line-height: 1.4;
+            animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .status-banner.success {
+            background: var(--success-glow);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .status-banner.error {
+            background: var(--error-glow);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Optimization overrides */
+        @media (max-width: 480px) {
+            .card {
+                padding: 32px 20px;
+                border-radius: 24px;
+            }
+            h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="tabs">
+            <button class="tab-btn active" id="tab-gen" onclick="switchTab('generate')">Generate Code</button>
+            <button class="tab-btn" id="tab-val" onclick="switchTab('verify')">Verify Access</button>
+        </div>
+
+        <div id="generate-section">
+            <h1>Acquire Access Key</h1>
+            <p class="subtitle">Pay ₦100 instantly via our secure processing pipeline to unlock your premium access credentials.</p>
+            
+            <form id="payment-form" onsubmit="initiatePaystackCheckout(event)">
+                <div class="input-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" placeholder="Enter your full name" required>
+                </div>
+                <div class="input-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="e.g. 08031234567" required>
+                </div>
+                <button type="submit" id="pay-btn" class="btn">Pay ₦100 & Get Code</button>
+            </form>
+
+            <div class="code-display-box" id="code-box" onclick="copyCodeToClipboard()">
+                <label>Secure Generated Key</label>
+                <div class="code-output" id="generated-code">--------</div>
+                <p class="copy-hint" id="copy-text">Click anywhere on box to auto-copy</p>
+            </div>
+        </div>
+
+        <div id="verify-section" class="hidden">
+            <h1>System Validator</h1>
+            <p class="subtitle">Query the distributed architecture database directly to ascertain validation markers of your key.</p>
+            
+            <div class="input-group">
+                <label for="verify-code-input">Insert Access Code</label>
+                <input type="text" id="verify-code-input" placeholder="8-Character Alpha-Numeric" maxlength="8" style="text-transform: uppercase; letter-spacing: 2px; text-align: center;">
+            </div>
+            <button class="btn" id="verify-btn" onclick="queryDatabaseCode()">Verify Key Authenticity</button>
+        </div>
+
+        <div id="status-banner" class="status-banner"></div>
+    </div>
+</div>
+
+<script>
+    // CRITICAL PROJECT PARAMETERS CONFIGURATION
+    const SUPABASE_URL = "https://dmnvkwagsnlfszoywduf.supabase.co";
+    const EDGE_FUNCTION_URL = "https://dmnvkwagsnlfszoywduf.supabase.co/functions/v1/dynamic-service";
+    
+    // Paste your exact project keys below for testing execution
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtbnZrd2Fnc25sZnN6b3l3ZHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MzAxMTYsImV4cCI6MjA5NzMwNjExNn0.3riiDi_1WoGMsQ0lylZO7vwCAmBWDnrZJyybdwI2xDM"; 
+    const PAYSTACK_PUBLIC_KEY = "pk_live_536ee53fe26447d609c6f8cf6b21dbe698c451ea";
+
+    // Initialize the Public Sub-client Context
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Interface Navigation Routing Function
+    function switchTab(destination) {
+        document.getElementById('status-banner').style.display = 'none';
+        
+        if (destination === 'generate') {
+            document.getElementById('tab-gen').classList.add('active');
+            document.getElementById('tab-val').classList.remove('active');
+            document.getElementById('generate-section').classList.remove('hidden');
+            document.getElementById('verify-section').classList.add('hidden');
+        } else {
+            document.getElementById('tab-val').classList.add('active');
+            document.getElementById('tab-gen').classList.remove('active');
+            document.getElementById('generate-section').classList.add('hidden');
+            document.getElementById('verify-section').classList.remove('hidden');
+        }
+    }
+
+    // Step 1: Initialize Payment Transaction Frame
+    function initiatePaystackCheckout(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('fullname').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const actionButton = document.getElementById('pay-btn');
+
+        if (!name || !phone) return triggerNotification("Please fill in all identity variables.", "error");
+
+        actionButton.innerText = "Opening secure link...";
+        actionButton.disabled = true;
+
+        const generatedEmail = `${phone.replace(/\s+/g, '')}@accesscodesaas.internal`;
+
+        let paymentHandler = PaystackPop.setup({
+            key: PAYSTACK_PUBLIC_KEY,
+            email: generatedEmail,
+            amount: 10000, // ₦100 scale parameter calculated uniformly in kobo units
+            currency: "NGN",
+            callback: function(paymentResponse) {
+                actionButton.innerText = "Processing server handshake...";
+                transmitVerificationToBackend(paymentResponse.reference, name, phone);
+            },
+            onClose: function() {
+                actionButton.innerText = "Pay ₦100 & Get Code";
+                actionButton.disabled = false;
+                triggerNotification("Transaction context terminated by user authorization cancel.", "error");
+            }
+        });
+        
+        paymentHandler.openIframe();
+    }
+
+    // Step 2: Handoff Verification to Protected Deno Edge Container Runtime
+    async function transmitVerificationToBackend(reference, name, phone) {
+        const actionButton = document.getElementById('pay-btn');
+        try {
+            const response = await fetch(EDGE_FUNCTION_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reference, name, phone })
+            });
+
+            const payloadData = await response.json();
+
+            if (response.ok && payloadData.success) {
+                document.getElementById('code-box').style.display = 'block';
+                document.getElementById('generated-code').innerText = payloadData.code;
+                triggerNotification("Handshake complete! Code deployed securely.", "success");
+                
+                // Native programmatic system device clipboard assignment
+                navigator.clipboard.writeText(payloadData.code);
+            } else {
+                triggerNotification(payloadData.error || "Execution validation rejected at server layer.", "error");
+            }
+        } catch (networkException) {
+            triggerNotification("Pipeline communication breakdown. Check edge settings.", "error");
+        } finally {
+            actionButton.innerText = "Pay ₦100 & Get Code";
+            actionButton.disabled = false;
+        }
+    }
+
+    // Step 3: Direct Client Validation Query (Leveraging Public Read Access Policy)
+    async function queryDatabaseCode() {
+        const structuralInput = document.getElementById('verify-code-input').value.trim().toUpperCase();
+        const verifyButton = document.getElementById('verify-btn');
+
+        if (!structuralInput || structuralInput.length !== 8) {
+            return triggerNotification("Please enter a structured 8-character token value.", "error");
+        }
+
+        verifyButton.innerText = "Scanning network registry...";
+        verifyButton.disabled = true;
+
+        try {
+            const { data, error } = await supabaseClient
+                .from('access_codes')
+                .select('status, name')
+                .eq('code', structuralInput)
+                .maybeSingle();
+
+            if (error) throw error;
+
+            if (data) {
+                if (data.status === 'active') {
+                    triggerNotification(`VALID: Active Token assigned to user metadata "${data.name}"`, "success");
+                } else {
+                    triggerNotification("USED: This token payload has already been processed by the host application.", "error");
+                }
+            } else {
+                triggerNotification("INVALID: Token signature not found in global system database.", "error");
+            }
+        } catch (registryException) {
+            triggerNotification("Authentication sync drop. Confirm credentials config parameters.", "error");
+        } finally {
+            verifyButton.innerText = "Verify Key Authenticity";
+            verifyButton.disabled = false;
+        }
+    }
+
+    // Utility Component Functions
+    function triggerNotification(message, classification) {
+        const targetBanner = document.getElementById('status-banner');
+        targetBanner.className = `status-banner ${classification}`;
+        targetBanner.innerText = message;
+        targetBanner.style.display = 'block';
+    }
+
+    function copyCodeToClipboard() {
+        const textToCapture = document.getElementById('generated-code').innerText;
+        if(textToCapture === '--------') return;
+        
+        navigator.clipboard.writeText(textToCapture);
+        const subtext = document.getElementById('copy-text');
+        subtext.innerText = "Copied to device memory!";
+        subtext.style.color = "#34d399";
+        
+        setTimeout(() => {
+            subtext.innerText = "Click anywhere on box to auto-copy";
+            subtext.style.color = "var(--text-muted)";
+        }, 2200);
+    }
+</script>
+</body>
+</html>
