@@ -4,17 +4,16 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>AdWave | Watch Video Ads & Earn Rewards</title>
+<title>AdWave | Watch Video Ads & Earn</title>
 
 
-<!-- Tailwind CSS -->
+<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
 
 
-<!-- Font Awesome Icons -->
+<!-- Font Awesome -->
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 
@@ -27,21 +26,17 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 
-
 <!-- Video.js -->
 <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet">
 
 <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 
 
-
 <!-- Google IMA SDK -->
 <script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
 
 
-
-<!-- Video.js Ads Plugin -->
-
+<!-- Video.js Ads -->
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/7.5.0/videojs-contrib-ads.css">
 
@@ -49,9 +44,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/7.5.0/videojs-c
 <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/7.5.0/videojs-contrib-ads.min.js"></script>
 
 
-
-<!-- Video.js IMA Plugin -->
-
+<!-- Video.js IMA -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-ima/2.3.1/videojs.ima.min.js"></script>
 
 
@@ -66,21 +59,7 @@ extend: {
 
 fontFamily: {
 
-sans: ["Inter", "sans-serif"]
-
-},
-
-colors: {
-
-brand: {
-
-500:"#22c55e",
-
-600:"#16a34a",
-
-700:"#15803d"
-
-}
+sans:["Inter","sans-serif"]
 
 }
 
@@ -107,7 +86,7 @@ font-family:Inter,sans-serif;
 
 width:100%;
 
-height:auto;
+height:450px;
 
 border-radius:20px;
 
@@ -116,15 +95,34 @@ overflow:hidden;
 }
 
 
-.vjs-big-play-button{
 
-top:50%!important;
+.video-js .vjs-big-play-button{
 
-left:50%!important;
+top:50%;
+
+left:50%;
 
 transform:translate(-50%,-50%);
 
-border-radius:50%!important;
+margin:0;
+
+width:80px;
+
+height:80px;
+
+border-radius:50%;
+
+font-size:35px;
+
+line-height:80px;
+
+}
+
+
+
+.video-js .vjs-control-bar{
+
+border-radius:0 0 20px 20px;
 
 }
 
@@ -139,19 +137,23 @@ border-radius:50%!important;
 <body class="bg-slate-950 text-white min-h-screen">
 
 
-<header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur">
+
+<header class="border-b border-slate-800 bg-slate-950/90">
+
 
 <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+
 
 
 <div class="flex items-center gap-3">
 
 
-<div class="w-12 h-12 rounded-xl bg-green-500 flex items-center justify-center">
+<div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
 
 <i class="fa-solid fa-play text-xl"></i>
 
 </div>
+
 
 
 <div>
@@ -162,7 +164,7 @@ AdWave
 
 
 <p class="text-xs text-slate-400">
-Video Reward Network
+In-stream Video Ads
 </p>
 
 
@@ -173,14 +175,16 @@ Video Reward Network
 
 
 
+
 <div class="bg-slate-900 border border-slate-800 px-5 py-2 rounded-full">
+
 
 <span class="text-slate-400">
 Balance:
 </span>
 
-<span id="balance"
-class="text-green-400 font-bold">
+
+<span class="text-green-400 font-bold">
 
 ₦0.00
 
@@ -193,52 +197,66 @@ class="text-green-400 font-bold">
 
 </div>
 
+
 </header>
+<!-- MAIN CONTENT -->
+
 <main class="max-w-7xl mx-auto px-6 py-12">
+
 
 <div class="grid lg:grid-cols-3 gap-10">
 
 
-<!-- VIDEO SECTION -->
 
-<div class="lg:col-span-2">
+<!-- VIDEO PLAYER CARD -->
+
+<section class="lg:col-span-2">
 
 
 <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl">
 
 
-<div class="flex items-center justify-between mb-6">
+
+<div class="flex justify-between items-center mb-6">
 
 
 <div>
 
 <h2 class="text-2xl font-bold">
-Watch Sponsored Video
+Watch Advertisement
 </h2>
 
-<p class="text-sm text-slate-400 mt-1">
-Powered by Adcash In-stream Video
+
+<p class="text-slate-400 text-sm mt-1">
+
+Complete the in-stream video session
+
 </p>
+
 
 </div>
 
 
 
 <span id="adStatus"
+
 class="px-4 py-2 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-semibold">
 
-Waiting
+Ready
 
 </span>
+
 
 
 </div>
 
 
 
+
 <!-- VIDEO PLAYER -->
 
-<div class="bg-black rounded-2xl overflow-hidden">
+
+<div class="rounded-2xl overflow-hidden bg-black">
 
 
 <video
@@ -262,22 +280,28 @@ crossorigin="anonymous">
 
 
 
+
 <!-- PROGRESS -->
 
 
 <div class="mt-6">
 
 
-<div class="flex justify-between mb-2 text-sm text-slate-400">
+<div class="flex justify-between text-sm mb-2">
 
 
-<span>
-Ad Progress
+<span class="text-slate-400">
+
+Watch Progress
+
 </span>
 
 
+
 <span id="percentage">
+
 0%
+
 </span>
 
 
@@ -304,22 +328,25 @@ style="width:0%">
 
 
 
-</div>
-
 
 </div>
 
 
+</section>
 
 
-<!-- SIDE PANEL -->
 
 
-<div class="space-y-6">
+
+<!-- SIDE INFORMATION -->
+
+<aside class="space-y-6">
 
 
-<!-- SESSION CARD -->
 
+
+
+<!-- SESSION INFO -->
 
 <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6">
 
@@ -335,6 +362,7 @@ Ad Session
 <div class="space-y-4 text-sm">
 
 
+
 <div class="flex justify-between">
 
 <span class="text-slate-400">
@@ -343,14 +371,17 @@ Status
 
 
 <span id="sessionStatus"
+
 class="text-yellow-400">
 
-Not Started
+Ready
 
 </span>
 
 
 </div>
+
+
 
 
 
@@ -368,6 +399,7 @@ In-stream Video
 
 
 </div>
+
 
 
 
@@ -390,6 +422,7 @@ Adcash VAST
 
 
 
+
 <div class="flex justify-between">
 
 <span class="text-slate-400">
@@ -407,16 +440,18 @@ Zone ID
 </div>
 
 
-</div>
-
 
 </div>
 
 
 
+</div>
 
 
-<!-- HOW IT WORKS -->
+
+
+
+<!-- INFORMATION CARD -->
 
 
 <div class="bg-green-500/10 border border-green-500/20 rounded-3xl p-6">
@@ -424,7 +459,7 @@ Zone ID
 
 <h3 class="font-bold text-lg mb-4">
 
-How It Works
+How it works
 
 </h3>
 
@@ -433,13 +468,16 @@ How It Works
 <div class="space-y-4 text-sm text-slate-300">
 
 
+
 <div class="flex gap-3">
 
-<i class="fa-solid fa-play text-green-400 mt-1"></i>
+<i class="fa-solid fa-circle-play text-green-400 mt-1"></i>
+
 
 <p>
-Start the video advertisement session.
+Click play and start the advertisement.
 </p>
+
 
 </div>
 
@@ -450,11 +488,14 @@ Start the video advertisement session.
 
 <i class="fa-solid fa-eye text-green-400 mt-1"></i>
 
+
 <p>
-Watch the advertisement until completion.
+Watch the video until completion.
 </p>
 
+
 </div>
+
 
 
 
@@ -463,11 +504,14 @@ Watch the advertisement until completion.
 
 <i class="fa-solid fa-shield-halved text-green-400 mt-1"></i>
 
+
 <p>
-The backend verifies the completed session.
+The completed session can later be verified by your backend.
 </p>
 
+
 </div>
+
 
 
 
@@ -476,22 +520,26 @@ The backend verifies the completed session.
 
 <i class="fa-solid fa-wallet text-green-400 mt-1"></i>
 
+
 <p>
-Rewards can be credited after verification.
+Rewards are handled after verification.
 </p>
 
-</div>
-
-
-
-</div>
-
 
 </div>
 
 
 
+
 </div>
+
+
+</div>
+
+
+
+
+</aside>
 
 
 
@@ -504,25 +552,21 @@ Rewards can be credited after verification.
 const vastTagUrl = "https://youradexchange.com/video/select.php?r=11849370";
 
 
-// Create Video.js Player
+// Create Video.js player
 
 const player = videojs("my-video", {
 
     controls: true,
-
     autoplay: false,
-
     preload: "auto",
-
-    fluid: true,
-
-    responsive: true
+    fluid: true
 
 });
 
 
 
-// Connect VAST Advertisement
+
+// Initialize Adcash VAST
 
 player.ima({
 
@@ -535,7 +579,7 @@ player.ima({
 
 
 
-// Elements
+// Get elements
 
 const adStatus = document.getElementById("adStatus");
 
@@ -549,21 +593,62 @@ const percentage = document.getElementById("percentage");
 
 
 
-// User starts video
+// Player ready
+
+player.ready(function(){
+
+console.log("Video player ready");
+
+});
+
+
+
+
+
+// When user presses play
 
 player.on("play", function(){
 
 
-    adStatus.innerText = "Playing";
+adStatus.innerText = "Loading";
 
-    adStatus.className =
-    "px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-xs font-semibold";
+adStatus.className =
+"px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-xs font-semibold";
 
 
-    sessionStatus.innerText = "Watching";
+sessionStatus.innerText = "Starting";
 
-    sessionStatus.className =
-    "text-blue-400";
+sessionStatus.className =
+"text-blue-400";
+
+
+});
+
+
+
+
+
+// When advertisement starts
+
+player.on("adstart", function(){
+
+
+console.log("Ad started");
+
+
+adStatus.innerText = "Ad Playing";
+
+
+adStatus.className =
+"px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-xs font-semibold";
+
+
+
+sessionStatus.innerText = "Watching";
+
+
+sessionStatus.className =
+"text-blue-400";
 
 
 });
@@ -577,42 +662,24 @@ player.on("play", function(){
 player.on("timeupdate", function(){
 
 
-    if(player.duration()){
+if(player.duration()){
 
 
-        let progress =
-        (player.currentTime() / player.duration()) * 100;
-
-
-        progressBar.style.width =
-        progress.toFixed(0) + "%";
-
-
-        percentage.innerText =
-        progress.toFixed(0) + "%";
-
-
-    }
-
-
-});
+let percent =
+(player.currentTime() / player.duration()) * 100;
 
 
 
+progressBar.style.width =
+percent.toFixed(0) + "%";
 
 
-// When Ad starts
 
-player.on("adstart", function(){
-
-
-    console.log("VAST Ad Started");
+percentage.innerText =
+percent.toFixed(0) + "%";
 
 
-    adStatus.innerText = "Ad Playing";
-
-
-    sessionStatus.innerText = "Ad Running";
+}
 
 
 });
@@ -621,44 +688,48 @@ player.on("adstart", function(){
 
 
 
-// When Ad finishes
+
+// Advertisement completed
 
 player.on("adend", function(){
 
 
-    console.log("VAST Ad Completed");
-
-
-    adStatus.innerText = "Completed";
-
-
-    adStatus.className =
-    "px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-xs font-semibold";
+console.log("Advertisement completed");
 
 
 
-    sessionStatus.innerText = "Completed";
+adStatus.innerText = "Completed";
 
 
-    sessionStatus.className =
-    "text-green-400";
-
-
-
-    progressBar.style.width = "100%";
-
-    percentage.innerText = "100%";
+adStatus.className =
+"px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-xs font-semibold";
 
 
 
-    /*
-       Later connect Supabase here:
+sessionStatus.innerText = "Completed";
 
-       send completed session
-       verify user
-       update reward balance
 
-    */
+sessionStatus.className =
+"text-green-400";
+
+
+
+progressBar.style.width = "100%";
+
+
+percentage.innerText = "100%";
+
+
+
+/*
+
+Later connect backend here:
+
+1. Send user ID
+2. Verify completed ad session
+3. Credit reward
+
+*/
 
 
 });
@@ -667,12 +738,13 @@ player.on("adend", function(){
 
 
 
-// Ad ready
+
+// VAST loaded successfully
 
 player.on("adsready", function(){
 
 
-    console.log("VAST advertisement ready");
+console.log("VAST ad ready");
 
 
 });
@@ -681,20 +753,21 @@ player.on("adsready", function(){
 
 
 
-// Ad errors
+
+// Error handling
 
 player.on("adserror", function(error){
 
 
-    console.error("VAST Error:", error);
+console.log("VAST error:", error);
 
 
 
-    adStatus.innerText = "Ad Error";
+adStatus.innerText = "Ad Error";
 
 
-    adStatus.className =
-    "px-4 py-2 rounded-full bg-red-500/20 text-red-400 text-xs font-semibold";
+adStatus.className =
+"px-4 py-2 rounded-full bg-red-500/20 text-red-400 text-xs font-semibold";
 
 
 
@@ -706,12 +779,15 @@ player.on("adserror", function(error){
 
 
 
+
+
 <footer class="border-t border-slate-800 py-8 mt-10">
+
 
 <div class="max-w-7xl mx-auto px-6 text-center text-slate-500 text-sm">
 
 
-© 2026 AdWave | Video Reward Network
+© 2026 AdWave • Video Reward Network
 
 
 </div>
