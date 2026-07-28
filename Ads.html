@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AdWave | Watch Ads & Earn</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+<script>
+tailwind.config={
+theme:{
+extend:{
+fontFamily:{
+sans:["Inter","sans-serif"]
+},
+colors:{
+brand:"#22c55e",
+dark:"#020617"
+}
+}
+}
+}
+</script>
+
+<!-- Adcash AutoTag -->
+
+<script src="//acscdn.com/script/aclib.js"></script>
+
+<script>
+
+window.addEventListener("load",()=>{
+
+if(typeof aclib==="undefined"){
+
+console.log("Adcash library not loaded");
+
+return;
+
+}
+
+try{
+
+aclib.runAutoTag({
+
+zoneId:"y9re0ybfvc"
+
+});
+
+console.log("Adcash initialized");
+
+}catch(err){
+
+console.log(err);
+
+}
+
+});
+
+</script>
+
+</head>
+
+<body class="bg-slate-950 text-white font-sans">
+
+<header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur sticky top-0 z-50">
+
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+
+<div class="flex items-center gap-3">
+
+<div class="w-12 h-12 rounded-xl bg-brand flex items-center justify-center">
+
+<i class="fa-solid fa-bolt"></i>
+
+</div>
+
+<div>
+
+<h1 class="text-xl font-bold">
+
+AdWave
+
+</h1>
+
+<p class="text-xs text-slate-400">
+
+Watch Ads • Earn Rewards
+
+</p>
+
+</div>
+
+</div>
+
+<div>
+
+<span id="balance"
+class="bg-slate-900 border border-slate-700 px-5 py-2 rounded-full text-emerald-400 font-bold">
+
+₦0.00
+
+</span>
+
+</div>
+
+</div>
+
+</header>
+
+<section class="max-w-7xl mx-auto px-6 py-20">
+
+<div class="grid lg:grid-cols-2 gap-14 items-center">
+
+<div>
+
+<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 border border-slate-700 mb-8">
+
+<i class="fa-solid fa-circle-check text-brand"></i>
+
+<span class="text-sm">
+
+Verified Adcash AutoTag Integration
+
+</span>
+
+</div>
+
+<h2 class="text-5xl font-extrabold leading-tight">
+
+Watch Ads.
+
+<br>
+
+Earn Rewards.
+
+</h2>
+
+<p class="text-slate-400 mt-8 text-lg leading-8">
+
+Complete sponsored ad sessions through our secure advertising partner.
+
+Rewards will be credited after backend verification once Supabase is connected.
+
+</p>
+
+<div class="grid grid-cols-3 gap-6 mt-12">
+
+<div>
+
+<h3 class="text-3xl font-bold">
+
+24/7
+
+</h3>
+
+<p class="text-slate-500">
+
+Available
+
+</p>
+
+</div>
+
+<div>
+
+<h3 class="text-3xl font-bold">
+
+100%
+
+</h3>
+
+<p class="text-slate-500">
+
+Secure
+
+</p>
+
+</div>
+
+<div>
+
+<h3 class="text-3xl font-bold text-brand">
+
+Fast
+
+</h3>
+
+<p class="text-slate-500">
+
+Experience
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- Right Side -->
+
+<div>
+
+<div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+
+<div class="flex items-center justify-between mb-8">
+
+<div>
+
+<h2 class="text-xl font-bold">
+
+Watch Advertisement
+
+</h2>
+
+<p class="text-slate-400 text-sm">
+
+Powered by Adcash AutoTag
+
+</p>
+
+</div>
+
+<span id="statusBadge"
+class="px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-semibold">
+
+Waiting
+
+</span>
+
+</div>
+
+<div class="bg-slate-950 border border-slate-800 rounded-2xl p-8 text-center">
+
+<div id="icon"
+class="w-20 h-20 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-6">
+
+<i class="fa-solid fa-play text-3xl text-brand"></i>
+
+</div>
+
+<h3 id="title"
+class="text-2xl font-bold">
+
+Ready to Watch
+
+</h3>
+
+<p id="description"
+class="text-slate-400 mt-3">
+
+Click the button below to start your ad session.
+
+If an advertisement is available, Adcash will display it automatically.
+
+</p>
+
+<div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden mt-8">
+
+<div id="progress"
+
+class="h-full bg-green-500"
+
+style="width:0%">
+
+</div>
+
+</div>
+
+<button
+
+id="watchBtn"
+
+class="w-full mt-8 py-4 rounded-xl bg-green-600 hover:bg-green-500 transition font-bold text-lg">
+
+<i class="fa-solid fa-play mr-2"></i>
+
+Watch Advertisement
+
+</button>
+
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-6">
+
+<div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+<p class="text-slate-500 text-sm">
+
+Session
+
+</p>
+
+<p id="session"
+
+class="font-bold text-lg">
+
+Not Started
+
+</p>
+
+</div>
+
+<div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+<p class="text-slate-500 text-sm">
+
+Reward
+
+</p>
+
+<p class="font-bold text-green-400">
+
+Backend Required
+
+</p>
+
+</div>
+
+</div>
+
+<div class="mt-6 bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
+
+<div class="flex gap-3">
+
+<i class="fa-solid fa-circle-info text-blue-400 mt-1"></i>
+
+<p class="text-sm text-slate-300">
+
+This page only starts the Adcash AutoTag.
+
+Reward verification should be performed on your backend after validating the user's session.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<footer class="border-t border-slate-800 py-8">
+
+<div class="max-w-7xl mx-auto px-6 flex justify-between flex-wrap gap-4">
+
+<p class="text-slate-500">
+
+© 2026 AdWave
+
+</p>
+
+<p class="text-slate-500">
+
+Powered by Adcash + Supabase
+
+</p>
+
+</div>
+
+</footer>
+<script>
+
+const watchBtn = document.getElementById("watchBtn");
+const progress = document.getElementById("progress");
+const title = document.getElementById("title");
+const description = document.getElementById("description");
+const session = document.getElementById("session");
+const statusBadge = document.getElementById("statusBadge");
+const icon = document.getElementById("icon");
+
+let running = false;
+
+watchBtn.addEventListener("click", startSession);
+
+function startSession(){
+
+if(running) return;
+
+running = true;
+
+watchBtn.disabled = true;
+
+watchBtn.classList.add("opacity-60","cursor-not-allowed");
+
+statusBadge.innerText="Running";
+statusBadge.className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs font-semibold";
+
+title.innerText="Searching For Advertisement";
+
+description.innerText="Please wait while Adcash checks for an available advertisement.";
+
+session.innerText="Starting";
+
+icon.innerHTML='<i class="fa-solid fa-spinner fa-spin text-3xl text-green-500"></i>';
+
+progress.style.width="0%";
+
+let width=0;
+
+const timer=setInterval(()=>{
+
+width+=2;
+
+progress.style.width=width+"%";
+
+if(width>=100){
+
+clearInterval(timer);
+
+finishSession();
+
+}
+
+},100);
+
+}
+
+function finishSession(){
+
+statusBadge.innerText="Completed";
+
+statusBadge.className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-semibold";
+
+title.innerText="Session Finished";
+
+description.innerText="If Adcash displayed a valid advertisement, your backend can later verify the session before rewarding the user.";
+
+session.innerText="Finished";
+
+icon.innerHTML='<i class="fa-solid fa-circle-check text-4xl text-green-500"></i>';
+
+watchBtn.disabled=false;
+
+watchBtn.classList.remove("opacity-60","cursor-not-allowed");
+
+watchBtn.innerHTML='<i class="fa-solid fa-rotate-right mr-2"></i>Start Another Session';
+
+runnin<script>
+
+const watchBtn = document.getElementById("watchBtn");
+const progress = document.getElementById("progress");
+const title = document.getElementById("title");
+const description = document.getElementById("description");
+const session = document.getElementById("session");
+const statusBadge = document.getElementById("statusBadge");
+const icon = document.getElementById("icon");
+
+let running = false;
+
+watchBtn.addEventListener("click", startSession);
+
+function startSession(){
+
+if(running) return;
+
+running = true;
+
+watchBtn.disabled = true;
+
+watchBtn.classList.add("opacity-60","cursor-not-allowed");
+
+statusBadge.innerText="Running";
+statusBadge.className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs font-semibold";
+
+title.innerText="Searching For Advertisement";
+
+description.innerText="Please wait while Adcash checks for an available advertisement.";
+
+session.innerText="Starting";
+
+icon.innerHTML='<i class="fa-solid fa-spinner fa-spin text-3xl text-green-500"></i>';
+
+progress.style.width="0%";
+
+let width=0;
+
+const timer=setInterval(()=>{
+
+width+=2;
+
+progress.style.width=width+"%";
+
+if(width>=100){
+
+clearInterval(timer);
+
+finishSession();
+
+}
+
+},100);
+
+}
+
+function finishSession(){
+
+statusBadge.innerText="Completed";
+
+statusBadge.className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-semibold";
+
+title.innerText="Session Finished";
+
+description.innerText="If Adcash displayed a valid advertisement, your backend can later verify the session before rewarding the user.";
+
+session.innerText="Finished";
+
+icon.innerHTML='<i class="fa-solid fa-circle-check text-4xl text-green-500"></i>';
+
+watchBtn.disabled=false;
+
+watchBtn.classList.remove("opacity-60","cursor-not-allowed");
+
+watchBtn.innerHTML='<i class="fa-solid fa-rotate-right mr-2"></i>Start Another Session';
+
+running=false;
+
+}
+
+</script>
+
+</body>
+
+</html>g=false;
+
+}
+
+</script>
+
+</body>
+
+</html>
