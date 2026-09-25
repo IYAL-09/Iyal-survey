@@ -1,172 +1,1225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Iyal Surveys – Terms & Conditions</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Tailwind CSS -->
+  <title>Terms & Conditions | Iyal Surveys</title>
+  <meta name="description" content="Read the Terms and Conditions governing the use of Iyal Surveys.">
+
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
 
   <style>
+    * {
+      font-family: "Inter", sans-serif;
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
+      background: #f7f9f8;
+      color: #17201b;
+    }
+
+    .brand-green {
+      color: #16a34a;
+    }
+
+    .brand-bg {
+      background: #16a34a;
+    }
+
+    .brand-border {
+      border-color: #d7eadc;
+    }
+
+    .legal-section {
+      scroll-margin-top: 105px;
+    }
+
+    .toc-link {
+      transition: all .2s ease;
+    }
+
+    .toc-link:hover {
+      color: #16a34a;
+      background: #f0f8f2;
+    }
+
+    .legal-content p {
+      color: #59655e;
+      line-height: 1.85;
+      margin-top: 12px;
+    }
+
+    .legal-content li {
+      color: #59655e;
+      line-height: 1.8;
+      margin-top: 8px;
+    }
+
+    .legal-content strong {
+      color: #253129;
+      font-weight: 600;
+    }
+
+    .legal-content h2 {
+      color: #18231c;
+    }
+
+    .section-card {
+      background: white;
+      border: 1px solid #e5ebe7;
+      box-shadow: 0 4px 18px rgba(20, 40, 28, 0.035);
+    }
+
+    .soft-green {
+      background: #f1f8f3;
+      border-color: #dceee0;
+    }
+
+    .number {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #edf8ef;
+      color: #16a34a;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 767px) {
+      .mobile-toc {
+        display: block;
+      }
     }
   </style>
 </head>
-<body class="bg-green-50 min-h-screen flex flex-col">
+
+<body>
 
   <!-- HEADER -->
-  <header class="bg-green-700 text-white shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="iyallogo.png" alt="Iyal Surveys Logo" class="w-10 h-10 rounded-full">
-        <span class="text-xl font-bold">Iyal Surveys</span>
+  <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+      <div class="h-[72px] flex items-center justify-between">
+
+        <!-- Existing logo treatment -->
+        <a href="index.html" class="flex items-center gap-3">
+
+          <img
+            src="iyallogo.png"
+            alt="Iyal Surveys"
+            class="w-10 h-10 object-contain"
+          >
+
+          <div>
+            <div class="font-bold text-[17px] text-gray-900 leading-tight">
+              Iyal Surveys
+            </div>
+
+            <div class="text-[10px] text-gray-500 mt-0.5">
+              Earn. Complete. Withdraw.
+            </div>
+          </div>
+
+        </a>
+
+
+        <div class="flex items-center gap-3">
+
+          <a
+            href="dashboard.html"
+            class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
+            Dashboard
+          </a>
+
+          <a
+            href="dashboard.html"
+            class="sm:hidden w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600"
+            aria-label="Dashboard"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+
+        </div>
+
       </div>
-      <a href="dashboard.html" class="text-sm hover:underline">
-        <i class="fa fa-home mr-1"></i> Home
-      </a>
+
     </div>
+
   </header>
 
+
+  <!-- PAGE INTRO -->
+  <section class="bg-white border-b border-gray-100">
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+
+      <div class="max-w-3xl">
+
+        <div class="flex items-center gap-2 text-xs font-semibold text-green-700 mb-5">
+          <span class="w-1.5 h-1.5 rounded-full bg-green-600"></span>
+          LEGAL
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
+          Terms & Conditions
+        </h1>
+
+        <p class="mt-5 text-gray-500 text-[15px] sm:text-base leading-7 max-w-2xl">
+          These Terms & Conditions explain the rules and requirements that
+          apply when you create an account, participate in surveys, earn
+          rewards, and use the Iyal Surveys platform.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3 mt-7">
+
+          <div class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-xs text-gray-500">
+            <i class="fa-regular fa-calendar text-green-600"></i>
+            Last updated: September 2026
+          </div>
+
+          <div class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-xs text-gray-500">
+            <i class="fa-solid fa-building text-green-600"></i>
+            Iyal Surveys
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- IMPORTANT NOTICE -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
+
+    <div class="soft-green border rounded-xl p-5 sm:p-6">
+
+      <div class="flex items-start gap-4">
+
+        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-green-600 shrink-0 border border-green-100">
+          <i class="fa-solid fa-circle-info"></i>
+        </div>
+
+        <div>
+
+          <h2 class="font-bold text-gray-900">
+            Please read these terms carefully
+          </h2>
+
+          <p class="text-sm text-gray-600 leading-6 mt-1">
+            By registering for or using Iyal Surveys, you acknowledge that
+            you have read, understood, and agree to these Terms & Conditions.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
   <!-- MAIN CONTENT -->
-  <main class="flex-grow max-w-4xl mx-auto px-4 py-10">
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
 
-    <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+    <div class="grid lg:grid-cols-[230px_minmax(0,1fr)] gap-8">
 
-      <h1 class="text-2xl md:text-3xl font-bold text-green-700 mb-4 flex items-center gap-2">
-        <i class="fa fa-file-contract"></i> Terms & Conditions
-      </h1>
 
-      <p class="text-gray-600 mb-6">
-        Last updated: <strong>December 2025</strong>
-      </p>
+      <!-- DESKTOP NAVIGATION -->
+      <aside class="hidden lg:block">
 
-      <!-- SECTION -->
-      <div class="space-y-6 text-gray-700 leading-relaxed">
+        <div class="sticky top-24">
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            1. Acceptance of Terms
-          </h2>
-          <p>
-            By accessing or using <strong>Iyal Surveys</strong>, you agree to be bound by these
-            Terms & Conditions. If you do not agree, please do not use our platform.
-          </p>
+          <div class="text-[11px] uppercase tracking-wider font-bold text-gray-400 px-3 mb-3">
+            Contents
+          </div>
+
+          <nav class="space-y-1">
+
+            <a href="#acceptance" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              Acceptance
+            </a>
+
+            <a href="#operator" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              About Iyal Surveys
+            </a>
+
+            <a href="#eligibility" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              Eligibility
+            </a>
+
+            <a href="#accounts" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              Accounts
+            </a>
+
+            <a href="#surveys" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              Surveys & Rewards
+            </a>
+
+            <a href="#withdrawals" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              Withdrawals
+            </a>
+
+            <a href="#fraud" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              Fraud & Security
+            </a>
+
+            <a href="#termination" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              Suspension
+            </a>
+
+            <a href="#privacy" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              Privacy
+            </a>
+
+            <a href="#contact" class="toc-link block px-3 py-2.5 rounded-lg text-sm text-gray-500">
+              Contact
+            </a>
+
+          </nav>
+
+        </div>
+
+      </aside>
+
+
+      <!-- LEGAL CONTENT -->
+      <div class="legal-content space-y-5">
+
+
+        <!-- 01 -->
+        <section id="acceptance" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">01</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Acceptance of These Terms
+              </h2>
+
+              <p>
+                By accessing, registering for, or using Iyal Surveys, you agree
+                to be bound by these Terms & Conditions and the policies
+                referenced within them.
+              </p>
+
+              <p>
+                If you do not agree with these Terms, please do not create an
+                account or use the platform.
+              </p>
+
+            </div>
+
+          </div>
+
         </section>
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            2. Eligibility
-          </h2>
-          <p>
-            Users must provide accurate and truthful information at all times.
-          </p>
+
+        <!-- 02 -->
+        <section id="operator" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">02</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                About Iyal Surveys
+              </h2>
+
+              <p>
+                <strong>Iyal Surveys</strong> is a survey-rewards platform
+                operated by
+                <strong>Iyal Couch Global Ventures And Business Solutions</strong>,
+                a business registered in Nigeria.
+              </p>
+
+              <p>
+                The platform provides users with access to survey and reward
+                opportunities made available through Iyal Surveys and
+                participating third-party partners.
+              </p>
+
+            </div>
+
+          </div>
+
         </section>
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            3. User Accounts
-          </h2>
-          <p>
-            Each user is allowed only one account. Creating multiple accounts,
-            using VPNs, bots, emulators, or fraudulent activities will result in
-            immediate account suspension or termination.
-          </p>
+
+        <!-- 03 -->
+        <section id="eligibility" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">03</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Eligibility
+              </h2>
+
+              <p>
+                Users must satisfy the applicable eligibility requirements
+                for Iyal Surveys and for individual survey opportunities.
+              </p>
+
+              <p>
+                You agree to provide accurate, current, and truthful
+                information when registering and when participating in surveys.
+              </p>
+
+              <p>
+                Individual survey providers may impose additional requirements
+                based on location, demographics, survey criteria, or other
+                factors.
+              </p>
+
+            </div>
+
+          </div>
+
         </section>
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            4. Surveys & Rewards
-          </h2>
-          <p>
-            Surveys are provided by third-party partners. Reward amounts,
-            availability, and eligibility are determined by these partners.
-            Completing a survey does not guarantee a reward if the provider
-            rejects the submission.
-          </p>
+
+        <!-- 04 -->
+        <section id="accounts" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">04</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Account Registration & Security
+              </h2>
+
+              <p>
+                You are responsible for keeping your account credentials
+                confidential and for activity carried out through your account.
+              </p>
+
+              <p>
+                Each person may maintain only
+                <strong>one Iyal Surveys account</strong>, unless Iyal Surveys
+                expressly authorizes otherwise.
+              </p>
+
+              <p>
+                You must not register using false information, another
+                person's identity, or information intended to conceal your
+                actual identity or activity.
+              </p>
+
+              <p>
+                If you believe your account has been accessed without your
+                authorization, please contact support promptly.
+              </p>
+
+            </div>
+
+          </div>
+
         </section>
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            5. Withdrawals
-          </h2>
-          <p>
-            Withdrawals are subject to review. We reserve the right to approve,
-            delay, or decline any withdrawal request if suspicious activity
-            is detected or if terms are violated.
-          </p>
+
+        <!-- 05 -->
+        <section id="surveys" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">05</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Surveys, Third-Party Providers & Embedded Content
+              </h2>
+
+              <p>
+                Surveys available through Iyal Surveys may be supplied by
+                independent third-party survey companies, research networks,
+                offerwall providers, or other partners.
+              </p>
+
+              <p>
+                Survey content may be delivered through
+                <strong>iframes, embedded pages, APIs, offerwalls, links, or
+                other integrations</strong>.
+              </p>
+
+              <p>
+                When you interact with third-party survey content, the relevant
+                provider may independently process information through your
+                browser, device, cookies, or other technologies according to
+                its own privacy notice and terms.
+              </p>
+
+              <p>
+                Survey availability, qualification, completion status, and
+                reward amounts may be determined by the relevant provider.
+              </p>
+
+              <p>
+                The appearance of a survey does not guarantee that you will
+                qualify for or receive a reward from it.
+              </p>
+
+            </div>
+
+          </div>
+
         </section>
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            6. Prohibited Activities
-          </h2>
-          <ul class="list-disc list-inside space-y-1">
-            <li>Using automated scripts or bots</li>
-            <li>Manipulating survey systems</li>
-            <li>Providing false information</li>
-            <li>Attempting to exploit or hack the platform</li>
-          </ul>
+
+        <!-- 06 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">06</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Rewards & Reward Reversals
+              </h2>
+
+              <p>
+                Rewards are credited based on information received from our
+                survey and reward partners and may be subject to verification.
+              </p>
+
+              <p>
+                A reward that initially appears in your account may later be
+                <strong>reversed, adjusted, rejected, or removed</strong> if
+                the relevant provider determines that a completion was invalid,
+                incomplete, duplicated, fraudulent, manipulated, or otherwise
+                ineligible.
+              </p>
+
+              <p>
+                Pending, rejected, reversed, fraudulent, or invalid rewards may
+                not be eligible for withdrawal.
+              </p>
+
+            </div>
+
+          </div>
+
         </section>
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            7. Account Suspension
-          </h2>
-          <p>
-            Iyal Surveys reserves the right to suspend or terminate any account
-            that violates these terms, without prior notice.
-          </p>
+
+        <!-- 07 -->
+        <section id="withdrawals" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">07</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Withdrawals & Payouts
+              </h2>
+
+              <p>
+                Users may request a withdrawal once they have reached the
+                applicable minimum withdrawal amount and satisfied the
+                requirements displayed within their account.
+              </p>
+
+              <div class="grid sm:grid-cols-2 gap-3 mt-5">
+
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+
+                  <div class="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                    <i class="fa-solid fa-shield-halved text-green-600"></i>
+                    Verification
+                  </div>
+
+                  <p class="!mt-1 text-xs leading-5">
+                    Withdrawal requests may be reviewed before payment is
+                    released.
+                  </p>
+
+                </div>
+
+
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+
+                  <div class="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                    <i class="fa-regular fa-clock text-green-600"></i>
+                    Processing
+                  </div>
+
+                  <p class="!mt-1 text-xs leading-5">
+                    Normal processing is generally within 1–10 days.
+                  </p>
+
+                </div>
+
+              </div>
+
+              <p>
+                A withdrawal may require additional review where account
+                activity, survey activity, reward history, payment information,
+                or security signals require verification.
+              </p>
+
+              <p>
+                Processing may take longer where additional verification is
+                required, request volume is unusually high, maintenance is
+                taking place, a payment provider experiences delays, or other
+                circumstances outside our reasonable control occur.
+              </p>
+
+              <p>
+                Users are responsible for providing accurate payment
+                information. Iyal Surveys is not responsible for payment
+                failures caused by incorrect information supplied by the user.
+              </p>
+
+            </div>
+
+          </div>
+
         </section>
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            8. Limitation of Liability
-          </h2>
-          <p>
-            Iyal Surveys is not responsible for any losses, delays, or damages
-            arising from the use of third-party survey providers.
-          </p>
+
+        <!-- 08 -->
+        <section id="fraud" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">08</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Fraud, Abuse & Security
+              </h2>
+
+              <p>
+                Iyal Surveys may use reasonable security and fraud-prevention
+                measures to protect users, survey partners, rewards, and the
+                platform.
+              </p>
+
+              <p>
+                These measures may involve reviewing account activity, IP
+                information, device information, survey behavior, reward
+                activity, withdrawal activity, and other relevant security
+                signals.
+              </p>
+
+              <p>
+                Users must not attempt to bypass, manipulate, interfere with,
+                or exploit Iyal Surveys or third-party survey systems.
+              </p>
+
+              <ul class="list-disc pl-5 mt-4">
+
+                <li>Creating or operating multiple accounts.</li>
+                <li>Using bots, scripts, automation, or unauthorized software.</li>
+                <li>Providing false or misleading survey information.</li>
+                <li>Manipulating survey completions or reward tracking.</li>
+                <li>Attempting to exploit technical vulnerabilities.</li>
+                <li>Using another person's account or identity.</li>
+                <li>Attempting to obtain rewards through fraudulent activity.</li>
+
+              </ul>
+
+            </div>
+
+          </div>
+
         </section>
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            9. Changes to Terms
-          </h2>
-          <p>
-            We may update these Terms & Conditions at any time. Continued use
-            of the platform indicates acceptance of the updated terms.
-          </p>
+
+        <!-- 09 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">09</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Prohibited Activities
+              </h2>
+
+              <p>
+                You must not use Iyal Surveys for unlawful, deceptive,
+                fraudulent, abusive, or unauthorized purposes.
+              </p>
+
+              <p>
+                This includes attempting to obtain rewards through manipulation
+                of survey systems, technical exploits, false information,
+                unauthorized automation, or other prohibited methods.
+              </p>
+
+              <p>
+                You must also comply with the rules and requirements applicable
+                to the third-party survey services you use.
+              </p>
+
+            </div>
+
+          </div>
+
         </section>
 
-        <section>
-          <h2 class="text-lg font-semibold text-green-700 mb-2">
-            10. Contact
-          </h2>
-          <p>
-            If you have questions regarding these terms, please contact us via
-            our official support email which is available in support page
-          </p>
+
+        <!-- 10 -->
+        <section id="termination" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">10</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Account Suspension & Termination
+              </h2>
+
+              <p>
+                We may restrict, suspend, or terminate an account where we
+                reasonably identify activity that violates these Terms,
+                applicable partner requirements, or applicable law.
+              </p>
+
+              <p>
+                An account may also be temporarily restricted while suspected
+                fraud, abuse, security issues, or disputed reward activity is
+                reviewed.
+              </p>
+
+              <p>
+                Where an account is terminated because of prohibited activity,
+                rewards reasonably determined to be fraudulent, manipulated,
+                invalid, or improperly obtained may be withheld or removed,
+                subject to applicable law.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 11 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">11</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Account Balances
+              </h2>
+
+              <p>
+                Your displayed balance may include rewards that remain subject
+                to verification or later adjustment by a survey provider.
+              </p>
+
+              <p>
+                Only valid and confirmed rewards are eligible for withdrawal.
+              </p>
+
+              <p>
+                If an account is restricted or terminated, the balance and
+                related activity may be reviewed before determining what amount,
+                if any, remains payable.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 12 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">12</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Third-Party Services
+              </h2>
+
+              <p>
+                Iyal Surveys may use third-party services for surveys, payment
+                processing, hosting, analytics, authentication, security, and
+                other platform functions.
+              </p>
+
+              <p>
+                These providers may operate under their own terms, privacy
+                notices, eligibility requirements, and service limitations.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 13 -->
+        <section id="privacy" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">13</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Privacy & Personal Data
+              </h2>
+
+              <p>
+                Our collection and use of personal information is explained in
+                our
+                <a
+                  href="privacy.html"
+                  class="text-green-700 hover:text-green-800 font-semibold"
+                >
+                  Privacy Policy
+                </a>.
+              </p>
+
+              <p>
+                Information may be processed for purposes including account
+                management, surveys, rewards, withdrawals, security,
+                fraud-prevention, dispute handling, and applicable legal
+                obligations.
+              </p>
+
+              <p>
+                Third-party survey providers may independently process
+                information when you interact with their survey content.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 14 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">14</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Intellectual Property
+              </h2>
+
+              <p>
+                Unless otherwise stated, the Iyal Surveys name, branding,
+                website design, logos, text, graphics, software, and other
+                platform materials are owned by or used by Iyal Surveys under
+                applicable rights.
+              </p>
+
+              <p>
+                You may not copy, reproduce, modify, distribute, sell, or
+                commercially exploit platform materials without appropriate
+                authorization.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 15 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">15</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Platform Availability
+              </h2>
+
+              <p>
+                We aim to keep Iyal Surveys available and functioning reliably,
+                but we do not guarantee uninterrupted or error-free operation.
+              </p>
+
+              <p>
+                The platform may occasionally be unavailable because of
+                maintenance, technical problems, security measures,
+                third-party service issues, or circumstances outside our
+                reasonable control.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 16 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">16</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Limitation of Liability
+              </h2>
+
+              <p>
+                To the extent permitted by applicable law, Iyal Surveys will
+                not be responsible for losses arising solely from circumstances
+                outside our reasonable control, including interruptions or
+                failures caused by third-party services, payment providers,
+                internet connectivity, or survey providers.
+              </p>
+
+              <p>
+                Nothing in these Terms is intended to exclude or limit any
+                liability or legal right that cannot lawfully be excluded or
+                limited under applicable law.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 17 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">17</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Changes to These Terms
+              </h2>
+
+              <p>
+                We may update these Terms when necessary to reflect changes to
+                the platform, reward system, third-party services, legal
+                requirements, or business operations.
+              </p>
+
+              <p>
+                The updated version will be published on this page with a
+                revised "Last updated" date.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 18 -->
+        <section id="contact" class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">18</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Complaints & Contact
+              </h2>
+
+              <p>
+                If you have a question, complaint, withdrawal issue, account
+                concern, or dispute relating to Iyal Surveys, please contact
+                our support team.
+              </p>
+
+              <div class="mt-5 p-4 rounded-lg bg-gray-50 border border-gray-200">
+
+                <div class="text-xs uppercase tracking-wider font-bold text-gray-400">
+                  Support email
+                </div>
+
+                <a
+                  href="mailto:iyaldevelopers@gmail.com"
+                  class="inline-block mt-1 text-green-700 font-semibold hover:text-green-800"
+                >
+                  iyaldevelopers@gmail.com
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 19 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">19</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Governing Law
+              </h2>
+
+              <p>
+                These Terms are intended to be interpreted in accordance with
+                the applicable laws of Nigeria, subject to mandatory legal
+                rights and requirements that apply.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 20 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">20</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Severability
+              </h2>
+
+              <p>
+                If any provision of these Terms is found to be invalid or
+                unenforceable, the remaining provisions will continue to apply
+                to the extent permitted by law.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- 21 -->
+        <section class="legal-section section-card rounded-xl p-5 sm:p-8">
+
+          <div class="flex items-start gap-4">
+
+            <div class="number">21</div>
+
+            <div class="flex-1">
+
+              <h2 class="text-xl font-bold">
+                Entire Agreement
+              </h2>
+
+              <p>
+                These Terms, together with the Privacy Policy and other policies
+                expressly referenced by Iyal Surveys, describe the principal
+                terms governing your use of the platform.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- FINAL CONTACT CARD -->
+        <section class="soft-green border rounded-xl p-5 sm:p-7">
+
+          <div class="flex items-start gap-4">
+
+            <div class="w-10 h-10 rounded-lg bg-white border border-green-100 flex items-center justify-center text-green-600 shrink-0">
+              <i class="fa-regular fa-envelope"></i>
+            </div>
+
+            <div>
+
+              <h3 class="font-bold text-gray-900">
+                Need clarification?
+              </h3>
+
+              <p class="text-sm text-gray-600 leading-6 mt-1">
+                If you have questions about these Terms or your account,
+                our support team can assist you.
+              </p>
+
+              <a
+                href="mailto:iyaldevelopers@gmail.com"
+                class="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-green-700 hover:text-green-800"
+              >
+                Contact support
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </a>
+
+            </div>
+
+          </div>
+
         </section>
 
       </div>
+
     </div>
+
   </main>
 
+
   <!-- FOOTER -->
-  <footer class="bg-green-700 text-white text-sm">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-2">
-      <p>© 2025 Iyal Surveys. All rights reserved.</p>
-      <div class="flex gap-4">
-        <a href="terms.html" class="hover:underline">Terms</a>
-        <a href="privacy.html" class="hover:underline">Privacy</a>
-        <a href="disclaimer.html" class="hover:underline">Disclaimer</a>
+  <footer class="bg-white border-t border-gray-100">
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-7">
+
+        <div class="flex items-center gap-3">
+
+          <img
+            src="iyallogo.png"
+            alt="Iyal Surveys"
+            class="w-10 h-10 object-contain"
+          >
+
+          <div>
+
+            <div class="font-bold text-gray-900">
+              Iyal Surveys
+            </div>
+
+            <div class="text-xs text-gray-500 mt-1">
+              Operated by Iyal Couch Global Ventures And Business Solutions
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <nav class="flex flex-wrap gap-x-5 gap-y-3 text-sm">
+
+          <a
+            href="terms.html"
+            class="font-semibold text-green-700"
+          >
+            Terms
+          </a>
+
+          <a
+            href="privacy.html"
+            class="text-gray-500 hover:text-gray-900 transition"
+          >
+            Privacy
+          </a>
+
+          <a
+            href="disclaimer.html"
+            class="text-gray-500 hover:text-gray-900 transition"
+          >
+            Disclaimer
+          </a>
+
+          <a
+            href="dashboard.html"
+            class="text-gray-500 hover:text-gray-900 transition"
+          >
+            Dashboard
+          </a>
+
+        </nav>
+
       </div>
+
+
+      <div class="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+
+        <p class="text-xs text-gray-400">
+          © 2026 Iyal Surveys. All rights reserved.
+        </p>
+
+        <p class="text-xs text-gray-400">
+          Operated by Iyal Couch Global Ventures And Business Solutions.
+        </p>
+
+      </div>
+
     </div>
+
   </footer>
 
 </body>
