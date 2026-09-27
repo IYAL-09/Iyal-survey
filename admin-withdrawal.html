@@ -3,130 +3,1593 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Withdrawal Requests | Iyal Surveys Admin</title>
+  <title>Withdrawals | Iyal Surveys Admin</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .copy-btn:active {
+      transform: scale(0.96);
+    }
+
+    @media (min-width: 768px) {
+      .mobile-card {
+        display: none;
+      }
+
+      .desktop-table {
+        display: block;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .desktop-table {
+        display: none;
+      }
+
+      .mobile-card {
+        display: block;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-blue-700 to-red-700 min-h-screen text-white font-sans">
+
+<body class="min-h-screen bg-slate-950 text-white">
 
   <!-- Header -->
-  <header class="bg-white/15 backdrop-blur-md shadow-md py-4 text-center font-bold text-xl">
-    💵 Withdrawal Requests
-  </header>
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
 
-  <!-- Container -->
-  <div class="container mx-auto p-4">
+    <div class="max-w-6xl mx-auto px-4 py-4">
 
-    <!-- Table -->
-    <div class="overflow-x-auto">
-      <table class="min-w-full border-collapse">
-        <thead class="bg-white/20">
-          <tr>
-            <th class="px-4 py-2 text-left">User</th>
-            <th class="px-4 py-2 text-left">Type</th>
-            <th class="px-4 py-2 text-left">Details</th>
-            <th class="px-4 py-2 text-left">Amount</th>
-            <th class="px-4 py-2 text-left">Requested At</th>
-            <th class="px-4 py-2 text-left">Action</th>
-          </tr>
-        </thead>
-        <tbody id="withdrawalsTable" class="divide-y divide-white/20">
-          <tr><td colspan="6" class="text-center py-4">Loading...</td></tr>
-        </tbody>
-      </table>
+      <div class="flex items-center justify-between gap-4">
+
+        <div>
+          <div class="flex items-center gap-2">
+            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg">
+              <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <div>
+              <h1 class="font-bold text-lg leading-tight">
+                Withdrawals
+              </h1>
+
+              <p class="text-xs text-slate-400">
+                Iyal Surveys Admin
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <button
+          id="logoutBtn"
+          class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition flex items-center justify-center"
+          title="Logout"
+        >
+          <i class="fa-solid fa-right-from-bracket text-slate-300"></i>
+        </button>
+
+      </div>
+
     </div>
 
-    <!-- Logout Button -->
-    <div class="mt-6 text-center">
-      <button id="logoutBtn" class="bg-red-700 hover:bg-red-800 px-6 py-2 rounded font-bold text-white">
-        <i class="fa fa-sign-out"></i> Logout
-      </button>
+  </header>
+
+
+  <!-- Main -->
+  <main class="max-w-6xl mx-auto px-4 py-5 pb-16">
+
+    <!-- Page intro -->
+    <div class="mb-5">
+
+      <h2 class="text-2xl font-bold">
+        Withdrawal Requests
+      </h2>
+
+      <p class="text-sm text-slate-400 mt-1">
+        Review and process user withdrawal requests.
+      </p>
+
+    </div>
+
+
+    <!-- Statistics -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+
+      <!-- Total -->
+      <div class="glass rounded-2xl p-4">
+
+        <div class="flex items-center justify-between mb-3">
+
+          <div class="w-9 h-9 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center">
+            <i class="fa-solid fa-list"></i>
+          </div>
+
+        </div>
+
+        <p class="text-2xl font-bold" id="totalCount">
+          0
+        </p>
+
+        <p class="text-xs text-slate-400 mt-1">
+          Total requests
+        </p>
+
+      </div>
+
+
+      <!-- Pending -->
+      <div class="glass rounded-2xl p-4">
+
+        <div class="flex items-center justify-between mb-3">
+
+          <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+
+        </div>
+
+        <p class="text-2xl font-bold" id="pendingCount">
+          0
+        </p>
+
+        <p class="text-xs text-slate-400 mt-1">
+          Pending
+        </p>
+
+      </div>
+
+
+      <!-- Approved -->
+      <div class="glass rounded-2xl p-4">
+
+        <div class="flex items-center justify-between mb-3">
+
+          <div class="w-9 h-9 rounded-xl bg-green-500/15 text-green-400 flex items-center justify-center">
+            <i class="fa-solid fa-check"></i>
+          </div>
+
+        </div>
+
+        <p class="text-2xl font-bold" id="approvedCount">
+          0
+        </p>
+
+        <p class="text-xs text-slate-400 mt-1">
+          Approved
+        </p>
+
+      </div>
+
+
+      <!-- Amount -->
+      <div class="glass rounded-2xl p-4">
+
+        <div class="flex items-center justify-between mb-3">
+
+          <div class="w-9 h-9 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
+            <i class="fa-solid fa-naira-sign"></i>
+          </div>
+
+        </div>
+
+        <p class="text-xl font-bold" id="totalAmount">
+          ₦0
+        </p>
+
+        <p class="text-xs text-slate-400 mt-1">
+          Total requested
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- Filters -->
+    <section class="mb-5">
+
+      <div class="glass rounded-2xl p-2 flex gap-2 overflow-x-auto">
+
+        <button
+          class="filter-btn active px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-blue-600"
+          data-filter="all"
+        >
+          All
+        </button>
+
+        <button
+          class="filter-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap text-slate-400 hover:bg-white/5"
+          data-filter="pending"
+        >
+          Pending
+        </button>
+
+        <button
+          class="filter-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap text-slate-400 hover:bg-white/5"
+          data-filter="approved"
+        >
+          Approved
+        </button>
+
+        <button
+          class="filter-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap text-slate-400 hover:bg-white/5"
+          data-filter="declined"
+        >
+          Declined
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- Loading -->
+    <div
+      id="loadingState"
+      class="glass rounded-2xl p-10 text-center"
+    >
+
+      <div class="w-10 h-10 border-4 border-white/10 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+
+      <p class="text-slate-400 text-sm">
+        Loading withdrawals...
+      </p>
+
+    </div>
+
+
+    <!-- Empty -->
+    <div
+      id="emptyState"
+      class="hidden glass rounded-2xl p-10 text-center"
+    >
+
+      <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
+        <i class="fa-solid fa-inbox text-2xl text-slate-500"></i>
+      </div>
+
+      <h3 class="font-semibold text-lg">
+        No withdrawals found
+      </h3>
+
+      <p class="text-sm text-slate-500 mt-1">
+        There are no requests in this category.
+      </p>
+
+    </div>
+
+
+    <!-- Mobile Cards -->
+    <div id="mobileWithdrawals" class="mobile-card space-y-3"></div>
+
+
+    <!-- Desktop Table -->
+    <div class="desktop-table">
+
+      <div class="glass rounded-2xl overflow-hidden">
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full text-sm">
+
+            <thead class="bg-white/5 border-b border-white/10">
+
+              <tr>
+
+                <th class="px-5 py-4 text-left font-semibold text-slate-300">
+                  User
+                </th>
+
+                <th class="px-5 py-4 text-left font-semibold text-slate-300">
+                  Type
+                </th>
+
+                <th class="px-5 py-4 text-left font-semibold text-slate-300">
+                  Details
+                </th>
+
+                <th class="px-5 py-4 text-left font-semibold text-slate-300">
+                  Amount
+                </th>
+
+                <th class="px-5 py-4 text-left font-semibold text-slate-300">
+                  Date
+                </th>
+
+                <th class="px-5 py-4 text-left font-semibold text-slate-300">
+                  Status
+                </th>
+
+                <th class="px-5 py-4 text-right font-semibold text-slate-300">
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="desktopWithdrawals"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- Confirmation Modal -->
+  <div
+    id="confirmModal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+  >
+
+    <div class="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl p-6">
+
+      <div class="flex items-start gap-4">
+
+        <div
+          id="modalIcon"
+          class="w-12 h-12 rounded-2xl flex items-center justify-center bg-blue-500/15 text-blue-400 shrink-0"
+        >
+          <i class="fa-solid fa-circle-question text-xl"></i>
+        </div>
+
+        <div class="flex-1">
+
+          <h3 id="modalTitle" class="text-lg font-bold">
+            Confirm action
+          </h3>
+
+          <p id="modalMessage" class="text-sm text-slate-400 mt-1">
+            Are you sure?
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="modalDetails"
+        class="mt-5 rounded-2xl bg-white/5 border border-white/10 p-4"
+      ></div>
+
+
+      <div class="grid grid-cols-2 gap-3 mt-5">
+
+        <button
+          id="cancelModal"
+          class="py-3 rounded-xl bg-white/5 hover:bg-white/10 font-semibold transition"
+        >
+          Cancel
+        </button>
+
+        <button
+          id="confirmAction"
+          class="py-3 rounded-xl bg-blue-600 hover:bg-blue-700 font-semibold transition"
+        >
+          Confirm
+        </button>
+
+      </div>
+
     </div>
 
   </div>
 
+
+  <!-- Toast -->
+  <div
+    id="toast"
+    class="fixed z-[60] bottom-5 left-1/2 -translate-x-1/2 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none"
+  >
+
+    <div
+      id="toastInner"
+      class="bg-slate-900 border border-white/10 shadow-2xl rounded-2xl px-5 py-3 flex items-center gap-3"
+    >
+
+      <i id="toastIcon" class="fa-solid fa-check text-green-400"></i>
+
+      <span id="toastMessage" class="text-sm font-medium">
+        Copied
+      </span>
+
+    </div>
+
+  </div>
+
+
   <script>
-    const FUNCTION_URL = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smart-action";
 
-    // Security: redirect if not logged in
+    const FUNCTION_URL =
+      "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/smart-action";
+
+
+    // ------------------------------
+    // SECURITY CHECK
+    // ------------------------------
+
     const adminSession = localStorage.getItem("adminSession");
-    if(!adminSession) window.location.href = "admin-login.html";
 
-    document.getElementById("logoutBtn").addEventListener("click", ()=>{
-      localStorage.removeItem("adminSession");
+    if (!adminSession) {
       window.location.href = "admin-login.html";
-    });
+    }
 
-    // Load withdrawals
-    async function loadWithdrawals() {
+
+    // ------------------------------
+    // GLOBAL STATE
+    // ------------------------------
+
+    let withdrawals = [];
+
+    let currentFilter = "all";
+
+    let pendingAction = null;
+
+
+    // ------------------------------
+    // LOGOUT
+    // ------------------------------
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener("click", () => {
+
+        localStorage.removeItem("adminSession");
+
+        window.location.href = "admin-login.html";
+
+      });
+
+
+    // ------------------------------
+    // FORMAT MONEY
+    // ------------------------------
+
+    function formatMoney(amount) {
+
+      return "₦" + Number(amount || 0).toLocaleString("en-NG");
+
+    }
+
+
+    // ------------------------------
+    // FORMAT DATE
+    // ------------------------------
+
+    function formatDate(date) {
+
+      return new Date(date).toLocaleString("en-NG", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+    }
+
+
+    // ------------------------------
+    // STATUS UI
+    // ------------------------------
+
+    function statusBadge(status) {
+
+      if (status === "pending") {
+
+        return `
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            Pending
+          </span>
+        `;
+
+      }
+
+
+      if (status === "approved") {
+
+        return `
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+            Approved
+          </span>
+        `;
+
+      }
+
+
+      return `
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+          Declined
+        </span>
+      `;
+
+    }
+
+
+    // ------------------------------
+    // GET DETAILS
+    // ------------------------------
+
+    function getDetails(w) {
+
+      if (w.type === "bank") {
+
+        return {
+          title: w.details?.bank || "Bank transfer",
+          primary: w.details?.number || "—",
+          secondary: w.details?.name || "—",
+          label: "Account number"
+        };
+
+      }
+
+
+      return {
+        title: w.details?.network || "Airtime",
+        primary: w.details?.number || "—",
+        secondary: "Airtime",
+        label: "Phone number"
+      };
+
+    }
+
+
+    // ------------------------------
+    // COPY
+    // ------------------------------
+
+    async function copyText(text) {
+
       try {
-        const res = await fetch(FUNCTION_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "fetch" })
-        });
-        const data = await res.json();
-        const tbody = document.getElementById("withdrawalsTable");
 
-        if(!data.success || !data.withdrawals.length){
-          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4">No pending withdrawals</td></tr>`;
-          return;
+        await navigator.clipboard.writeText(text);
+
+        showToast("Copied to clipboard", "success");
+
+      } catch (error) {
+
+        // Fallback for some mobile browsers
+
+        const input = document.createElement("input");
+
+        input.value = text;
+
+        document.body.appendChild(input);
+
+        input.select();
+
+        document.execCommand("copy");
+
+        input.remove();
+
+        showToast("Copied to clipboard", "success");
+
+      }
+
+    }
+
+
+    // ------------------------------
+    // TOAST
+    // ------------------------------
+
+    function showToast(message, type = "success") {
+
+      const toast = document.getElementById("toast");
+
+      const icon = document.getElementById("toastIcon");
+
+      document.getElementById("toastMessage").textContent = message;
+
+
+      if (type === "success") {
+
+        icon.className =
+          "fa-solid fa-check text-green-400";
+
+      } else {
+
+        icon.className =
+          "fa-solid fa-circle-exclamation text-red-400";
+
+      }
+
+
+      toast.classList.remove(
+        "translate-y-20",
+        "opacity-0"
+      );
+
+      setTimeout(() => {
+
+        toast.classList.add(
+          "translate-y-20",
+          "opacity-0"
+        );
+
+      }, 2000);
+
+    }
+
+
+    // ------------------------------
+    // UPDATE STATISTICS
+    // ------------------------------
+
+    function updateStats() {
+
+      const total = withdrawals.length;
+
+      const pending =
+        withdrawals.filter(w => w.status === "pending").length;
+
+      const approved =
+        withdrawals.filter(w => w.status === "approved").length;
+
+      const totalAmount =
+        withdrawals.reduce(
+          (sum, w) => sum + Number(w.amount || 0),
+          0
+        );
+
+
+      document.getElementById("totalCount").textContent = total;
+
+      document.getElementById("pendingCount").textContent = pending;
+
+      document.getElementById("approvedCount").textContent = approved;
+
+      document.getElementById("totalAmount").textContent =
+        formatMoney(totalAmount);
+
+    }
+
+
+    // ------------------------------
+    // FILTER
+    // ------------------------------
+
+    function getFilteredWithdrawals() {
+
+      if (currentFilter === "all") {
+
+        return withdrawals;
+
+      }
+
+      return withdrawals.filter(
+        w => w.status === currentFilter
+      );
+
+    }
+
+
+    // ------------------------------
+    // MOBILE CARD
+    // ------------------------------
+
+    function createMobileCard(w) {
+
+      const details = getDetails(w);
+
+      const email =
+        w.users?.email || w.user_id || "Unknown user";
+
+
+      const isPending =
+        w.status === "pending";
+
+
+      return `
+
+        <article
+          class="glass rounded-2xl p-4"
+        >
+
+          <!-- Top -->
+
+          <div class="flex items-start justify-between gap-3">
+
+            <div class="min-w-0">
+
+              <div class="flex items-center gap-2">
+
+                <div class="w-9 h-9 rounded-xl
+                  ${w.type === "bank"
+                    ? "bg-blue-500/15 text-blue-400"
+                    : "bg-purple-500/15 text-purple-400"}
+                  flex items-center justify-center shrink-0"
+                >
+
+                  <i class="fa-solid ${
+                    w.type === "bank"
+                      ? "fa-building-columns"
+                      : "fa-mobile-screen-button"
+                  }"></i>
+
+                </div>
+
+
+                <div class="min-w-0">
+
+                  <p class="font-semibold truncate">
+                    ${details.title}
+                  </p>
+
+                  <p class="text-xs text-slate-500">
+                    ${w.type === "bank" ? "Bank transfer" : "Airtime"}
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="text-right shrink-0">
+
+              <p class="font-bold text-lg">
+                ${formatMoney(w.amount)}
+              </p>
+
+              ${statusBadge(w.status)}
+
+            </div>
+
+          </div>
+
+
+          <!-- User -->
+
+          <div class="mt-4 pt-4 border-t border-white/10">
+
+            <p class="text-xs text-slate-500 mb-1">
+              User
+            </p>
+
+            <p class="text-sm font-medium break-all">
+              ${email}
+            </p>
+
+          </div>
+
+
+          <!-- Details -->
+
+          <div class="mt-4">
+
+            ${
+              w.type === "bank"
+
+              ? `
+
+                <div class="mb-3">
+
+                  <p class="text-xs text-slate-500 mb-1">
+                    Account name
+                  </p>
+
+                  <p class="text-sm font-medium">
+                    ${w.details?.name || "—"}
+                  </p>
+
+                </div>
+
+              `
+
+              : ""
+
+            }
+
+
+            <div class="flex items-center justify-between gap-3 rounded-xl bg-white/5 border border-white/10 p-3">
+
+              <div class="min-w-0">
+
+                <p class="text-xs text-slate-500">
+                  ${details.label}
+                </p>
+
+                <p class="font-mono text-sm font-semibold mt-1">
+                  ${details.primary}
+                </p>
+
+              </div>
+
+
+              <button
+                onclick="copyText('${String(details.primary).replace(/'/g, "\\'")}')"
+                class="copy-btn shrink-0 px-3 py-2 rounded-lg bg-blue-600/15 text-blue-400 hover:bg-blue-600/25 transition text-xs font-semibold"
+              >
+
+                <i class="fa-regular fa-copy mr-1"></i>
+                Copy
+
+              </button>
+
+            </div>
+
+
+            ${
+              w.type === "bank"
+
+              ? `
+
+                <div class="mt-3 flex items-center justify-between gap-3">
+
+                  <div>
+
+                    <p class="text-xs text-slate-500">
+                      Bank
+                    </p>
+
+                    <p class="text-sm font-medium mt-1">
+                      ${w.details?.bank || "—"}
+                    </p>
+
+                  </div>
+
+
+                  <button
+                    onclick="copyText('${String(w.details?.number || "").replace(/'/g, "\\'")}')"
+                    class="copy-btn px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold"
+                  >
+
+                    <i class="fa-regular fa-copy mr-1"></i>
+                    Account
+
+                  </button>
+
+                </div>
+
+              `
+
+              : ""
+
+            }
+
+          </div>
+
+
+          <!-- Date -->
+
+          <div class="mt-4 flex items-center gap-2 text-xs text-slate-500">
+
+            <i class="fa-regular fa-clock"></i>
+
+            ${formatDate(w.created_at)}
+
+          </div>
+
+
+          <!-- Actions -->
+
+          ${
+            isPending
+
+            ? `
+
+              <div class="grid grid-cols-2 gap-2 mt-4">
+
+                <button
+                  onclick="openConfirmation('${w.id}', 'approved')"
+                  class="py-3 rounded-xl bg-green-600 hover:bg-green-700 transition font-semibold text-sm"
+                >
+
+                  <i class="fa-solid fa-check mr-1"></i>
+                  Approve
+
+                </button>
+
+
+                <button
+                  onclick="openConfirmation('${w.id}', 'declined')"
+                  class="py-3 rounded-xl bg-red-600/15 text-red-400 hover:bg-red-600/25 transition font-semibold text-sm"
+                >
+
+                  <i class="fa-solid fa-xmark mr-1"></i>
+                  Decline
+
+                </button>
+
+              </div>
+
+            `
+
+            : ""
+
+          }
+
+        </article>
+
+      `;
+
+    }
+
+
+    // ------------------------------
+    // DESKTOP ROW
+    // ------------------------------
+
+    function createDesktopRow(w) {
+
+      const details = getDetails(w);
+
+      const email =
+        w.users?.email || w.user_id || "Unknown";
+
+
+      return `
+
+        <tr class="border-b border-white/5 hover:bg-white/[0.03] transition">
+
+          <td class="px-5 py-4">
+
+            <p class="font-medium max-w-[180px] truncate">
+              ${email}
+            </p>
+
+          </td>
+
+
+          <td class="px-5 py-4">
+
+            <span class="text-xs font-semibold uppercase text-slate-400">
+              ${w.type}
+            </span>
+
+          </td>
+
+
+          <td class="px-5 py-4">
+
+            ${
+              w.type === "bank"
+
+              ? `
+
+                <div>
+
+                  <p class="font-medium">
+                    ${w.details?.name || "—"}
+                  </p>
+
+                  <p class="text-xs text-slate-500 mt-1">
+                    ${w.details?.bank || "—"}
+                  </p>
+
+                  <div class="flex items-center gap-2 mt-2">
+
+                    <span class="font-mono text-xs">
+                      ${w.details?.number || "—"}
+                    </span>
+
+                    <button
+                      onclick="copyText('${String(w.details?.number || "").replace(/'/g, "\\'")}')"
+                      class="text-blue-400 hover:text-blue-300"
+                      title="Copy account number"
+                    >
+
+                      <i class="fa-regular fa-copy"></i>
+
+                    </button>
+
+                  </div>
+
+                </div>
+
+              `
+
+              : `
+
+                <div>
+
+                  <p class="font-medium">
+                    ${w.details?.network || "—"}
+                  </p>
+
+                  <div class="flex items-center gap-2 mt-1">
+
+                    <span class="font-mono text-xs">
+                      ${w.details?.number || "—"}
+                    </span>
+
+                    <button
+                      onclick="copyText('${String(w.details?.number || "").replace(/'/g, "\\'")}')"
+                      class="text-blue-400 hover:text-blue-300"
+                      title="Copy phone number"
+                    >
+
+                      <i class="fa-regular fa-copy"></i>
+
+                    </button>
+
+                  </div>
+
+                </div>
+
+              `
+
+            }
+
+          </td>
+
+
+          <td class="px-5 py-4 font-bold">
+            ${formatMoney(w.amount)}
+          </td>
+
+
+          <td class="px-5 py-4 text-xs text-slate-400 whitespace-nowrap">
+            ${formatDate(w.created_at)}
+          </td>
+
+
+          <td class="px-5 py-4">
+            ${statusBadge(w.status)}
+          </td>
+
+
+          <td class="px-5 py-4 text-right">
+
+            ${
+              w.status === "pending"
+
+              ? `
+
+                <div class="flex justify-end gap-2">
+
+                  <button
+                    onclick="openConfirmation('${w.id}', 'approved')"
+                    class="px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 transition text-xs font-semibold"
+                  >
+                    <i class="fa-solid fa-check mr-1"></i>
+                    Approve
+                  </button>
+
+                  <button
+                    onclick="openConfirmation('${w.id}', 'declined')"
+                    class="px-3 py-2 rounded-lg bg-red-600/10 text-red-400 hover:bg-red-600/20 transition text-xs font-semibold"
+                  >
+                    Decline
+                  </button>
+
+                </div>
+
+              `
+
+              : `
+
+                <span class="text-xs text-slate-500">
+                  Completed
+                </span>
+
+              `
+
+            }
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+
+
+    // ------------------------------
+    // RENDER
+    // ------------------------------
+
+    function renderWithdrawals() {
+
+      const mobile =
+        document.getElementById("mobileWithdrawals");
+
+      const desktop =
+        document.getElementById("desktopWithdrawals");
+
+      const empty =
+        document.getElementById("emptyState");
+
+
+      const filtered =
+        getFilteredWithdrawals();
+
+
+      if (!filtered.length) {
+
+        mobile.innerHTML = "";
+
+        desktop.innerHTML = "";
+
+        empty.classList.remove("hidden");
+
+        return;
+
+      }
+
+
+      empty.classList.add("hidden");
+
+
+      mobile.innerHTML =
+        filtered.map(createMobileCard).join("");
+
+
+      desktop.innerHTML =
+        filtered.map(createDesktopRow).join("");
+
+    }
+
+
+    // ------------------------------
+    // LOAD WITHDRAWALS
+    // ------------------------------
+
+    async function loadWithdrawals() {
+
+      const loading =
+        document.getElementById("loadingState");
+
+
+      loading.classList.remove("hidden");
+
+
+      try {
+
+        const res = await fetch(FUNCTION_URL, {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            action: "fetch"
+          })
+
+        });
+
+
+        const data = await res.json();
+
+
+        if (!data.success) {
+
+          throw new Error(
+            data.error || "Failed to load withdrawals"
+          );
+
         }
 
-        // Pending requests first
-        data.withdrawals.sort((a, b) => {
-          if (a.status === "pending" && b.status !== "pending") return -1;
-          if (a.status !== "pending" && b.status === "pending") return 1;
-          return new Date(a.created_at) - new Date(b.created_at);
+
+        withdrawals =
+          Array.isArray(data.withdrawals)
+            ? data.withdrawals
+            : [];
+
+
+        // Pending first
+
+        withdrawals.sort((a, b) => {
+
+          if (
+            a.status === "pending" &&
+            b.status !== "pending"
+          ) {
+            return -1;
+          }
+
+
+          if (
+            a.status !== "pending" &&
+            b.status === "pending"
+          ) {
+            return 1;
+          }
+
+
+          return new Date(b.created_at) -
+                 new Date(a.created_at);
+
         });
 
-        tbody.innerHTML = "";
-       data.withdrawals.forEach(w => {
-          const detailHtml = w.type === "bank"
-            ? `Account Name: ${w.details.account_name}<br>Account Number: ${w.details.account_number}<br>Bank: ${w.details.bank}`
-            : `Network: ${w.details.network}<br>Phone: ${w.details.phone_number}`;
 
-          const actionHtml = w.status === "pending"
-            ? `<button class="approve bg-green-600 hover:bg-green-700 px-3 py-1 rounded mr-2" onclick="updateStatus('${w.id}','approved')">Approve</button>
-               <button class="decline bg-red-600 hover:bg-red-700 px-3 py-1 rounded" onclick="updateStatus('${w.id}','declined')">Decline</button>`
-            : `<span class="font-bold ${w.status === 'approved' ? 'text-green-400' : 'text-red-400'}">${w.status.toUpperCase()}</span>`;
+        updateStats();
 
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td class="px-4 py-2">${w.users?.email || w.user_id}</td>
-            <td class="px-4 py-2">${w.type}</td>
-            <td class="px-4 py-2">${detailHtml}</td>
-            <td class="px-4 py-2">₦${w.amount}</td>
-            <td class="px-4 py-2">${new Date(w.created_at).toLocaleString()}</td>
-            <td class="px-4 py-2">${actionHtml}</td>
-          `;
-          tbody.appendChild(row);
-        });
+        renderWithdrawals();
 
-      } catch(err) {
-        console.error(err);
-        document.getElementById("withdrawalsTable").innerHTML = `<tr><td colspan="6" class="text-center py-4">Error loading withdrawals</td></tr>`;
+
+      } catch (error) {
+
+        console.error(error);
+
+        withdrawals = [];
+
+        document.getElementById(
+          "mobileWithdrawals"
+        ).innerHTML = "";
+
+
+        document.getElementById(
+          "desktopWithdrawals"
+        ).innerHTML = "";
+
+
+        document.getElementById(
+          "emptyState"
+        ).classList.remove("hidden");
+
+
+        showToast(
+          "Unable to load withdrawals",
+          "error"
+        );
+
+      } finally {
+
+        loading.classList.add("hidden");
+
       }
+
     }
 
-    // Approve/Decline withdrawal
-    async function updateStatus(id, status){
-      try {
-        const res = await fetch(FUNCTION_URL, {
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body: JSON.stringify({ action: "update", id, status })
+
+    // ------------------------------
+    // FILTER BUTTONS
+    // ------------------------------
+
+    document
+      .querySelectorAll(".filter-btn")
+      .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+          currentFilter =
+            button.dataset.filter;
+
+
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach(btn => {
+
+              btn.classList.remove(
+                "bg-blue-600",
+                "text-white"
+              );
+
+              btn.classList.add(
+                "text-slate-400"
+              );
+
+            });
+
+
+          button.classList.add(
+            "bg-blue-600",
+            "text-white"
+          );
+
+          button.classList.remove(
+            "text-slate-400"
+          );
+
+
+          renderWithdrawals();
+
         });
-        const data = await res.json();
-        if(data.success) loadWithdrawals();
-        else alert("Failed to update status");
-      } catch(err){
-        console.error(err);
-        alert("Error updating status");
+
+      });
+
+
+    // ------------------------------
+    // CONFIRMATION
+    // ------------------------------
+
+    function openConfirmation(id, status) {
+
+      const withdrawal =
+        withdrawals.find(w => w.id === id);
+
+
+      if (!withdrawal) return;
+
+
+      pendingAction = {
+        id,
+        status
+      };
+
+
+      const details =
+        getDetails(withdrawal);
+
+
+      const modal =
+        document.getElementById("confirmModal");
+
+
+      const title =
+        document.getElementById("modalTitle");
+
+
+      const message =
+        document.getElementById("modalMessage");
+
+
+      const detailsBox =
+        document.getElementById("modalDetails");
+
+
+      const confirmBtn =
+        document.getElementById("confirmAction");
+
+
+      if (status === "approved") {
+
+        title.textContent =
+          "Approve withdrawal?";
+
+        message.textContent =
+          "This will mark the withdrawal as approved.";
+
+        confirmBtn.textContent =
+          "Approve";
+
+        confirmBtn.className =
+          "py-3 rounded-xl bg-green-600 hover:bg-green-700 font-semibold transition";
+
+      } else {
+
+        title.textContent =
+          "Decline withdrawal?";
+
+        message.textContent =
+          "This will mark the withdrawal as declined.";
+
+        confirmBtn.textContent =
+          "Decline";
+
+        confirmBtn.className =
+          "py-3 rounded-xl bg-red-600 hover:bg-red-700 font-semibold transition";
+
       }
+
+
+      detailsBox.innerHTML = `
+
+        <div class="flex justify-between gap-4 mb-3">
+
+          <span class="text-xs text-slate-500">
+            Amount
+          </span>
+
+          <span class="font-bold">
+            ${formatMoney(withdrawal.amount)}
+          </span>
+
+        </div>
+
+
+        <div class="flex justify-between gap-4 mb-3">
+
+          <span class="text-xs text-slate-500">
+            Type
+          </span>
+
+          <span class="capitalize">
+            ${withdrawal.type}
+          </span>
+
+        </div>
+
+
+        <div class="flex justify-between gap-4">
+
+          <span class="text-xs text-slate-500">
+            ${
+              withdrawal.type === "bank"
+                ? "Account"
+                : "Phone"
+            }
+          </span>
+
+          <span class="font-mono text-sm">
+            ${details.primary}
+          </span>
+
+        </div>
+
+      `;
+
+
+      modal.classList.remove("hidden");
+
+      modal.classList.add("flex");
+
     }
+
+
+    // ------------------------------
+    // CLOSE MODAL
+    // ------------------------------
+
+    function closeModal() {
+
+      const modal =
+        document.getElementById("confirmModal");
+
+      modal.classList.add("hidden");
+
+      modal.classList.remove("flex");
+
+      pendingAction = null;
+
+    }
+
+
+    document
+      .getElementById("cancelModal")
+      .addEventListener(
+        "click",
+        closeModal
+      );
+
+
+    document
+      .getElementById("confirmModal")
+      .addEventListener("click", event => {
+
+        if (
+          event.target.id === "confirmModal"
+        ) {
+
+          closeModal();
+
+        }
+
+      });
+
+
+    // ------------------------------
+    // UPDATE STATUS
+    // ------------------------------
+
+    document
+      .getElementById("confirmAction")
+      .addEventListener(
+        "click",
+        async () => {
+
+          if (!pendingAction) return;
+
+
+          const {
+            id,
+            status
+          } = pendingAction;
+
+
+          const button =
+            document.getElementById(
+              "confirmAction"
+            );
+
+
+          button.disabled = true;
+
+          button.textContent =
+            "Updating...";
+
+
+          try {
+
+            const res =
+              await fetch(FUNCTION_URL, {
+
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+                  action: "update",
+                  id,
+                  status
+                })
+
+              });
+
+
+            const data =
+              await res.json();
+
+
+            if (!data.success) {
+
+              throw new Error(
+                data.error ||
+                "Failed to update status"
+              );
+
+            }
+
+
+            closeModal();
+
+            showToast(
+              status === "approved"
+                ? "Withdrawal approved"
+                : "Withdrawal declined",
+              "success"
+            );
+
+
+            await loadWithdrawals();
+
+
+          } catch (error) {
+
+            console.error(error);
+
+            showToast(
+              "Failed to update withdrawal",
+              "error"
+            );
+
+          } finally {
+
+            button.disabled = false;
+
+          }
+
+        }
+      );
+
+
+    // ------------------------------
+    // START
+    // ------------------------------
 
     loadWithdrawals();
+
   </script>
 
 </body>
