@@ -81,7 +81,7 @@
         });
 
         tbody.innerHTML = "";
-        data.withdrawals.forEach(w => {
+       data.withdrawals.forEach(w => {
           const detailHtml = w.type === "bank"
             ? `Account Name: ${w.details.account_name}<br>Account Number: ${w.details.account_number}<br>Bank: ${w.details.bank}`
             : `Network: ${w.details.network}<br>Phone: ${w.details.phone_number}`;
