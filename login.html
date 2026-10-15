@@ -268,16 +268,18 @@ window.login = async function () {
 });
 
 if (error) {
-  throw new Error("Invalid email or password");
+  if (error.message.includes("Invalid login credentials")) {
+    throw new Error("Wrong email or password");
+  } else {
+    throw new Error(error.message);
+  }
 }
 
 // CHECK EMAIL VERIFIED
 if (!data.user.email_confirmed_at) {
-
   await supabase.auth.signOut();
-
   throw new Error(
-    "Please verify your email before logging in."
+    "Your email is not verified. Check your inbox (and spam) for confirmation link."
   );
 }
 
@@ -329,7 +331,7 @@ window.forgotPassword = async function () {
 
     // Try WITHOUT redirectTo first - let Supabase use Site URL
    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-  redirectTo: "https://iyal-survey.vercel.app/reset-password.html"
+  redirectTo: "https://iyalsurveys.online/reset-password.html"
 });
 
     console.log("Reset password response:", { data, error });
