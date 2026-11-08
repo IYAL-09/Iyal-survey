@@ -663,7 +663,7 @@ Referrals
 
 <div class="vendor-switch">
 
-<button class="vendor-btn active" data-vendor="cpx">
+<button class="vendor-btn" data-vendor="cpx">
 CPX Research
 </button>
 
@@ -687,11 +687,9 @@ LIVE
 </div>
 
 <div id="surveyContent">
-
-<div class="loader-wrap">
-<div class="loader"></div>
+<div style="padding:40px; text-align:center; color:#86efac;">
+Select a survey provider above to start earning.
 </div>
-
 </div>
 
 </div>
@@ -806,7 +804,7 @@ throw new Error("No session");
 initTrackers();
 loadDashboard();
 loadNewDashboardData();
-loadSurveys();
+// DO NOT auto-load survey/CPX modal on start, keep placeholder visible.
 
 /* =========================
    MENU & NOTIFICATION TOGGLES
@@ -873,7 +871,6 @@ if(!data.success){
 throw new Error(data.message || "Failed to load dashboard");
 }
 
-// textContent is already safe from XSS (no escapeHtml needed here)
 document.getElementById("username").textContent = data.username || "User";
 animateBalance(Number(data.balance || 0));
 
@@ -1121,14 +1118,14 @@ balanceElement.textContent = `₦${Math.floor(start).toLocaleString()}`;
    SURVEY VENDORS
 ========================= */
 
-let activeVendor = "cpx";
+let activeVendor = null;
 
 document.querySelectorAll(".vendor-btn").forEach(btn=>{
 btn.addEventListener("click",()=>{
 document.querySelectorAll(".vendor-btn").forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
 activeVendor = btn.dataset.vendor;
-loadSurveys();
+loadSurveys(true);
 });
 });
 
@@ -1136,19 +1133,22 @@ loadSurveys();
    LOAD SURVEYS
 ========================= */
 
-function loadSurveys(){
+function loadSurveys(isUserClick = false){
 const surveyContent = document.getElementById("surveyContent");
+
+if(activeVendor === "cpx"){
+if(!isUserClick){
+return;
+}
+document.getElementById("consentModal").style.display = "flex";
+return;
+}
 
 surveyContent.innerHTML = `
 <div class="loader-wrap">
 <div class="loader"></div>
 </div>
 `;
-
-if(activeVendor === "cpx"){
-document.getElementById("consentModal").style.display = "flex";
-return;
-}
 
 if(activeVendor === "bitlab"){
 const userId = session.user.id;
@@ -1299,7 +1299,6 @@ async function sendActiveTime(seconds) {
 }
 
 </script>
-
 
 </body>
 </html>
