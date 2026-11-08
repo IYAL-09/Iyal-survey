@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="manifest" href="/manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Iyal Surveys – Identity Verification</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="iyallogo.png">
+<link rel="apple-touch-icon" href="iyallogo.png">
+
+<!-- Persona SDK Script -->
+<script src="https://cdn.withpersona.com/dist/persona-v5.5.0.js" integrity="sha384-UK+a2yEU9KOzEmsgI4IlkrXWE4AekM/iAgWF60Zuyule702g7qaQ2nYccO3tnT0A" crossorigin="anonymous"></script>
+   
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#08140d;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* BACKGROUND */
+.bg{
+position:fixed;
+inset:0;
+z-index:-2;
+background:
+radial-gradient(circle at top left,#16a34a55,transparent 35%),
+radial-gradient(circle at bottom right,#22c55e44,transparent 35%),
+#08140d;
+}
+
+.blur{
+position:fixed;
+width:300px;
+height:300px;
+border-radius:50%;
+background:#22c55e22;
+filter:blur(90px);
+z-index:-1;
+animation:float 8s infinite ease-in-out;
+}
+
+.blur1{ top:-80px; left:-80px; }
+.blur2{ bottom:-100px; right:-100px; animation-delay:3s; }
+
+@keyframes float{
+0%,100%{transform:translateY(0px);}
+50%{transform:translateY(30px);}
+}
+
+/* HEADER */
+header{
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:999;
+backdrop-filter:blur(20px);
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo img{
+width:52px;
+height:52px;
+border-radius:50%;
+border:2px solid #22c55e;
+object-fit:cover;
+}
+
+.logo h1{
+font-size:1.15rem;
+font-weight:700;
+}
+
+.header-right {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.bell-btn, .menu-btn{
+width:46px;
+height:46px;
+border-radius:16px;
+background:#ffffff10;
+display:flex;
+align-items:center;
+justify-content:center;
+backdrop-filter:blur(12px);
+cursor:pointer;
+font-size:1.1rem;
+border:1px solid #ffffff10;
+transition:.3s;
+position: relative;
+color: white;
+}
+
+.bell-btn:hover, .menu-btn:hover{
+transform:scale(1.05);
+}
+
+nav{
+position:absolute;
+top:85px;
+right:20px;
+background:#0f1d14ee;
+backdrop-filter:blur(18px);
+padding:18px;
+border-radius:22px;
+display:none;
+flex-direction:column;
+gap:16px;
+width:230px;
+border:1px solid #ffffff10;
+z-index:100;
+animation:fadeUp .3s ease;
+}
+
+nav a{
+text-decoration:none;
+color:#d1fae5;
+font-size:.95rem;
+}
+
+/* NOTIFICATION DROPDOWN */
+#notifMenu {
+display: none;
+position: absolute;
+top: 85px;
+right: 20px;
+background: #0f1d14ee;
+backdrop-filter: blur(18px);
+padding: 16px;
+border-radius: 22px;
+width: 320px;
+border: 1px solid #ffffff10;
+z-index: 100;
+box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+animation: fadeUp .3s ease;
+}
+
+#notifMenu h4 {
+font-size: 1rem;
+color: #86efac;
+margin-bottom: 12px;
+border-bottom: 1px solid #ffffff10;
+padding-bottom: 8px;
+}
+
+.notif-item { padding: 12px 12px 12px 16px; border-radius: 12px; font-size: .85rem; line-height: 1.4; margin-bottom: 8px; position: relative; border: 1px solid transparent; }
+.notif-item.unread { background: #22c55e22; border-color: #22c55e55; color: #ffffff; }
+.notif-item.unread .notif-text { font-weight: 700; color: #ffffff; }
+.notif-item.read { background: #ffffff08; border-color: #ffffff08; color: #d1fae5; opacity: 0.75; }
+.notif-item.read .notif-text { font-weight: 400; }
+.notif-dot { position: absolute; left: 6px; top: 18px; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; }
+.notif-item span.notif-time { display: block; font-size: .7rem; color: #86efac; margin-top: 4px; }
+
+/* TOAST NOTIFICATION */
+.toast-notification {
+position: fixed;
+bottom: 30px;
+left: 50%;
+transform: translateX(-50%) translateY(100px);
+background: #0f1d14;
+border: 1px solid #22c55e55;
+color: #ffffff;
+padding: 12px 24px;
+border-radius: 14px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+font-size: 0.9rem;
+z-index: 9999;
+transition: transform 0.3s ease, opacity 0.3s ease;
+opacity: 0;
+}
+.toast-notification.show {
+transform: translateX(-50%) translateY(0);
+opacity: 1;
+}
+
+/* CONTAINER */
+.container{
+padding:20px;
+padding-bottom:120px;
+max-width: 650px;
+margin: 0 auto;
+}
+
+/* VERIFY CONTAINER CARD */
+.verify-card{
+background:#0f1d14;
+border:1px solid #ffffff12;
+border-radius:28px;
+padding:28px;
+box-shadow:0 15px 40px rgba(0,0,0,.3);
+animation:fadeUp .6s ease;
+text-align: center;
+}
+
+.verify-card h2 {
+font-size: 1.6rem;
+color: #86efac;
+margin-bottom: 12px;
+}
+
+.verify-card p {
+color: #d1fae5;
+font-size: 0.95rem;
+line-height: 1.6;
+margin-bottom: 24px;
+}
+
+.verify-main-btn {
+display: block;
+width: 100%;
+padding: 14px;
+border: none;
+border-radius: 18px;
+background: linear-gradient(135deg,#16a34a,#22c55e);
+color: white;
+font-weight: 700;
+font-size: 1rem;
+cursor: pointer;
+transition: .3s;
+box-shadow: 0 10px 25px rgba(34,197,94,.25);
+margin-bottom: 12px;
+}
+
+.verify-main-btn:hover {
+transform: translateY(-2px);
+}
+
+.verify-sec-btn {
+display: block;
+width: 100%;
+padding: 14px;
+border: 1px solid #ffffff15;
+border-radius: 18px;
+background: #ffffff08;
+color: #d1fae5;
+font-weight: 600;
+font-size: 0.95rem;
+cursor: pointer;
+transition: .3s;
+text-decoration: none;
+}
+
+.verify-sec-btn:hover {
+background: #ffffff12;
+}
+
+/* LOADER */
+.loader-wrap{
+padding:40px 0;
+display:flex;
+justify-content:center;
+}
+
+.loader{
+width:32px;
+height:32px;
+border:3px solid #ffffff15;
+border-top:3px solid #22c55e;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg);}
+}
+
+@keyframes fadeUp{
+from{ opacity:0; transform:translateY(20px); }
+to{ opacity:1; transform:translateY(0); }
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#0b1610ee;
+backdrop-filter:blur(18px);
+display:flex;
+justify-content:space-around;
+padding:14px 0;
+border-top:1px solid #ffffff10;
+z-index:999;
+}
+
+.bottom-nav a{
+color:white;
+text-decoration:none;
+font-size:.8rem;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:5px;
+transition:.3s;
+}
+
+.bottom-nav a:hover{
+transform:translateY(-2px);
+}
+
+.bottom-nav i{
+font-size:1.1rem;
+}
+
+.active-nav{
+color:#86efac !important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="blur blur1"></div>
+<div class="blur blur2"></div>
+
+<header>
+
+<div class="logo">
+<img src="iyallogo.png" alt="Logo">
+<h1>Iyal Surveys</h1>
+</div>
+
+<div class="header-right">
+ <!-- BELL -->
+ <div class="bell-btn" onclick="toggleNotif()">
+ <i class="fa-solid fa-bell"></i>
+ <span id="notifCount" style="position:absolute; top:-5px; right:-5px; background:#ef4444; color:white; font-size:.7rem; font-weight:700; min-width:20px; height:20px; border-radius:999px; display:none; align-items:center; justify-content:center; padding:0 5px;">0</span>
+ </div>
+
+ <div class="menu-btn" onclick="toggleMenu()">
+ <i class="fa-solid fa-bars"></i>
+ </div>
+</div>
+
+<!-- NOTIFICATION DROPDOWN -->
+<div id="notifMenu">
+ <h4>Notifications</h4>
+ <div id="notifList" style="display:flex; flex-direction:column; max-height: 250px; overflow-y: auto;">
+ <div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div>
+ </div>
+</div>
+
+<nav id="menu">
+<a href="dashboard.html">Dashboard</a>
+<a href="profile.html">Profile</a>
+<a href="leaderboard.html">Leaderboard</a>
+<a href="withdraw.html">Withdrawals</a>
+<a href="support.html">Support</a>
+<a href="settings.html">Settings</a>
+<a href="w-policy.html">Withdrawal Policy</a>
+</nav>
+
+</header>
+
+<div class="container">
+<div class="verify-card" id="verifyContainer">
+  <div class="loader-wrap">
+    <div class="loader"></div>
+  </div>
+  <p style="margin-top:10px; color:#bbf7d0;">Checking verification status...</p>
+</div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+<a href="dashboard.html"><i class="fa-solid fa-house"></i>Home</a>
+<a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a>
+<a href="referrals.html"><i class="fa-solid fa-users"></i>Referrals</a>
+<a href="profile.html"><i class="fa-solid fa-user"></i>Profile</a>
+<a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabase = createClient(
+"httpsxkshzlfducmnglxfnxzk.supabase.co".replace('https','https://'),
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
+); 
+
+/* =========================
+   SECURITY: HTML ESCAPING
+========================= */
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/* =========================
+   POLITE TOAST SYSTEM
+========================= */
+function showToast(message) {
+  let toast = document.getElementById('customToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'customToast';
+    toast.className = 'toast-notification';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+/* =========================
+   CHECK USER SESSION
+========================= */
+const { data: { session } } = await supabase.auth.getSession();
+
+if(!session){
+  window.location.href = "login.html";
+  throw new Error("No session");
+}
+
+const userId = session.user.id;
+
+/* 1. SECURE return_to VALIDATION (Exact Match Array Lookup) */
+const urlParams = new URLSearchParams(window.location.search);
+let returnTo = urlParams.get('return_to') || 'profile.html';
+const allowedPaths = ['dashboard.html', 'profile.html', 'leaderboard.html', 'withdraw.html'];
+if (!allowedPaths.includes(returnTo)) {
+  returnTo = 'profile.html';
+}
+
+/* INITIAL TRACKERS & LOADERS */
+initTrackers();
+loadNotifications();
+initVerifyPage();
+
+/* TOGGLE MENUS */
+window.toggleMenu = function(){
+  const menu = document.getElementById("menu");
+  const notifMenu = document.getElementById("notifMenu");
+  notifMenu.style.display = "none";
+  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+};
+
+window.toggleNotif = function(){
+  const notifMenu = document.getElementById("notifMenu");
+  const menu = document.getElementById("menu");
+  menu.style.display = "none";
+  notifMenu.style.display = (notifMenu.style.display === "block") ? "none" : "block";
+  markNotificationsRead();
+};
+
+window.addEventListener("click", (e) => {
+  if(!e.target.closest('.bell-btn') && !e.target.closest('#notifMenu')){
+    document.getElementById("notifMenu").style.display = "none";
+  }
+  if(!e.target.closest('.menu-btn') && !e.target.closest('nav')){
+    document.getElementById("menu").style.display = "none";
+  }
+});
+
+/* FETCH NOTIFICATIONS FOR BELL */
+async function loadNotifications() {
+  try {
+    const res = await fetch(
+      "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ action: "get-dashboard" })
+      }
+    );
+    const data = await res.json();
+    if (data.success && data.notifications) {
+      updateNotifications(data.notifications);
+    }
+  } catch (err) {
+    showToast("Unable to load notifications.");
+  }
+}
+
+function formatNotifTime(created_at) {
+  const d = new Date(created_at);
+  const now = new Date();
+  const diffMs = now - d;
+  const diffMin = Math.floor(diffMs / 60000);
+  const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  if (diffMin < 1) return 'Just now';
+  if (diffMin < 60) return diffMin + 'm ago';
+  return timeStr;
+}
+
+function updateNotifications(notifs){
+  const notifList = document.getElementById("notifList");
+  const notifCount = document.getElementById("notifCount");
+  if(!notifs || notifs.length === 0){
+    notifList.innerHTML = `<div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div>`;
+    notifCount.style.display = "none";
+    return;
+  }
+  let unreadCount = notifs.filter(n => !n.is_read).length;
+  if(unreadCount > 0){ notifCount.textContent = unreadCount; notifCount.style.display = "flex"; }
+  else { notifCount.style.display = "none"; }
+  notifList.innerHTML = notifs.map(n => {
+    const isUnread = !n.is_read;
+    return `<div class="notif-item ${isUnread ? 'unread' : 'read'}">${isUnread ? '<span class="notif-dot"></span>' : ''}<div class="notif-text">${escapeHtml(n.message)}</div><span class="notif-time">${formatNotifTime(n.created_at || Date.now())}</span></div>`;
+  }).join('');
+}
+
+async function markNotificationsRead(){
+  document.getElementById("notifCount").style.display = "none";
+  try {
+    await fetch(
+      "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+      {
+        method:"POST",
+        headers:{
+          Authorization:`Bearer ${session.access_token}`,
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({ action: "mark-read" })
+      }
+    );
+  } catch(err){
+    // silent catch
+  }
+}
+
+/* =========================================================
+   VISIT & ACTIVE TIME TRACKER (Hardened & Anti-Cheat)
+========================================================= */
+function initTrackers() {
+  trackVisit(userId);
+
+  let lastActivityTime = Date.now();
+  let accumulatedActiveSeconds = 0;
+  const idleLimit = 3 * 60 * 1000;
+
+  const activityEvents = ['click', 'scroll', 'keypress', 'mousemove', 'touchstart'];
+  activityEvents.forEach(event => {
+    window.addEventListener(event, () => {
+      lastActivityTime = Date.now();
+    }, { passive: true });
+  });
+
+  setInterval(() => {
+    if (document.hidden) return;
+
+    const now = Date.now();
+    const idleDuration = now - lastActivityTime;
+
+    if (idleDuration < idleLimit) {
+      accumulatedActiveSeconds += 10;
+    }
+
+    if (accumulatedActiveSeconds >= 60) {
+      sendActiveTime(accumulatedActiveSeconds);
+      accumulatedActiveSeconds = 0;
+    }
+  }, 10000);
+}
+
+async function trackVisit(userId) {
+  try {
+    const lastVisitKey = `last_visit_recorded_${userId}`;
+    const lastVisitTime = localStorage.getItem(lastVisitKey);
+    const now = Date.now();
+    const thirtyMinutes = 30 * 60 * 1000;
+
+    if (!lastVisitTime || (now - Number(lastVisitTime)) > thirtyMinutes) {
+      localStorage.setItem(lastVisitKey, now.toString());
+      await fetch(
+        "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ action: "track-visit" })
+        }
+      );
+    }
+  } catch (err) {
+    // silent catch
+  }
+}
+
+async function sendActiveTime(seconds) {
+  if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0 || seconds > 70) {
+    return;
+  }
+
+  try {
+    await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        action: "track-time",
+        active_seconds: seconds
+      })
+    });
+  } catch (err) {
+    // silent catch
+  }
+}
+
+/* =========================
+   VERIFICATION FLOW LOGIC
+========================= */
+/* 
+  NOTE FOR BACKEND: Edge Function 'persona-verification' must ignore any user_id 
+  sent from the frontend body and extract the real user ID securely from the JWT Authorization header.
+*/
+async function checkVerificationStatus(silent = false) {
+  try {
+    const { data, error } = await supabase.functions.invoke('persona-verification', {
+      body: { action: 'check', user_id: userId }
+    });
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    if (!silent) {
+      showToast("Unable to verify status. Please try again.");
+    }
+    return { verified: false, status: 'not_verified' };
+  }
+}
+
+async function initVerifyPage() {
+  const container = document.getElementById("verifyContainer");
+  const statusData = await checkVerificationStatus(false);
+
+  if (statusData.verified || statusData.status === 'verified') {
+    container.innerHTML = `
+      <h2>Identity Verified 🎉</h2>
+      <p>Your account has been successfully verified. You have full access to claim rewards, run surveys, and withdraw funds.</p>
+      <button class="verify-main-btn" onclick="window.location.href='${returnTo}'">Return to Previous Page</button>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <h2>Identity Verification Required</h2>
+    <p>Please complete our secure identity check to unlock full payout withdrawals, prevent fraud, and secure your account profile.</p>
+    <button class="verify-main-btn" id="startVerifyBtn">Start Verification</button>
+    <a href="${returnTo}" class="verify-sec-btn">Go Back</a>
+  `;
+
+  document.getElementById("startVerifyBtn").addEventListener("click", () => {
+    launchPersonaFlow();
+  });
+}
+
+function launchPersonaFlow() {
+  const client = new Persona.Client({
+    templateId: 'itmpl_AigutaXdgBUCpJagJBqZEAsGFLL3Pz',
+    environmentId: 'env_AigutaX2UQQ4TLUDouMNWKinJDYos6',
+    referenceId: userId,
+    onReady: () => {
+      client.open();
+    },
+    onComplete: async ({ inquiryId }) => {
+      const container = document.getElementById("verifyContainer");
+      container.innerHTML = `
+        <h2>Verification Submitted</h2>
+        <p>Thank you. Please wait a moment while we confirm your verification...</p>
+        <div class="loader-wrap"><div class="loader"></div></div>
+      `;
+      for (let i = 0; i < 6; i++) {
+        await new Promise(r => setTimeout(r, 5000));
+        const updated = await checkVerificationStatus(true); // Silent polling to avoid toast spam
+        if (updated.verified || updated.status === 'verified') {
+          window.location.href = returnTo;
+          return;
+        }
+      }
+      showToast("Verification submitted and is being reviewed. You will be notified once approved.");
+      setTimeout(() => { window.location.href = returnTo; }, 2000);
+    },
+    onCancel: ({ inquiryId }) => {
+      // Clean cancellation handling without console logs
+    },
+    onError: (error) => {
+      showToast("Unable to load verification. Please try again.");
+    }
+  });
+}
+
+/* LOGOUT */
+document.getElementById("logoutBtn").addEventListener("click", async (e)=>{
+  e.preventDefault();
+  await supabase.auth.signOut();
+  window.location.href = "login.html";
+});
+</script>
+
+</body>
+</html>
