@@ -1,227 +1,1305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="/manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Iyal Surveys – Dashboard</title>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
+   <!-- Favicon -->
+<link rel="icon" type="image/png" href="iyallogo.png">
+<link rel="apple-touch-icon" href="iyallogo.png">
+   
 <style>
-body { font-family:'Segoe UI',sans-serif; margin:0; background:#f1f8e9; color:#2e7d32; }
-header { background:#2e7d32; color:white; padding:15px; display:flex; align-items:center; justify-content:space-between; position:relative; }
-.logo { display:flex; align-items:center; }
-.logo img { width:50px; height:50px; border-radius:50%; border:3px solid white; object-fit:cover; margin-right:10px; }
-.logo span { font-size:1.2em; font-weight:bold; }
-.menu-toggle { font-size:1.5em; cursor:pointer; }
-nav { position:absolute; top:60px; right:15px; background:#1b5e20; display:none; flex-direction:column; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.3); z-index:10; }
-nav a { color:white; text-decoration:none; padding:8px 0; border-bottom:1px solid #66bb6a; }
 
-.tabs { display:flex; justify-content:space-around; margin:15px 0; }
-.tab { flex:1; text-align:center; padding:10px 0; cursor:pointer; border-radius:8px; font-weight:bold; background:#c8e6c9; margin:0 5px; }
-.tab.active { background:#2e7d32; color:white; }
-
-.content { padding:15px; padding-bottom:140px; }
-.balance-card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; text-align:center; font-size:1.2em; font-weight:bold; }
-
-.card { background:white; padding:18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px; }
-
-.bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:#2e7d32; display:flex; justify-content:space-around; padding:10px 0; }
-.bottom-nav a { color:white; text-decoration:none; font-size:0.9em; text-align:center; }
-.bottom-nav i { display:block; font-size:1.2em; margin-bottom:4px; }
-
-/* CONSENT MODAL (UNCHANGED) */
-#consentModal {
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
 }
-#consentBox {
-  background:#fff;
-  padding:20px;
-  border-radius:12px;
-  max-width:420px;
-  text-align:center;
-}
-#consentBox button {
-  margin:10px;
-  padding:10px 15px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:bold;
-}
-.accept { background:#2e7d32; color:#fff; }
-.reject { background:#ccc; }
 
-iframe {
-  width:100%;
-  height:70vh;
-  border-radius:12px;
-  border:none;
+body{
+background:#08140d;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
 }
+
+/* BACKGROUND */
+
+.bg{
+position:fixed;
+inset:0;
+z-index:-2;
+background:
+radial-gradient(circle at top left,#16a34a55,transparent 35%),
+radial-gradient(circle at bottom right,#22c55e44,transparent 35%),
+#08140d;
+}
+
+.blur{
+position:fixed;
+width:300px;
+height:300px;
+border-radius:50%;
+background:#22c55e22;
+filter:blur(90px);
+z-index:-1;
+animation:float 8s infinite ease-in-out;
+}
+
+.blur1{
+top:-80px;
+left:-80px;
+}
+
+.blur2{
+bottom:-100px;
+right:-100px;
+animation-delay:3s;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0px);}
+50%{transform:translateY(30px);}
+}
+
+/* HEADER */
+
+header{
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:999;
+backdrop-filter:blur(20px);
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo img{
+width:52px;
+height:52px;
+border-radius:50%;
+border:2px solid #22c55e;
+object-fit:cover;
+}
+
+.logo h1{
+font-size:1.15rem;
+font-weight:700;
+}
+
+.header-right {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.bell-btn, .menu-btn{
+width:46px;
+height:46px;
+border-radius:16px;
+background:#ffffff10;
+display:flex;
+align-items:center;
+justify-content:center;
+backdrop-filter:blur(12px);
+cursor:pointer;
+font-size:1.1rem;
+border:1px solid #ffffff10;
+transition:.3s;
+position: relative;
+color: white;
+}
+
+.bell-btn:hover, .menu-btn:hover{
+transform:scale(1.05);
+}
+
+nav{
+position:absolute;
+top:85px;
+right:20px;
+background:#0f1d14ee;
+backdrop-filter:blur(18px);
+padding:18px;
+border-radius:22px;
+display:none;
+flex-direction:column;
+gap:16px;
+width:230px;
+border:1px solid #ffffff10;
+z-index:100;
+animation:fadeUp .3s ease;
+}
+
+nav a{
+text-decoration:none;
+color:#d1fae5;
+font-size:.95rem;
+}
+
+/* NOTIFICATION DROPDOWN */
+#notifMenu {
+display: none;
+position: absolute;
+top: 85px;
+right: 20px;
+background: #0f1d14ee;
+backdrop-filter: blur(18px);
+padding: 16px;
+border-radius: 22px;
+width: 320px;
+border: 1px solid #ffffff10;
+z-index: 100;
+box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+animation: fadeUp .3s ease;
+}
+
+#notifMenu h4 {
+font-size: 1rem;
+color: #86efac;
+margin-bottom: 12px;
+border-bottom: 1px solid #ffffff10;
+padding-bottom: 8px;
+}
+
+.notif-item {
+padding: 10px 12px;
+border-radius: 12px;
+background: #ffffff08;
+border: 1px solid #ffffff08;
+font-size: .85rem;
+color: #d1fae5;
+line-height: 1.4;
+margin-bottom: 8px;
+}
+
+.notif-item span {
+display: block;
+font-size: .7rem;
+color: #86efac;
+margin-top: 4px;
+}
+
+/* CONTAINER */
+
+.container{
+padding:20px;
+padding-bottom:120px;
+}
+
+/* GREETING */
+
+.greeting{
+margin-bottom:22px;
+animation:fadeUp .5s ease;
+}
+
+.greeting h2{
+font-size:1.7rem;
+margin-bottom:8px;
+}
+
+.greeting p{
+color:#bbf7d0;
+font-size:.95rem;
+}
+
+/* ADMIN BANNER */
+#adminBanner {
+display: none;
+position: relative;
+background: linear-gradient(135deg, #16a34a33, #22c55e33);
+border: 1px solid #22c55e55;
+padding: 14px 40px 14px 16px;
+border-radius: 18px;
+margin-bottom: 18px;
+font-size: .9rem;
+font-weight: 600;
+color: #86efac;
+animation: fadeUp .55s ease;
+}
+
+.banner-close {
+position: absolute;
+right: 14px;
+top: 50%;
+transform: translateY(-50%);
+cursor: pointer;
+font-size: 1.1rem;
+color: #86efac;
+opacity: 0.8;
+transition: .2s;
+}
+
+.banner-close:hover {
+opacity: 1;
+}
+
+/* COMBINED PROFILE BANNER */
+#profileBanner {
+display: none;
+background: #0f1d14;
+border: 1px solid #ffffff15;
+padding: 16px;
+border-radius: 20px;
+margin-bottom: 18px;
+animation: fadeUp .6s ease;
+}
+
+#profileBanner p {
+font-size: .9rem;
+margin-bottom: 12px;
+color: #d1fae5;
+line-height: 1.4;
+}
+
+.profile-banner-inputs {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.profile-input {
+width: 100%;
+padding: 12px;
+border-radius: 14px;
+border: 1px solid #ffffff15;
+outline: none;
+background: #ffffff08;
+color: white;
+font-size: .9rem;
+}
+
+.profile-input:focus {
+border-color: #22c55e;
+}
+
+.profile-btn {
+padding: 12px 18px;
+border: none;
+border-radius: 14px;
+background: linear-gradient(135deg, #16a34a, #22c55e);
+color: white;
+font-weight: 700;
+cursor: pointer;
+transition: .3s;
+width: 100%;
+}
+
+.profile-btn:hover {
+transform: scale(1.02);
+}
+
+/* BALANCE CARD */
+
+.balance-card{
+background:linear-gradient(135deg,#16a34a,#22c55e);
+padding:24px;
+border-radius:30px;
+margin-bottom:24px;
+box-shadow:0 15px 50px rgba(34,197,94,.25);
+position:relative;
+overflow:hidden;
+animation:fadeUp .6s ease;
+}
+
+.balance-card::before{
+content:'';
+position:absolute;
+width:180px;
+height:180px;
+background:#ffffff15;
+border-radius:50%;
+top:-60px;
+right:-60px;
+}
+
+.balance-label{
+font-size:.95rem;
+opacity:.9;
+margin-bottom:12px;
+}
+
+.balance-amount{
+font-size:2rem;
+font-weight:800;
+margin-bottom:18px;
+}
+
+.balance-actions{
+display:flex;
+gap:12px;
+}
+
+.balance-btn{
+flex:1;
+padding:14px;
+border:none;
+border-radius:18px;
+background:#ffffff18;
+backdrop-filter:blur(10px);
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+}
+
+.balance-btn:hover{
+transform:translateY(-2px);
+}
+
+/* SURVEY SWITCHER */
+
+.vendor-switch{
+display:flex;
+gap:10px;
+margin-bottom:22px;
+overflow-x:auto;
+scrollbar-width:none;
+}
+
+.vendor-switch::-webkit-scrollbar{
+display:none;
+}
+
+.vendor-btn{
+border:none;
+padding:14px 18px;
+border-radius:18px;
+background:#ffffff08;
+color:#d1fae5;
+font-weight:600;
+cursor:pointer;
+white-space:nowrap;
+transition:.3s;
+border:1px solid #ffffff10;
+}
+
+.vendor-btn.active{
+background:linear-gradient(135deg,#16a34a,#22c55e);
+color:white;
+box-shadow:0 10px 25px rgba(34,197,94,.25);
+}
+
+/* SURVEY CARD */
+
+.survey-card{
+background:#ffffff10;
+backdrop-filter:blur(18px);
+border:1px solid #ffffff12;
+border-radius:28px;
+padding:18px;
+box-shadow:0 10px 40px rgba(0,0,0,.25);
+animation:fadeUp .6s ease;
+overflow:hidden;
+}
+
+.survey-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+}
+
+.survey-top h3{
+font-size:1rem;
+color:#86efac;
+}
+
+.live-badge{
+background:#22c55e22;
+color:#86efac;
+padding:8px 12px;
+border-radius:999px;
+font-size:.75rem;
+font-weight:700;
+}
+
+/* IFRAME */
+
+iframe{
+width:100%;
+height:72vh;
+border:none;
+border-radius:22px;
+background:#08140d;
+}
+
+/* CONSENT MODAL */
+
+#consentModal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+padding:20px;
+}
+
+#consentBox{
+background:#0f1d14;
+padding:24px;
+border-radius:28px;
+max-width:420px;
+border:1px solid #ffffff10;
+text-align:center;
+animation:fadeUp .3s ease;
+}
+
+#consentBox p{
+line-height:1.7;
+color:#d1fae5;
+margin-bottom:14px;
+}
+
+#consentBox a{
+color:#86efac;
+text-decoration:none;
+}
+
+.modal-actions{
+display:flex;
+gap:12px;
+margin-top:20px;
+}
+
+.modal-actions button{
+flex:1;
+padding:14px;
+border:none;
+border-radius:18px;
+font-weight:700;
+cursor:pointer;
+}
+
+.accept{
+background:linear-gradient(135deg,#16a34a,#22c55e);
+color:white;
+}
+
+.reject{
+background:#ffffff10;
+color:white;
+}
+
+/* LOADER */
+
+.loader-wrap{
+padding:50px 0;
+display:flex;
+justify-content:center;
+}
+
+.loader{
+width:28px;
+height:28px;
+border:3px solid #ffffff15;
+border-top:3px solid #22c55e;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg);}
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#0b1610ee;
+backdrop-filter:blur(18px);
+display:flex;
+justify-content:space-around;
+padding:14px 0;
+border-top:1px solid #ffffff10;
+z-index:999;
+}
+
+.bottom-nav a{
+color:white;
+text-decoration:none;
+font-size:.8rem;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:5px;
+transition:.3s;
+}
+
+.bottom-nav a:hover{
+transform:translateY(-2px);
+}
+
+.bottom-nav i{
+font-size:1.1rem;
+}
+
+.active-nav{
+color:#86efac !important;
+}
+
 </style>
 </head>
 
 <body>
 
+<div class="bg"></div>
+<div class="blur blur1"></div>
+<div class="blur blur2"></div>
+
 <header>
-  <div class="logo">
-    <img src="iyallogo.png" />
-    <span>Iyal Surveys</span>
-  </div>
-  <div class="menu-toggle" onclick="toggleMenu()">
-    <i class="fa fa-bars"></i>
-  </div>
-  <nav id="menu">
-    <a href="terms.html">Terms & conditions</a>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="about.html">About Us</a>
-    <a href="disclaimer.html">Disclaimer</a>
-    <a href="support.html">Support</a>
-    <a href="settings.html">Settings</a>
-  </nav>
+
+<div class="logo">
+<img src="iyallogo.png">
+<h1>Iyal Surveys</h1>
+</div>
+
+<div class="header-right">
+ <!-- BELL -->
+ <div class="bell-btn" onclick="toggleNotif()">
+ <i class="fa-solid fa-bell"></i>
+ <span id="notifCount" style="position:absolute; top:-5px; right:-5px; background:#ef4444; color:white; font-size:.7rem; font-weight:700; min-width:20px; height:20px; border-radius:999px; display:none; align-items:center; justify-content:center; padding:0 5px;">0</span>
+ </div>
+
+ <div class="menu-btn" onclick="toggleMenu()">
+ <i class="fa-solid fa-bars"></i>
+ </div>
+</div>
+
+<!-- NOTIFICATION DROPDOWN -->
+<div id="notifMenu">
+ <h4>Notifications</h4>
+ <div id="notifList" style="display:flex; flex-direction:column; max-height: 250px; overflow-y: auto;">
+ <div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div>
+ </div>
+</div>
+
+<nav id="menu">
+<a href="terms.html">Terms & Conditions</a>
+<a href="privacy.html">Privacy Policy</a>
+<a href="about.html">About Us</a>
+<a href="disclaimer.html">Disclaimer</a>
+<a href="support.html">Support</a>
+<a href="settings.html">Settings</a>
+   <a href="w-policy.html">Withdrawal Policy</a>
+</nav>
+
 </header>
 
-<div class="content">
-  <div class="balance-card">
-    Balance: <span id="userBalance">₦ Loading...</span>
-  </div>
+<div class="container">
 
-  <div class="tabs">
-    <div class="tab active" data-vendor="cpx">CPX Research</div>
-    <div class="tab" data-vendor="bitlab">BitLab</div>
-    <div class="tab" data-vendor="wannads">Wannads</div>
-  </div>
-
-  <div id="surveyContent"></div>
+<div class="greeting">
+<h2>Hello, <span id="username">User</span> 👋</h2>
+<p>Complete surveys and earn rewards instantly.</p>
 </div>
 
-<!-- CPX CONSENT MODAL (UNCHANGED) -->
+<!-- ADMIN BANNER (with 24h snooze + close button) -->
+<div id="adminBanner">
+ 📢 <span id="adminBannerText"></span>
+ <span class="banner-close" onclick="dismissAdminBanner()">&times;</span>
+</div>
+
+<!-- COMBINED PROFILE BANNER (Username & WhatsApp) -->
+<div id="profileBanner">
+ <p>Please complete your profile details below to get rewards & leaderboard alerts:</p>
+ <div class="profile-banner-inputs">
+   <input id="profileUsernameInput" class="profile-input" placeholder="Enter your username (e.g. John)">
+   <input id="profileWhatsappInput" class="profile-input" placeholder="Enter WhatsApp number (e.g. 0803...)">
+   <button onclick="saveProfileBanner()" class="profile-btn">Save Details</button>
+ </div>
+</div>
+
+<div class="balance-card">
+
+<div class="balance-label">
+Available Balance
+</div>
+
+<div class="balance-amount" id="userBalance">
+₦0
+</div>
+
+<div class="balance-actions">
+<button class="balance-btn" onclick="location.href='withdraw.html'">
+Withdraw
+</button>
+
+<button class="balance-btn" onclick="location.href='referrals.html'">
+Referrals
+</button>
+</div>
+
+</div>
+
+<div class="vendor-switch">
+
+<button class="vendor-btn active" data-vendor="cpx">
+CPX Research
+</button>
+
+<button class="vendor-btn" data-vendor="bitlab">
+BitLabs
+</button>
+
+<button class="vendor-btn" data-vendor="wannads">
+Wannads
+</button>
+
+</div>
+
+<div class="survey-card">
+
+<div class="survey-top">
+<h3>Survey Offers</h3>
+<div class="live-badge">
+LIVE
+</div>
+</div>
+
+<div id="surveyContent">
+
+<div class="loader-wrap">
+<div class="loader"></div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CONSENT MODAL -->
+
 <div id="consentModal">
-  <div id="consentBox">
-    <p>
-      CPX Research uses cookies and tracking technologies to deliver surveys.
-      By accepting, you agree to data processing.
-    </p>
-    <p>
-      <a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank">CPX Privacy</a> |
-      <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank">CPX Terms</a>
-    </p>
-    <button class="accept" id="acceptConsent">Accept</button>
-    <button class="reject" id="rejectConsent">Reject</button>
-  </div>
+
+<div id="consentBox">
+
+<p>
+CPX Research uses cookies and tracking technologies to deliver surveys.
+By accepting, you agree to data processing.
+</p>
+
+<p>
+<a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank">
+CPX Privacy
+</a>
+|
+<a href="https://cpx-research.com/main/en/terms-user.php" target="_blank">
+CPX Terms
+</a>
+</p>
+
+<div class="modal-actions">
+<button class="accept" id="acceptConsent">
+Accept
+</button>
+
+<button class="reject" id="rejectConsent">
+Reject
+</button>
 </div>
+
+</div>
+
+</div>
+
+<!-- BOTTOM NAV -->
 
 <div class="bottom-nav">
-  <a href="withdraw.html"><i class="fa fa-money-bill-wave"></i>Cash Out</a>
-  <a href="referrals.html"><i class="fa fa-users"></i>Referrals</a>
-    <a href="game.html"><i class="fa fa-gamepad" style="color:#a5d6a7"></i>Games</a>
-      <a href="login.html" id="logoutBtn"><i class="fa fa-sign-out-alt"></i>Logout</a>
+
+<a href="#" class="active-nav">
+<i class="fa-solid fa-house"></i>
+Home
+</a>
+
+<a href="withdraw.html">
+<i class="fa-solid fa-wallet"></i>
+Cash Out
+</a>
+
+<a href="referrals.html">
+<i class="fa-solid fa-users"></i>
+Referrals
+</a>
+
+   <!-- BOTTOM NAV
+   
+<a href="game.html">
+<i class="fa-solid fa-gamepad"></i>
+Games
+</a>
+ -->
+   
+<a href="#" id="logoutBtn">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</a>
+
 </div>
 
 <script type="module">
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 const supabase = createClient(
-  "https://xkshzlfducmnglxfnxzk.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
-);
+"https://xkshzlfducmnglxfnxzk.supabase.co",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
+); 
 
-/* AUTH */
-const { data:{ session } } = await supabase.auth.getSession();
-if(!session) location.href="login.html";
-
-/* MENU */
-window.toggleMenu = () => {
-  const m = document.getElementById("menu");
-  m.style.display = m.style.display === "flex" ? "none" : "flex";
-};
-
-/* LOAD BALANCE */
-async function loadBalance(){
-  try{
-    const res = await fetch(
-      "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor",
-      {
-        method:"POST",
-        headers:{
-          "Authorization":`Bearer ${session.access_token}`,
-          "Content-Type":"application/json"
-        }
-      }
-    );
-    const data = await res.json();
-    document.getElementById("userBalance").textContent =
-      "₦" + Number(data.balance || 0).toLocaleString();
-  }catch{
-    document.getElementById("userBalance").textContent = "₦0";
-  }
-}
-loadBalance();
-
-/* SURVEYS */
-let activeVendor = "cpx";
-
-document.querySelectorAll(".tab").forEach(tab=>{
-  tab.onclick = ()=>{
-    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-    tab.classList.add("active");
-    activeVendor = tab.dataset.vendor;
-    loadSurveys();
-  };
-});
-
-function loadSurveys(){
-  const c = document.getElementById("surveyContent");
-  c.innerHTML = "";
-
-  if(activeVendor === "cpx"){
-    document.getElementById("consentModal").style.display = "flex";
-    return;
-  }
-
-  if(activeVendor === "bitlab"){
-    const userId = session.user.id;
-    const bitlabToken = "5f6cc641-dd5c-4551-a948-5c526d61d97a";
-
-    const iframeSrc = `https://web.bitlabs.ai/?token=${bitlabToken}&uid=${userId}`;
-
-    c.innerHTML = `
-      <iframe src="${iframeSrc}"></iframe>
-    `;
-    return;
-  }
-
-  c.innerHTML = `<div class="card">Surveys for ${activeVendor}</div>`;
+/* =========================
+   SECURITY: HTML ESCAPING (XSS PROTECTION)
+========================= */
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
-/* CPX CONSENT (UNCHANGED) */
-document.getElementById("acceptConsent").onclick = ()=>{
-  document.getElementById("consentModal").style.display="none";
-  const userId = session.user.id;
-  const iframeSrc = `https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${userId}`;
-  document.getElementById("surveyContent").innerHTML = `<iframe src="${iframeSrc}"></iframe>`;
-};
+/* =========================
+   CHECK USER SESSION
+========================= */
 
-document.getElementById("rejectConsent").onclick = ()=>{
-  document.getElementById("consentModal").style.display="none";
-  document.getElementById("surveyContent").innerHTML =
-    `<div class="card">You rejected cookies. CPX surveys cannot be shown.</div>`;
-};
+const {
+data:{ session }
+} = await supabase.auth.getSession();
 
+if(!session){
+window.location.href = "login.html";
+throw new Error("No session");
+}
+
+/* INITIAL TRACKERS & LOADERS */
+initTrackers();
+loadDashboard();
+loadNewDashboardData();
 loadSurveys();
 
-/* LOGOUT */
-document.getElementById("logoutBottom").onclick = async ()=>{
-  await supabase.auth.signOut();
-  location.href="login.html";
+/* =========================
+   MENU & NOTIFICATION TOGGLES
+========================= */
+
+window.toggleMenu = function(){
+const menu = document.getElementById("menu");
+const notifMenu = document.getElementById("notifMenu");
+notifMenu.style.display = "none";
+
+if(menu.style.display === "flex"){
+menu.style.display = "none";
+}else{
+menu.style.display = "flex";
+}
 };
+
+window.toggleNotif = function(){
+const notifMenu = document.getElementById("notifMenu");
+const menu = document.getElementById("menu");
+menu.style.display = "none";
+
+if(notifMenu.style.display === "block"){
+notifMenu.style.display = "none";
+}else{
+notifMenu.style.display = "block";
+markNotificationsRead();
+}
+};
+
+// Close dropdowns when clicking outside
+window.addEventListener("click", (e) => {
+if(!e.target.closest('.bell-btn') && !e.target.closest('#notifMenu')){
+document.getElementById("notifMenu").style.display = "none";
+}
+if(!e.target.closest('.menu-btn') && !e.target.closest('nav')){
+document.getElementById("menu").style.display = "none";
+}
+});
+
+/* =========================
+   EXISTING DASHBOARD (rapid-processor) - UNTOUCHED
+========================= */
+
+async function loadDashboard(){
+try{
+const res = await fetch(
+"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor",
+{
+method:"POST",
+headers:{
+Authorization:`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+},
+body: JSON.stringify({
+action:"dashboard"
+})
+}
+);
+
+const data = await res.json();
+
+if(!data.success){
+throw new Error(data.message || "Failed to load dashboard");
+}
+
+// textContent is already safe from XSS (no escapeHtml needed here)
+document.getElementById("username").textContent = data.username || "User";
+animateBalance(Number(data.balance || 0));
+
+}catch(err){
+console.error(err);
+document.getElementById("username").textContent = "User";
+document.getElementById("userBalance").textContent = "₦0";
+}
+}
+
+/* =========================
+   NEW DASHBOARD FEATURES (dashboard-service) - SECURED
+========================= */
+
+let currentBannerId = null;
+
+async function loadNewDashboardData(){
+try{
+const res = await fetch(
+"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+{
+method:"POST",
+headers:{
+Authorization:`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+},
+body: JSON.stringify({
+action:"get-dashboard"
+})
+}
+);
+
+const data = await res.json();
+if(!data.success) return;
+
+// 1. Profile Banner Check
+checkProfileBanner(data.username, data.whatsapp);
+
+// 2. Admin Banner (with 24h snooze + ID check)
+if(data.admin_banner && data.admin_banner.is_active !== false){
+currentBannerId = data.admin_banner.id || data.admin_banner.message;
+const bannerText = data.admin_banner.message;
+
+const dismissedBannerId = localStorage.getItem("dismissed_banner_id");
+const dismissedAt = localStorage.getItem("dismissed_at");
+const now = Date.now();
+const twentyFourHours = 24 * 60 * 60 * 1000;
+
+let showBanner = true;
+if (dismissedBannerId === String(currentBannerId) && dismissedAt) {
+  if (now - Number(dismissedAt) < twentyFourHours) {
+    showBanner = false;
+  }
+}
+
+if (showBanner) {
+  document.getElementById("adminBannerText").textContent = bannerText;
+  document.getElementById("adminBanner").style.display = "block";
+} else {
+  document.getElementById("adminBanner").style.display = "none";
+}
+} else {
+document.getElementById("adminBanner").style.display = "none";
+}
+
+// 3. Notifications List (Sanitized with escapeHtml for innerHTML)
+updateNotifications(data.notifications || []);
+
+}catch(err){
+console.error("New dashboard service error:", err);
+}
+}
+
+window.dismissAdminBanner = function(){
+if(currentBannerId){
+localStorage.setItem("dismissed_banner_id", currentBannerId);
+localStorage.setItem("dismissed_at", Date.now().toString());
+}
+document.getElementById("adminBanner").style.display = "none";
+};
+
+function checkProfileBanner(username, whatsapp){
+const banner = document.getElementById("profileBanner");
+const usernameInput = document.getElementById("profileUsernameInput");
+const whatsappInput = document.getElementById("profileWhatsappInput");
+
+const hasValidUsername = username && username.trim() !== "" && username !== "User";
+const hasValidWhatsapp = whatsapp && whatsapp.trim() !== "";
+
+if (hasValidUsername && hasValidWhatsapp) {
+  banner.style.display = "none";
+  return;
+}
+
+banner.style.display = "block";
+
+if (hasValidUsername) {
+  usernameInput.style.display = "none";
+} else {
+  usernameInput.style.display = "block";
+}
+
+if (hasValidWhatsapp) {
+  whatsappInput.style.display = "none";
+} else {
+  whatsappInput.style.display = "block";
+}
+}
+
+window.saveProfileBanner = async function(){
+const usernameInput = document.getElementById("profileUsernameInput");
+const whatsappInput = document.getElementById("profileWhatsappInput");
+const saveBtn = document.querySelector(".profile-btn");
+
+const isUsernameVisible = usernameInput.style.display !== "none";
+const isWhatsappVisible = whatsappInput.style.display !== "none";
+
+if (!isUsernameVisible && !isWhatsappVisible) {
+  document.getElementById("profileBanner").style.display = "none";
+  return;
+}
+
+let updatePayload = { action: "save-profile" };
+
+if (isUsernameVisible) {
+  let rawUsername = usernameInput.value.trim();
+  const usernameRegex = /^[a-zA-Z0-9_\s]{2,30}$/;
+  if (!usernameRegex.test(rawUsername)) {
+    alert("Username must be 2-30 characters, letters and numbers only");
+    return;
+  }
+  updatePayload.username = rawUsername;
+}
+
+if (isWhatsappVisible) {
+  let rawWhatsapp = whatsappInput.value.trim();
+  let cleanedWhatsapp = rawWhatsapp.replace(/[\s+]/g, '');
+  const whatsappRegex = /^\d{10,15}$/;
+  if (!whatsappRegex.test(cleanedWhatsapp)) {
+    alert("Enter valid WhatsApp number, 10-15 digits");
+    return;
+  }
+  updatePayload.whatsapp = cleanedWhatsapp;
+}
+
+saveBtn.disabled = true;
+const originalBtnText = saveBtn.textContent;
+saveBtn.textContent = "Saving...";
+
+try {
+const res = await fetch(
+"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+{
+method:"POST",
+headers:{
+Authorization:`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+},
+body: JSON.stringify(updatePayload)
+}
+);
+const data = await res.json();
+if(data.success){
+alert("Profile saved successfully!");
+loadDashboard();
+loadNewDashboardData();
+} else {
+alert(data.message || "Failed to save profile.");
+}
+} catch(err){
+console.error(err);
+alert("Error saving profile.");
+} finally {
+saveBtn.disabled = false;
+saveBtn.textContent = originalBtnText;
+}
+};
+
+function updateNotifications(notifs){
+const notifList = document.getElementById("notifList");
+const notifCount = document.getElementById("notifCount");
+
+if(!notifs || notifs.length === 0){
+notifList.innerHTML = `<div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div>`;
+notifCount.style.display = "none";
+return;
+}
+
+let unreadCount = notifs.filter(n => !n.is_read).length;
+if(unreadCount > 0){
+notifCount.textContent = unreadCount;
+notifCount.style.display = "flex";
+} else {
+notifCount.style.display = "none";
+}
+
+notifList.innerHTML = notifs.map(n => `
+<div class="notif-item">
+ ${escapeHtml(n.message)}
+ <span>${new Date(n.created_at || Date.now()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+</div>
+`).join('');
+}
+
+async function markNotificationsRead(){
+document.getElementById("notifCount").style.display = "none";
+try {
+await fetch(
+"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+{
+method:"POST",
+headers:{
+Authorization:`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+},
+body: JSON.stringify({ action: "mark-read" })
+}
+);
+} catch(err){
+console.error("Mark read failed", err);
+}
+}
+
+/* =========================
+   ANIMATE BALANCE
+========================= */
+
+function animateBalance(balance){
+const balanceElement = document.getElementById("userBalance");
+let start = 0;
+const duration = 1200;
+const increment = balance / 60;
+
+const timer = setInterval(()=>{
+start += increment;
+if(start >= balance){
+start = balance;
+clearInterval(timer);
+}
+balanceElement.textContent = `₦${Math.floor(start).toLocaleString()}`;
+}, duration / 60);
+}
+
+/* =========================
+   SURVEY VENDORS
+========================= */
+
+let activeVendor = "cpx";
+
+document.querySelectorAll(".vendor-btn").forEach(btn=>{
+btn.addEventListener("click",()=>{
+document.querySelectorAll(".vendor-btn").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+activeVendor = btn.dataset.vendor;
+loadSurveys();
+});
+});
+
+/* =========================
+   LOAD SURVEYS
+========================= */
+
+function loadSurveys(){
+const surveyContent = document.getElementById("surveyContent");
+
+surveyContent.innerHTML = `
+<div class="loader-wrap">
+<div class="loader"></div>
+</div>
+`;
+
+if(activeVendor === "cpx"){
+document.getElementById("consentModal").style.display = "flex";
+return;
+}
+
+if(activeVendor === "bitlab"){
+const userId = session.user.id;
+const bitlabsToken = "5f6cc641-dd5c-4551-a948-5c526d61d97a";
+const iframeSrc = `https://web.bitlabs.ai/?token=${bitlabsToken}&uid=${userId}`;
+
+surveyContent.innerHTML = `
+<iframe src="${iframeSrc}" allowfullscreen></iframe>
+`;
+return;
+}
+
+if(activeVendor === "wannads"){
+const userId = session.user.id;
+const iframeSrc = `https://publishers.wannads.com/wall?apiKey=YOUR_WANNADS_API_KEY&userId=${userId}`;
+
+surveyContent.innerHTML = `
+<iframe src="${iframeSrc}" allowfullscreen></iframe>
+`;
+return;
+}
+}
+
+/* =========================
+   CPX CONSENT ACCEPT
+========================= */
+
+document.getElementById("acceptConsent").addEventListener("click",()=>{
+document.getElementById("consentModal").style.display = "none";
+const userId = session.user.id;
+const iframeSrc = `https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${userId}`;
+
+document.getElementById("surveyContent").innerHTML = `
+<iframe src="${iframeSrc}" allowfullscreen></iframe>
+`;
+});
+
+/* =========================
+   CPX CONSENT REJECT
+========================= */
+
+document.getElementById("rejectConsent").addEventListener("click",()=>{
+document.getElementById("consentModal").style.display = "none";
+document.getElementById("surveyContent").innerHTML = `
+<div style="padding:40px; text-align:center; color:#bbf7d0;">
+You rejected cookies.<br>CPX surveys cannot be shown.
+</div>
+`;
+});
+
+/* =========================
+   LOGOUT
+========================= */
+
+document.getElementById("logoutBtn").addEventListener("click", async (e)=>{
+e.preventDefault();
+await supabase.auth.signOut();
+window.location.href = "login.html";
+});
+
+/* =========================================================
+   VISIT & ACTIVE TIME TRACKER (Hardened & Anti-Cheat)
+========================================================= */
+function initTrackers() {
+  const userId = session.user.id;
+
+  // 1. Visit Tracker (30-min window check)
+  trackVisit(userId);
+
+  // 2. Active Time Tracker (3-min idle cutoff & visibility check)
+  let lastActivityTime = Date.now();
+  let accumulatedActiveSeconds = 0;
+  const idleLimit = 3 * 60 * 1000; // 3 minutes idle cutoff
+
+  const activityEvents = ['click', 'scroll', 'keypress', 'mousemove', 'touchstart'];
+  activityEvents.forEach(event => {
+    window.addEventListener(event, () => {
+      lastActivityTime = Date.now();
+    }, { passive: true });
+  });
+
+  // Ticker every 10 seconds
+  setInterval(() => {
+    // If tab is hidden or minimized, stop accumulating active time immediately
+    if (document.hidden) return;
+
+    const now = Date.now();
+    const idleDuration = now - lastActivityTime;
+
+    if (idleDuration < idleLimit) {
+      accumulatedActiveSeconds += 10;
+    }
+
+    if (accumulatedActiveSeconds >= 60) {
+      sendActiveTime(accumulatedActiveSeconds);
+      accumulatedActiveSeconds = 0;
+    }
+  }, 10000);
+}
+
+async function trackVisit(userId) {
+  try {
+    const lastVisitKey = `last_visit_recorded_${userId}`;
+    const lastVisitTime = localStorage.getItem(lastVisitKey);
+    const now = Date.now();
+    const thirtyMinutes = 30 * 60 * 1000;
+
+    if (!lastVisitTime || (now - Number(lastVisitTime)) > thirtyMinutes) {
+      localStorage.setItem(lastVisitKey, now.toString());
+      await fetch(
+        "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ action: "track-visit" })
+        }
+      );
+    }
+  } catch (err) {
+    console.error("Visit tracking error:", err);
+  }
+}
+
+async function sendActiveTime(seconds) {
+  if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0 || seconds > 70) {
+    console.warn("Blocked fraudulent or invalid active time payload:", seconds);
+    return;
+  }
+
+  try {
+    await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        action: "track-time",
+        active_seconds: seconds
+      })
+    });
+  } catch (err) {
+    console.error("Time tracking sync failed:", err);
+  }
+}
+
 </script>
+
 
 </body>
 </html>
