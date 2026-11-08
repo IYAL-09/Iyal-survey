@@ -100,7 +100,13 @@ font-size:1.15rem;
 font-weight:700;
 }
 
-.menu-btn{
+.header-right {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.bell-btn, .menu-btn{
 width:46px;
 height:46px;
 border-radius:16px;
@@ -113,9 +119,11 @@ cursor:pointer;
 font-size:1.1rem;
 border:1px solid #ffffff10;
 transition:.3s;
+position: relative;
+color: white;
 }
 
-.menu-btn:hover{
+.bell-btn:hover, .menu-btn:hover{
 transform:scale(1.05);
 }
 
@@ -142,6 +150,49 @@ color:#d1fae5;
 font-size:.95rem;
 }
 
+/* NOTIFICATION DROPDOWN */
+#notifMenu {
+display: none;
+position: absolute;
+top: 85px;
+right: 20px;
+background: #0f1d14ee;
+backdrop-filter: blur(18px);
+padding: 16px;
+border-radius: 22px;
+width: 320px;
+border: 1px solid #ffffff10;
+z-index: 100;
+box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+animation: fadeUp .3s ease;
+}
+
+#notifMenu h4 {
+font-size: 1rem;
+color: #86efac;
+margin-bottom: 12px;
+border-bottom: 1px solid #ffffff10;
+padding-bottom: 8px;
+}
+
+.notif-item {
+padding: 10px 12px;
+border-radius: 12px;
+background: #ffffff08;
+border: 1px solid #ffffff08;
+font-size: .85rem;
+color: #d1fae5;
+line-height: 1.4;
+margin-bottom: 8px;
+}
+
+.notif-item span {
+display: block;
+font-size: .7rem;
+color: #86efac;
+margin-top: 4px;
+}
+
 /* CONTAINER */
 
 .container{
@@ -164,6 +215,92 @@ margin-bottom:8px;
 .greeting p{
 color:#bbf7d0;
 font-size:.95rem;
+}
+
+/* ADMIN BANNER */
+#adminBanner {
+display: none;
+position: relative;
+background: linear-gradient(135deg, #16a34a33, #22c55e33);
+border: 1px solid #22c55e55;
+padding: 14px 40px 14px 16px;
+border-radius: 18px;
+margin-bottom: 18px;
+font-size: .9rem;
+font-weight: 600;
+color: #86efac;
+animation: fadeUp .55s ease;
+}
+
+.banner-close {
+position: absolute;
+right: 14px;
+top: 50%;
+transform: translateY(-50%);
+cursor: pointer;
+font-size: 1.1rem;
+color: #86efac;
+opacity: 0.8;
+transition: .2s;
+}
+
+.banner-close:hover {
+opacity: 1;
+}
+
+/* COMBINED PROFILE BANNER */
+#profileBanner {
+display: none;
+background: #0f1d14;
+border: 1px solid #ffffff15;
+padding: 16px;
+border-radius: 20px;
+margin-bottom: 18px;
+animation: fadeUp .6s ease;
+}
+
+#profileBanner p {
+font-size: .9rem;
+margin-bottom: 12px;
+color: #d1fae5;
+line-height: 1.4;
+}
+
+.profile-banner-inputs {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.profile-input {
+width: 100%;
+padding: 12px;
+border-radius: 14px;
+border: 1px solid #ffffff15;
+outline: none;
+background: #ffffff08;
+color: white;
+font-size: .9rem;
+}
+
+.profile-input:focus {
+border-color: #22c55e;
+}
+
+.profile-btn {
+padding: 12px 18px;
+border: none;
+border-radius: 14px;
+background: linear-gradient(135deg, #16a34a, #22c55e);
+color: white;
+font-weight: 700;
+cursor: pointer;
+transition: .3s;
+width: 100%;
+}
+
+.profile-btn:hover {
+transform: scale(1.02);
 }
 
 /* BALANCE CARD */
@@ -301,63 +438,52 @@ border-radius:22px;
 background:#08140d;
 }
 
-/* CONSENT MODAL */
-
-#consentModal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.75);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:9999;
-padding:20px;
+/* INLINE CONSENT BOX */
+.inline-consent {
+background: #0f1d14;
+padding: 24px;
+border-radius: 20px;
+border: 1px solid #ffffff10;
+text-align: center;
+margin: 10px 0;
 }
 
-#consentBox{
-background:#0f1d14;
-padding:24px;
-border-radius:28px;
-max-width:420px;
-border:1px solid #ffffff10;
-text-align:center;
-animation:fadeUp .3s ease;
+.inline-consent p {
+line-height: 1.6;
+color: #d1fae5;
+margin-bottom: 14px;
+font-size: 0.95rem;
 }
 
-#consentBox p{
-line-height:1.7;
-color:#d1fae5;
-margin-bottom:14px;
+.inline-consent a {
+color: #86efac;
+text-decoration: none;
 }
 
-#consentBox a{
-color:#86efac;
-text-decoration:none;
+.inline-consent-actions {
+display: flex;
+gap: 12px;
+margin-top: 16px;
 }
 
-.modal-actions{
-display:flex;
-gap:12px;
-margin-top:20px;
+.inline-consent-actions button {
+flex: 1;
+padding: 12px;
+border: none;
+border-radius: 14px;
+font-weight: 700;
+cursor: pointer;
+transition: .3s;
 }
 
-.modal-actions button{
-flex:1;
-padding:14px;
-border:none;
-border-radius:18px;
-font-weight:700;
-cursor:pointer;
+.inline-accept {
+background: linear-gradient(135deg,#16a34a,#22c55e);
+color: white;
 }
 
-.accept{
-background:linear-gradient(135deg,#16a34a,#22c55e);
-color:white;
-}
-
-.reject{
-background:#ffffff10;
-color:white;
+.inline-reject {
+background: #ffffff10;
+color: white;
 }
 
 /* LOADER */
@@ -447,8 +573,24 @@ color:#86efac !important;
 <h1>Iyal Surveys</h1>
 </div>
 
-<div class="menu-btn" onclick="toggleMenu()">
-<i class="fa-solid fa-bars"></i>
+<div class="header-right">
+ <!-- BELL -->
+ <div class="bell-btn" onclick="toggleNotif()">
+ <i class="fa-solid fa-bell"></i>
+ <span id="notifCount" style="position:absolute; top:-5px; right:-5px; background:#ef4444; color:white; font-size:.7rem; font-weight:700; min-width:20px; height:20px; border-radius:999px; display:none; align-items:center; justify-content:center; padding:0 5px;">0</span>
+ </div>
+
+ <div class="menu-btn" onclick="toggleMenu()">
+ <i class="fa-solid fa-bars"></i>
+ </div>
+</div>
+
+<!-- NOTIFICATION DROPDOWN -->
+<div id="notifMenu">
+ <h4>Notifications</h4>
+ <div id="notifList" style="display:flex; flex-direction:column; max-height: 250px; overflow-y: auto;">
+ <div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div>
+ </div>
 </div>
 
 <nav id="menu">
@@ -468,6 +610,22 @@ color:#86efac !important;
 <div class="greeting">
 <h2>Hello, <span id="username">User</span> 👋</h2>
 <p>Complete surveys and earn rewards instantly.</p>
+</div>
+
+<!-- ADMIN BANNER (with 24h snooze + close button) -->
+<div id="adminBanner">
+ 📢 <span id="adminBannerText"></span>
+ <span class="banner-close" onclick="dismissAdminBanner()">&times;</span>
+</div>
+
+<!-- COMBINED PROFILE BANNER (Username & WhatsApp) -->
+<div id="profileBanner">
+ <p>Please complete your profile details below to get rewards & leaderboard alerts:</p>
+ <div class="profile-banner-inputs">
+   <input id="profileUsernameInput" class="profile-input" placeholder="Enter your username (e.g. John)">
+   <input id="profileWhatsappInput" class="profile-input" placeholder="Enter WhatsApp number (e.g. 0803...)">
+   <button onclick="saveProfileBanner()" class="profile-btn">Save Details</button>
+ </div>
 </div>
 
 <div class="balance-card">
@@ -518,46 +676,18 @@ LIVE
 </div>
 
 <div id="surveyContent">
-
-<div class="loader-wrap">
-<div class="loader"></div>
+<!-- Inline CPX consent loaded by default -->
+<div class="inline-consent">
+ <p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p>
+ <p>
+  <a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank">CPX Privacy</a> | 
+  <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank">CPX Terms</a>
+ </p>
+ <div class="inline-consent-actions">
+  <button class="inline-accept" id="acceptConsentInline">Accept</button>
+  <button class="inline-reject" id="rejectConsentInline">Reject</button>
+ </div>
 </div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- CONSENT MODAL -->
-
-<div id="consentModal">
-
-<div id="consentBox">
-
-<p>
-CPX Research uses cookies and tracking technologies to deliver surveys.
-By accepting, you agree to data processing.
-</p>
-
-<p>
-<a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank">
-CPX Privacy
-</a>
-|
-<a href="https://cpx-research.com/main/en/terms-user.php" target="_blank">
-CPX Terms
-</a>
-</p>
-
-<div class="modal-actions">
-<button class="accept" id="acceptConsent">
-Accept
-</button>
-
-<button class="reject" id="rejectConsent">
-Reject
-</button>
 </div>
 
 </div>
@@ -583,14 +713,6 @@ Cash Out
 Referrals
 </a>
 
-   <!-- BOTTOM NAV
-   
-<a href="game.html">
-<i class="fa-solid fa-gamepad"></i>
-Games
-</a>
- -->
-   
 <a href="#" id="logoutBtn">
 <i class="fa-solid fa-right-from-bracket"></i>
 Logout
@@ -607,7 +729,18 @@ const supabase = createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
 ); 
 
-   
+/* =========================
+   SECURITY: HTML ESCAPING (XSS PROTECTION)
+========================= */
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 /* =========================
    CHECK USER SESSION
@@ -621,71 +754,57 @@ if(!session){
 window.location.href = "login.html";
 throw new Error("No session");
 }
-   /* UPDATE LAST VISIT */
 
-updateLastVisit();
+/* INITIAL TRACKERS & LOADERS */
+initTrackers();
+loadDashboard();
+loadNewDashboardData();
 
 /* =========================
-   MENU TOGGLE
+   MENU & NOTIFICATION TOGGLES
 ========================= */
 
 window.toggleMenu = function(){
-
 const menu = document.getElementById("menu");
+const notifMenu = document.getElementById("notifMenu");
+notifMenu.style.display = "none";
 
 if(menu.style.display === "flex"){
 menu.style.display = "none";
 }else{
 menu.style.display = "flex";
 }
-
 };
 
-async function updateLastVisit() {
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+window.toggleNotif = function(){
+const notifMenu = document.getElementById("notifMenu");
+const menu = document.getElementById("menu");
+menu.style.display = "none";
 
-  if (!session) return;
-
-  const userId = session.user.id;
-
-  // Update last visit
-  const { error } = await supabase
-    .from('users')
-    .update({
-      last_visit: new Date().toISOString()
-    })
-    .eq('id', userId);
-
-  if (error) {
-    console.error("Last visit update failed:", error);
-  } else {
-    console.log("Last visit updated");
-
-    // Fetch fresh updated data
-    const { data: freshUser, error: fetchError } = await supabase
-      .from('users')
-      .select('last_visit')
-      .eq('id', userId)
-      .single();
-
-    if (!fetchError) {
-      console.log("Fresh last visit:", freshUser.last_visit);
-    }
-  }
+if(notifMenu.style.display === "block"){
+notifMenu.style.display = "none";
+}else{
+notifMenu.style.display = "block";
+markNotificationsRead();
 }
+};
 
-
+// Close dropdowns when clicking outside
+window.addEventListener("click", (e) => {
+if(!e.target.closest('.bell-btn') && !e.target.closest('#notifMenu')){
+document.getElementById("notifMenu").style.display = "none";
+}
+if(!e.target.closest('.menu-btn') && !e.target.closest('nav')){
+document.getElementById("menu").style.display = "none";
+}
+});
 
 /* =========================
-   LOAD DASHBOARD DATA
+   EXISTING DASHBOARD (rapid-processor) - UNTOUCHED
 ========================= */
 
 async function loadDashboard(){
-
 try{
-
 const res = await fetch(
 "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor",
 {
@@ -702,39 +821,231 @@ action:"dashboard"
 
 const data = await res.json();
 
-console.log("Dashboard Data:", data);
-
 if(!data.success){
 throw new Error(data.message || "Failed to load dashboard");
 }
 
-/* =========================
-   USERNAME
-========================= */
-
-document.getElementById("username").textContent =
-data.username || "User";
-
-/* =========================
-   BALANCE
-========================= */
-
-animateBalance(
-Number(data.balance || 0)
-);
+document.getElementById("username").textContent = data.username || "User";
+animateBalance(Number(data.balance || 0));
 
 }catch(err){
-
 console.error(err);
-
-document.getElementById("username").textContent =
-"User";
-
-document.getElementById("userBalance").textContent =
-"₦0";
-
+document.getElementById("username").textContent = "User";
+document.getElementById("userBalance").textContent = "₦0";
+}
 }
 
+/* =========================
+   NEW DASHBOARD FEATURES (dashboard-service) - SECURED
+========================= */
+
+let currentBannerId = null;
+
+async function loadNewDashboardData(){
+try{
+const res = await fetch(
+"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+{
+method:"POST",
+headers:{
+Authorization:`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+},
+body: JSON.stringify({
+action:"get-dashboard"
+})
+}
+);
+
+const data = await res.json();
+if(!data.success) return;
+
+// 1. Profile Banner Check
+checkProfileBanner(data.username, data.whatsapp);
+
+// 2. Admin Banner (with 24h snooze + ID check)
+if(data.admin_banner && data.admin_banner.is_active !== false){
+currentBannerId = data.admin_banner.id || data.admin_banner.message;
+const bannerText = data.admin_banner.message;
+
+const dismissedBannerId = localStorage.getItem("dismissed_banner_id");
+const dismissedAt = localStorage.getItem("dismissed_at");
+const now = Date.now();
+const twentyFourHours = 24 * 60 * 60 * 1000;
+
+let showBanner = true;
+if (dismissedBannerId === String(currentBannerId) && dismissedAt) {
+  if (now - Number(dismissedAt) < twentyFourHours) {
+    showBanner = false;
+  }
+}
+
+if (showBanner) {
+  document.getElementById("adminBannerText").textContent = bannerText;
+  document.getElementById("adminBanner").style.display = "block";
+} else {
+  document.getElementById("adminBanner").style.display = "none";
+}
+} else {
+document.getElementById("adminBanner").style.display = "none";
+}
+
+// 3. Notifications List
+updateNotifications(data.notifications || []);
+
+}catch(err){
+console.error("New dashboard service error:", err);
+}
+}
+
+window.dismissAdminBanner = function(){
+if(currentBannerId){
+localStorage.setItem("dismissed_banner_id", currentBannerId);
+localStorage.setItem("dismissed_at", Date.now().toString());
+}
+document.getElementById("adminBanner").style.display = "none";
+};
+
+function checkProfileBanner(username, whatsapp){
+const banner = document.getElementById("profileBanner");
+const usernameInput = document.getElementById("profileUsernameInput");
+const whatsappInput = document.getElementById("profileWhatsappInput");
+
+const hasValidUsername = username && username.trim() !== "" && username !== "User";
+const hasValidWhatsapp = whatsapp && whatsapp.trim() !== "";
+
+if (hasValidUsername && hasValidWhatsapp) {
+  banner.style.display = "none";
+  return;
+}
+
+banner.style.display = "block";
+
+if (hasValidUsername) {
+  usernameInput.style.display = "none";
+} else {
+  usernameInput.style.display = "block";
+}
+
+if (hasValidWhatsapp) {
+  whatsappInput.style.display = "none";
+} else {
+  whatsappInput.style.display = "block";
+}
+}
+
+window.saveProfileBanner = async function(){
+const usernameInput = document.getElementById("profileUsernameInput");
+const whatsappInput = document.getElementById("profileWhatsappInput");
+const saveBtn = document.querySelector(".profile-btn");
+
+const isUsernameVisible = usernameInput.style.display !== "none";
+const isWhatsappVisible = whatsappInput.style.display !== "none";
+
+if (!isUsernameVisible && !isWhatsappVisible) {
+  document.getElementById("profileBanner").style.display = "none";
+  return;
+}
+
+let updatePayload = { action: "save-profile" };
+
+if (isUsernameVisible) {
+  let rawUsername = usernameInput.value.trim();
+  const usernameRegex = /^[a-zA-Z0-9_\s]{2,30}$/;
+  if (!usernameRegex.test(rawUsername)) {
+    alert("Username must be 2-30 characters, letters and numbers only");
+    return;
+  }
+  updatePayload.username = rawUsername;
+}
+
+if (isWhatsappVisible) {
+  let rawWhatsapp = whatsappInput.value.trim();
+  let cleanedWhatsapp = rawWhatsapp.replace(/[\s+]/g, '');
+  const whatsappRegex = /^\d{10,15}$/;
+  if (!whatsappRegex.test(cleanedWhatsapp)) {
+    alert("Enter valid WhatsApp number, 10-15 digits");
+    return;
+  }
+  updatePayload.whatsapp = cleanedWhatsapp;
+}
+
+saveBtn.disabled = true;
+const originalBtnText = saveBtn.textContent;
+saveBtn.textContent = "Saving...";
+
+try {
+const res = await fetch(
+"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+{
+method:"POST",
+headers:{
+Authorization:`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+},
+body: JSON.stringify(updatePayload)
+}
+);
+const data = await res.json();
+if(data.success){
+alert("Profile saved successfully!");
+loadDashboard();
+loadNewDashboardData();
+} else {
+alert(data.message || "Failed to save profile.");
+}
+} catch(err){
+console.error(err);
+alert("Error saving profile.");
+} finally {
+saveBtn.disabled = false;
+saveBtn.textContent = originalBtnText;
+}
+};
+
+function updateNotifications(notifs){
+const notifList = document.getElementById("notifList");
+const notifCount = document.getElementById("notifCount");
+
+if(!notifs || notifs.length === 0){
+notifList.innerHTML = `<div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div>`;
+notifCount.style.display = "none";
+return;
+}
+
+let unreadCount = notifs.filter(n => !n.is_read).length;
+if(unreadCount > 0){
+notifCount.textContent = unreadCount;
+notifCount.style.display = "flex";
+} else {
+notifCount.style.display = "none";
+}
+
+notifList.innerHTML = notifs.map(n => `
+<div class="notif-item">
+ ${escapeHtml(n.message)}
+ <span>${new Date(n.created_at || Date.now()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+</div>
+`).join('');
+}
+
+async function markNotificationsRead(){
+document.getElementById("notifCount").style.display = "none";
+try {
+await fetch(
+"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+{
+method:"POST",
+headers:{
+Authorization:`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+},
+body: JSON.stringify({ action: "mark-read" })
+}
+);
+} catch(err){
+console.error("Mark read failed", err);
+}
 }
 
 /* =========================
@@ -742,33 +1053,19 @@ document.getElementById("userBalance").textContent =
 ========================= */
 
 function animateBalance(balance){
-
-const balanceElement =
-document.getElementById("userBalance");
-
+const balanceElement = document.getElementById("userBalance");
 let start = 0;
-
 const duration = 1200;
-
 const increment = balance / 60;
 
 const timer = setInterval(()=>{
-
 start += increment;
-
 if(start >= balance){
-
 start = balance;
-
 clearInterval(timer);
-
 }
-
-balanceElement.textContent =
-`₦${Math.floor(start).toLocaleString()}`;
-
+balanceElement.textContent = `₦${Math.floor(start).toLocaleString()}`;
 }, duration / 60);
-
 }
 
 /* =========================
@@ -778,20 +1075,12 @@ balanceElement.textContent =
 let activeVendor = "cpx";
 
 document.querySelectorAll(".vendor-btn").forEach(btn=>{
-
 btn.addEventListener("click",()=>{
-
-document.querySelectorAll(".vendor-btn")
-.forEach(b=>b.classList.remove("active"));
-
+document.querySelectorAll(".vendor-btn").forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
-
 activeVendor = btn.dataset.vendor;
-
 loadSurveys();
-
 });
-
 });
 
 /* =========================
@@ -799,11 +1088,24 @@ loadSurveys();
 ========================= */
 
 function loadSurveys(){
+const surveyContent = document.getElementById("surveyContent");
 
-const surveyContent =
-document.getElementById("surveyContent");
-
-/* LOADER */
+if(activeVendor === "cpx"){
+surveyContent.innerHTML = `
+<div class="inline-consent">
+ <p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p>
+ <p>
+  <a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank">CPX Privacy</a> | 
+  <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank">CPX Terms</a>
+ </p>
+ <div class="inline-consent-actions">
+  <button class="inline-accept" id="acceptConsentInline">Accept</button>
+  <button class="inline-reject" id="rejectConsentInline">Reject</button>
+ </div>
+</div>
+`;
+return;
+}
 
 surveyContent.innerHTML = `
 <div class="loader-wrap">
@@ -811,143 +1113,148 @@ surveyContent.innerHTML = `
 </div>
 `;
 
-/* =========================
-   CPX
-========================= */
-
-if(activeVendor === "cpx"){
-
-document.getElementById("consentModal")
-.style.display = "flex";
-
-return;
-
-}
-
-/* =========================
-   BITLABS
-========================= */
-
 if(activeVendor === "bitlab"){
-
 const userId = session.user.id;
-
-const bitlabsToken =
-"5f6cc641-dd5c-4551-a948-5c526d61d97a";
-
-const iframeSrc =
-`https://web.bitlabs.ai/?token=${bitlabsToken}&uid=${userId}`;
+const bitlabsToken = "5f6cc641-dd5c-4551-a948-5c526d61d97a";
+const iframeSrc = `https://web.bitlabs.ai/?token=${bitlabsToken}&uid=${userId}`;
 
 surveyContent.innerHTML = `
-<iframe
-src="${iframeSrc}"
-allowfullscreen>
-</iframe>
+<iframe src="${iframeSrc}" allowfullscreen></iframe>
 `;
-
 return;
-
 }
-
-/* =========================
-   WANNADS
-========================= */
 
 if(activeVendor === "wannads"){
-
 const userId = session.user.id;
-
-/* PUT YOUR WANNADS LINK HERE */
-
-const iframeSrc =
-`https://publishers.wannads.com/wall?apiKey=YOUR_WANNADS_API_KEY&userId=${userId}`;
+const iframeSrc = `https://publishers.wannads.com/wall?apiKey=YOUR_WANNADS_API_KEY&userId=${userId}`;
 
 surveyContent.innerHTML = `
-<iframe
-src="${iframeSrc}"
-allowfullscreen>
-</iframe>
+<iframe src="${iframeSrc}" allowfullscreen></iframe>
 `;
-
 return;
-
 }
-
 }
 
 /* =========================
-   CPX CONSENT ACCEPT
+   INLINE CPX CONSENT HANDLERS (Event Delegation)
 ========================= */
 
-document.getElementById("acceptConsent")
-.addEventListener("click",()=>{
+document.getElementById("surveyContent").addEventListener("click", (e) => {
+if (e.target && e.target.id === "acceptConsentInline") {
+  const userId = session.user.id;
+  const iframeSrc = `https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${userId}`;
+  document.getElementById("surveyContent").innerHTML = `
+  <iframe src="${iframeSrc}" allowfullscreen></iframe>
+  `;
+}
 
-document.getElementById("consentModal")
-.style.display = "none";
-
-const userId = session.user.id;
-
-/* CPX OFFERWALL */
-
-const iframeSrc =
-`https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${userId}`;
-
-document.getElementById("surveyContent")
-.innerHTML = `
-<iframe
-src="${iframeSrc}"
-allowfullscreen>
-</iframe>
-`;
-
-});
-
-/* =========================
-   CPX CONSENT REJECT
-========================= */
-
-document.getElementById("rejectConsent")
-.addEventListener("click",()=>{
-
-document.getElementById("consentModal")
-.style.display = "none";
-
-document.getElementById("surveyContent")
-.innerHTML = `
-<div style="
-padding:40px;
-text-align:center;
-color:#bbf7d0;
-">
-You rejected cookies.<br>
-CPX surveys cannot be shown.
-</div>
-`;
-
+if (e.target && e.target.id === "rejectConsentInline") {
+  document.getElementById("surveyContent").innerHTML = `
+  <div style="padding:40px; text-align:center; color:#bbf7d0;">
+  You rejected cookies.<br>CPX surveys cannot be shown.
+  </div>
+  `;
+}
 });
 
 /* =========================
    LOGOUT
 ========================= */
 
-document.getElementById("logoutBtn")
-.addEventListener("click", async (e)=>{
-
+document.getElementById("logoutBtn").addEventListener("click", async (e)=>{
 e.preventDefault();
-
 await supabase.auth.signOut();
-
 window.location.href = "login.html";
-
 });
 
-/* =========================
-   START
-========================= */
+/* =========================================================
+   VISIT & ACTIVE TIME TRACKER (Hardened & Anti-Cheat)
+========================================================= */
+function initTrackers() {
+  const userId = session.user.id;
 
-loadDashboard();
+  // 1. Visit Tracker (30-min window check)
+  trackVisit(userId);
 
-loadSurveys();
+  // 2. Active Time Tracker (3-min idle cutoff & visibility check)
+  let lastActivityTime = Date.now();
+  let accumulatedActiveSeconds = 0;
+  const idleLimit = 3 * 60 * 1000; // 3 minutes idle cutoff
+
+  const activityEvents = ['click', 'scroll', 'keypress', 'mousemove', 'touchstart'];
+  activityEvents.forEach(event => {
+    window.addEventListener(event, () => {
+      lastActivityTime = Date.now();
+    }, { passive: true });
+  });
+
+  // Ticker every 10 seconds
+  setInterval(() => {
+    // If tab is hidden or minimized, stop accumulating active time immediately
+    if (document.hidden) return;
+
+    const now = Date.now();
+    const idleDuration = now - lastActivityTime;
+
+    if (idleDuration < idleLimit) {
+      accumulatedActiveSeconds += 10;
+    }
+
+    if (accumulatedActiveSeconds >= 60) {
+      sendActiveTime(accumulatedActiveSeconds);
+      accumulatedActiveSeconds = 0;
+    }
+  }, 10000);
+}
+
+async function trackVisit(userId) {
+  try {
+    const lastVisitKey = `last_visit_recorded_${userId}`;
+    const lastVisitTime = localStorage.getItem(lastVisitKey);
+    const now = Date.now();
+    const thirtyMinutes = 30 * 60 * 1000;
+
+    if (!lastVisitTime || (now - Number(lastVisitTime)) > thirtyMinutes) {
+      localStorage.setItem(lastVisitKey, now.toString());
+      await fetch(
+        "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ action: "track-visit" })
+        }
+      );
+    }
+  } catch (err) {
+    console.error("Visit tracking error:", err);
+  }
+}
+
+async function sendActiveTime(seconds) {
+  if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0 || seconds > 70) {
+    console.warn("Blocked fraudulent or invalid active time payload:", seconds);
+    return;
+  }
+
+  try {
+    await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        action: "track-time",
+        active_seconds: seconds
+      })
+    });
+  } catch (err) {
+    console.error("Time tracking sync failed:", err);
+  }
+}
 
 </script>
 
