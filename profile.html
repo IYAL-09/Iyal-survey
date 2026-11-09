@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="manifest" href="/manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iyal Surveys – User Profile</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="icon" type="image/png" href="iyallogo.png">
+<link rel="apple-touch-icon" href="iyallogo.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#08140d;color:white;min-height:100vh;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at top left,#16a34a55,transparent 35%),radial-gradient(circle at bottom right,#22c55e44,transparent 35%),#08140d}
+.blur{position:fixed;width:300px;height:300px;border-radius:50%;background:#22c55e22;filter:blur(90px);z-index:-1;animation:float 8s infinite ease-in-out}
+.blur1{top:-80px;left:-80px}.blur2{bottom:-100px;right:-100px;animation-delay:3s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(30px)}}
+header{padding:20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:999;backdrop-filter:blur(20px)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo img{width:52px;height:52px;border-radius:50%;border:2px solid #22c55e;object-fit:cover}
+.logo h1{font-size:1.15rem;font-weight:700}
+.header-right{display:flex;align-items:center;gap:12px}
+.menu-btn{width:46px;height:46px;border-radius:16px;background:#ffffff10;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;border:1px solid #ffffff10;color:white}
+nav{position:absolute;top:85px;right:20px;background:#0f1d14ee;backdrop-filter:blur(18px);padding:18px;border-radius:22px;display:none;flex-direction:column;gap:16px;width:230px;border:1px solid #ffffff10;z-index:100;animation:fadeUp .3s ease}
+nav a{text-decoration:none;color:#d1fae5;font-size:.95rem}
+.toast-notification{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#0f1d14;border:1px solid #22c55e55;color:#fff;padding:12px 24px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.5);font-size:.9rem;z-index:9999;transition:.3s;opacity:0}
+.toast-notification.show{transform:translateX(-50%) translateY(0);opacity:1}
+.container{padding:20px;padding-bottom:120px;max-width:650px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.card{background:#0f1d14;border:1px solid #ffffff12;border-radius:24px;padding:24px;box-shadow:0 15px 40px rgba(0,0,0,.3);animation:fadeUp .5s ease}
+.profile-header-card{text-align:center}
+.avatar-wrapper{position:relative;width:100px;height:100px;margin:0 auto 16px;border-radius:50%;background:#ffffff08;border:2px solid #22c55e55;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.avatar-wrapper img{width:100%;height:100%;object-fit:cover}
+.user-name{font-size:1.4rem;font-weight:700;margin-bottom:4px}
+.user-handle{font-size:.9rem;color:#86efac;margin-bottom:12px}
+.badges-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.badge{padding:6px 12px;border-radius:99px;font-size:.75rem;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.badge-verified{background:#16a34a25;color:#4ade80;border:1px solid #16a34a55}
+.badge-unverified{background:#ffffff08;color:#94a3b8;border:1px solid #ffffff15}
+.badge-level{background:#2563eb25;color:#60a5fa;border:1px solid #2563eb55}
+.stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.stat-box{background:#ffffff05;border:1px solid #ffffff0a;border-radius:16px;padding:16px;text-align:left}
+.stat-box span{font-size:.75rem;color:#94a3b8;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.stat-box h3{font-size:1.15rem;color:#86efac;font-weight:700}
+.alert-box{padding:16px;border-radius:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:10px;font-size:.9rem}
+.alert-yellow{background:#fef3c715;border:1px solid #fef3c744;color:#fde68a}
+.alert-green{background:#dcfce715;border:1px solid #dcfce744;color:#86efac}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.85rem;color:#cbd5e1;margin-bottom:6px;font-weight:600}
+.form-input,.form-select{width:100%;padding:12px 16px;background:#ffffff08;border:1px solid #ffffff15;border-radius:14px;color:white;font-size:.95rem;outline:none}
+.form-input:focus,.form-select:focus{border-color:#22c55e;background:#ffffff10}
+.form-input:disabled{opacity:.6;cursor:not-allowed}
+.input-hint{font-size:.75rem;color:#94a3b8;margin-top:4px;display:block}
+.btn-primary{display:block;width:100%;padding:14px;border:none;border-radius:16px;background:linear-gradient(135deg,#16a34a,#22c55e);color:white;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 10px 25px rgba(34,197,94,.25);margin-top:10px;text-decoration:none;text-align:center}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 14px;border-radius:10px;background:#ffffff10;color:white;border:1px solid #ffffff15;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none}
+.skeleton{background:linear-gradient(90deg,#ffffff08 25%,#ffffff15 50%,#ffffff08 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;color:transparent!important}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:#0b1610ee;backdrop-filter:blur(18px);display:flex;justify-content:space-around;padding:14px 0;border-top:1px solid #ffffff10;z-index:999}
+.bottom-nav a{color:white;text-decoration:none;font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:5px}
+.bottom-nav i{font-size:1.1rem}
+.active-nav{color:#86efac!important}
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="blur blur1"></div><div class="blur blur2"></div>
+<header>
+<div class="logo"><img src="iyallogo.png" alt="Logo"><h1>Iyal Surveys</h1></div>
+<div class="header-right"><div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div></div>
+<nav id="menu">
+<a href="dashboard.html">Dashboard</a><a href="profile.html">Profile</a><a href="leaderboard.html">Leaderboard</a><a href="withdraw.html">Withdrawals</a><a href="support.html">Support</a><a href="settings.html">Settings</a><a href="w-policy.html">Withdrawal Policy</a>
+</nav>
+</header>
+
+<div class="container" id="mainContainer">
+  <div class="card profile-header-card">
+    <div class="avatar-wrapper skeleton" style="width:100px;height:100px;"></div>
+    <div class="skeleton" style="height:24px;width:160px;margin:0 auto 8px;"></div>
+    <div class="skeleton" style="height:16px;width:100px;margin:0 auto;"></div>
+  </div>
+  <div class="card"><div class="skeleton" style="height:100px;width:100%;"></div></div>
+</div>
+
+<div class="bottom-nav">
+<a href="dashboard.html"><i class="fa-solid fa-house"></i>Home</a>
+<a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a>
+<a href="referrals.html"><i class="fa-solid fa-users"></i>Referrals</a>
+<a href="profile.html" class="active-nav"><i class="fa-solid fa-user"></i>Profile</a>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+// ===== SECURE CONFIG WITH PUBLISHABLE KEY =====
+const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Z6fCexCd_v13ARt6147e_Q_T9NtE-Hg";
+const EDGE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/profile";
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+// ===== INLINE HELPERS =====
+function escapeHtml(str){ if(!str) return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+function showToast(message){ let toast=document.getElementById('customToast'); if(!toast){ toast=document.createElement('div'); toast.id='customToast'; toast.className='toast-notification'; document.body.appendChild(toast);} toast.textContent=message; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
+async function requireUser(){ const {data:{session}}=await supabase.auth.getSession(); if(!session){ window.location.href="login.html"; throw new Error("No session"); } return session.user; }
+async function callEdge(action, method="GET", body=null){
+  const {data:{session}}=await supabase.auth.getSession();
+  if(!session) throw new Error("No session");
+  const res=await fetch(`${EDGE_URL}?action=${action}`,{method,headers:{"Content-Type":"application/json","Authorization":`Bearer ${session.access_token}`,"apikey":SUPABASE_PUBLISHABLE_KEY},body:body?JSON.stringify(body):null});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.error||data.msg||"Request failed");
+  return data;
+}
+async function loadProfile(){ return await callEdge("get","GET"); }
+function getAvatarUrl(style,username,gender){ const seed=`${username||'user'}-${gender||'other'}`; return `https://api.dicebear.com/9.x/${style||'avataaars'}/svg?seed=${encodeURIComponent(seed)}`; }
+function getLevel(count){ const s=count||0; if(s>=50) return {title:"Master 🏆",color:"#fbbf24"}; if(s>=10) return {title:"Pro ⚡",color:"#60a5fa"}; return {title:"Newbie",color:"#94a3b8"}; }
+async function isUsernameAvailable(val,myUsername){ const username=val.trim().toLowerCase(); if(!/^[a-z0-9_]{3,20}$/.test(username)) return {ok:false,msg:"Invalid format: 3-20 chars (a-z, 0-9, _)"}; if(username===(myUsername||'').toLowerCase()) return {ok:true,msg:"Username available"}; const data=await callEdge(`check-username&username=${encodeURIComponent(username)}`,"GET"); return {ok:data.ok,msg:data.msg}; }
+function is18Plus(dob){ if(!dob) return true; const d=new Date(dob+"T00:00:00Z"); const today=new Date(); let age=today.getUTCFullYear()-d.getUTCFullYear(); const m=today.getUTCMonth()-d.getUTCMonth(); if(m<0||(m===0&&today.getUTCDate()<d.getUTCDate())) age--; return age>=18; }
+async function saveProfile(payload){ return await callEdge("update","POST",payload); }
+async function resendVerificationEmail(email){ const {error}=await supabase.auth.resend({type:'signup',email}); if(error) throw error; }
+
+// ===== PAGE LOGIC =====
+const userSession = await requireUser();
+window.toggleMenu=function(){ const menu=document.getElementById("menu"); menu.style.display=(menu.style.display==="flex")?"none":"flex"; };
+window.addEventListener("click",(e)=>{ if(!e.target.closest('.menu-btn')&&!e.target.closest('nav')) document.getElementById("menu").style.display="none"; });
+
+async function initProfilePage(){
+  try{
+    const { user, latestVerify } = await loadProfile();
+    const container=document.getElementById("mainContainer");
+    const level=getLevel(user.completed_surveys_count);
+    const memberSince=new Date(user.created_at||Date.now()).toLocaleDateString([],{month:'short',year:'numeric'});
+    const initialStyle=user.avatar_style||"avataaars";
+    const initialGender=user.gender||"other";
+    const initialUsername=user.username||"";
+    const activeAvatar=getAvatarUrl(initialStyle,initialUsername,initialGender);
+    const isEmailVerified=!!user.email_verified_at;
+    container.innerHTML=`
+      <div class="card profile-header-card">
+        <div class="avatar-wrapper"><img id="liveAvatarImg" src="${activeAvatar}" alt="Avatar"></div>
+        <h2 class="user-name" id="displayHeaderName">${escapeHtml(user.name||"Surveyor")}</h2>
+        <div class="user-handle" id="displayHeaderHandle">@${escapeHtml(initialUsername||"username")}</div>
+        <div class="badges-row">
+          <span class="badge badge-level" style="border-color:${level.color}55;color:${level.color};">${level.title} (${user.completed_surveys_count||0} Surveys)</span>
+          ${user.is_verified?'<span class="badge badge-verified"><i class="fa-solid fa-shield-check"></i> Identity Verified</span>':'<span class="badge badge-unverified">Unverified</span>'}
+        </div>
+        <p style="font-size:.75rem;color:#94a3b8;margin-top:10px;">Member Since ${memberSince}</p>
+      </div>
+      <div class="card" style="padding:18px;">
+        <div class="stats-grid">
+          <div class="stat-box"><span>Balance</span><h3>₦${Number(user.balance||0).toLocaleString()}</h3></div>
+          <div class="stat-box"><span>Total Earned</span><h3>₦${Number(user.total_earned||0).toLocaleString()}</h3></div>
+          <div class="stat-box"><span>Total Withdrawn</span><h3>₦${Number(user.total_withdrawn||0).toLocaleString()}</h3></div>
+          <div class="stat-box"><span>Surveys Done</span><h3>${user.completed_surveys_count||0}</h3></div>
+        </div>
+      </div>
+      ${!isEmailVerified?`
+        <div class="alert-box alert-yellow">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <span><b>⚠️ Email Unverified:</b> Verify your email to save profile changes.</span>
+            <button id="resendEmailBtn" class="btn-secondary" style="white-space:nowrap;">Resend Link</button>
+          </div>
+        </div>`:`
+        <div class="alert-box alert-green"><span><b>✅ Email Verified:</b> Your email is confirmed.</span></div>`}
+      <div class="card">
+        <h3 style="font-size:1.05rem;color:#86efac;margin-bottom:12px;"><i class="fa-solid fa-id-card"></i> Identity Status</h3>
+        ${user.is_verified
+          ?`<div style="background:#16a34a15;border:1px solid #16a34a44;padding:14px;border-radius:14px;color:#4ade80;"><b>✅ Verified Account</b><br><span style="font-size:.85rem;color:#d1fae5;">Verified Name: ${escapeHtml(latestVerify?.persona_name||user.name)}<br>Date: ${latestVerify?.verified_at?new Date(latestVerify.verified_at).toLocaleDateString():'N/A'}</span></div>`
+          :(latestVerify?.status==='failed'||latestVerify?.status==='declined')
+          ?`<div style="background:#dc262615;border:1px solid #dc262644;padding:14px;border-radius:14px;color:#fca5a5;display:flex;flex-direction:column;gap:10px;"><div><b>❌ Verification Failed</b><br><span style="font-size:.85rem;">${escapeHtml(latestVerify?.mismatch_reason||"Verification requirements were not met.")}</span></div><a href="verify.html?return_to=profile.html" class="btn-primary" style="margin:0;">Try Again</a></div>`
+          :`<div style="background:#ffffff05;border:1px solid #ffffff10;padding:14px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;"><span style="font-size:.9rem;color:#cbd5e1;">Unlock full withdrawal access.</span><a href="verify.html?return_to=profile.html" class="btn-secondary" style="background:#22c55e;color:white;border:none;white-space:nowrap;">Verify Now</a></div>`
+        }
+      </div>
+      <div class="card">
+        <h3 style="font-size:1.15rem;color:#86efac;margin-bottom:20px;">Edit Profile</h3>
+        <form id="profileForm">
+          <div class="form-group"><label>Full Name</label><input type="text" id="inputName" class="form-input" value="${escapeHtml(user.name||'')}" required></div>
+          <div class="form-group"><label>Username</label><input type="text" id="inputUsername" class="form-input" value="${escapeHtml(initialUsername)}" required><span class="input-hint" id="usernameFeedback">3-20 characters, lowercase letters, numbers, underscores.</span></div>
+          <div class="form-group"><label>Email Address</label><input type="email" class="form-input" value="${escapeHtml(user.email||'')}" disabled><span class="input-hint">Email cannot be changed here.</span></div>
+          <div class="form-group"><label>Gender</label><select id="selectGender" class="form-select"><option value="male" ${initialGender==='male'?'selected':''}>Male</option><option value="female" ${initialGender==='female'?'selected':''}>Female</option><option value="other" ${initialGender==='other'?'selected':''}>Prefer not to say</option></select></div>
+          <div class="form-group"><label>Avatar Style</label><select id="selectAvatarStyle" class="form-select"><option value="avataaars" ${initialStyle==='avataaars'?'selected':''}>Avataaars</option><option value="adventurer" ${initialStyle==='adventurer'?'selected':''}>Adventurer</option><option value="personas" ${initialStyle==='personas'?'selected':''}>Personas</option><option value="notionists" ${initialStyle==='notionists'?'selected':''}>Notionists</option><option value="fun-emoji" ${initialStyle==='fun-emoji'?'selected':''}>Fun Emoji</option><option value="bottts" ${initialStyle==='bottts'?'selected':''}>Bottts</option></select></div>
+          <div class="form-group"><label>Date of Birth ${user.is_verified?'(Locked)':''}</label><input type="date" id="inputDob" class="form-input" value="${user.date_of_birth||''}" ${user.is_verified?'disabled':''}><span class="input-hint">${user.is_verified?'Locked after verification.':'Must be at least 18 years old.'}</span></div>
+          <div class="form-group"><label>Phone Number</label><input type="text" id="inputPhone" class="form-input" placeholder="+234..." value="${escapeHtml(user.phone||'')}"><span class="input-hint">Nigerian format (+234...). ${user.phone_verified?'✅ Verified':'Unverified'}</span></div>
+          <button type="submit" id="saveBtn" class="btn-primary" ${!isEmailVerified?'disabled':''}>Save Changes</button>
+          ${!isEmailVerified?'<span class="input-hint" style="text-align:center;color:#fca5a5;margin-top:8px;">Verify your email above to enable saving.</span>':''}
+        </form>
+      </div>
+    `;
+    bindFormInteractions(initialUsername);
+  }catch(err){ showToast("Failed to load profile data."); }
+}
+function bindFormInteractions(initialUsername){
+  const inputUsername=document.getElementById("inputUsername");
+  const usernameFeedback=document.getElementById("usernameFeedback");
+  const selectAvatarStyle=document.getElementById("selectAvatarStyle");
+  const selectGender=document.getElementById("selectGender");
+  const liveAvatarImg=document.getElementById("liveAvatarImg");
+  const profileForm=document.getElementById("profileForm");
+  const resendEmailBtn=document.getElementById("resendEmailBtn");
+  let isUsernameValid=true, debounceTimer=null;
+  function updateAvatarPreview(){ liveAvatarImg.src=getAvatarUrl(selectAvatarStyle.value,inputUsername.value.trim()||initialUsername,selectGender.value); }
+  selectAvatarStyle.addEventListener("change",updateAvatarPreview);
+  selectGender.addEventListener("change",updateAvatarPreview);
+  inputUsername.addEventListener("input",(e)=>{
+    updateAvatarPreview();
+    usernameFeedback.textContent="Checking availability..."; usernameFeedback.style.color="#fbbf24";
+    clearTimeout(debounceTimer);
+    debounceTimer=setTimeout(async()=>{
+      try{ const res=await isUsernameAvailable(e.target.value,initialUsername); usernameFeedback.textContent=res.msg; usernameFeedback.style.color=res.ok?"#4ade80":"#fca5a5"; isUsernameValid=res.ok; }
+      catch{ usernameFeedback.textContent="Could not check username"; isUsernameValid=false; }
+    },500);
+  });
+  if(resendEmailBtn){
+    resendEmailBtn.addEventListener("click",async()=>{
+      resendEmailBtn.textContent="Sending...";
+      try{ await resendVerificationEmail(userSession.email); showToast("Verification email sent! Check your inbox."); resendEmailBtn.textContent="Sent ✅"; }
+      catch(err){ showToast(err.message||"Failed to resend email."); resendEmailBtn.textContent="Resend Link"; }
+    });
+  }
+  profileForm.addEventListener("submit",async(e)=>{
+    e.preventDefault();
+    if(!isUsernameValid){ showToast("Please choose a valid and available username."); return; }
+    const saveBtn=document.getElementById("saveBtn"); saveBtn.textContent="Saving..."; saveBtn.disabled=true;
+    const name=document.getElementById("inputName").value.trim();
+    const username=inputUsername.value.trim().toLowerCase();
+    const gender=selectGender.value;
+    const avatar_style=selectAvatarStyle.value;
+    const date_of_birth=document.getElementById("inputDob").value||null;
+    const phone=document.getElementById("inputPhone").value.trim()||null;
+    if(date_of_birth&&!is18Plus(date_of_birth)){ showToast("You must be at least 18 years old."); saveBtn.textContent="Save Changes"; saveBtn.disabled=false; return; }
+    try{
+      await saveProfile({name,username,gender,avatar_style,date_of_birth,phone});
+      showToast("Profile updated successfully! ✨");
+      document.getElementById("displayHeaderName").textContent=name;
+      document.getElementById("displayHeaderHandle").textContent=`@${username}`;
+      saveBtn.textContent="Save Changes"; saveBtn.disabled=false;
+    }catch(err){ showToast(err.message||"Failed to save profile updates."); saveBtn.textContent="Save Changes"; saveBtn.disabled=false; }
+  });
+}
+initProfilePage();
+</script>
+</body>
+</html>
