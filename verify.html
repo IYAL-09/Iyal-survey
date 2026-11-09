@@ -12,9 +12,6 @@
 <!-- Favicon -->
 <link rel="icon" type="image/png" href="iyallogo.png">
 <link rel="apple-touch-icon" href="iyallogo.png">
-
-<!-- Persona SDK Script -->
-<script src="https://cdn.withpersona.com/dist/persona-v5.5.0.js" integrity="sha384-UK+a2yEU9KOzEmsgI4IlkrXWE4AekM/iAgWF60Zuyule702g7qaQ2nYccO3tnT0A" crossorigin="anonymous"></script>
    
 <style>
 *{
@@ -400,9 +397,12 @@ color:#86efac !important;
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 const supabase = createClient(
-"httpsxkshzlfducmnglxfnxzk.supabase.co".replace('https','https://'),
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
-); 
+  "https://xkshzlfducmnglxfnxzk.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
+);
+
+const FN = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/persona-verification";
+const TEMPLATE_ID = "itmpl_AigutaXdgBUCpJagJBqZEAsGFLL3Pz";
 
 /* =========================
    SECURITY: HTML ESCAPING
@@ -447,7 +447,7 @@ if(!session){
 
 const userId = session.user.id;
 
-/* 1. SECURE return_to VALIDATION (Exact Match Array Lookup) */
+/* Parse safe return_to parameter */
 const urlParams = new URLSearchParams(window.location.search);
 let returnTo = urlParams.get('return_to') || 'profile.html';
 const allowedPaths = ['dashboard.html', 'profile.html', 'leaderboard.html', 'withdraw.html'];
@@ -640,84 +640,147 @@ async function sendActiveTime(seconds) {
 /* =========================
    VERIFICATION FLOW LOGIC
 ========================= */
-/* 
-  NOTE FOR BACKEND: Edge Function 'persona-verification' must ignore any user_id 
-  sent from the frontend body and extract the real user ID securely from the JWT Authorization header.
-*/
-async function checkVerificationStatus(silent = false) {
-  try {
-    const { data, error } = await supabase.functions.invoke('persona-verification', {
-      body: { action: 'check', user_id: userId }
-    });
-    if (error) throw error;
-    return data;
-  } catch (err) {
-    if (!silent) {
-      showToast("Unable to verify status. Please try again.");
-    }
-    return { verified: false, status: 'not_verified' };
-  }
-}
-
 async function initVerifyPage() {
   const container = document.getElementById("verifyContainer");
-  const statusData = await checkVerificationStatus(false);
 
-  if (statusData.verified || statusData.status === 'verified') {
+  // Step 1: Check users.date_of_birth
+  const { data: profile, error: profileError } = await supabase
+    .from("users")
+    .select("name, date_of_birth")
+    .eq("id", userId)
+    .single();
+
+  if (profileError || !profile?.date_of_birth) {
     container.innerHTML = `
-      <h2>Identity Verified 🎉</h2>
-      <p>Your account has been successfully verified. You have full access to claim rewards, run surveys, and withdraw funds.</p>
-      <button class="verify-main-btn" onclick="window.location.href='${returnTo}'">Return to Previous Page</button>
+      <div style="background:#fef3c7; color:#1a1000; padding:20px; border-radius:18px; text-align:center;">
+        <h3 style="font-size:1.3rem; margin-bottom:10px;">⚠️ Add Date of Birth First</h3>
+        <p style="margin-bottom:16px; font-size:0.95rem;">Add your DOB in profile before verification.</p>
+        <a href="profile.html" style="display:inline-block; background:#16a34a; color:white; padding:12px 20px; border-radius:14px; text-decoration:none; font-weight:700;">Go to Profile → Add DOB</a>
+      </div>
     `;
     return;
   }
 
+  // Step 2: Call verification status endpoint
+  try {
+    const res = await fetch(FN, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    const v = await res.json();
+
+    if (v.verified) {
+      container.innerHTML = `
+        <h2>✅ Verified</h2>
+        <p>Your account has been successfully verified. You have full access to claim rewards, run surveys, and withdraw funds.</p>
+        <p style="color:#86efac; font-size:0.85rem; margin-bottom:20px;">Verified at: ${v.verified_at ? new Date(v.verified_at).toLocaleString() : ""}</p>
+        <button class="verify-main-btn" onclick="window.location.href='${returnTo}'">Return to Dashboard</button>
+      `;
+      return;
+    }
+
+    if (v.blocked) {
+      container.innerHTML = `
+        <h2>🚫 Blocked</h2>
+        <p>You used all 3 attempts. ${escapeHtml(v.mismatch_reason || "")}</p>
+        <a href="support.html" class="verify-sec-btn" style="text-align:center;">Contact Support</a>
+      `;
+      return;
+    }
+
+    if (v.is_name_mismatch) {
+      container.innerHTML = `
+        <h2>❌ Name / ID No Match</h2>
+        <p style="text-align:left; background:#ffffff08; padding:14px; border-radius:14px; margin-bottom:16px; font-size:0.9rem; line-height:1.5;">
+          ID Name: <b>${escapeHtml(v.persona_name || "N/A")}</b><br>
+          Account Name: <b>${escapeHtml(v.account_name || "N/A")}</b>
+        </p>
+        <p style="color:#fca5a5; margin-bottom:12px; font-size:0.9rem;">${escapeHtml(v.mismatch_reason || "")}</p>
+        <p style="margin-bottom:16px; color:#d1fae5; font-size:0.9rem;">Attempts left: ${v.attemptsLeft}/3</p>
+        <button class="verify-main-btn" onclick="startVerify()">Try Again</button>
+        <a href="${returnTo}" class="verify-sec-btn" style="text-align:center; margin-top:10px;">Go Back</a>
+      `;
+      return;
+    }
+
+    if (v.status === "expired") {
+      container.innerHTML = `
+        <h2>⏰ Expired</h2>
+        <p>Verification session expired. Please start again.</p>
+        <button class="verify-main-btn" onclick="startVerify()">Start Again</button>
+        <a href="${returnTo}" class="verify-sec-btn" style="text-align:center; margin-top:10px;">Go Back</a>
+      `;
+      return;
+    }
+
+    if (v.mismatch_reason?.startsWith("DUPLICATE_ID")) {
+      container.innerHTML = `
+        <h2>❌ ID Already Used</h2>
+        <p>This ID has already been used for another account.</p>
+        <a href="support.html" class="verify-sec-btn" style="text-align:center; margin-top:20px;">Contact Support</a>
+      `;
+      return;
+    }
+
+    // Default / standard verification prompt
+    container.innerHTML = `
+      <h2>Verify Your Identity</h2>
+      <p>Attempts left: ${v.attemptsLeft}/3</p>
+      <p style="color:#bbf7d0; font-size:0.9rem; margin-bottom:24px;">${escapeHtml(v.mismatch_reason || "Use your government ID with name matching your account.")}</p>
+      <button class="verify-main-btn" onclick="startVerify()">Start Verification</button>
+      <a href="${returnTo}" class="verify-sec-btn" style="text-align:center; margin-top:10px;">Go Back</a>
+    `;
+
+  } catch (err) {
+    console.error("Verification status fetch error:", err);
+    container.innerHTML = `
+      <h2>Connection Error</h2>
+      <p>Unable to retrieve verification status. Please check your connection and try again.</p>
+      <button class="verify-main-btn" onclick="window.location.reload()">Retry</button>
+    `;
+  }
+}
+
+window.startVerify = function() {
+  window.open(`https://withpersona.com/verify?inquiry-template-id=${TEMPLATE_ID}&reference-id=${userId}`, "_blank");
+  
+  // Show submission waiting state on screen while polling
+  const container = document.getElementById("verifyContainer");
   container.innerHTML = `
-    <h2>Identity Verification Required</h2>
-    <p>Please complete our secure identity check to unlock full payout withdrawals, prevent fraud, and secure your account profile.</p>
-    <button class="verify-main-btn" id="startVerifyBtn">Start Verification</button>
-    <a href="${returnTo}" class="verify-sec-btn">Go Back</a>
+    <h2>Verification Submitted</h2>
+    <p>Thank you. Please complete the flow in the opened tab. We are confirming your verification...</p>
+    <div class="loader-wrap"><div class="loader"></div></div>
   `;
 
-  document.getElementById("startVerifyBtn").addEventListener("click", () => {
-    launchPersonaFlow();
-  });
-}
-
-function launchPersonaFlow() {
-  const client = new Persona.Client({
-    templateId: 'itmpl_AigutaXdgBUCpJagJBqZEAsGFLL3Pz',
-    environmentId: 'env_AigutaX2UQQ4TLUDouMNWKinJDYos6',
-    referenceId: userId,
-    onReady: () => {
-      client.open();
-    },
-    onComplete: async ({ inquiryId }) => {
-      const container = document.getElementById("verifyContainer");
-      container.innerHTML = `
-        <h2>Verification Submitted</h2>
-        <p>Thank you. Please wait a moment while we confirm your verification...</p>
-        <div class="loader-wrap"><div class="loader"></div></div>
-      `;
-      for (let i = 0; i < 6; i++) {
-        await new Promise(r => setTimeout(r, 5000));
-        const updated = await checkVerificationStatus(true); // Silent polling to avoid toast spam
-        if (updated.verified || updated.status === 'verified') {
-          window.location.href = returnTo;
-          return;
-        }
-      }
-      showToast("Verification submitted and is being reviewed. You will be notified once approved.");
-      setTimeout(() => { window.location.href = returnTo; }, 2000);
-    },
-    onCancel: ({ inquiryId }) => {
-      // Clean cancellation handling without console logs
-    },
-    onError: (error) => {
-      showToast("Unable to load verification. Please try again.");
+  let n = 0;
+  const t = setInterval(async () => {
+    n++;
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      clearInterval(t);
+      return;
     }
-  });
-}
+    try {
+      const r = await fetch(FN, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      const v = await r.json();
+      if (v.verified || v.status === "expired" || v.status === "failed" || v.blocked || n > 12) {
+        clearInterval(t);
+        initVerifyPage();
+      }
+    } catch (e) {
+      // ignore network errors during poll
+    }
+  }, 5000);
+};
 
 /* LOGOUT */
 document.getElementById("logoutBtn").addEventListener("click", async (e)=>{
