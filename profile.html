@@ -250,7 +250,6 @@ function renderProfile(u, confirmResult){
       <label>Email (Current)</label><input value="${escapeHtml(u.email||'')}" disabled>
       <button class="btn" id="saveBtn">Save Changes — Send Confirmation Email</button>
       <div id="msg"></div>
-      <button class="btn-sec" id="changeEmailBtn">Change Email Separately</button>
       <a class="btn-sec" href="verify.html">Go to Verification →</a>
     `;
     renderAvatarGrid();
@@ -292,11 +291,7 @@ function renderProfile(u, confirmResult){
         btn.disabled=false; btn.textContent='Save Changes — Send Confirmation Email';
       }
     });
-    document.getElementById('changeEmailBtn').addEventListener('click',async()=>{
-      const ne=prompt('Enter new email:'); if(!ne) return;
-      const { error }=await supabase.auth.updateUser({email:ne.trim()});
-      if(error) showToast('STEP: CHANGE_EMAIL | MESSAGE: '+error.message); else showToast('Verification sent to your NEW email.');
-    });
+    
 }
 document.getElementById("logoutBtn").addEventListener("click",async(e)=>{ e.preventDefault(); await supabase.auth.signOut(); window.location.href="login.html"; });
 </script>
