@@ -13,19 +13,25 @@ label{font-size:13px;color:#bbf7d0} button{width:100%;padding:14px;border:none;b
 button:disabled{opacity:.5} .msg{padding:12px;border-radius:12px;margin:12px 0;display:none;font-size:14px;line-height:1.5}
 .success{background:#14532d} .error{background:#7f1d1d} .info{background:#1e3a8a}
 .avatar{width:90px;height:90px;border-radius:50%;background:#1a2e22;display:block;margin:0 auto 10px;object-fit:cover}
-.verify{padding:14px;border-radius:14px;margin:12px 0;font-size:14px}
+.verify{padding:14px;border-radius:14px;margin:12px 0;font-size:14px;display:flex;gap:12px;align-items:flex-start}
 .v-verified{background:#14532d} .v-failed{background:#7f1d1d} .v-pending{background:#854d0e} .v-not{background:#1f2937}
 .small{font-size:12px;color:#9ca3af} .row{display:flex;gap:10px} .row>div{flex:1}
 .avatar-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0 12px}
 .avatar-opt{width:56px;height:56px;border-radius:50%;border:2px solid transparent;cursor:pointer;background:#1a2e22;object-fit:cover}
 .avatar-opt.active{border-color:#22c55e}
+.dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.dot-green{background:#22c55e;box-shadow:0 0 0 4px #22c55e33}
+.dot-red{background:#ef4444;box-shadow:0 0 0 4px #ef444433}
+.dot-yellow{background:#eab308;box-shadow:0 0 0 4px #eab30833}
+.dot-gray{background:#6b7280}
+.verify-btn{width:auto!important;padding:8px 16px!important;font-size:13px;margin-top:8px;background:#fff!important;color:#000!important}
+.verify-btn-green{background:#22c55e!important;color:#fff!important}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#14532d;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700}
 </style>
 </head>
 <body>
 <div class="card">
-  <div id="loading" style="text-align:center;padding:30px">
-    <div style="font-size:32px">⏳</div><p>Loading profile...</p>
-  </div>
+  <div id="loading" style="text-align:center;padding:30px"><div style="font-size:32px">⏳</div><p>Loading profile...</p></div>
 
   <div id="noAuth" style="display:none;text-align:center">
     <h2>Please sign in to continue</h2><p>You need to sign in to view your profile.</p>
@@ -33,17 +39,26 @@ button:disabled{opacity:.5} .msg{padding:12px;border-radius:12px;margin:12px 0;d
   </div>
 
   <div id="main" style="display:none">
-    <div id="confirmedBanner" class="msg success" style="display:none">✅ <b>Profile Updated</b><br>Your changes have been confirmed and applied.</div>
+    <div id="confirmedBanner" class="msg success" style="display:none">✅ <b>Profile Updated Successfully!</b><br>Your changes have been confirmed and applied.</div>
     <div id="alert" class="msg"></div>
 
-    <!-- AVATAR - NOT REMOVED -->
     <img id="avatarImg" class="avatar" src="" alt="Avatar">
     <p style="text-align:center;color:#bbf7d0;font-size:13px;margin:0">Choose Avatar Style</p>
     <div class="avatar-row" id="avatarRow"></div>
 
     <h2 id="displayName" style="text-align:center;margin:6px 0">Loading...</h2>
     <p id="displayUser" style="text-align:center;color:#9ca3af;margin:0">@...</p>
-    <div id="verifyBox" class="verify v-not"><b id="verifyTitle">Identity Not Verified</b><br><span id="verifySub"></span></div>
+
+    <!-- PRO VERIFY BOX - WITH DOT + BUTTON -->
+    <div id="verifyBox" class="verify v-not">
+      <span id="verifyDot" class="dot dot-gray"></span>
+      <div style="flex:1">
+        <b id="verifyTitle">Identity Not Verified</b><br>
+        <span id="verifySub">Verify your identity to unlock full access.</span><br>
+        <button id="verifyBtn" class="verify-btn" onclick="location.href='verify.html'" style="display:none">Verify Now →</button>
+        <span id="verifiedBadge" class="badge" style="display:none;margin-top:8px">● Verified</span>
+      </div>
+    </div>
 
     <label>Full Name</label><input id="name" placeholder="Full name">
     <label>Username</label><input id="username" placeholder="username"><div id="userMsg" class="small"></div>
@@ -62,7 +77,6 @@ button:disabled{opacity:.5} .msg{padding:12px;border-radius:12px;margin:12px 0;d
     <p style="text-align:center"><a href="dashboard.html" style="color:#22c55e">← Back to Dashboard</a></p>
   </div>
 
-  <!-- Confirm Modal -->
   <div id="confirmModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:20px;z-index:99">
     <div style="background:#0f1d14;border:1px solid #22c55e55;border-radius:24px;padding:28px;max-width:400px;width:100%;text-align:center">
       <div style="font-size:48px">✉️</div><h2>Check Your Email</h2>
@@ -74,12 +88,11 @@ button:disabled{opacity:.5} .msg{padding:12px;border-radius:12px;margin:12px 0;d
 
 <script>
 const SUPABASE_URL="https://xkshzlfducmnglxfnxzk.supabase.co";
-const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDAsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
 const EDGE="https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/profile";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let original=null;
 const AVATAR_STYLES=["avataaars","adventurer","personas","notionists","fun-emoji","bottts"];
-
 function showMsg(t,type){const a=document.getElementById('alert');a.style.display='block';a.className='msg '+type;a.innerHTML=t;}
 function hideMsg(){document.getElementById('alert').style.display='none';}
 function avatarUrl(style,username,gender){return `https://api.dicebear.com/9.x/${style}/svg?seed=${encodeURIComponent((username||'user')+'-'+(gender||'male'))}`;}
@@ -95,10 +108,36 @@ function renderAvatarRow(){
     row.appendChild(img);
   });
 }
-
+function updateVerifyBox(u, verifyDisplay){
+  const dot=document.getElementById('verifyDot');
+  const btn=document.getElementById('verifyBtn');
+  const badge=document.getElementById('verifiedBadge');
+  const box=document.getElementById('verifyBox');
+  const title=document.getElementById('verifyTitle');
+  const sub=document.getElementById('verifySub');
+  if(u.is_verified){
+    box.className='verify v-verified'; dot.className='dot dot-green';
+    title.textContent='● Verified'; sub.textContent='Your identity is verified. Full access unlocked.';
+    btn.style.display='none'; badge.style.display='inline-flex';
+  } else if(verifyDisplay && verifyDisplay.state==='pending'){
+    box.className='verify v-pending'; dot.className='dot dot-yellow';
+    title.textContent=verifyDisplay.title; sub.textContent=verifyDisplay.subtitle;
+    btn.textContent='Check Status →'; btn.style.display='inline-block'; badge.style.display='none';
+  } else if(verifyDisplay && verifyDisplay.state==='failed'){
+    box.className='verify v-failed'; dot.className='dot dot-red';
+    title.textContent=verifyDisplay.title; sub.textContent=verifyDisplay.subtitle;
+    btn.textContent='Try Again →'; btn.style.display='inline-block'; badge.style.display='none';
+  } else {
+    box.className='verify v-not'; dot.className='dot dot-gray';
+    title.textContent='Identity Not Verified'; sub.textContent='Verify your identity to unlock full access and secure your account.';
+    btn.textContent='Verify Now →'; btn.style.display='inline-block'; badge.style.display='none';
+  }
+}
 async function init(){
   try{
     const params=new URLSearchParams(location.search);
+    // Handle confirm link landing on profile
+    const token=params.get('token')||params.get('code');
     if(params.get('confirmed')==='1'){
       document.getElementById('confirmedBanner').style.display='block';
       history.replaceState({},'',location.pathname);
@@ -107,6 +146,15 @@ async function init(){
     document.getElementById('loading').style.display='none';
     if(!session){document.getElementById('noAuth').style.display='block';setTimeout(()=>location.href='login.html',2000);return;}
     document.getElementById('main').style.display='block';
+    // If link came with token, confirm it via Edge
+    if(token){
+      try{
+        const cr=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify({action:'confirm',token})});
+        const cj=await cr.json();
+        if(cj.success){document.getElementById('confirmedBanner').style.display='block';}
+      }catch(e){}
+      history.replaceState({},'',location.pathname);
+    }
     const res=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify({action:'get'})});
     const j=await res.json();
     if(!j.success){showMsg(j.message||"We're having trouble loading your profile. Please refresh and try again.",'error');return;}
@@ -118,7 +166,7 @@ async function init(){
     document.getElementById('displayName').textContent=u.name||'User'; document.getElementById('displayUser').textContent='@'+(u.username||'');
     document.getElementById('avatarImg').src=u.avatar_url||avatarUrl(u.avatar_style||'avataaars',u.username,u.gender);
     document.getElementById('bal').textContent=(u.balance||0).toLocaleString(); document.getElementById('earned').textContent=(u.total_earned||0).toLocaleString(); document.getElementById('surveys').textContent=u.completed_surveys_count||0;
-    if(j.verifyDisplay){document.getElementById('verifyTitle').textContent=j.verifyDisplay.title;document.getElementById('verifySub').textContent=j.verifyDisplay.subtitle;document.getElementById('verifyBox').className='verify v-'+j.verifyDisplay.state;}
+    updateVerifyBox(u, j.verifyDisplay);
     if(u.is_verified){document.getElementById('dob').disabled=true;document.getElementById('dobLock').style.display='block';}
     renderAvatarRow();
   }catch(e){
@@ -127,7 +175,6 @@ async function init(){
     showMsg('Could not load profile. Check network and refresh.','error');
   }
 }
-
 document.getElementById('username').addEventListener('input',async e=>{
   const v=e.target.value.trim().toLowerCase(); if(v.length<3){document.getElementById('userMsg').textContent='';return;}
   const {data:{session}}=await sb.auth.getSession(); if(!session)return;
@@ -143,7 +190,6 @@ document.getElementById('gender').addEventListener('change',()=>{
   const style=document.getElementById('avatar_style').value; const uname=document.getElementById('username').value||'user'; const g=document.getElementById('gender').value;
   document.getElementById('avatarImg').src=avatarUrl(style,uname,g); renderAvatarRow();
 });
-
 async function saveProfile(){
   hideMsg(); const btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Sending Confirmation...';
   const {data:{session}}=await sb.auth.getSession(); if(!session){location.href='login.html';return;}
@@ -153,7 +199,7 @@ async function saveProfile(){
   try{
     const r=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify(payload)});
     const j=await r.json();
-    if(j.success && j.confirmRequired){document.getElementById('confirmEmail').textContent=j.email||newEmail;document.getElementById('confirmModal').style.display='flex';}
+    if(j.success && j.confirmRequired){document.getElementById('confirmEmail').textContent=j.email||newEmail||original.email;document.getElementById('confirmModal').style.display='flex';}
     else showMsg(j.message||'We could not save your profile. Please try again.','error');
   }catch(e){showMsg('We could not save your profile. Please try again.','error');}
   btn.disabled=false; btn.textContent='Save Changes';
