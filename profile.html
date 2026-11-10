@@ -66,7 +66,6 @@ input:disabled{background:#ffffff08;color:#9ca3af}
 .bottom-nav a:hover{transform:translateY(-2px)}.bottom-nav i{font-size:1.1rem}.active-nav{color:#86efac !important}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);align-items:center;justify-content:center;padding:20px;z-index:9999}
 .modal.show{display:flex}.modal-box{background:#0f1d14;border:1px solid #22c55e55;border-radius:24px;padding:28px;max-width:400px;width:100%;text-align:center}
-/* Animated success */
 .success-circle{width:90px;height:90px;border-radius:50%;background:#22c55e22;border:3px solid #22c55e;display:flex;align-items:center;justify-content:center;font-size:44px;margin:0 auto;animation:pop .5s ease, bounce 1s ease .5s infinite}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
@@ -84,13 +83,11 @@ input:disabled{background:#ffffff08;color:#9ca3af}
 <div id="notifMenu"><h4>Notifications</h4><div id="notifList" style="display:flex;flex-direction:column;max-height:250px;overflow-y:auto"><div class="notif-item" style="text-align:center;color:#86efac">No new notifications</div></div></div>
 <nav id="menu"><a href="dashboard.html">Dashboard</a><a href="profile.html">Profile</a><a href="leaderboard.html">Leaderboard</a><a href="withdraw.html">Withdrawals</a><a href="support.html">Support</a><a href="settings.html">Settings</a><a href="w-policy.html">Withdrawal Policy</a></nav>
 </header>
-
 <div class="container">
 <div class="card" id="profileCard">
 <div class="loader-wrap"><div class="loader"></div></div><p style="text-align:center;color:#bbf7d0">Loading profile...</p>
 </div>
 </div>
-
 <div class="bottom-nav">
 <a href="dashboard.html"><i class="fa-solid fa-house"></i>Home</a>
 <a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a>
@@ -98,13 +95,9 @@ input:disabled{background:#ffffff08;color:#9ca3af}
 <a href="profile.html" class="active-nav"><i class="fa-solid fa-user"></i>Profile</a>
 <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
 </div>
-
 <div class="modal" id="confirmModal"><div class="modal-box"><div style="font-size:48px">✉️</div><h2 style="margin:12px 0 8px">Check Your Email</h2><p id="modalText" style="color:#d1fae5;line-height:1.6;font-size:.92rem">We sent confirmation link to your email.</p><button class="btn" onclick="document.getElementById('confirmModal').classList.remove('show')">Got It</button></div></div>
-
 <div class="modal" id="successModal"><div class="modal-box"><div class="success-circle">✅</div><h2 class="success-title">Profile Updated!</h2><p id="successText" style="color:#d1fae5;line-height:1.6;font-size:.92rem">Your changes have been confirmed and applied.</p><button class="btn" onclick="document.getElementById('successModal').classList.remove('show')">Awesome</button></div></div>
-
 <div class="modal" id="errorModal"><div class="modal-box"><div style="font-size:48px">❌</div><h2 style="margin:12px 0 8px">Link Expired</h2><p id="errorText" style="color:#d1fae5;line-height:1.6;font-size:.92rem">Link expired or already used.</p><button class="btn" onclick="document.getElementById('errorModal').classList.remove('show')">Okay</button></div></div>
-
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
@@ -112,16 +105,15 @@ const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 function escapeHtml(str){ if(!str) return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
 function showToast(message){ let toast=document.getElementById('customToast'); if(!toast){ toast=document.createElement('div'); toast.id='customToast'; toast.className='toast-notification'; document.body.appendChild(toast);} toast.textContent=message; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
-
 async function handleEmailConfirmation(){
   const params = new URLSearchParams(location.search);
   if(params.get('confirmed') !== '1') return null;
   const token = params.get('token');
   if(!token) return { success:false, message:'Link expired or already used' };
   try{
-    const r = await fetch(`${SUPABASE_URL}/functions/v1/profile/confirm`,{
+    const r = await fetch(`${SUPABASE_URL}/functions/v1/profile`,{
       method:"POST",
-      headers:{"Content-Type":"application/json"},
+      headers:{"Content-Type":"application/json","apikey":SUPABASE_ANON},
       body: JSON.stringify({ token })
     });
     const data = await r.json();
@@ -129,7 +121,6 @@ async function handleEmailConfirmation(){
     return data;
   }catch(e){ history.replaceState({}, "", "profile.html"); return { success:false, message:'Confirmation failed' }; }
 }
-
 const { data: { session } } = await supabase.auth.getSession();
 const _params = new URLSearchParams(location.search);
 const _isConfirm = _params.get('confirmed')==='1' && _params.get('token');
@@ -143,11 +134,9 @@ if(!session && _isConfirm){
 if(!session){ window.location.href="login.html"; throw new Error("No session"); }
 const userId = session.user.id;
 initTrackers(); loadNotifications(); loadProfile();
-
 window.toggleMenu=function(){ const m=document.getElementById("menu"); const n=document.getElementById("notifMenu"); n.style.display="none"; m.style.display=(m.style.display==="flex")?"none":"flex"; };
 window.toggleNotif=function(){ const n=document.getElementById("notifMenu"); const m=document.getElementById("menu"); m.style.display="none"; n.style.display=(n.style.display==="block")?"none":"block"; markNotificationsRead(); };
 window.addEventListener("click",(e)=>{ if(!e.target.closest('.bell-btn') && !e.target.closest('#notifMenu')) document.getElementById("notifMenu").style.display="none"; if(!e.target.closest('.menu-btn') && !e.target.closest('nav')) document.getElementById("menu").style.display="none"; });
-
 async function loadNotifications(){
   try{
     const res=await fetch(`${SUPABASE_URL}/functions/v1/dashboard-service`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"get-dashboard"})});
@@ -166,8 +155,6 @@ async function markNotificationsRead(){ document.getElementById("notifCount").st
 function initTrackers(){ trackVisit(userId); let last=Date.now(); let acc=0; ['click','scroll','keypress','mousemove','touchstart'].forEach(ev=>window.addEventListener(ev,()=>{last=Date.now()},{passive:true})); setInterval(()=>{ if(document.hidden) return; if(Date.now()-last<3*60*1000) acc+=10; if(acc>=60){ sendActiveTime(acc); acc=0; } },10000); }
 async function trackVisit(uid){ try{ const k=`last_visit_recorded_${uid}`; const lastV=localStorage.getItem(k); const now=Date.now(); if(!lastV||(now-Number(lastV))>30*60*1000){ localStorage.setItem(k,now.toString()); await fetch(`${SUPABASE_URL}/functions/v1/dashboard-service`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"track-visit"})}); } }catch(e){} }
 async function sendActiveTime(s){ if(typeof s!=='number'||isNaN(s)||s<0||s>70) return; try{ await fetch(`${SUPABASE_URL}/functions/v1/dashboard-service`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"track-time",active_seconds:s})}); }catch(e){} }
-
-/* ===== PROFILE ===== */
 const AVATARS=["avataaars","adventurer","personas","notionists","fun-emoji","bottts"];
 let selectedAvatar="avataaars"; let usernameTimer=null;
 function avatarUrl(style,seed){ return `https://api.dicebear.com/9.x/${style}/svg?seed=${encodeURIComponent(seed||'user')}`; }
@@ -190,10 +177,8 @@ async function loadProfile(){
     if(confirmResult){ window._confirmResult = confirmResult; }
     const { data: u, error: uErr } = await supabase.from('users').select('*').eq('id', userId).single();
     if(uErr || !u){
-      // Fallback: try auth user data if users row not readable
       const fallback = { id:userId, name:session.user.user_metadata?.name||'', username:session.user.user_metadata?.username||'', email:session.user.email||'', avatar_style:'avataaars', balance:0, total_earned:0, completed_surveys_count:0 };
       if(uErr) console.error('users read error', uErr);
-      // Still show fallback so page never blank
       renderProfile(fallback, confirmResult);
       return;
     }
@@ -246,12 +231,20 @@ function renderProfile(u, confirmResult){
     document.getElementById('username').addEventListener('input',e=>{
       const v=e.target.value.trim().toLowerCase(); e.target.value=v; clearTimeout(usernameTimer);
       const hm=document.getElementById('usernameMsg'); hm.textContent='Checking...'; hm.className='hint';
-      usernameTimer=setTimeout(async()=>{ if(v.length<3){ hm.textContent=''; return; } const r=await callProfile({action:'check-username',username:v}); if(r?.success){ hm.textContent=r.msg||r.message||''; hm.className='hint '+(r.ok?'ok':'err'); } renderAvatarGrid(); },500);
+      usernameTimer=setTimeout(async()=>{
+        if(v.length<3){ hm.textContent=''; return; }
+        if(v === (u.username||'').toLowerCase()){ hm.textContent='This is your current username'; hm.className='hint ok'; renderAvatarGrid(); return; }
+        const { data, error } = await supabase.from('users').select('id').eq('username', v).maybeSingle();
+        if(error){ hm.textContent=''; return; }
+        if(data){ hm.textContent='Username already taken'; hm.className='hint err'; }
+        else { hm.textContent='Username available'; hm.className='hint ok'; }
+        renderAvatarGrid();
+      },500);
     });
     document.getElementById('gender').addEventListener('change',renderAvatarGrid);
     document.getElementById('saveBtn').addEventListener('click',async()=>{
       const btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Sending...';
-      const res2=await callProfile({action:'update',name:document.getElementById('name').value.trim(),username:document.getElementById('username').value.trim().toLowerCase(),gender:document.getElementById('gender').value,avatar_style:selectedAvatar,phone:document.getElementById('phone').value.trim()||null,date_of_birth:document.getElementById('dob').value||null});
+      const res2=await callProfile({name:document.getElementById('name').value.trim(),username:document.getElementById('username').value.trim().toLowerCase(),gender:document.getElementById('gender').value,avatar_style:selectedAvatar,phone:document.getElementById('phone').value.trim()||null,date_of_birth:document.getElementById('dob').value||null});
       btn.disabled=false; btn.textContent='Save Changes — Send Confirmation Email';
       const m=document.getElementById('msg');
       if(res2?.success){ document.getElementById('modalText').textContent=`We sent confirmation link to your email. Click the button inside email to apply changes. Link expires in 15 minutes.`; document.getElementById('confirmModal').classList.add('show'); }
