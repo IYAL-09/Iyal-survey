@@ -105,6 +105,33 @@ const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 function escapeHtml(str){ if(!str) return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
 function showToast(message){ let toast=document.getElementById('customToast'); if(!toast){ toast=document.createElement('div'); toast.id='customToast'; toast.className='toast-notification'; document.body.appendChild(toast);} toast.textContent=message; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
+// AGENCY LEVEL: Show full diagnostic, never hide error
+function showAgencyError(res, fallback='Request failed'){
+  const m = document.getElementById('msg');
+  let lines = [];
+  if(res?.step) lines.push('STEP: '+res.step);
+  lines.push('MESSAGE: '+(res?.message || res?.msg || fallback));
+  if(res?.code) lines.push('CODE: '+res.code);
+  if(res?.details) lines.push('DETAILS: '+res.details);
+  if(res?.hint) lines.push('HINT: '+res.hint);
+  if(res?.what_is_missing && res.what_is_missing.length) lines.push('MISSING: '+res.what_is_missing.join(', '));
+  if(res?.what_to_give_me) lines.push('FIX: '+res.what_to_give_me);
+  const full = lines.join(' | ');
+  if(m){ m.textContent = full; m.style.color='#fca5a5'; m.style.whiteSpace='pre-wrap'; m.style.textAlign='left'; m.style.background='#ef444422'; m.style.padding='10px'; m.style.borderRadius='10px'; }
+  showToast(res?.message || fallback);
+  console.log('AGENCY ERROR:', res);
+  return full;
+}
+function formatAgencyError(res, fallback='Link expired or already used'){
+  let parts = [];
+  if(res?.step) parts.push('STEP: '+res.step);
+  parts.push(res?.message || fallback);
+  if(res?.code) parts.push('CODE: '+res.code);
+  if(res?.details) parts.push('DETAILS: '+res.details);
+  if(res?.hint) parts.push('HINT: '+res.hint);
+  if(res?.what_is_missing && res.what_is_missing.length) parts.push('MISSING: '+res.what_is_missing.join(', '));
+  return parts.join(' | ');
+}
 async function handleEmailConfirmation(){
   const params = new URLSearchParams(location.search);
   if(params.get('confirmed') !== '1') return null;
@@ -116,10 +143,11 @@ async function handleEmailConfirmation(){
       headers:{"Content-Type":"application/json","apikey":SUPABASE_ANON},
       body: JSON.stringify({ token })
     });
-    const data = await r.json();
+    const text = await r.text();
+    let data; try{ data = JSON.parse(text); }catch{ data = { success:false, message:'Server returned: '+text.slice(0,300) }; }
     history.replaceState({}, "", "profile.html");
     return data;
-  }catch(e){ history.replaceState({}, "", "profile.html"); return { success:false, message:'Confirmation failed' }; }
+  }catch(e){ history.replaceState({}, "", "profile.html"); return { success:false, message:'Confirmation failed: '+e.message }; }
 }
 const { data: { session } } = await supabase.auth.getSession();
 const _params = new URLSearchParams(location.search);
@@ -127,7 +155,7 @@ const _isConfirm = _params.get('confirmed')==='1' && _params.get('token');
 if(!session && _isConfirm){
   const _res = await handleEmailConfirmation();
   if(_res?.success){ document.getElementById('successModal').classList.add('show'); document.getElementById('successText').textContent='Your changes have been confirmed and applied. Please login to see them.'; }
-  else { document.getElementById('errorText').textContent=_res?.message||'Link expired or already used'; document.getElementById('errorModal').classList.add('show'); }
+  else { document.getElementById('errorText').textContent=formatAgencyError(_res); document.getElementById('errorModal').classList.add('show'); }
   setTimeout(()=>{ window.location.href="login.html"; }, 4000);
   throw new Error("Confirm done - redirecting to login");
 }
@@ -141,7 +169,7 @@ async function loadNotifications(){
   try{
     const res=await fetch(`${SUPABASE_URL}/functions/v1/dashboard-service`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"get-dashboard"})});
     const data=await res.json(); if(data.success && data.notifications) updateNotifications(data.notifications);
-  }catch(err){}
+  }catch(err){ console.log('NOTIF ERROR:', err); }
 }
 function formatNotifTime(c){ const d=new Date(c); const now=new Date(); const diffMin=Math.floor((now-d)/60000); if(diffMin<1) return 'Just now'; if(diffMin<60) return diffMin+'m ago'; return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
 function updateNotifications(notifs){
@@ -167,8 +195,15 @@ function renderAvatarGrid(){
   const prev=document.getElementById('avatarPreview'); if(prev) prev.src=avatarUrl(selectedAvatar,username+'-'+gender);
 }
 async function callProfile(body){
-  const r=await fetch(`${SUPABASE_URL}/functions/v1/profile`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json",apikey:SUPABASE_ANON},body:JSON.stringify(body)});
-  return r.json();
+  const controller = new AbortController();
+  const timeout = setTimeout(()=>controller.abort(), 20000);
+  try{
+    const r=await fetch(`${SUPABASE_URL}/functions/v1/profile`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json",apikey:SUPABASE_ANON},body:JSON.stringify(body),signal:controller.signal});
+    const text = await r.text();
+    try{ return JSON.parse(text); }catch{ return { success:false, message:'Server returned non-JSON: '+text.slice(0,300), step:'PARSE_RESPONSE' }; }
+  }catch(e){
+    return { success:false, message: e.name==='AbortError' ? 'Request timed out after 20s - function is hanging' : 'Network error: '+e.message, step:'NETWORK' };
+  }finally{ clearTimeout(timeout); }
 }
 async function loadProfile(){
   const card=document.getElementById('profileCard');
@@ -183,19 +218,20 @@ async function loadProfile(){
       return;
     }
     renderProfile(u, confirmResult);
-  }catch(e){ console.error(e); card.innerHTML=`<h2>Could not load profile</h2><p class="sub">Please refresh and try again.</p><button class="btn" onclick="location.reload()">Refresh</button>`; }
+  }catch(e){ console.error(e); card.innerHTML=`<h2>Could not load profile</h2><p class="sub">STEP: LOAD_PROFILE | MESSAGE: ${escapeHtml(e.message)} | Please refresh and try again.</p><button class="btn" onclick="location.reload()">Refresh</button>`; }
 }
 function renderProfile(u, confirmResult){
   const card=document.getElementById('profileCard');
-  const vd = { state: u.is_verified ? 'verified' : 'not', title: u.is_verified ? 'Verified' : 'Not Verified', subtitle: '' };
+  const isVerified = !!u.is_verified;
+  const vd = { state: isVerified ? 'verified' : 'not', title: isVerified ? '● Verified' : '● Not Verified', subtitle: '' };
   selectedAvatar=u.avatar_style||'avataaars';
-  const badgeClass=vd.state==='verified'?'verified':vd.state==='pending'?'pending':vd.state==='failed'?'failed':'not';
   card.innerHTML=`
       <div class="profile-top">
         <img id="avatarPreview" src="${escapeHtml(u.avatar_url||avatarUrl(selectedAvatar,u.username))}">
         <h3>${escapeHtml(u.name||'No Name')}</h3>
         <span>@${escapeHtml(u.username||'')}</span><br>
-        <span class="badge ${badgeClass}">${escapeHtml(vd.title||'Not Verified')}</span>
+        <span class="badge ${isVerified?'verified':'pending'}" style="${isVerified?'':'background:#f59e0b;color:#000'}">${escapeHtml(vd.title)}</span>
+        ${!isVerified ? `<br><a href="verify.html" class="btn-sec" style="display:inline-block;margin-top:10px;padding:8px 16px;width:auto">Verify Now →</a>` : ''}
         <p style="color:#bbf7d0;font-size:.85rem;margin-top:10px;line-height:1.5">${escapeHtml(vd.subtitle||'')}</p>
         <div class="stats">
           <div class="stat"><b>₦${Number(u.balance||0).toLocaleString()}</b><span>Balance</span></div>
@@ -223,9 +259,9 @@ function renderProfile(u, confirmResult){
         document.getElementById('successModal').classList.add('show');
         const m=document.getElementById('msg'); m.textContent='✅ Changes confirmed and applied!'; m.style.color='#4ade80';
       } else {
-        document.getElementById('errorText').textContent=confirmResult.message||'Link expired or already used';
+        document.getElementById('errorText').textContent=formatAgencyError(confirmResult);
         document.getElementById('errorModal').classList.add('show');
-        const m=document.getElementById('msg'); m.textContent='❌ '+(confirmResult.message||'Link expired or already used'); m.style.color='#fca5a5';
+        const m=document.getElementById('msg'); m.textContent='❌ '+formatAgencyError(confirmResult); m.style.color='#fca5a5'; m.style.whiteSpace='pre-wrap'; m.style.textAlign='left';
       }
     }
     document.getElementById('username').addEventListener('input',e=>{
@@ -235,7 +271,7 @@ function renderProfile(u, confirmResult){
         if(v.length<3){ hm.textContent=''; return; }
         if(v === (u.username||'').toLowerCase()){ hm.textContent='This is your current username'; hm.className='hint ok'; renderAvatarGrid(); return; }
         const { data, error } = await supabase.from('users').select('id').eq('username', v).maybeSingle();
-        if(error){ hm.textContent=''; return; }
+        if(error){ hm.textContent='STEP: CHECK_USERNAME | MESSAGE: '+error.message+' | CODE: '+error.code; hm.className='hint err'; return; }
         if(data){ hm.textContent='Username already taken'; hm.className='hint err'; }
         else { hm.textContent='Username available'; hm.className='hint ok'; }
         renderAvatarGrid();
@@ -243,17 +279,23 @@ function renderProfile(u, confirmResult){
     });
     document.getElementById('gender').addEventListener('change',renderAvatarGrid);
     document.getElementById('saveBtn').addEventListener('click',async()=>{
-      const btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Sending...';
-      const res2=await callProfile({name:document.getElementById('name').value.trim(),username:document.getElementById('username').value.trim().toLowerCase(),gender:document.getElementById('gender').value,avatar_style:selectedAvatar,phone:document.getElementById('phone').value.trim()||null,date_of_birth:document.getElementById('dob').value||null});
-      btn.disabled=false; btn.textContent='Save Changes — Send Confirmation Email';
-      const m=document.getElementById('msg');
-      if(res2?.success){ document.getElementById('modalText').textContent=`We sent confirmation link to your email. Click the button inside email to apply changes. Link expires in 15 minutes.`; document.getElementById('confirmModal').classList.add('show'); }
-      else { m.textContent=res2?.message||'Could not save'; m.style.color='#fca5a5'; showToast(res2?.message||'Could not save'); }
+      const btn=document.getElementById('saveBtn'); const m=document.getElementById('msg');
+      btn.disabled=true; btn.textContent='Sending...'; m.textContent='';
+      try{
+        const res2=await callProfile({name:document.getElementById('name').value.trim(),username:document.getElementById('username').value.trim().toLowerCase(),gender:document.getElementById('gender').value,avatar_style:selectedAvatar,phone:document.getElementById('phone').value.trim()||null,date_of_birth:document.getElementById('dob').value||null});
+        console.log('SAVE RESULT:', res2);
+        if(res2?.success){ document.getElementById('modalText').textContent=`We sent confirmation link to your email. Click the button inside email to apply changes. Link expires in 15 minutes.`; document.getElementById('confirmModal').classList.add('show'); }
+        else { showAgencyError(res2, 'Could not save'); }
+      }catch(e){
+        showAgencyError({step:'SAVE_CLICK', message:e.message}, 'Could not save');
+      }finally{
+        btn.disabled=false; btn.textContent='Save Changes — Send Confirmation Email';
+      }
     });
     document.getElementById('changeEmailBtn').addEventListener('click',async()=>{
       const ne=prompt('Enter new email:'); if(!ne) return;
       const { error }=await supabase.auth.updateUser({email:ne.trim()});
-      if(error) showToast(error.message); else showToast('Verification sent to your NEW email.');
+      if(error) showToast('STEP: CHANGE_EMAIL | MESSAGE: '+error.message); else showToast('Verification sent to your NEW email.');
     });
 }
 document.getElementById("logoutBtn").addEventListener("click",async(e)=>{ e.preventDefault(); await supabase.auth.signOut(); window.location.href="login.html"; });
