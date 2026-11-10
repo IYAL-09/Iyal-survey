@@ -66,6 +66,11 @@ input:disabled{background:#ffffff08;color:#9ca3af}
 .bottom-nav a:hover{transform:translateY(-2px)}.bottom-nav i{font-size:1.1rem}.active-nav{color:#86efac !important}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);align-items:center;justify-content:center;padding:20px;z-index:9999}
 .modal.show{display:flex}.modal-box{background:#0f1d14;border:1px solid #22c55e55;border-radius:24px;padding:28px;max-width:400px;width:100%;text-align:center}
+/* Animated success */
+.success-circle{width:90px;height:90px;border-radius:50%;background:#22c55e22;border:3px solid #22c55e;display:flex;align-items:center;justify-content:center;font-size:44px;margin:0 auto;animation:pop .5s ease, bounce 1s ease .5s infinite}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.success-title{font-size:1.35rem;margin:14px 0 8px;color:#86efac}
 </style>
 </head>
 <body>
@@ -96,16 +101,45 @@ input:disabled{background:#ffffff08;color:#9ca3af}
 
 <div class="modal" id="confirmModal"><div class="modal-box"><div style="font-size:48px">✉️</div><h2 style="margin:12px 0 8px">Check Your Email</h2><p id="modalText" style="color:#d1fae5;line-height:1.6;font-size:.92rem">We sent confirmation link to your email.</p><button class="btn" onclick="document.getElementById('confirmModal').classList.remove('show')">Got It</button></div></div>
 
+<div class="modal" id="successModal"><div class="modal-box"><div class="success-circle">✅</div><h2 class="success-title">Profile Updated!</h2><p id="successText" style="color:#d1fae5;line-height:1.6;font-size:.92rem">Your changes have been confirmed and applied.</p><button class="btn" onclick="document.getElementById('successModal').classList.remove('show')">Awesome</button></div></div>
+
+<div class="modal" id="errorModal"><div class="modal-box"><div style="font-size:48px">❌</div><h2 style="margin:12px 0 8px">Link Expired</h2><p id="errorText" style="color:#d1fae5;line-height:1.6;font-size:.92rem">Link expired or already used.</p><button class="btn" onclick="document.getElementById('errorModal').classList.remove('show')">Okay</button></div></div>
+
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-const supabase = createClient(
-"httpsxkshzlfducmnglxfnxzk.supabase.co".replace('https','https://'),
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
-);
+const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 function escapeHtml(str){ if(!str) return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
 function showToast(message){ let toast=document.getElementById('customToast'); if(!toast){ toast=document.createElement('div'); toast.id='customToast'; toast.className='toast-notification'; document.body.appendChild(toast);} toast.textContent=message; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
 
+async function handleEmailConfirmation(){
+  const params = new URLSearchParams(location.search);
+  if(params.get('confirmed') !== '1') return null;
+  const token = params.get('token');
+  if(!token) return { success:false, message:'Link expired or already used' };
+  try{
+    const r = await fetch(`${SUPABASE_URL}/functions/v1/profile/confirm`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ token })
+    });
+    const data = await r.json();
+    history.replaceState({}, "", "profile.html");
+    return data;
+  }catch(e){ history.replaceState({}, "", "profile.html"); return { success:false, message:'Confirmation failed' }; }
+}
+
 const { data: { session } } = await supabase.auth.getSession();
+const _params = new URLSearchParams(location.search);
+const _isConfirm = _params.get('confirmed')==='1' && _params.get('token');
+if(!session && _isConfirm){
+  const _res = await handleEmailConfirmation();
+  if(_res?.success){ document.getElementById('successModal').classList.add('show'); document.getElementById('successText').textContent='Your changes have been confirmed and applied. Please login to see them.'; }
+  else { document.getElementById('errorText').textContent=_res?.message||'Link expired or already used'; document.getElementById('errorModal').classList.add('show'); }
+  setTimeout(()=>{ window.location.href="login.html"; }, 4000);
+  throw new Error("Confirm done - redirecting to login");
+}
 if(!session){ window.location.href="login.html"; throw new Error("No session"); }
 const userId = session.user.id;
 initTrackers(); loadNotifications(); loadProfile();
@@ -116,7 +150,7 @@ window.addEventListener("click",(e)=>{ if(!e.target.closest('.bell-btn') && !e.t
 
 async function loadNotifications(){
   try{
-    const res=await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"get-dashboard"})});
+    const res=await fetch(`${SUPABASE_URL}/functions/v1/dashboard-service`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"get-dashboard"})});
     const data=await res.json(); if(data.success && data.notifications) updateNotifications(data.notifications);
   }catch(err){}
 }
@@ -128,10 +162,10 @@ function updateNotifications(notifs){
   if(unread>0){ count.textContent=unread; count.style.display="flex"; } else count.style.display="none";
   list.innerHTML=notifs.map(n=>{ const u=!n.is_read; return `<div class="notif-item ${u?'unread':'read'}">${u?'<span class="notif-dot"></span>':''}<div class="notif-text">${escapeHtml(n.message)}</div><span class="notif-time">${formatNotifTime(n.created_at||Date.now())}</span></div>`; }).join('');
 }
-async function markNotificationsRead(){ document.getElementById("notifCount").style.display="none"; try{ await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"mark-read"})}); }catch(e){} }
+async function markNotificationsRead(){ document.getElementById("notifCount").style.display="none"; try{ await fetch(`${SUPABASE_URL}/functions/v1/dashboard-service`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"mark-read"})}); }catch(e){} }
 function initTrackers(){ trackVisit(userId); let last=Date.now(); let acc=0; ['click','scroll','keypress','mousemove','touchstart'].forEach(ev=>window.addEventListener(ev,()=>{last=Date.now()},{passive:true})); setInterval(()=>{ if(document.hidden) return; if(Date.now()-last<3*60*1000) acc+=10; if(acc>=60){ sendActiveTime(acc); acc=0; } },10000); }
-async function trackVisit(uid){ try{ const k=`last_visit_recorded_${uid}`; const lastV=localStorage.getItem(k); const now=Date.now(); if(!lastV||(now-Number(lastV))>30*60*1000){ localStorage.setItem(k,now.toString()); await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"track-visit"})}); } }catch(e){} }
-async function sendActiveTime(s){ if(typeof s!=='number'||isNaN(s)||s<0||s>70) return; try{ await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"track-time",active_seconds:s})}); }catch(e){} }
+async function trackVisit(uid){ try{ const k=`last_visit_recorded_${uid}`; const lastV=localStorage.getItem(k); const now=Date.now(); if(!lastV||(now-Number(lastV))>30*60*1000){ localStorage.setItem(k,now.toString()); await fetch(`${SUPABASE_URL}/functions/v1/dashboard-service`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"track-visit"})}); } }catch(e){} }
+async function sendActiveTime(s){ if(typeof s!=='number'||isNaN(s)||s<0||s>70) return; try{ await fetch(`${SUPABASE_URL}/functions/v1/dashboard-service`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({action:"track-time",active_seconds:s})}); }catch(e){} }
 
 /* ===== PROFILE ===== */
 const AVATARS=["avataaars","adventurer","personas","notionists","fun-emoji","bottts"];
@@ -146,18 +180,32 @@ function renderAvatarGrid(){
   const prev=document.getElementById('avatarPreview'); if(prev) prev.src=avatarUrl(selectedAvatar,username+'-'+gender);
 }
 async function callProfile(body){
-  const r=await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/profile",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json",apikey:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"},body:JSON.stringify(body)});
+  const r=await fetch(`${SUPABASE_URL}/functions/v1/profile`,{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json",apikey:SUPABASE_ANON},body:JSON.stringify(body)});
   return r.json();
 }
 async function loadProfile(){
   const card=document.getElementById('profileCard');
   try{
-    const res=await callProfile({action:'get'});
-    if(!res?.success){ card.innerHTML=`<h2>Could not load profile</h2><p class="sub">${escapeHtml(res?.message||'Please refresh')}</p><button class="btn" onclick="location.reload()">Refresh</button>`; return; }
-    const u=res.user; const vd=res.verifyDisplay||{};
-    selectedAvatar=u.avatar_style||'avataaars';
-    const badgeClass=vd.state==='verified'?'verified':vd.state==='pending'?'pending':vd.state==='failed'?'failed':'not';
-    card.innerHTML=`
+    const confirmResult = await handleEmailConfirmation();
+    if(confirmResult){ window._confirmResult = confirmResult; }
+    const { data: u, error: uErr } = await supabase.from('users').select('*').eq('id', userId).single();
+    if(uErr || !u){
+      // Fallback: try auth user data if users row not readable
+      const fallback = { id:userId, name:session.user.user_metadata?.name||'', username:session.user.user_metadata?.username||'', email:session.user.email||'', avatar_style:'avataaars', balance:0, total_earned:0, completed_surveys_count:0 };
+      if(uErr) console.error('users read error', uErr);
+      // Still show fallback so page never blank
+      renderProfile(fallback, confirmResult);
+      return;
+    }
+    renderProfile(u, confirmResult);
+  }catch(e){ console.error(e); card.innerHTML=`<h2>Could not load profile</h2><p class="sub">Please refresh and try again.</p><button class="btn" onclick="location.reload()">Refresh</button>`; }
+}
+function renderProfile(u, confirmResult){
+  const card=document.getElementById('profileCard');
+  const vd = { state: u.is_verified ? 'verified' : 'not', title: u.is_verified ? 'Verified' : 'Not Verified', subtitle: '' };
+  selectedAvatar=u.avatar_style||'avataaars';
+  const badgeClass=vd.state==='verified'?'verified':vd.state==='pending'?'pending':vd.state==='failed'?'failed':'not';
+  card.innerHTML=`
       <div class="profile-top">
         <img id="avatarPreview" src="${escapeHtml(u.avatar_url||avatarUrl(selectedAvatar,u.username))}">
         <h3>${escapeHtml(u.name||'No Name')}</h3>
@@ -171,25 +219,34 @@ async function loadProfile(){
         </div>
       </div>
       <h2>Edit Profile</h2>
-      <p class="sub">Changes need email confirmation before they apply. Link expires in 30 minutes.</p>
+      <p class="sub">Changes need email confirmation before they apply. Link expires in 15 minutes.</p>
       <label>Full Name</label><input id="name" value="${escapeHtml(u.name||'')}" placeholder="e.g. Aisha Bello" maxlength="50">
       <label>Username</label><input id="username" value="${escapeHtml(u.username||'')}" placeholder="aisha_bello" maxlength="20"><div id="usernameMsg" class="hint"></div>
       <label>Gender</label><select id="gender"><option value="male" ${u.gender==='male'?'selected':''}>Male</option><option value="female" ${u.gender==='female'?'selected':''}>Female</option><option value="other" ${u.gender==='other'?'selected':''}>Other</option></select>
       <label>Avatar Style — Tap to Preview</label><div class="avatar-grid" id="avatarGrid"></div><div class="hint">Preview updates instantly when you change username, gender or style.</div>
       <label>Phone (Nigerian)</label><input id="phone" value="${escapeHtml(u.phone||'')}" placeholder="+2348031234567">
       <label>Date of Birth ${u.is_verified?'<span style="color:#fca5a5;font-size:.78rem">🔒 Locked after verification</span>':''}</label><input id="dob" type="date" value="${escapeHtml(u.date_of_birth||'')}" ${u.is_verified?'disabled':''}>
-      <label>Email (Current)</label><input value="${escapeHtml(u.email||res.auth_email||'')}" disabled>
+      <label>Email (Current)</label><input value="${escapeHtml(u.email||'')}" disabled>
       <button class="btn" id="saveBtn">Save Changes — Send Confirmation Email</button>
       <div id="msg"></div>
       <button class="btn-sec" id="changeEmailBtn">Change Email Separately</button>
       <a class="btn-sec" href="verify.html">Go to Verification →</a>
     `;
     renderAvatarGrid();
-    if(new URLSearchParams(location.search).get('confirmed')==='1'){ const m=document.getElementById('msg'); m.textContent='✅ Changes confirmed and applied!'; m.className='ok'; m.style.color='#4ade80'; }
+    if(confirmResult){
+      if(confirmResult.success){
+        document.getElementById('successModal').classList.add('show');
+        const m=document.getElementById('msg'); m.textContent='✅ Changes confirmed and applied!'; m.style.color='#4ade80';
+      } else {
+        document.getElementById('errorText').textContent=confirmResult.message||'Link expired or already used';
+        document.getElementById('errorModal').classList.add('show');
+        const m=document.getElementById('msg'); m.textContent='❌ '+(confirmResult.message||'Link expired or already used'); m.style.color='#fca5a5';
+      }
+    }
     document.getElementById('username').addEventListener('input',e=>{
       const v=e.target.value.trim().toLowerCase(); e.target.value=v; clearTimeout(usernameTimer);
       const hm=document.getElementById('usernameMsg'); hm.textContent='Checking...'; hm.className='hint';
-      usernameTimer=setTimeout(async()=>{ if(v.length<3){ hm.textContent=''; return; } const r=await callProfile({action:'check-username',username:v}); if(r?.success){ hm.textContent=r.msg; hm.className='hint '+(r.ok?'ok':'err'); } renderAvatarGrid(); },500);
+      usernameTimer=setTimeout(async()=>{ if(v.length<3){ hm.textContent=''; return; } const r=await callProfile({action:'check-username',username:v}); if(r?.success){ hm.textContent=r.msg||r.message||''; hm.className='hint '+(r.ok?'ok':'err'); } renderAvatarGrid(); },500);
     });
     document.getElementById('gender').addEventListener('change',renderAvatarGrid);
     document.getElementById('saveBtn').addEventListener('click',async()=>{
@@ -197,7 +254,7 @@ async function loadProfile(){
       const res2=await callProfile({action:'update',name:document.getElementById('name').value.trim(),username:document.getElementById('username').value.trim().toLowerCase(),gender:document.getElementById('gender').value,avatar_style:selectedAvatar,phone:document.getElementById('phone').value.trim()||null,date_of_birth:document.getElementById('dob').value||null});
       btn.disabled=false; btn.textContent='Save Changes — Send Confirmation Email';
       const m=document.getElementById('msg');
-      if(res2?.success && res2.confirmRequired){ document.getElementById('modalText').textContent=`We sent confirmation link to ${res2.email}. Click the button inside email to apply changes.`; document.getElementById('confirmModal').classList.add('show'); }
+      if(res2?.success){ document.getElementById('modalText').textContent=`We sent confirmation link to your email. Click the button inside email to apply changes. Link expires in 15 minutes.`; document.getElementById('confirmModal').classList.add('show'); }
       else { m.textContent=res2?.message||'Could not save'; m.style.color='#fca5a5'; showToast(res2?.message||'Could not save'); }
     });
     document.getElementById('changeEmailBtn').addEventListener('click',async()=>{
@@ -205,7 +262,6 @@ async function loadProfile(){
       const { error }=await supabase.auth.updateUser({email:ne.trim()});
       if(error) showToast(error.message); else showToast('Verification sent to your NEW email.');
     });
-  }catch(e){ card.innerHTML=`<h2>Could not load profile</h2><p class="sub">Please refresh and try again.</p><button class="btn" onclick="location.reload()">Refresh</button>`; }
 }
 document.getElementById("logoutBtn").addEventListener("click",async(e)=>{ e.preventDefault(); await supabase.auth.signOut(); window.location.href="login.html"; });
 </script>
