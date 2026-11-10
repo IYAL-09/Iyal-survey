@@ -3,209 +3,212 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile - Iyal Surveys</title>
+<title>Profile — Iyal Surveys</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:Segoe UI,sans-serif;background:#08140d;color:#fff;padding:20px}
-.card{max-width:520px;margin:0 auto;background:#0f1d14;border:1px solid #22c55e55;border-radius:24px;padding:24px}
-input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#0a1a10;color:#fff;margin:6px 0 12px}
-label{font-size:13px;color:#bbf7d0} button{width:100%;padding:14px;border:none;border-radius:14px;background:#22c55e;color:#fff;font-weight:700;cursor:pointer}
-button:disabled{opacity:.5} .msg{padding:12px;border-radius:12px;margin:12px 0;display:none;font-size:14px;line-height:1.5}
-.success{background:#14532d} .error{background:#7f1d1d} .info{background:#1e3a8a}
-.avatar{width:90px;height:90px;border-radius:50%;background:#1a2e22;display:block;margin:0 auto 10px;object-fit:cover}
-.verify{padding:14px;border-radius:14px;margin:12px 0;font-size:14px;display:flex;gap:12px;align-items:flex-start}
-.v-verified{background:#14532d} .v-failed{background:#7f1d1d} .v-pending{background:#854d0e} .v-not{background:#1f2937}
-.small{font-size:12px;color:#9ca3af} .row{display:flex;gap:10px} .row>div{flex:1}
-.avatar-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0 12px}
-.avatar-opt{width:56px;height:56px;border-radius:50%;border:2px solid transparent;cursor:pointer;background:#1a2e22;object-fit:cover}
-.avatar-opt.active{border-color:#22c55e}
-.dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.dot-green{background:#22c55e;box-shadow:0 0 0 4px #22c55e33}
-.dot-red{background:#ef4444;box-shadow:0 0 0 4px #ef444433}
-.dot-yellow{background:#eab308;box-shadow:0 0 0 4px #eab30833}
-.dot-gray{background:#6b7280}
-.verify-btn{width:auto!important;padding:8px 16px!important;font-size:13px;margin-top:8px;background:#fff!important;color:#000!important}
-.verify-btn-green{background:#22c55e!important;color:#fff!important}
-.badge{display:inline-flex;align-items:center;gap:6px;background:#14532d;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700}
+*{box-sizing:border-box} body{margin:0;font-family:'Inter',system-ui,sans-serif;background:#F6F7F3;color:#0F1F14;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.top{max-width:1120px;margin:0 auto;padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;font-size:19px;letter-spacing:-.02em;display:flex;gap:9px;align-items:center}
+.logo i{width:32px;height:32px;border-radius:10px;background:#0F1F14;color:#fff;display:grid;place-items:center;font-style:normal;font-size:18px}
+.top-link{font-size:13px;font-weight:600;background:#fff;border:1px solid #E5E7EB;padding:9px 14px;border-radius:99px}
+.hero{max-width:1120px;margin:6px auto 0;padding:0 20px}
+.hero h1{font-size:32px;letter-spacing:-.04em;margin:6px 0 6px;line-height:1.05}
+.hero p{color:#5B6B5E;font-size:14px;line-height:1.6;margin:0;max-width:560px}
+.grid{max-width:1120px;margin:20px auto;padding:0 20px 40px;display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}
+@media(max-width:820px){.grid{grid-template-columns:1fr}.hero h1{font-size:28px}}
+.card{background:#fff;border:1px solid #EDEDEA;border-radius:20px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.profile-card{text-align:center;position:sticky;top:16px}
+.avatar-wrap{position:relative;width:124px;height:124px;margin:6px auto 0}
+.avatar-wrap img{width:124px;height:124px;border-radius:50%;object-fit:cover;border:4px solid #EAF7EE;background:#EAF7EE}
+.dot{position:absolute;right:6px;bottom:8px;width:22px;height:22px;border-radius:50%;background:#22C55E;border:3px solid #fff}
+.profile-card h2{font-size:20px;margin:14px 0 2px;letter-spacing:-.02em}
+.profile-card .handle{color:#6B7A6E;font-size:13px}
+.badge{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:7px 11px;border-radius:99px;font-size:12px;font-weight:700}
+.badge.verified{background:#DCFCE7;color:#166534}.badge.pending{background:#FEF3C7;color:#92400E}.badge.failed{background:#FEE2E2;color:#991B1B}.badge.not{background:#F3F4F6;color:#374151}
+.sub{font-size:12.5px;line-height:1.6;color:#6B7A6E;margin:10px 0 0}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}
+.stat{background:#F6F7F3;border-radius:14px;padding:12px 6px}
+.stat b{font-size:16px;display:block;letter-spacing:-.02em}.stat span{font-size:11px;color:#6B7A6E;font-weight:600}
+.divider{height:1px;background:#EEEEEA;margin:16px 0}
+.mini{display:flex;justify-content:space-between;font-size:12.5px;color:#5B6B5E;padding:7px 0}
+.mini b{color:#0F1F14}
+.form-head{display:flex;justify-content:space-between;align-items:start;gap:12px}
+.form-head h3{margin:0;font-size:18px;letter-spacing:-.02em}.form-head p{margin:6px 0 0;color:#6B7A6E;font-size:13px;line-height:1.5}
+.pill{font-size:11px;font-weight:700;background:#FFFBEB;color:#92400E;border:1px solid #FDE68A;padding:6px 9px;border-radius:99px;white-space:nowrap}
+.section{margin-top:22px}
+.section-title{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8A9A8E;margin-bottom:12px}
+.field{margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;display:block;margin-bottom:7px}
+.field input,.field select{width:100%;padding:12px 13px;border-radius:12px;border:1px solid #E2E8E2;background:#FCFCFB;font-size:14px;outline:none;transition:.15s}
+.field input:focus,.field select:focus{border-color:#0F1F14;background:#fff;box-shadow:0 0 0 3px #DCFCE7}
+.field input:disabled{background:#F3F4F6;color:#9CA3AF}
+.hint{font-size:12px;color:#6B7A6E;margin-top:6px;line-height:1.5}.hint.ok{color:#16A34A}.hint.err{color:#DC2626}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}}
+.avatar-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+@media(max-width:560px){.avatar-grid{grid-template-columns:repeat(3,1fr)}}
+.av{border:2px solid #EDEDEA;border-radius:16px;padding:8px 4px 6px;cursor:pointer;text-align:center;background:#FCFCFB;transition:.15s}
+.av.active{border-color:#0F1F14;background:#0F1F14;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.av img{width:52px;height:52px;border-radius:50%;background:#EAF7EE}.av span{font-size:11px;font-weight:600;display:block;margin-top:5px}
+.btn{width:100%;padding:14px;border-radius:14px;border:0;background:#0F1F14;color:#fff;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:disabled{opacity:.6}.btn-green{background:#16A34A}
+.btn-ghost{background:#fff;border:1px solid #E2E8E2;color:#0F1F14}
+#msg{min-height:20px;font-size:13px;text-align:center;margin-top:10px;font-weight:600}#msg.ok{color:#16A34A}#msg.err{color:#DC2626}
+.modal{display:none;position:fixed;inset:0;background:rgba(15,31,20,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;z-index:99}
+.modal.show{display:flex}.modal-box{background:#fff;border-radius:24px;padding:28px;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal-box h2{margin:12px 0 8px;font-size:20px}.modal-box p{color:#6B7A6E;font-size:13.5px;line-height:1.6;margin:0}
 </style>
 </head>
 <body>
-<div class="card">
-  <div id="loading" style="text-align:center;padding:30px"><div style="font-size:32px">⏳</div><p>Loading profile...</p></div>
+<header class="top">
+  <div class="logo"><i>✓</i> Iyal Surveys</div>
+  <a class="top-link" href="dashboard.html">← Dashboard</a>
+</header>
+<div class="hero">
+  <div style="font-size:12px;font-weight:800;letter-spacing:.1em;color:#16A34A">ACCOUNT • PROFILE</div>
+  <h1>Your profile, your identity.</h1>
+  <p>Update your details below. For your security, every change needs email confirmation before it goes live.</p>
+</div>
 
-  <div id="noAuth" style="display:none;text-align:center">
-    <h2>Please sign in to continue</h2><p>You need to sign in to view your profile.</p>
-    <button onclick="location.href='login.html'">Go to Login</button>
-  </div>
+<div class="grid">
+  <aside class="card profile-card">
+    <div class="avatar-wrap"><img id="avatarPreview" src="" alt="Avatar"><div class="dot"></div></div>
+    <h2 id="displayName">Loading...</h2>
+    <div class="handle" id="displayUsername">@...</div>
+    <span id="verifyBadge" class="badge not">● Loading</span>
+    <p class="sub" id="verifySubtitle"></p>
+    <div class="stats">
+      <div class="stat"><b id="statBalance">₦0</b><span>Balance</span></div>
+      <div class="stat"><b id="statEarned">₦0</b><span>Earned</span></div>
+      <div class="stat"><b id="statSurveys">0</b><span>Surveys</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="mini"><span>Member since</span><b id="memberSince">—</b></div>
+    <div class="mini"><span>Email</span><b id="sideEmail" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</b></div>
+    <div class="mini"><span>Phone verified</span><b id="sidePhone">—</b></div>
+  </aside>
 
-  <div id="main" style="display:none">
-    <div id="confirmedBanner" class="msg success" style="display:none">✅ <b>Profile Updated Successfully!</b><br>Your changes have been confirmed and applied.</div>
-    <div id="alert" class="msg"></div>
+  <main class="card">
+    <div class="form-head">
+      <div><h3>Edit profile</h3><p>Changes are saved only after you confirm from your email. Link expires in 30 minutes.</p></div>
+      <span class="pill">🔒 Email confirmation required</span>
+    </div>
 
-    <img id="avatarImg" class="avatar" src="" alt="Avatar">
-    <p style="text-align:center;color:#bbf7d0;font-size:13px;margin:0">Choose Avatar Style</p>
-    <div class="avatar-row" id="avatarRow"></div>
-
-    <h2 id="displayName" style="text-align:center;margin:6px 0">Loading...</h2>
-    <p id="displayUser" style="text-align:center;color:#9ca3af;margin:0">@...</p>
-
-    <!-- PRO VERIFY BOX - WITH DOT + BUTTON -->
-    <div id="verifyBox" class="verify v-not">
-      <span id="verifyDot" class="dot dot-gray"></span>
-      <div style="flex:1">
-        <b id="verifyTitle">Identity Not Verified</b><br>
-        <span id="verifySub">Verify your identity to unlock full access.</span><br>
-        <button id="verifyBtn" class="verify-btn" onclick="location.href='verify.html'" style="display:none">Verify Now →</button>
-        <span id="verifiedBadge" class="badge" style="display:none;margin-top:8px">● Verified</span>
+    <div class="section">
+      <div class="section-title">Basic Information</div>
+      <div class="field"><label>Full name</label><input id="name" placeholder="e.g. Aisha Bello" maxlength="50"></div>
+      <div class="row2">
+        <div class="field"><label>Username</label><input id="username" placeholder="aisha_bello" maxlength="20"><div id="usernameMsg" class="hint"></div></div>
+        <div class="field"><label>Gender</label><select id="gender"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
       </div>
     </div>
 
-    <label>Full Name</label><input id="name" placeholder="Full name">
-    <label>Username</label><input id="username" placeholder="username"><div id="userMsg" class="small"></div>
-
-    <div class="row">
-      <div><label>Gender</label><select id="gender"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
-      <div><label>Avatar Style</label><select id="avatar_style"><option value="avataaars">Avataaars</option><option value="adventurer">Adventurer</option><option value="personas">Personas</option><option value="notionists">Notionists</option><option value="fun-emoji">Fun Emoji</option><option value="bottts">Bottts</option></select></div>
+    <div class="section">
+      <div class="section-title">Avatar — Choose Your Style</div>
+      <div class="avatar-grid" id="avatarGrid"></div>
+      <div class="hint">Your avatar preview updates instantly as you change username, gender or style.</div>
     </div>
 
-    <label>Phone (+234...)</label><input id="phone" placeholder="+2348031234567">
-    <label>Email</label><input id="email" placeholder="email@example.com"><div class="small">Changing email requires confirmation. New email will apply only after you confirm.</div>
-    <label>Date of Birth</label><input id="dob" type="date"><div id="dobLock" class="small" style="display:none;color:#fbbf24">🔒 Date of birth is locked after verification.</div>
-
-    <button id="saveBtn" onclick="saveProfile()">Save Changes</button>
-    <p class="small" style="text-align:center">Balance: ₦<span id="bal">0</span> • Earned: ₦<span id="earned">0</span> • Surveys: <span id="surveys">0</span></p>
-    <p style="text-align:center"><a href="dashboard.html" style="color:#22c55e">← Back to Dashboard</a></p>
-  </div>
-
-  <div id="confirmModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:20px;z-index:99">
-    <div style="background:#0f1d14;border:1px solid #22c55e55;border-radius:24px;padding:28px;max-width:400px;width:100%;text-align:center">
-      <div style="font-size:48px">✉️</div><h2>Check Your Email</h2>
-      <p style="color:#bbf7d0;line-height:1.6">We've sent a confirmation link to <b id="confirmEmail"></b>.<br>Please confirm to apply these changes. Link expires in 30 minutes.</p>
-      <button onclick="closeModal()">Got It</button>
+    <div class="section">
+      <div class="section-title">Contact & Identity</div>
+      <div class="row2">
+        <div class="field"><label>Phone — Nigerian</label><input id="phone" placeholder="+2348031234567"></div>
+        <div class="field"><label>Date of birth <span id="dobLock" class="hint"></span></label><input id="dob" type="date"></div>
+      </div>
+      <div class="field"><label>Email — Current</label><input id="emailDisplay" disabled></div>
     </div>
-  </div>
+
+    <button id="saveBtn" class="btn btn-green">Save changes → Send confirmation email</button>
+    <div id="msg"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+      <button id="changeEmailBtn" class="btn btn-ghost">Change email separately</button>
+      <button onclick="location.href='dashboard.html'" class="btn btn-ghost">Back to dashboard</button>
+    </div>
+  </main>
 </div>
 
+<div class="modal" id="confirmModal"><div class="modal-box"><div style="font-size:52px">✉️</div><h2>Check your inbox</h2><p id="modalText">We sent a confirmation link to your email.</p><button class="btn" style="margin-top:18px" onclick="document.getElementById('confirmModal').classList.remove('show')">Got it</button></div></div>
+
 <script>
-const SUPABASE_URL="https://xkshzlfducmnglxfnxzk.supabase.co";
-const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
-const EDGE="https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/profile";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let original=null;
-const AVATAR_STYLES=["avataaars","adventurer","personas","notionists","fun-emoji","bottts"];
-function showMsg(t,type){const a=document.getElementById('alert');a.style.display='block';a.className='msg '+type;a.innerHTML=t;}
-function hideMsg(){document.getElementById('alert').style.display='none';}
-function avatarUrl(style,username,gender){return `https://api.dicebear.com/9.x/${style}/svg?seed=${encodeURIComponent((username||'user')+'-'+(gender||'male'))}`;}
-function renderAvatarRow(){
-  const row=document.getElementById('avatarRow'); row.innerHTML='';
-  const uname=document.getElementById('username').value||'user';
-  const gender=document.getElementById('gender').value||'male';
-  const current=document.getElementById('avatar_style').value;
-  AVATAR_STYLES.forEach(style=>{
-    const img=document.createElement('img');
-    img.src=avatarUrl(style,uname,gender); img.className='avatar-opt'+(style===current?' active':''); img.title=style;
-    img.onclick=()=>{document.getElementById('avatar_style').value=style; document.getElementById('avatarImg').src=avatarUrl(style,uname,gender); renderAvatarRow();};
-    row.appendChild(img);
-  });
+const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const FN_URL = SUPABASE_URL + "/functions/v1/profile";
+const AVATARS = ["avataaars","adventurer","personas","notionists","fun-emoji","bottts"];
+let selectedAvatar = "avataaars", usernameTimer = null;
+function msg(t, ok=false){ const el=document.getElementById('msg'); el.textContent=t; el.id='msg'; el.style.color = ok ? '#16A34A' : '#DC2626'; }
+function avatarUrl(style, seed){ return `https://api.dicebear.com/9.x/${style}/svg?seed=${encodeURIComponent(seed||'user')}`; }
+function renderAvatarGrid(){
+  const grid = document.getElementById('avatarGrid');
+  const username = document.getElementById('username').value || 'user';
+  const gender = document.getElementById('gender').value || 'female';
+  grid.innerHTML = AVATARS.map(s=>`<div class="av ${s===selectedAvatar?'active':''}" onclick="pickAvatar('${s}')"><img src="${avatarUrl(s, username+'-'+gender)}"><span>${s}</span></div>`).join('');
+  document.getElementById('avatarPreview').src = avatarUrl(selectedAvatar, username+'-'+gender);
 }
-function updateVerifyBox(u, verifyDisplay){
-  const dot=document.getElementById('verifyDot');
-  const btn=document.getElementById('verifyBtn');
-  const badge=document.getElementById('verifiedBadge');
-  const box=document.getElementById('verifyBox');
-  const title=document.getElementById('verifyTitle');
-  const sub=document.getElementById('verifySub');
-  if(u.is_verified){
-    box.className='verify v-verified'; dot.className='dot dot-green';
-    title.textContent='● Verified'; sub.textContent='Your identity is verified. Full access unlocked.';
-    btn.style.display='none'; badge.style.display='inline-flex';
-  } else if(verifyDisplay && verifyDisplay.state==='pending'){
-    box.className='verify v-pending'; dot.className='dot dot-yellow';
-    title.textContent=verifyDisplay.title; sub.textContent=verifyDisplay.subtitle;
-    btn.textContent='Check Status →'; btn.style.display='inline-block'; badge.style.display='none';
-  } else if(verifyDisplay && verifyDisplay.state==='failed'){
-    box.className='verify v-failed'; dot.className='dot dot-red';
-    title.textContent=verifyDisplay.title; sub.textContent=verifyDisplay.subtitle;
-    btn.textContent='Try Again →'; btn.style.display='inline-block'; badge.style.display='none';
-  } else {
-    box.className='verify v-not'; dot.className='dot dot-gray';
-    title.textContent='Identity Not Verified'; sub.textContent='Verify your identity to unlock full access and secure your account.';
-    btn.textContent='Verify Now →'; btn.style.display='inline-block'; badge.style.display='none';
-  }
+function pickAvatar(s){ selectedAvatar=s; renderAvatarGrid(); }
+async function callFn(body){
+  const { data:{ session } } = await supabase.auth.getSession();
+  if(!session){ location.href='login.html'; return null; }
+  const r = await fetch(FN_URL, { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+session.access_token, 'apikey': SUPABASE_ANON_KEY }, body: JSON.stringify(body) });
+  return r.json();
 }
-async function init(){
-  try{
-    const params=new URLSearchParams(location.search);
-    // Handle confirm link landing on profile
-    const token=params.get('token')||params.get('code');
-    if(params.get('confirmed')==='1'){
-      document.getElementById('confirmedBanner').style.display='block';
-      history.replaceState({},'',location.pathname);
-    }
-    const {data:{session}} = await sb.auth.getSession();
-    document.getElementById('loading').style.display='none';
-    if(!session){document.getElementById('noAuth').style.display='block';setTimeout(()=>location.href='login.html',2000);return;}
-    document.getElementById('main').style.display='block';
-    // If link came with token, confirm it via Edge
-    if(token){
-      try{
-        const cr=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify({action:'confirm',token})});
-        const cj=await cr.json();
-        if(cj.success){document.getElementById('confirmedBanner').style.display='block';}
-      }catch(e){}
-      history.replaceState({},'',location.pathname);
-    }
-    const res=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify({action:'get'})});
-    const j=await res.json();
-    if(!j.success){showMsg(j.message||"We're having trouble loading your profile. Please refresh and try again.",'error');return;}
-    const u=j.user; original=u;
-    document.getElementById('name').value=u.name||''; document.getElementById('username').value=u.username||'';
-    document.getElementById('gender').value=u.gender||'male'; document.getElementById('avatar_style').value=u.avatar_style||'avataaars';
-    document.getElementById('phone').value=u.phone||''; document.getElementById('email').value=u.email||'';
-    document.getElementById('dob').value=u.date_of_birth||'';
-    document.getElementById('displayName').textContent=u.name||'User'; document.getElementById('displayUser').textContent='@'+(u.username||'');
-    document.getElementById('avatarImg').src=u.avatar_url||avatarUrl(u.avatar_style||'avataaars',u.username,u.gender);
-    document.getElementById('bal').textContent=(u.balance||0).toLocaleString(); document.getElementById('earned').textContent=(u.total_earned||0).toLocaleString(); document.getElementById('surveys').textContent=u.completed_surveys_count||0;
-    updateVerifyBox(u, j.verifyDisplay);
-    if(u.is_verified){document.getElementById('dob').disabled=true;document.getElementById('dobLock').style.display='block';}
-    renderAvatarRow();
-  }catch(e){
-    document.getElementById('loading').style.display='none';
-    document.getElementById('main').style.display='block';
-    showMsg('Could not load profile. Check network and refresh.','error');
-  }
+async function load(){
+  const { data:{ session } } = await supabase.auth.getSession();
+  if(!session){ location.href='login.html'; return; }
+  const res = await callFn({ action:'get' });
+  if(!res?.success){ msg(res?.message||'Failed to load'); return; }
+  const u = res.user;
+  document.getElementById('displayName').textContent = u.name || 'No Name';
+  document.getElementById('displayUsername').textContent = '@'+(u.username||'');
+  document.getElementById('name').value = u.name || '';
+  document.getElementById('username').value = u.username || '';
+  document.getElementById('gender').value = u.gender || 'female';
+  document.getElementById('phone').value = u.phone || '';
+  document.getElementById('dob').value = u.date_of_birth || '';
+  document.getElementById('emailDisplay').value = u.email || res.auth_email || '';
+  document.getElementById('sideEmail').textContent = u.email || res.auth_email || '—';
+  document.getElementById('sidePhone').textContent = u.phone_verified ? 'Yes' : 'No';
+  document.getElementById('memberSince').textContent = u.created_at ? new Date(u.created_at).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}) : '—';
+  selectedAvatar = u.avatar_style || 'avataaars';
+  document.getElementById('avatarPreview').src = u.avatar_url || avatarUrl(selectedAvatar, u.username);
+  document.getElementById('statBalance').textContent = '₦'+Number(u.balance||0).toLocaleString();
+  document.getElementById('statEarned').textContent = '₦'+Number(u.total_earned||0).toLocaleString();
+  document.getElementById('statSurveys').textContent = u.completed_surveys_count||0;
+  const badge = document.getElementById('verifyBadge');
+  const vd = res.verifyDisplay || {};
+  badge.textContent = '● '+(vd.title || 'Not Verified');
+  badge.className = 'badge ' + (vd.state==='verified'?'verified': vd.state==='pending'?'pending': vd.state==='failed'?'failed':'not');
+  document.getElementById('verifySubtitle').textContent = vd.subtitle || '';
+  if(u.is_verified){ document.getElementById('dob').disabled=true; document.getElementById('dobLock').textContent='🔒 Locked after verification'; }
+  renderAvatarGrid();
+  if(new URLSearchParams(location.search).get('confirmed')==='1') msg('✅ Changes confirmed and applied!', true);
 }
-document.getElementById('username').addEventListener('input',async e=>{
-  const v=e.target.value.trim().toLowerCase(); if(v.length<3){document.getElementById('userMsg').textContent='';return;}
-  const {data:{session}}=await sb.auth.getSession(); if(!session)return;
-  const r=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify({action:'check-username',username:v})});
-  const j=await r.json(); document.getElementById('userMsg').textContent=j.msg||''; document.getElementById('userMsg').style.color=j.ok?'#22c55e':'#f87171';
-  renderAvatarRow();
+document.getElementById('username').addEventListener('input', e=>{
+  const v = e.target.value.trim().toLowerCase(); e.target.value=v;
+  clearTimeout(usernameTimer); document.getElementById('usernameMsg').textContent='Checking...'; document.getElementById('usernameMsg').className='hint';
+  usernameTimer=setTimeout(async()=>{
+    if(v.length<3){ document.getElementById('usernameMsg').textContent=''; return; }
+    const r = await callFn({ action:'check-username', username: v });
+    if(r?.success){ document.getElementById('usernameMsg').textContent=r.msg; document.getElementById('usernameMsg').className='hint '+(r.ok?'ok':'err'); }
+    renderAvatarGrid();
+  },500);
 });
-document.getElementById('avatar_style').addEventListener('change',()=>{
-  const style=document.getElementById('avatar_style').value; const uname=document.getElementById('username').value||'user'; const g=document.getElementById('gender').value;
-  document.getElementById('avatarImg').src=avatarUrl(style,uname,g); renderAvatarRow();
+document.getElementById('gender').addEventListener('change', renderAvatarGrid);
+document.getElementById('saveBtn').addEventListener('click', async ()=>{
+  const btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Sending...';
+  const res = await callFn({ action:'update', name: document.getElementById('name').value.trim(), username: document.getElementById('username').value.trim().toLowerCase(), gender: document.getElementById('gender').value, avatar_style: selectedAvatar, phone: document.getElementById('phone').value.trim() || null, date_of_birth: document.getElementById('dob').value || null });
+  btn.disabled=false; btn.textContent='Save changes → Send confirmation email';
+  if(res?.success && res.confirmRequired){ document.getElementById('modalText').textContent=`We sent a confirmation link to ${res.email}. Click the button inside the email to apply your changes. Link expires in 30 minutes.`; document.getElementById('confirmModal').classList.add('show'); }
+  else msg(res?.message || 'Could not save');
 });
-document.getElementById('gender').addEventListener('change',()=>{
-  const style=document.getElementById('avatar_style').value; const uname=document.getElementById('username').value||'user'; const g=document.getElementById('gender').value;
-  document.getElementById('avatarImg').src=avatarUrl(style,uname,g); renderAvatarRow();
+document.getElementById('changeEmailBtn').addEventListener('click', async ()=>{
+  const ne = prompt('Enter new email:'); if(!ne) return;
+  const { error } = await supabase.auth.updateUser({ email: ne.trim() });
+  if(error) alert(error.message); else alert('We sent verification to your NEW email. Click link there to confirm email change.');
 });
-async function saveProfile(){
-  hideMsg(); const btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Sending Confirmation...';
-  const {data:{session}}=await sb.auth.getSession(); if(!session){location.href='login.html';return;}
-  const payload={action:'update',name:document.getElementById('name').value.trim(),username:document.getElementById('username').value.trim().toLowerCase(),gender:document.getElementById('gender').value,avatar_style:document.getElementById('avatar_style').value,phone:document.getElementById('phone').value.trim()||null,date_of_birth:document.getElementById('dob').value||null};
-  const newEmail=document.getElementById('email').value.trim().toLowerCase();
-  if(newEmail && original && newEmail!==original.email) payload.newEmail=newEmail;
-  try{
-    const r=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify(payload)});
-    const j=await r.json();
-    if(j.success && j.confirmRequired){document.getElementById('confirmEmail').textContent=j.email||newEmail||original.email;document.getElementById('confirmModal').style.display='flex';}
-    else showMsg(j.message||'We could not save your profile. Please try again.','error');
-  }catch(e){showMsg('We could not save your profile. Please try again.','error');}
-  btn.disabled=false; btn.textContent='Save Changes';
-}
-function closeModal(){document.getElementById('confirmModal').style.display='none';}
-init();
+load();
 </script>
 </body>
 </html>
