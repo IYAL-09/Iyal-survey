@@ -1,266 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="manifest" href="/manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Iyal Surveys – Profile</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<link rel="icon" type="image/png" href="iyallogo.png">
-<link rel="apple-touch-icon" href="iyallogo.png">
+<title>Profile - Iyal Surveys</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-body{background:#08140d;color:white;min-height:100vh;overflow-x:hidden}
-.bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at top left,#16a34a55,transparent 35%),radial-gradient(circle at bottom right,#22c55e44,transparent 35%),#08140d}
-.blur{position:fixed;width:300px;height:300px;border-radius:50%;background:#22c55e22;filter:blur(90px);z-index:-1;animation:float 8s infinite ease-in-out}
-.blur1{top:-80px;left:-80px}
-.blur2{bottom:-100px;right:-100px;animation-delay:3s}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(30px)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-header{padding:20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:999;backdrop-filter:blur(20px)}
-.logo{display:flex;align-items:center;gap:12px}
-.logo img{width:52px;height:52px;border-radius:50%;border:2px solid #22c55e;object-fit:cover}
-.logo h1{font-size:1.15rem;font-weight:700}
-.back-btn{width:46px;height:46px;border-radius:16px;background:#ffffff10;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;border:1px solid #ffffff10;color:white;text-decoration:none}
-.container{padding:20px;padding-bottom:120px}
-.greeting{margin-bottom:22px;animation:fadeUp .5s ease}
-.greeting h2{font-size:1.7rem;margin-bottom:8px}
-.greeting p{color:#bbf7d0;font-size:.95rem}
-.card{background:#ffffff10;backdrop-filter:blur(18px);border:1px solid #ffffff12;border-radius:28px;padding:20px;margin-bottom:18px;animation:fadeUp .6s ease}
-.card h3{font-size:1rem;color:#86efac;margin-bottom:16px}
-.label{font-size:.85rem;color:#bbf7d0;margin:14px 0 8px;display:block}
-.input{width:100%;padding:14px;border-radius:14px;border:1px solid #ffffff15;outline:none;background:#ffffff08;color:white;font-size:.95rem}
-.input:focus{border-color:#22c55e}
-.input:disabled{opacity:.6}
-.readonly{background:#ffffff05}
-.btn{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#16a34a,#22c55e);color:white;font-weight:700;cursor:pointer;transition:.3s;margin-top:18px;font-size:.95rem}
-.btn:hover{transform:scale(1.02)}
-.btn:disabled{opacity:.6}
-.info-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #ffffff10;font-size:.92rem}
-.info-row:last-child{border-bottom:none}
-.info-row span:last-child{color:#86efac;font-weight:600;text-align:right}
-.policy{font-size:.9rem;line-height:1.6;color:#d1fae5}
-.policy li{margin-left:18px;margin-bottom:8px}
-#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#0f1d14;border:1px solid #22c55e55;padding:12px 18px;border-radius:999px;font-size:.9rem;display:none;z-index:1000;max-width:90%;text-align:center}
-.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:#0b1610ee;backdrop-filter:blur(18px);display:flex;justify-content:space-around;padding:14px 0;border-top:1px solid #ffffff10;z-index:999}
-.bottom-nav a{color:white;text-decoration:none;font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:5px}
-.bottom-nav i{font-size:1.1rem}
-.active-nav{color:#86efac !important}
+*{box-sizing:border-box} body{margin:0;font-family:Segoe UI,sans-serif;background:#08140d;color:#fff;padding:20px}
+.card{max-width:520px;margin:0 auto;background:#0f1d14;border:1px solid #22c55e55;border-radius:24px;padding:24px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#0a1a10;color:#fff;margin:6px 0 12px}
+label{font-size:13px;color:#bbf7d0} button{width:100%;padding:14px;border:none;border-radius:14px;background:#22c55e;color:#fff;font-weight:700;cursor:pointer}
+button:disabled{opacity:.5} .msg{padding:12px;border-radius:12px;margin:12px 0;display:none;font-size:14px;line-height:1.5}
+.success{background:#14532d} .error{background:#7f1d1d} .info{background:#1e3a8a}
+.avatar{width:90px;height:90px;border-radius:50%;background:#1a2e22;display:block;margin:0 auto 10px;object-fit:cover}
+.verify{padding:14px;border-radius:14px;margin:12px 0;font-size:14px}
+.v-verified{background:#14532d} .v-failed{background:#7f1d1d} .v-pending{background:#854d0e} .v-not{background:#1f2937}
+.small{font-size:12px;color:#9ca3af} .row{display:flex;gap:10px} .row>div{flex:1}
 </style>
 </head>
 <body>
-<div class="bg"></div>
-<div class="blur blur1"></div>
-<div class="blur blur2"></div>
-
-<header>
-<div class="logo">
-<img src="iyallogo.png">
-<h1>Iyal Surveys</h1>
-</div>
-<a class="back-btn" href="dashboard.html"><i class="fa-solid fa-arrow-left"></i></a>
-</header>
-
-<div class="container">
-<div class="greeting">
-<h2>My Profile 👋</h2>
-<p>Manage your details and check withdrawal policy.</p>
-</div>
-
 <div class="card">
-<h3>Profile Details</h3>
-<label class="label">Username</label>
-<input id="usernameInput" class="input" placeholder="Enter username (e.g. John)">
-<label class="label">WhatsApp Number</label>
-<input id="whatsappInput" class="input" placeholder="0803..." inputmode="numeric">
-<label class="label">Email</label>
-<input id="emailDisplay" class="input readonly" disabled>
-<button id="saveBtn" class="btn" onclick="saveProfile()">Save Changes</button>
-<p id="saveHint" style="font-size:.82rem;color:#86efac;margin-top:10px;text-align:center"></p>
+  <div id="noAuth" style="display:none;text-align:center">
+    <h2>Please sign in to continue</h2><p>You need to sign in to view your profile.</p>
+    <button onclick="location.href='login.html'">Go to Login</button>
+  </div>
+
+  <div id="main" style="display:none">
+    <div id="confirmedBanner" class="msg success" style="display:none">✅ <b>Profile Updated</b><br>Your changes have been confirmed and applied.</div>
+    <div id="alert" class="msg"></div>
+    <img id="avatarImg" class="avatar" src="">
+    <h2 id="displayName" style="text-align:center;margin:6px 0">Loading...</h2>
+    <p id="displayUser" style="text-align:center;color:#9ca3af;margin:0">@...</p>
+    <div id="verifyBox" class="verify v-not"><b id="verifyTitle">Identity Not Verified</b><br><span id="verifySub"></span></div>
+
+    <label>Full Name</label><input id="name" placeholder="Full name">
+    <label>Username</label><input id="username" placeholder="username"><div id="userMsg" class="small"></div>
+    <div class="row"><div><label>Gender</label><select id="gender"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
+    <div><label>Avatar Style</label><select id="avatar_style"><option value="avataaars">Avataaars</option><option value="adventurer">Adventurer</option><option value="personas">Personas</option><option value="notionists">Notionists</option><option value="fun-emoji">Fun Emoji</option><option value="bottts">Bottts</option></select></div></div>
+    <label>Phone (+234...)</label><input id="phone" placeholder="+2348031234567">
+    <label>Email</label><input id="email" placeholder="email@example.com"><div class="small">Changing email requires confirmation. New email will apply only after you confirm.</div>
+    <label>Date of Birth</label><input id="dob" type="date"><div id="dobLock" class="small" style="display:none;color:#fbbf24">🔒 Date of birth is locked after verification.</div>
+    <button id="saveBtn" onclick="saveProfile()">Save Changes</button>
+    <p class="small" style="text-align:center">Balance: ₦<span id="bal">0</span> • Earned: ₦<span id="earned">0</span> • Surveys: <span id="surveys">0</span></p>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div id="confirmModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:20px">
+    <div style="background:#0f1d14;border:1px solid #22c55e55;border-radius:24px;padding:28px;max-width:400px;width:100%;text-align:center">
+      <div style="font-size:48px">✉️</div><h2>Check Your Email</h2>
+      <p style="color:#bbf7d0;line-height:1.6">We've sent a confirmation link to <b id="confirmEmail"></b>.<br>Please confirm to apply these changes. Link expires in 30 minutes.</p>
+      <button onclick="closeModal()">Got It</button>
+    </div>
+  </div>
 </div>
 
-<div class="card">
-<h3>Account Info</h3>
-<div class="info-row"><span>Available Balance</span><span id="balanceDisplay">₦0</span></div>
-<div class="info-row"><span>User ID</span><span id="userIdDisplay">-</span></div>
-<div class="info-row"><span>Member Since</span><span id="memberSince">-</span></div>
-</div>
+<script>
+const SUPABASE_URL="https://xkshzlfducmnglxfnxzk.supabase.co";
+const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"; // <-- put your anon key
+const EDGE="https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/profile";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let original=null, currentUser=null;
 
-<div class="card">
-<h3>Withdrawal Policy</h3>
-<ul class="policy">
-<li>Minimum withdrawal is ₦1,000. Requests below this will be rejected.</li>
-<li>Withdrawals are processed within 24 to 72 hours on working days.</li>
-<li>Your username and WhatsApp number must be correct before withdrawal. Wrong details can delay payment.</li>
-<li>One withdrawal request at a time. Wait for your current request to complete before making another.</li>
-<li>Earnings from fraudulent activity, fake surveys, or multiple accounts will be removed and account may be banned.</li>
-<li>Iyal Surveys reserves the right to verify any withdrawal before payment.</li>
-</ul>
-<button class="btn" onclick="location.href='withdraw.html'">Go to Withdraw</button>
-</div>
+function showMsg(t,type){const a=document.getElementById('alert');a.style.display='block';a.className='msg '+type;a.innerHTML=t;}
+function hideMsg(){document.getElementById('alert').style.display='none';}
 
-<div class="card">
-<h3>Account Actions</h3>
-<button class="btn" style="background:#ffffff10;border:1px solid #ffffff15" onclick="logout()">Logout</button>
-</div>
-</div>
-
-<div id="toast"></div>
-
-<div class="bottom-nav">
-<a href="dashboard.html"><i class="fa-solid fa-house"></i>Home</a>
-<a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a>
-<a href="referrals.html"><i class="fa-solid fa-users"></i>Referrals</a>
-<a href="profile.html" class="active-nav"><i class="fa-solid fa-user"></i>Profile</a>
-</div>
-
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-// SAME AS DASHBOARD - OLD ANON KEY, NOT sb_publishable_
-const supabase = createClient(
-"https://xkshzlfducmnglxfnxzk.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
-);
-
-function escapeHtml(str){
-  if(!str) return "";
-  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-}
-
-function showToast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.style.display = "block";
-  setTimeout(()=>{ t.style.display = "none"; }, 3500);
-}
-
-// SAME AS DASHBOARD - SESSION ONCE AT TOP
-const { data:{ session } } = await supabase.auth.getSession();
-if(!session){
-  window.location.href = "login.html";
-  throw new Error("No session");
-}
-
-initTrackers();
-loadProfile();
-
-// SAME FETCH PATTERN AS DASHBOARD - NO APIKEY HEADER
-async function callEdge(action, bodyExtra = {}){
-  const res = await fetch(
-    "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/profile",
-    {
-      method:"POST",
-      headers:{
-        Authorization:`Bearer ${session.access_token}`,
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({ action, ...bodyExtra })
-    }
-  );
-  const data = await res.json();
-  return data;
-}
-
-async function loadProfile(){
-  try{
-    const data = await callEdge("get");
-    if(!data.success) throw new Error(data.message || "Failed to load profile data.");
-    document.getElementById("usernameInput").value = data.username || "";
-    document.getElementById("whatsappInput").value = data.whatsapp || "";
-    document.getElementById("emailDisplay").value = data.email || session.user.email || "";
-    document.getElementById("balanceDisplay").textContent = "₦" + Number(data.balance || 0).toLocaleString();
-    document.getElementById("userIdDisplay").textContent = session.user.id.slice(0,8) + "...";
-    if(session.user.created_at){
-      document.getElementById("memberSince").textContent = new Date(session.user.created_at).toLocaleDateString([], { day:'numeric', month:'short', year:'numeric' });
-    }
-  }catch(err){
-    console.error(err);
-    showToast(err.message || "Failed to load profile data.");
+async function init(){
+  const params=new URLSearchParams(location.search);
+  if(params.get('confirmed')==='1'){
+    document.getElementById('confirmedBanner').style.display='block';
+    history.replaceState({},'',location.pathname);
   }
+  const {data:{session}}=await supabase.auth.getSession();
+  if(!session){document.getElementById('noAuth').style.display='block';setTimeout(()=>location.href='login.html',2000);return;}
+  currentUser=session.user;
+  document.getElementById('main').style.display='block';
+  const res=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify({action:'get'})});
+  const j=await res.json();
+  if(!j.success){showMsg(j.message||"We're having trouble loading your profile. Please refresh and try again.",'error');return;}
+  const u=j.user; original=u;
+  document.getElementById('name').value=u.name||''; document.getElementById('username').value=u.username||'';
+  document.getElementById('gender').value=u.gender||'male'; document.getElementById('avatar_style').value=u.avatar_style||'avataaars';
+  document.getElementById('phone').value=u.phone||''; document.getElementById('email').value=u.email||'';
+  document.getElementById('dob').value=u.date_of_birth||'';
+  document.getElementById('displayName').textContent=u.name||'User'; document.getElementById('displayUser').textContent='@'+(u.username||'');
+  document.getElementById('avatarImg').src=u.avatar_url||'';
+  document.getElementById('bal').textContent=(u.balance||0).toLocaleString(); document.getElementById('earned').textContent=(u.total_earned||0).toLocaleString(); document.getElementById('surveys').textContent=u.completed_surveys_count||0;
+  if(j.verifyDisplay){document.getElementById('verifyTitle').textContent=j.verifyDisplay.title;document.getElementById('verifySub').textContent=j.verifyDisplay.subtitle;document.getElementById('verifyBox').className='verify v-'+j.verifyDisplay.state;}
+  if(u.is_verified){document.getElementById('dob').disabled=true;document.getElementById('dobLock').style.display='block';}
 }
-
-window.saveProfile = async function(){
-  const btn = document.getElementById("saveBtn");
-  const username = document.getElementById("usernameInput").value.trim();
-  const whatsappRaw = document.getElementById("whatsappInput").value.trim();
-  const whatsapp = whatsappRaw.replace(/[\s+]/g, '');
-
-  const usernameRegex = /^[a-zA-Z0-9_\s]{2,30}$/;
-  if(!usernameRegex.test(username)){ showToast("Username must be 2-30 characters, letters and numbers only"); return; }
-  const whatsappRegex = /^\d{10,15}$/;
-  if(!whatsappRegex.test(whatsapp)){ showToast("Enter valid WhatsApp number, 10-15 digits"); return; }
-
-  btn.disabled = true;
-  btn.textContent = "Saving...";
+document.getElementById('username').addEventListener('input',async e=>{
+  const v=e.target.value.trim().toLowerCase(); if(v.length<3)return;
+  const {data:{session}}=await supabase.auth.getSession(); if(!session)return;
+  const r=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify({action:'check-username',username:v})});
+  const j=await r.json(); document.getElementById('userMsg').textContent=j.msg||''; document.getElementById('userMsg').style.color=j.ok?'#22c55e':'#f87171';
+});
+document.getElementById('avatar_style').addEventListener('change',()=>{
+  const style=document.getElementById('avatar_style').value; const uname=document.getElementById('username').value||'user'; const g=document.getElementById('gender').value;
+  document.getElementById('avatarImg').src=`https://api.dicebear.com/9.x/${style}/svg?seed=${encodeURIComponent(uname+'-'+g)}`;
+});
+async function saveProfile(){
+  hideMsg(); const btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Sending Confirmation...';
+  const {data:{session}}=await supabase.auth.getSession(); if(!session){location.href='login.html';return;}
+  const payload={action:'update',name:document.getElementById('name').value.trim(),username:document.getElementById('username').value.trim().toLowerCase(),gender:document.getElementById('gender').value,avatar_style:document.getElementById('avatar_style').value,phone:document.getElementById('phone').value.trim()||null,date_of_birth:document.getElementById('dob').value||null};
+  const newEmail=document.getElementById('email').value.trim().toLowerCase();
+  if(newEmail && newEmail!==original.email) payload.newEmail=newEmail;
   try{
-    const data = await callEdge("update", { username, whatsapp });
-    if(!data.success) throw new Error(data.message || "Failed to save profile.");
-    showToast("Profile saved successfully!");
-    document.getElementById("saveHint").textContent = "Saved at " + new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
-  }catch(err){
-    console.error(err);
-    showToast(err.message);
-  }finally{
-    btn.disabled = false;
-    btn.textContent = "Save Changes";
-  }
-};
-
-window.logout = async function(){
-  await supabase.auth.signOut();
-  window.location.href = "login.html";
-};
-
-/* ===== TRACKERS - SAME AS DASHBOARD, SAME FUNCTION ===== */
-function initTrackers(){
-  const userId = session.user.id;
-  trackVisit(userId);
-  let lastActivityTime = Date.now();
-  let accumulatedActiveSeconds = 0;
-  const idleLimit = 3 * 60 * 1000;
-  ['click','scroll','keypress','mousemove','touchstart'].forEach(event=>{
-    window.addEventListener(event, ()=>{ lastActivityTime = Date.now(); }, { passive:true });
-  });
-  setInterval(()=>{
-    if(document.hidden) return;
-    const now = Date.now();
-    const idleDuration = now - lastActivityTime;
-    if(idleDuration < idleLimit) accumulatedActiveSeconds += 10;
-    if(accumulatedActiveSeconds >= 60){
-      sendActiveTime(accumulatedActiveSeconds);
-      accumulatedActiveSeconds = 0;
-    }
-  }, 10000);
+    const r=await fetch(EDGE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_KEY},body:JSON.stringify(payload)});
+    const j=await r.json();
+    if(j.success && j.confirmRequired){document.getElementById('confirmEmail').textContent=j.email||newEmail;document.getElementById('confirmModal').style.display='flex';}
+    else showMsg(j.message||'We could not save your profile. Please try again.','error');
+  }catch(e){showMsg('We could not save your profile. Please try again.','error');}
+  btn.disabled=false; btn.textContent='Save Changes';
 }
-
-async function trackVisit(userId){
-  try{
-    const lastVisitKey = `last_visit_recorded_${userId}`;
-    const lastVisitTime = localStorage.getItem(lastVisitKey);
-    const now = Date.now();
-    const thirtyMinutes = 30 * 60 * 1000;
-    if(!lastVisitTime || (now - Number(lastVisitTime)) > thirtyMinutes){
-      localStorage.setItem(lastVisitKey, now.toString());
-      await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",{
-        method:"POST",
-        headers:{ Authorization:`Bearer ${session.access_token}`, "Content-Type":"application/json" },
-        body: JSON.stringify({ action:"track-visit" })
-      });
-    }
-  }catch(err){ console.error("Visit tracking error:", err); }
-}
-
-async function sendActiveTime(seconds){
-  if(typeof seconds !== 'number' || isNaN(seconds) || seconds < 0 || seconds > 70) return;
-  try{
-    await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",{
-      method:"POST",
-      headers:{ Authorization:`Bearer ${session.access_token}`, "Content-Type":"application/json" },
-      body: JSON.stringify({ action:"track-time", active_seconds: seconds })
-    });
-  }catch(err){ console.error("Time tracking sync failed:", err); }
-}
+function closeModal(){document.getElementById('confirmModal').style.display='none';}
+init();
 </script>
 </body>
 </html>
