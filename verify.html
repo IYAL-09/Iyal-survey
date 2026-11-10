@@ -74,7 +74,7 @@ nav a{text-decoration:none;color:#d1fae5;font-size:.95rem;}
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 const supabase = createClient("https://xkshzlfducmnglxfnxzk.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0");
 const FN = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/persona-verification";
-const TEMPLATE_ID = "itmpl_AigutaXyDmWg2ZV5ZeozFEwJh53xnN";
+const TEMPLATE_ID = "itmpl_AigutaX1QHk4gYwCjWTAbJGgQ6oJzW";
 function escapeHtml(str) { if (!str) return ""; return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
 function showToast(message) { let toast = document.getElementById('customToast'); if (!toast) { toast = document.createElement('div'); toast.id = 'customToast'; toast.className = 'toast-notification'; document.body.appendChild(toast); } toast.textContent = message; toast.classList.add('show'); setTimeout(() => { toast.classList.remove('show'); }, 3000); }
 const { data: { session } } = await supabase.auth.getSession();
