@@ -144,10 +144,24 @@ z-index:100;
 animation:fadeUp .3s ease;
 }
 
-nav a{
-text-decoration:none;
-color:#d1fae5;
-font-size:.95rem;
+nav a {
+  text-decoration: none;
+  color: #d1fae5;
+  font-size: .95rem;
+  display: flex;          /* Aligns icon and text horizontally */
+  align-items: center;    /* Keeps them vertically centered */
+  gap: 10px;             /* Adds clean spacing between icon and text */
+  transition: color .2s ease;
+}
+
+nav a:hover {
+  color: #86efac;
+}
+
+.nav-icon {
+  width: 20px;           /* Gives every icon fixed width so text lines up straight */
+  text-align: center;
+  color: #86efac;        /* Matches your accent green color */
 }
 
 /* NOTIFICATION DROPDOWN */
@@ -562,13 +576,13 @@ color:#86efac !important;
 </div>
 
 <nav id="menu">
-<a href="terms.html">🤝 Terms & Conditions</a>
-<a href="privacy.html">🛡️ Privacy Policy</a>
-<a href="about.html">💡 About Us</a>
-<a href="disclaimer.html">ℹ️ Disclaimer</a>
-<a href="support.html">📩 Support</a>
-<a href="settings.html">⚙️ Settings</a>
-   <a href="profile.html">👤 Profile</a>
+  <a href="terms.html"><i class="fa-solid fa-handshake nav-icon"></i> Terms & Conditions</a>
+  <a href="privacy.html"><i class="fa-solid fa-shield-halved nav-icon"></i> Privacy Policy</a>
+  <a href="about.html"><i class="fa-solid fa-circle-info nav-icon"></i> About Us</a>
+  <a href="disclaimer.html"><i class="fa-solid fa-triangle-exclamation nav-icon"></i> Disclaimer</a>
+  <a href="support.html"><i class="fa-solid fa-envelope nav-icon"></i> Support</a>
+  <a href="settings.html"><i class="fa-solid fa-gear nav-icon"></i> Settings</a>
+  <a href="profile.html"><i class="fa-solid fa-user nav-icon"></i> Profile</a>
 </nav>
 
 </header>
