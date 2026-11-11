@@ -1,195 +1,1572 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="manifest" href="/manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08140d">
+
+<link rel="manifest" href="/manifest.json">
 <title>Iyal Surveys – Identity Verification</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="icon" type="image/png" href="iyallogo.png">
 <link rel="apple-touch-icon" href="iyallogo.png">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
-body{background:#08140d;color:white;min-height:100vh;overflow-x:hidden;}
-.bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at top left,#16a34a55,transparent 35%),radial-gradient(circle at bottom right,#22c55e44,transparent 35%),#08140d;}
-.blur{position:fixed;width:300px;height:300px;border-radius:50%;background:#22c55e22;filter:blur(90px);z-index:-1;animation:float 8s infinite ease-in-out;}
-.blur1{ top:-80px; left:-80px; }
-.blur2{ bottom:-100px; right:-100px; animation-delay:3s; }
-@keyframes float{0%,100%{transform:translateY(0px);}50%{transform:translateY(30px);}}
-header{padding:20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:999;backdrop-filter:blur(20px);}
-.logo{display:flex;align-items:center;gap:12px;}
-.logo img{width:52px;height:52px;border-radius:50%;border:2px solid #22c55e;object-fit:cover;}
-.logo h1{font-size:1.15rem;font-weight:700;}
-.header-right {display: flex;align-items: center;gap: 12px;}
-.bell-btn, .menu-btn{width:46px;height:46px;border-radius:16px;background:#ffffff10;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(12px);cursor:pointer;font-size:1.1rem;border:1px solid #ffffff10;transition:.3s;position: relative;color: white;}
-.bell-btn:hover, .menu-btn:hover{transform:scale(1.05);}
-nav{position:absolute;top:85px;right:20px;background:#0f1d14ee;backdrop-filter:blur(18px);padding:18px;border-radius:22px;display:none;flex-direction:column;gap:16px;width:230px;border:1px solid #ffffff10;z-index:100;animation:fadeUp .3s ease;}
-nav a{text-decoration:none;color:#d1fae5;font-size:.95rem;}
-#notifMenu {display: none;position: absolute;top: 85px;right: 20px;background: #0f1d14ee;backdrop-filter: blur(18px);padding: 16px;border-radius: 22px;width: 320px;border: 1px solid #ffffff10;z-index: 100;box-shadow: 0 15px 40px rgba(0,0,0,0.4);animation: fadeUp .3s ease;}
-#notifMenu h4 {font-size: 1rem;color: #86efac;margin-bottom: 12px;border-bottom: 1px solid #ffffff10;padding-bottom: 8px;}
-.notif-item { padding: 12px 12px 12px 16px; border-radius: 12px; font-size: .85rem; line-height: 1.4; margin-bottom: 8px; position: relative; border: 1px solid transparent; }
-.notif-item.unread { background: #22c55e22; border-color: #22c55e55; color: #ffffff; }
-.notif-item.unread .notif-text { font-weight: 700; color: #ffffff; }
-.notif-item.read { background: #ffffff08; border-color: #ffffff08; color: #d1fae5; opacity: 0.75; }
-.notif-item.read .notif-text { font-weight: 400; }
-.notif-dot { position: absolute; left: 6px; top: 18px; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; }
-.notif-item span.notif-time { display: block; font-size: .7rem; color: #86efac; margin-top: 4px; }
-.toast-notification {position: fixed;bottom: 30px;left: 50%;transform: translateX(-50%) translateY(100px);background: #0f1d14;border: 1px solid #22c55e55;color: #ffffff;padding: 12px 24px;border-radius: 14px;box-shadow: 0 10px 30px rgba(0,0,0,0.5);font-size: 0.9rem;z-index: 9999;transition: transform 0.3s ease, opacity 0.3s ease;opacity: 0;}
-.toast-notification.show {transform: translateX(-50%) translateY(0);opacity: 1;}
-.container{padding:20px;padding-bottom:120px;max-width: 650px;margin: 0 auto;}
-.verify-card{background:#0f1d14;border:1px solid #ffffff12;border-radius:28px;padding:28px;box-shadow:0 15px 40px rgba(0,0,0,.3);animation:fadeUp .6s ease;text-align: center;}
-.verify-card h2 {font-size: 1.6rem;color: #86efac;margin-bottom: 12px;}
-.verify-card p {color: #d1fae5;font-size: 0.95rem;line-height: 1.6;margin-bottom: 24px;}
-.verify-main-btn {display: block;width: 100%;padding: 14px;border: none;border-radius: 18px;background: linear-gradient(135deg,#16a34a,#22c55e);color: white;font-weight: 700;font-size: 1rem;cursor: pointer;transition: .3s;box-shadow: 0 10px 25px rgba(34,197,94,.25);margin-bottom: 12px;}
-.verify-main-btn:hover {transform: translateY(-2px);}
-.verify-sec-btn {display: block;width: 100%;padding: 14px;border: 1px solid #ffffff15;border-radius: 18px;background: #ffffff08;color: #d1fae5;font-weight: 600;font-size: 0.95rem;cursor: pointer;transition: .3s;text-decoration: none;}
-.verify-sec-btn:hover {background: #ffffff12;}
-.loader-wrap{padding:40px 0;display:flex;justify-content:center;}
-.loader{width:32px;height:32px;border:3px solid #ffffff15;border-top:3px solid #22c55e;border-radius:50%;animation:spin 1s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-@keyframes fadeUp{from{ opacity:0; transform:translateY(20px); }to{ opacity:1; transform:translateY(0); }}
-.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:#0b1610ee;backdrop-filter:blur(18px);display:flex;justify-content:space-around;padding:14px 0;border-top:1px solid #ffffff10;z-index:999;}
-.bottom-nav a{color:white;text-decoration:none;font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.3s;}
-.bottom-nav a:hover{transform:translateY(-2px);}
-.bottom-nav i{font-size:1.1rem;}
-.active-nav{color:#86efac !important;}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+:root {
+  --green: #22c55e;
+  --green-light: #86efac;
+  --background: #08140d;
+  --card: #0f1d14;
+  --text: #d1fae5;
+  --muted: #a7cbb5;
+}
+
+body {
+  background: var(--background);
+  color: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(circle at top left, #16a34a55, transparent 35%),
+    radial-gradient(circle at bottom right, #22c55e44, transparent 35%),
+    var(--background);
+}
+
+.blur {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: #22c55e22;
+  filter: blur(90px);
+  z-index: -1;
+  animation: float 8s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.blur1 {
+  top: -80px;
+  left: -80px;
+}
+
+.blur2 {
+  bottom: -100px;
+  right: -100px;
+  animation-delay: 3s;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(30px); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: .45; }
+}
+
+header {
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: #08140d55;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--green);
+  object-fit: cover;
+}
+
+.logo h1 {
+  font-size: 1.12rem;
+  font-weight: 700;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bell-btn,
+.menu-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  background: #ffffff10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  font-size: 1.1rem;
+  border: 1px solid #ffffff10;
+  transition: .3s;
+  position: relative;
+  color: white;
+}
+
+.bell-btn:hover,
+.menu-btn:hover {
+  transform: scale(1.05);
+  background: #22c55e20;
+}
+
+nav {
+  position: absolute;
+  top: 78px;
+  right: 20px;
+  background: #0f1d14f5;
+  backdrop-filter: blur(18px);
+  padding: 18px;
+  border-radius: 22px;
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  width: 230px;
+  border: 1px solid #ffffff10;
+  z-index: 100;
+  animation: fadeUp .3s ease;
+  box-shadow: 0 15px 40px #0006;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: .95rem;
+}
+
+nav a:hover {
+  color: var(--green-light);
+}
+
+#notifMenu {
+  display: none;
+  position: absolute;
+  top: 78px;
+  right: 20px;
+  background: #0f1d14f5;
+  backdrop-filter: blur(18px);
+  padding: 16px;
+  border-radius: 22px;
+  width: min(320px, calc(100vw - 40px));
+  border: 1px solid #ffffff10;
+  z-index: 100;
+  box-shadow: 0 15px 40px #0006;
+  animation: fadeUp .3s ease;
+}
+
+#notifMenu h4 {
+  font-size: 1rem;
+  color: var(--green-light);
+  margin-bottom: 12px;
+  border-bottom: 1px solid #ffffff10;
+  padding-bottom: 8px;
+}
+
+.notif-item {
+  padding: 12px 12px 12px 16px;
+  border-radius: 12px;
+  font-size: .85rem;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.notif-item.unread {
+  background: #22c55e22;
+  border-color: #22c55e55;
+  color: white;
+}
+
+.notif-item.unread .notif-text {
+  font-weight: 700;
+}
+
+.notif-item.read {
+  background: #ffffff08;
+  border-color: #ffffff08;
+  color: var(--text);
+  opacity: .75;
+}
+
+.notif-dot {
+  position: absolute;
+  left: 6px;
+  top: 18px;
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+}
+
+.notif-item span.notif-time {
+  display: block;
+  font-size: .7rem;
+  color: var(--green-light);
+  margin-top: 4px;
+}
+
+.toast-notification {
+  position: fixed;
+  bottom: 95px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #102419;
+  border: 1px solid #22c55e66;
+  color: white;
+  padding: 13px 22px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px #0008;
+  font-size: .9rem;
+  z-index: 9999;
+  transition: .3s;
+  opacity: 0;
+  width: max-content;
+  max-width: calc(100vw - 40px);
+  text-align: center;
+}
+
+.toast-notification.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.container {
+  padding: 22px 18px 125px;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.verify-card {
+  background: linear-gradient(145deg, #102219, #0b1910);
+  border: 1px solid #ffffff12;
+  border-radius: 28px;
+  padding: 28px 23px;
+  box-shadow: 0 15px 40px #0005;
+  animation: fadeUp .5s ease;
+  text-align: center;
+  overflow: hidden;
+}
+
+.verify-card h2 {
+  font-size: 1.55rem;
+  color: var(--green-light);
+  margin-bottom: 12px;
+}
+
+.verify-card p {
+  color: var(--text);
+  font-size: .94rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.status-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  margin: 0 auto 20px;
+}
+
+.status-success {
+  background: #22c55e20;
+  color: #4ade80;
+  border: 1px solid #22c55e44;
+}
+
+.status-pending {
+  background: #f59e0b18;
+  color: #fbbf24;
+  border: 1px solid #f59e0b44;
+}
+
+.status-failed {
+  background: #ef444418;
+  color: #f87171;
+  border: 1px solid #ef444444;
+}
+
+.status-info {
+  background: #3b82f618;
+  color: #60a5fa;
+  border: 1px solid #3b82f644;
+}
+
+.verify-main-btn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: .3s;
+  box-shadow: 0 10px 25px #22c55e30;
+  margin-bottom: 12px;
+}
+
+.verify-main-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px #22c55e40;
+}
+
+.verify-main-btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.verify-sec-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ffffff15;
+  border-radius: 17px;
+  background: #ffffff08;
+  color: var(--text);
+  font-weight: 600;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: .3s;
+  text-decoration: none;
+}
+
+.verify-sec-btn:hover {
+  background: #ffffff12;
+}
+
+.info-box {
+  background: #ffffff08;
+  border: 1px solid #ffffff12;
+  border-radius: 17px;
+  padding: 17px;
+  text-align: left;
+  font-size: .9rem;
+  line-height: 1.8;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.warning-box {
+  background: #fef3c7;
+  color: #1a1000;
+  padding: 15px;
+  border-radius: 15px;
+  font-size: .9rem;
+  line-height: 1.6;
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.attempts-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff08;
+  border: 1px solid #ffffff12;
+  padding: 14px 16px;
+  border-radius: 15px;
+  margin-bottom: 18px;
+  color: var(--text);
+  font-size: .9rem;
+}
+
+.attempts-box strong {
+  color: var(--green-light);
+  font-size: 1rem;
+}
+
+.loader-wrap {
+  padding: 35px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.loader {
+  width: 35px;
+  height: 35px;
+  border: 3px solid #ffffff15;
+  border-top: 3px solid var(--green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.pending-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fbbf24;
+  font-size: .85rem;
+  margin-bottom: 18px;
+}
+
+.pending-indicator span {
+  width: 8px;
+  height: 8px;
+  background: #fbbf24;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #0b1610ee;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  display: flex;
+  justify-content: space-around;
+  padding: 13px 0 max(13px, env(safe-area-inset-bottom));
+  border-top: 1px solid #ffffff10;
+  z-index: 999;
+}
+
+.bottom-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: .75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: .3s;
+}
+
+.bottom-nav a:hover {
+  transform: translateY(-2px);
+}
+
+.bottom-nav i {
+  font-size: 1.1rem;
+}
+
+.active-nav {
+  color: var(--green-light) !important;
+}
+
+@media(max-width:400px) {
+  .verify-card {
+    padding: 24px 17px;
+  }
+
+  .logo h1 {
+    font-size: 1rem;
+  }
+
+  .bottom-nav a {
+    font-size: .68rem;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="bg"></div>
 <div class="blur blur1"></div>
 <div class="blur blur2"></div>
+
 <header>
-<div class="logo"><img src="iyallogo.png" alt="Logo"><h1>Iyal Surveys</h1></div>
-<div class="header-right">
- <div class="bell-btn" onclick="toggleNotif()"><i class="fa-solid fa-bell"></i><span id="notifCount" style="position:absolute; top:-5px; right:-5px; background:#ef4444; color:white; font-size:.7rem; font-weight:700; min-width:20px; height:20px; border-radius:999px; display:none; align-items:center; justify-content:center; padding:0 5px;">0</span></div>
- <div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
-</div>
-<div id="notifMenu"><h4>Notifications</h4><div id="notifList" style="display:flex; flex-direction:column; max-height: 250px; overflow-y: auto;"><div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div></div></div>
-<nav id="menu"><a href="dashboard.html">Dashboard</a><a href="profile.html">Profile</a><a href="leaderboard.html">Leaderboard</a><a href="withdraw.html">Withdrawals</a><a href="support.html">Support</a><a href="settings.html">Settings</a><a href="w-policy.html">Withdrawal Policy</a></nav>
+  <div class="logo">
+    <img src="iyallogo.png" alt="Iyal Surveys Logo">
+    <h1>Iyal Surveys</h1>
+  </div>
+
+  <div class="header-right">
+    <div class="bell-btn" onclick="toggleNotif()">
+      <i class="fa-solid fa-bell"></i>
+      <span id="notifCount" style="position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;font-size:.7rem;font-weight:700;min-width:20px;height:20px;border-radius:999px;display:none;align-items:center;justify-content:center;padding:0 5px;">0</span>
+    </div>
+
+    <div class="menu-btn" onclick="toggleMenu()">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+  </div>
+
+  <div id="notifMenu">
+    <h4>Notifications</h4>
+    <div id="notifList" style="display:flex;flex-direction:column;max-height:250px;overflow-y:auto;">
+      <div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div>
+    </div>
+  </div>
+
+  <nav id="menu">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="leaderboard.html">Leaderboard</a>
+    <a href="withdraw.html">Withdrawals</a>
+    <a href="support.html">Support</a>
+    <a href="settings.html">Settings</a>
+    <a href="w-policy.html">Withdrawal Policy</a>
+  </nav>
 </header>
-<div class="container"><div class="verify-card" id="verifyContainer"><div class="loader-wrap"><div class="loader"></div></div><p style="margin-top:10px; color:#bbf7d0;">Checking verification status...</p></div></div>
-<div class="bottom-nav"><a href="dashboard.html"><i class="fa-solid fa-house"></i>Home</a><a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a><a href="referrals.html"><i class="fa-solid fa-users"></i>Referrals</a><a href="profile.html"><i class="fa-solid fa-user"></i>Profile</a><a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>Logout</a></div>
+
+<div class="container">
+  <div class="verify-card" id="verifyContainer">
+    <div class="loader-wrap"><div class="loader"></div></div>
+    <p style="margin-top:10px;color:#bbf7d0;">Checking verification status...</p>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="dashboard.html"><i class="fa-solid fa-house"></i>Home</a>
+  <a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a>
+  <a href="referrals.html"><i class="fa-solid fa-users"></i>Referrals</a>
+  <a href="profile.html"><i class="fa-solid fa-user"></i>Profile</a>
+  <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+</div>
+
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-const supabase = createClient("https://xkshzlfducmnglxfnxzk.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0");
+
+const supabase = createClient(
+  "https://xkshzlfducmnglxfnxzk.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
+);
+
 const FN = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/persona-verification";
+const DASHBOARD_FN = "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service";
 const TEMPLATE_ID = "itmpl_AigutaX1QHk4gYwCjWTAbJGgQ6oJzW";
-function escapeHtml(str) { if (!str) return ""; return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
-function showToast(message) { let toast = document.getElementById('customToast'); if (!toast) { toast = document.createElement('div'); toast.id = 'customToast'; toast.className = 'toast-notification'; document.body.appendChild(toast); } toast.textContent = message; toast.classList.add('show'); setTimeout(() => { toast.classList.remove('show'); }, 3000); }
-const { data: { session } } = await supabase.auth.getSession();
-if(!session){ window.location.href = "login.html"; throw new Error("No session"); }
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function showToast(message) {
+  let toast = document.getElementById("customToast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "customToast";
+    toast.className = "toast-notification";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(toast.hideTimer);
+  toast.hideTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+
+const {
+  data: { session }
+} = await supabase.auth.getSession();
+
+if (!session) {
+  window.location.href = "login.html";
+  throw new Error("No session");
+}
+
 const userId = session.user.id;
+
 const urlParams = new URLSearchParams(window.location.search);
-let returnTo = urlParams.get('return_to') || 'profile.html';
-const allowedPaths = ['dashboard.html', 'profile.html', 'leaderboard.html', 'withdraw.html'];
-if (!allowedPaths.includes(returnTo)) { returnTo = 'profile.html'; }
+
+let returnTo = urlParams.get("return_to") || "profile.html";
+
+const allowedPaths = [
+  "dashboard.html",
+  "profile.html",
+  "leaderboard.html",
+  "withdraw.html"
+];
+
+if (!allowedPaths.includes(returnTo)) {
+  returnTo = "profile.html";
+}
+
+let currentStatus = null;
+let pollingTimer = null;
+let pollingAttempts = 0;
+let isCheckingStatus = false;
+let isStartingVerification = false;
+
+const MAX_POLLING_ATTEMPTS = 60;
+const POLLING_INTERVAL = 5000;
+
+/* INITIALISE PAGE */
+
 initTrackers();
 loadNotifications();
 initVerifyPage();
-window.toggleMenu = function(){ const menu = document.getElementById("menu"); const notifMenu = document.getElementById("notifMenu"); notifMenu.style.display = "none"; menu.style.display = (menu.style.display === "flex") ? "none" : "flex"; };
-window.toggleNotif = function(){ const notifMenu = document.getElementById("notifMenu"); const menu = document.getElementById("menu"); menu.style.display = "none"; notifMenu.style.display = (notifMenu.style.display === "block") ? "none" : "block"; markNotificationsRead(); };
-window.addEventListener("click", (e) => { if(!e.target.closest('.bell-btn') && !e.target.closest('#notifMenu')){ document.getElementById("notifMenu").style.display = "none"; } if(!e.target.closest('.menu-btn') && !e.target.closest('nav')){ document.getElementById("menu").style.display = "none"; } });
-async function loadNotifications() { try { const res = await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",{ method: "POST", headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" }, body: JSON.stringify({ action: "get-dashboard" }) }); const data = await res.json(); if (data.success && data.notifications) { updateNotifications(data.notifications); } } catch (err) { showToast("Unable to load notifications."); } }
-function formatNotifTime(created_at) { const d = new Date(created_at); const now = new Date(); const diffMs = now - d; const diffMin = Math.floor(diffMs / 60000); const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); if (diffMin < 1) return 'Just now'; if (diffMin < 60) return diffMin + 'm ago'; return timeStr; }
-function updateNotifications(notifs){ const notifList = document.getElementById("notifList"); const notifCount = document.getElementById("notifCount"); if(!notifs || notifs.length === 0){ notifList.innerHTML = `<div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div>`; notifCount.style.display = "none"; return; } let unreadCount = notifs.filter(n => !n.is_read).length; if(unreadCount > 0){ notifCount.textContent = unreadCount; notifCount.style.display = "flex"; } else { notifCount.style.display = "none"; } notifList.innerHTML = notifs.map(n => { const isUnread = !n.is_read; return `<div class="notif-item ${isUnread ? 'unread' : 'read'}">${isUnread ? '<span class="notif-dot"></span>' : ''}<div class="notif-text">${escapeHtml(n.message)}</div><span class="notif-time">${formatNotifTime(n.created_at || Date.now())}</span></div>`; }).join(''); }
-async function markNotificationsRead(){ document.getElementById("notifCount").style.display = "none"; try { await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",{ method:"POST", headers:{ Authorization:`Bearer ${session.access_token}`, "Content-Type":"application/json" }, body: JSON.stringify({ action: "mark-read" }) }); } catch(err){} }
-/* TRACKERS - DO NOT REMOVE - sends visit + active time to dashboard-service */
-function initTrackers() { trackVisit(userId); let lastActivityTime = Date.now(); let accumulatedActiveSeconds = 0; const idleLimit = 3 * 60 * 1000; const activityEvents = ['click', 'scroll', 'keypress', 'mousemove', 'touchstart']; activityEvents.forEach(event => { window.addEventListener(event, () => { lastActivityTime = Date.now(); }, { passive: true }); }); setInterval(() => { if (document.hidden) return; const now = Date.now(); const idleDuration = now - lastActivityTime; if (idleDuration < idleLimit) { accumulatedActiveSeconds += 10; } if (accumulatedActiveSeconds >= 60) { sendActiveTime(accumulatedActiveSeconds); accumulatedActiveSeconds = 0; } }, 10000); }
-async function trackVisit(userId) { try { const lastVisitKey = `last_visit_recorded_${userId}`; const lastVisitTime = localStorage.getItem(lastVisitKey); const now = Date.now(); const thirtyMinutes = 30 * 60 * 1000; if (!lastVisitTime || (now - Number(lastVisitTime)) > thirtyMinutes) { localStorage.setItem(lastVisitKey, now.toString()); await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",{ method: "POST", headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" }, body: JSON.stringify({ action: "track-visit" }) }); } } catch (err) {} }
-async function sendActiveTime(seconds) { if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0 || seconds > 70) { return; } try { await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service", { method: "POST", headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type":"application/json" }, body: JSON.stringify({ action: "track-time", active_seconds: seconds }) }); } catch (err) {} }
-/* VERIFICATION FLOW */
-async function initVerifyPage() {
-  const container = document.getElementById("verifyContainer");
-  const { data: profile, error: profileError } = await supabase.from("users").select("name, date_of_birth").eq("id", userId).single();
-  if (profileError || !profile?.date_of_birth) {
-    container.innerHTML = `<div style="background:#fef3c7; color:#1a1000; padding:20px; border-radius:18px; text-align:center;"><h3 style="font-size:1.3rem; margin-bottom:10px;">⚠️ Add Date of Birth First</h3><p style="margin-bottom:16px; font-size:0.95rem;">Add your DOB in profile before verification.</p><a href="profile.html" style="display:inline-block; background:#16a34a; color:white; padding:12px 20px; border-radius:14px; text-decoration:none; font-weight:700;">Go to Profile → Add DOB</a></div>`;
-    return;
+
+/* HEADER CONTROLS */
+
+window.toggleMenu = function() {
+  const menu = document.getElementById("menu");
+  const notifMenu = document.getElementById("notifMenu");
+
+  notifMenu.style.display = "none";
+
+  menu.style.display =
+    menu.style.display === "flex" ? "none" : "flex";
+};
+
+window.toggleNotif = function() {
+  const notifMenu = document.getElementById("notifMenu");
+  const menu = document.getElementById("menu");
+
+  menu.style.display = "none";
+
+  notifMenu.style.display =
+    notifMenu.style.display === "block" ? "none" : "block";
+
+  if (notifMenu.style.display === "block") {
+    markNotificationsRead();
   }
+};
+
+window.addEventListener("click", (e) => {
+  if (
+    !e.target.closest(".bell-btn") &&
+    !e.target.closest("#notifMenu")
+  ) {
+    document.getElementById("notifMenu").style.display = "none";
+  }
+
+  if (
+    !e.target.closest(".menu-btn") &&
+    !e.target.closest("nav")
+  ) {
+    document.getElementById("menu").style.display = "none";
+  }
+});
+
+/* NOTIFICATIONS */
+
+async function loadNotifications() {
   try {
-    const res = await fetch(FN, { method: "POST", headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" } });
-    const v = await res.json();
-    if (v.verified) {
-      container.innerHTML = `<h2>✅ Verified</h2><p>Your account has been successfully verified. You have full access to claim rewards, run surveys, and withdraw funds.</p><p style="color:#86efac; font-size:0.85rem; margin-bottom:20px;">Verified at: ${v.verified_at ? new Date(v.verified_at).toLocaleString() : ""}</p><button class="verify-main-btn" onclick="window.location.href='${returnTo}'">Return to Dashboard</button>`;
-      return;
+    const res = await fetch(DASHBOARD_FN, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "get-dashboard"
+      })
+    });
+
+    if (!res.ok) {
+      throw new Error("Notification request failed");
     }
-    if (v.blocked) {
-      container.innerHTML = `
-        <h2>🚫 Verification Blocked</h2>
-        <p style="color:#fca5a5;">You used all 3 attempts. ${escapeHtml(v.mismatch_reason || "")}</p>
-        <div style="background:#fef3c7; color:#1a1000; padding:16px; border-radius:16px; font-size:0.9rem; line-height:1.6; text-align:left; margin-bottom:16px;">
-          <b>Why you need to contact Support:</b><br>
-          Your verification is now locked for security — to stop fraud and fake IDs. Only our Support team can manually review your case and reset your attempts.<br><br>
-          <b>When you click Contact Support, tell them:</b><br>
-          1. Your full name on your ID<br>
-          2. The ID you used (NIN / Driver's License / Voter's Card)<br>
-          3. Why it failed (name mismatch / blurry photo / database not found)<br>
-          4. Ask them to review and reset your verification attempts.
-        </div>
-        <a href="support.html" class="verify-main-btn" style="text-align:center; text-decoration:none;">Contact Support For Manual Review</a>
-        <a href="${returnTo}" class="verify-sec-btn" style="text-align:center; margin-top:10px;">Go Back</a>`;
-      return;
+
+    const data = await res.json();
+
+    if (data.success && data.notifications) {
+      updateNotifications(data.notifications);
     }
-    if (v.is_name_mismatch) {
-      container.innerHTML = `
-        <h2>❌ Name / ID No Match</h2>
-        <p style="text-align:left; background:#ffffff08; padding:14px; border-radius:14px; margin-bottom:16px; font-size:0.9rem; line-height:1.5;">ID Name: <b>${escapeHtml(v.persona_name || "N/A")}</b><br>Account Name: <b>${escapeHtml(v.account_name || "N/A")}</b></p>
-        <p style="color:#fca5a5; margin-bottom:12px; font-size:0.9rem;">${escapeHtml(v.mismatch_reason || "")}</p>
-        <div style="background:#fef3c7; color:#1a1000; padding:14px; border-radius:14px; font-size:0.9rem; margin-bottom:16px; text-align:left;">⚠️ <b>No try again with same name.</b><br>Go update your profile name to match your ID exactly, then come back to verify.</div>
-        <p style="margin-bottom:16px; color:#d1fae5; font-size:0.9rem;">Attempts left: ${v.attemptsLeft}/3</p>
-        <a href="profile.html" class="verify-main-btn" style="text-align:center; text-decoration:none;">Update Profile To Match ID</a>
-        <button class="verify-main-btn" onclick="startVerify()" style="background:#ffffff08; border:1px solid #ffffff15; margin-top:10px;">I Don Update Am — Try Again</button>
-        <a href="${returnTo}" class="verify-sec-btn" style="text-align:center; margin-top:10px;">Go Back</a>`;
-      return;
-    }
-    if (v.status === "expired") {
-      container.innerHTML = `<h2>⏰ Expired</h2><p>Verification session expired. Please start again.</p><button class="verify-main-btn" onclick="startVerify()">Start Again</button><a href="${returnTo}" class="verify-sec-btn" style="text-align:center; margin-top:10px;">Go Back</a>`;
-      return;
-    }
-    if (v.mismatch_reason?.startsWith("DUPLICATE_ID")) {
-      container.innerHTML = `
-        <h2>❌ ID Already Used</h2>
-        <p>This ID has already been used for another account.</p>
-        <div style="background:#fef3c7; color:#1a1000; padding:16px; border-radius:16px; font-size:0.9rem; line-height:1.6; text-align:left; margin-bottom:16px;"><b>Why contact Support?</b><br>Only Support can check if na you really own the ID or if someone else use am. Tell them your ID type and when you registered, make dem review am manually.</div>
-        <a href="support.html" class="verify-main-btn" style="text-align:center; text-decoration:none;">Contact Support For Manual Review</a>`;
-      return;
-    }
-    container.innerHTML = `
-      <h2>Verify Your Identity</h2>
-      <p style="margin-bottom:12px;">Attempts left: ${v.attemptsLeft}/3</p>
-      <div style="background:#ffffff08; border:1px solid #ffffff10; border-radius:16px; padding:16px; text-align:left; font-size:0.9rem; line-height:1.7; margin-bottom:16px;">
-        <b style="color:#86efac;">How e go work (2 mins):</b><br>
-        1️⃣ Snap <b>front of your ID only</b> — no need back<br>
-        2️⃣ Take a quick <b>selfie</b><br>
-        3️⃣ We check your ID for <b>Database</b> automatically
-      </div>
-      <div style="background:#fef3c7; color:#1a1000; padding:14px; border-radius:14px; font-size:0.9rem; margin-bottom:16px; text-align:left;">💡 <b>Use:</b> NIN Slip / NIN Card / Driver's License / Voter's Card<br>Your profile name must match your ID name exactly.</div>
-      <p style="color:#bbf7d0; font-size:0.9rem; margin-bottom:24px;">${escapeHtml(v.mismatch_reason || "Use your government ID with name matching your account.")}</p>
-      <button class="verify-main-btn" onclick="startVerify()">Start Verification</button>
-      <a href="${returnTo}" class="verify-sec-btn" style="text-align:center; margin-top:10px;">Go Back</a>
-    `;
+
   } catch (err) {
-    console.error("Verification status fetch error:", err);
-    container.innerHTML = `<h2>Connection Error</h2><p>Unable to retrieve verification status. Please check your connection and try again.</p><button class="verify-main-btn" onclick="window.location.reload()">Retry</button>`;
+    console.error("Notification error:", err);
   }
 }
-window.startVerify = function() {
-  window.open(`https://withpersona.com/verify?inquiry-template-id=${TEMPLATE_ID}&reference-id=${userId}`, "_blank");
+
+function formatNotifTime(created_at) {
+  const d = new Date(created_at);
+
+  if (isNaN(d.getTime())) return "";
+
+  const now = new Date();
+  const diffMs = now - d;
+  const diffMin = Math.floor(diffMs / 60000);
+
+  if (diffMin < 1) return "Just now";
+  if (diffMin < 60) return diffMin + "m ago";
+
+  return d.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function updateNotifications(notifs) {
+  const notifList = document.getElementById("notifList");
+  const notifCount = document.getElementById("notifCount");
+
+  if (!notifs || notifs.length === 0) {
+    notifList.innerHTML = `
+      <div class="notif-item" style="text-align:center;color:#86efac;">
+        No new notifications
+      </div>
+    `;
+
+    notifCount.style.display = "none";
+    return;
+  }
+
+  const unreadCount = notifs.filter(n => !n.is_read).length;
+
+  if (unreadCount > 0) {
+    notifCount.textContent = unreadCount;
+    notifCount.style.display = "flex";
+  } else {
+    notifCount.style.display = "none";
+  }
+
+  notifList.innerHTML = notifs.map(n => {
+    const isUnread = !n.is_read;
+
+    return `
+      <div class="notif-item ${isUnread ? "unread" : "read"}">
+        ${isUnread ? '<span class="notif-dot"></span>' : ""}
+        <div class="notif-text">${escapeHtml(n.message)}</div>
+        <span class="notif-time">
+          ${formatNotifTime(n.created_at || Date.now())}
+        </span>
+      </div>
+    `;
+  }).join("");
+}
+
+async function markNotificationsRead() {
+  document.getElementById("notifCount").style.display = "none";
+
+  try {
+    await fetch(DASHBOARD_FN, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "mark-read"
+      })
+    });
+  } catch (err) {
+    console.error("Mark notification read error:", err);
+  }
+}
+
+/* TRACKERS - DO NOT REMOVE
+   Sends visit + active time to dashboard-service.
+*/
+
+function initTrackers() {
+  trackVisit(userId);
+
+  let lastActivityTime = Date.now();
+  let accumulatedActiveSeconds = 0;
+
+  const idleLimit = 3 * 60 * 1000;
+
+  const activityEvents = [
+    "click",
+    "scroll",
+    "keypress",
+    "mousemove",
+    "touchstart"
+  ];
+
+  activityEvents.forEach(event => {
+    window.addEventListener(event, () => {
+      lastActivityTime = Date.now();
+    }, { passive: true });
+  });
+
+  setInterval(() => {
+    if (document.hidden) return;
+
+    const now = Date.now();
+    const idleDuration = now - lastActivityTime;
+
+    if (idleDuration < idleLimit) {
+      accumulatedActiveSeconds += 10;
+    }
+
+    if (accumulatedActiveSeconds >= 60) {
+      sendActiveTime(accumulatedActiveSeconds);
+      accumulatedActiveSeconds = 0;
+    }
+  }, 10000);
+}
+
+async function trackVisit(userId) {
+  try {
+    const lastVisitKey = `last_visit_recorded_${userId}`;
+    const lastVisitTime = localStorage.getItem(lastVisitKey);
+    const now = Date.now();
+
+    const thirtyMinutes = 30 * 60 * 1000;
+
+    if (
+      !lastVisitTime ||
+      (now - Number(lastVisitTime)) > thirtyMinutes
+    ) {
+      localStorage.setItem(lastVisitKey, now.toString());
+
+      await fetch(DASHBOARD_FN, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          action: "track-visit"
+        })
+      });
+    }
+  } catch (err) {
+    console.error("Visit tracking error:", err);
+  }
+}
+
+async function sendActiveTime(seconds) {
+  if (
+    typeof seconds !== "number" ||
+    isNaN(seconds) ||
+    seconds < 0 ||
+    seconds > 70
+  ) {
+    return;
+  }
+
+  try {
+    await fetch(DASHBOARD_FN, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "track-time",
+        active_seconds: seconds
+      })
+    });
+  } catch (err) {
+    console.error("Active time tracking error:", err);
+  }
+}
+
+/* VERIFICATION STATUS REQUEST */
+
+async function getVerificationStatus() {
+  const {
+    data: { session: currentSession }
+  } = await supabase.auth.getSession();
+
+  if (!currentSession) {
+    window.location.href = "login.html";
+    return null;
+  }
+
+  const res = await fetch(FN, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${currentSession.access_token}`,
+      "Content-Type": "application/json"
+    }
+  });
+
+  if (!res.ok) {
+    throw new Error("Unable to retrieve verification status");
+  }
+
+  const result = await res.json();
+
+  if (result.success === false) {
+    throw new Error(result.message || "Verification status request failed");
+  }
+
+  return result;
+}
+
+/* ATTEMPT DISPLAY */
+
+function getAttemptsLeft(v) {
+  if (typeof v.attemptsLeft === "number") {
+    return Math.max(0, v.attemptsLeft);
+  }
+
+  const max = Number(v.max_attempts || 3);
+  const used = Number(v.attempts || 0);
+
+  return Math.max(0, max - used);
+}
+
+/* MAIN VERIFICATION PAGE */
+
+async function initVerifyPage() {
   const container = document.getElementById("verifyContainer");
-  container.innerHTML = `<h2>Verification Submitted</h2><p>Thank you. Please complete the flow in the opened tab. We are confirming your verification...</p><div class="loader-wrap"><div class="loader"></div></div>`;
-  let n = 0;
-  const t = setInterval(async () => {
-    n++;
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) { clearInterval(t); return; }
-    try {
-      const r = await fetch(FN, { method: "POST", headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" } });
-      const v = await r.json();
-      if (v.verified || v.status === "expired" || v.status === "failed" || v.blocked || n > 36) { clearInterval(t); initVerifyPage(); }
-    } catch (e) {}
-  }, 5000);
+
+  stopPolling();
+
+  container.innerHTML = `
+    <div class="loader-wrap"><div class="loader"></div></div>
+    <p style="margin-top:10px;color:#bbf7d0;">
+      Checking verification status...
+    </p>
+  `;
+
+  try {
+    const {
+      data: profile,
+      error: profileError
+    } = await supabase
+      .from("users")
+      .select("name,date_of_birth")
+      .eq("id", userId)
+      .single();
+
+    if (profileError || !profile?.date_of_birth) {
+      showDobRequired();
+      return;
+    }
+
+    const v = await getVerificationStatus();
+
+    if (!v) return;
+
+    currentStatus = v.status;
+
+    if (v.verified || v.status === "verified") {
+      showVerified(v);
+      return;
+    }
+
+    if (v.blocked) {
+      showBlocked();
+      return;
+    }
+
+    if (v.status === "pending") {
+      showPending();
+      return;
+    }
+
+    if (v.status === "expired") {
+      showExpired(v);
+      return;
+    }
+
+    if (v.status === "failed") {
+      showFailed(v);
+      return;
+    }
+
+    showStartVerification(v);
+
+  } catch (err) {
+    console.error("Verification status error:", err);
+
+    container.innerHTML = `
+      <div class="status-icon status-failed">
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+
+      <h2>Connection Error</h2>
+
+      <p>
+        We couldn't retrieve your verification status.
+        Please check your internet connection and try again.
+      </p>
+
+      <button class="verify-main-btn" onclick="initVerifyPage()">
+        <i class="fa-solid fa-rotate"></i>
+        Try Again
+      </button>
+    `;
+  }
+}
+
+window.initVerifyPage = initVerifyPage;
+
+/* DOB REQUIRED */
+
+function showDobRequired() {
+  const container = document.getElementById("verifyContainer");
+
+  container.innerHTML = `
+    <div class="status-icon status-pending">
+      <i class="fa-solid fa-calendar-days"></i>
+    </div>
+
+    <h2>Add Date of Birth First</h2>
+
+    <p>
+      Before verifying your identity, please add your correct
+      date of birth to your Iyal Surveys profile.
+    </p>
+
+    <a href="profile.html" class="verify-main-btn" style="text-decoration:none;">
+      <i class="fa-solid fa-user-pen"></i>
+      Go to Profile
+    </a>
+  `;
+}
+
+/* VERIFIED */
+
+function showVerified(v) {
+  const container = document.getElementById("verifyContainer");
+
+  const verifiedDate = v.verified_at
+    ? new Date(v.verified_at).toLocaleString()
+    : "";
+
+  container.innerHTML = `
+    <div class="status-icon status-success">
+      <i class="fa-solid fa-shield-check"></i>
+    </div>
+
+    <h2>Identity Verified!</h2>
+
+    <p>
+      Congratulations! Your identity has been successfully verified.
+      Your Iyal Surveys account is now verified.
+    </p>
+
+    ${verifiedDate ? `
+      <div class="info-box" style="text-align:center;">
+        <span style="color:#86efac;">Verified on</span><br>
+        <strong>${escapeHtml(verifiedDate)}</strong>
+      </div>
+    ` : ""}
+
+    <button class="verify-main-btn" onclick="window.location.href='${returnTo}'">
+      <i class="fa-solid fa-arrow-right"></i>
+      Continue
+    </button>
+  `;
+
+  loadNotifications();
+}
+
+/* BLOCKED */
+
+function showBlocked() {
+  const container = document.getElementById("verifyContainer");
+
+  container.innerHTML = `
+    <div class="status-icon status-failed">
+      <i class="fa-solid fa-lock"></i>
+    </div>
+
+    <h2>Verification Locked</h2>
+
+    <p style="color:#fca5a5;">
+      You have used all 3 verification attempts available for today.
+    </p>
+
+    <div class="warning-box">
+      <strong>Why is verification locked?</strong><br><br>
+
+      Your verification attempts have reached the daily limit.
+      This restriction helps protect accounts against fraudulent
+      verification attempts.
+
+      <br><br>
+
+      If you believe this is a mistake, contact our Support team
+      for assistance.
+    </div>
+
+    <a href="support.html" class="verify-main-btn" style="text-decoration:none;">
+      <i class="fa-solid fa-headset"></i>
+      Contact Support
+    </a>
+
+    <a href="${returnTo}" class="verify-sec-btn">
+      Go Back
+    </a>
+  `;
+}
+
+/* PENDING */
+
+function showPending() {
+  const container = document.getElementById("verifyContainer");
+
+  container.innerHTML = `
+    <div class="status-icon status-pending">
+      <i class="fa-solid fa-hourglass-half"></i>
+    </div>
+
+    <div class="pending-indicator">
+      <span></span>
+      Verification in progress
+    </div>
+
+    <h2>We're Reviewing Your Identity</h2>
+
+    <p>
+      Your verification has been submitted successfully.
+      We're waiting for the verification result.
+    </p>
+
+    <div class="info-box">
+      <strong style="color:#86efac;">What happens next?</strong><br>
+      Your identity verification is being processed.
+      You don't need to submit another verification while
+      this one is pending.
+    </div>
+
+    <button class="verify-main-btn" id="checkStatusBtn" onclick="manualCheckStatus()">
+      <i class="fa-solid fa-rotate"></i>
+      Check Verification Status
+    </button>
+
+    <a href="${returnTo}" class="verify-sec-btn">
+      Go Back
+    </a>
+  `;
+
+  startPolling();
+}
+
+/* EXPIRED */
+
+function showExpired(v) {
+  const container = document.getElementById("verifyContainer");
+  const canRetry = v.can_retry === true;
+
+  container.innerHTML = `
+    <div class="status-icon status-failed">
+      <i class="fa-solid fa-clock"></i>
+    </div>
+
+    <h2>Verification Expired</h2>
+
+    <p>
+      Your previous verification session expired before
+      completion. You may need to start a new session.
+    </p>
+
+    ${attemptsBox(v)}
+
+    ${
+      canRetry
+        ? `
+          <button class="verify-main-btn" onclick="startVerify()">
+            <i class="fa-solid fa-rotate"></i>
+            Try Again
+          </button>
+        `
+        : `
+          <div class="warning-box">
+            You cannot start another attempt right now.
+            Please contact Support if you need assistance.
+          </div>
+
+          <a href="support.html" class="verify-main-btn" style="text-decoration:none;">
+            Contact Support
+          </a>
+        `
+    }
+
+    <a href="${returnTo}" class="verify-sec-btn">
+      Go Back
+    </a>
+  `;
+}
+
+/* FAILED */
+
+function showFailed(v) {
+  const container = document.getElementById("verifyContainer");
+  const canRetry = v.can_retry === true;
+
+  container.innerHTML = `
+    <div class="status-icon status-failed">
+      <i class="fa-solid fa-circle-xmark"></i>
+    </div>
+
+    <h2>Verification Unsuccessful</h2>
+
+    <p>
+      Unfortunately, your identity verification was not successful.
+      Please carefully review your information before trying again.
+    </p>
+
+    <div class="info-box">
+      <strong style="color:#86efac;">Before your next attempt:</strong><br>
+      • Use a valid government-issued ID.<br>
+      • Make sure your ID details are clearly visible.<br>
+      • Take your selfie in good lighting.<br>
+      • Ensure your profile information is correct.
+    </div>
+
+    ${attemptsBox(v)}
+
+    ${
+      canRetry
+        ? `
+          <button class="verify-main-btn" onclick="startVerify()">
+            <i class="fa-solid fa-rotate"></i>
+            Try Again
+          </button>
+        `
+        : `
+          <div class="warning-box">
+            You have no more verification attempts available right now.
+            Contact Support if you need help.
+          </div>
+
+          <a href="support.html" class="verify-main-btn" style="text-decoration:none;">
+            Contact Support
+          </a>
+        `
+    }
+
+    <a href="${returnTo}" class="verify-sec-btn">
+      Go Back
+    </a>
+  `;
+}
+
+/* DEFAULT START SCREEN */
+
+function showStartVerification(v) {
+  const container = document.getElementById("verifyContainer");
+  const canRetry = v.can_retry === true;
+  const attemptsLeft = getAttemptsLeft(v);
+
+  container.innerHTML = `
+    <div class="status-icon status-info">
+      <i class="fa-solid fa-shield-halved"></i>
+    </div>
+
+    <h2>Verify Your Identity</h2>
+
+    <p>
+      Complete a quick identity verification to help protect
+      your account and keep Iyal Surveys secure.
+    </p>
+
+    ${attemptsBox(v)}
+
+    <div class="info-box">
+      <strong style="color:#86efac;">How verification works</strong><br><br>
+
+      <i class="fa-solid fa-id-card" style="color:#86efac;"></i>
+      Take a clear photo of the front of your ID.<br>
+
+      <i class="fa-solid fa-camera" style="color:#86efac;"></i>
+      Take a quick selfie.<br>
+
+      <i class="fa-solid fa-shield-halved" style="color:#86efac;"></i>
+      Your identity details will be checked securely.
+    </div>
+
+    <div class="warning-box">
+      <strong>Accepted identification:</strong><br>
+      NIN Slip / NIN Card / Driver's License / Voter's Card.
+
+      <br><br>
+
+      Make sure the name and information on your ID
+      match your account details.
+    </div>
+
+    ${
+      canRetry && attemptsLeft > 0
+        ? `
+          <button class="verify-main-btn" onclick="startVerify()">
+            <i class="fa-solid fa-shield-halved"></i>
+            Start Verification
+          </button>
+        `
+        : `
+          <div class="warning-box">
+            Verification is currently unavailable.
+            Please contact Support for assistance.
+          </div>
+
+          <a href="support.html" class="verify-main-btn" style="text-decoration:none;">
+            Contact Support
+          </a>
+        `
+    }
+
+    <a href="${returnTo}" class="verify-sec-btn">
+      Go Back
+    </a>
+  `;
+}
+
+/* ATTEMPTS DISPLAY */
+
+function attemptsBox(v) {
+  const attemptsLeft = getAttemptsLeft(v);
+  const maxAttempts = Number(v.max_attempts || 3);
+
+  return `
+    <div class="attempts-box">
+      <span>
+        <i class="fa-solid fa-rotate" style="color:#86efac;margin-right:7px;"></i>
+        Attempts remaining today
+      </span>
+
+      <strong>${attemptsLeft} / ${maxAttempts}</strong>
+    </div>
+  `;
+}
+
+/* START VERIFICATION */
+
+window.startVerify = async function() {
+  if (isStartingVerification) return;
+
+  isStartingVerification = true;
+
+  /*
+    Open Persona immediately during the click event.
+    This helps avoid browser popup blockers.
+  */
+
+  const personaUrl =
+    `https://withpersona.com/verify?inquiry-template-id=${encodeURIComponent(TEMPLATE_ID)}&reference-id=${encodeURIComponent(userId)}`;
+
+  const personaWindow = window.open(personaUrl, "_blank");
+
+  if (!personaWindow) {
+    showToast("Please allow pop-ups to continue verification.");
+    isStartingVerification = false;
+    return;
+  }
+
+  const container = document.getElementById("verifyContainer");
+
+  container.innerHTML = `
+    <div class="status-icon status-pending">
+      <i class="fa-solid fa-hourglass-half"></i>
+    </div>
+
+    <h2>Verification Started</h2>
+
+    <p>
+      Complete the verification process in the newly opened tab.
+      We will automatically check your status.
+    </p>
+
+    <div class="loader-wrap">
+      <div class="loader"></div>
+    </div>
+
+    <p style="font-size:.85rem;color:#86efac;">
+      Please don't close this page.
+    </p>
+  `;
+
+  isStartingVerification = false;
+
+  /*
+    We do not insert a verification row from the frontend.
+    Persona webhook and existing backend logic remain responsible
+    for recording verification events.
+  */
+
+  pollingAttempts = 0;
+  startPolling();
 };
-document.getElementById("logoutBtn").addEventListener("click", async (e)=>{ e.preventDefault(); await supabase.auth.signOut(); window.location.href = "login.html"; });
+
+/* POLLING */
+
+function stopPolling() {
+  if (pollingTimer) {
+    clearInterval(pollingTimer);
+    pollingTimer = null;
+  }
+
+  pollingAttempts = 0;
+}
+
+function startPolling() {
+  if (pollingTimer) return;
+
+  pollingAttempts = 0;
+
+  pollingTimer = setInterval(async () => {
+    pollingAttempts++;
+
+    if (pollingAttempts > MAX_POLLING_ATTEMPTS) {
+      stopPolling();
+
+      showToast("Status checking paused. You can check again manually.");
+
+      return;
+    }
+
+    await checkStatusInBackground();
+
+  }, POLLING_INTERVAL);
+}
+
+async function checkStatusInBackground() {
+  if (isCheckingStatus) return;
+
+  isCheckingStatus = true;
+
+  try {
+    const v = await getVerificationStatus();
+
+    if (!v) return;
+
+    const newStatus = v.status;
+
+    if (
+      v.verified ||
+      newStatus === "verified" ||
+      newStatus === "failed" ||
+      newStatus === "expired" ||
+      v.blocked
+    ) {
+      stopPolling();
+
+      currentStatus = newStatus;
+
+      /*
+        Give the database trigger a short moment to insert
+        the notification before refreshing the notification list.
+      */
+
+      setTimeout(loadNotifications, 500);
+
+      await initVerifyPage();
+    }
+
+  } catch (err) {
+    console.error("Background status check error:", err);
+  } finally {
+    isCheckingStatus = false;
+  }
+}
+
+/* MANUAL STATUS CHECK */
+
+window.manualCheckStatus = async function() {
+  const button = document.getElementById("checkStatusBtn");
+
+  if (button) {
+    button.disabled = true;
+    button.innerHTML = `
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Checking...
+    `;
+  }
+
+  try {
+    const v = await getVerificationStatus();
+
+    if (!v) return;
+
+    if (
+      v.verified ||
+      v.status === "verified" ||
+      v.status === "failed" ||
+      v.status === "expired" ||
+      v.blocked
+    ) {
+      stopPolling();
+
+      setTimeout(loadNotifications, 500);
+
+      await initVerifyPage();
+
+      showToast("Verification status updated.");
+      return;
+    }
+
+    showToast("Your verification is still being processed.");
+
+  } catch (err) {
+    console.error("Manual status check error:", err);
+    showToast("Unable to check status. Try again.");
+  } finally {
+    const updatedButton = document.getElementById("checkStatusBtn");
+
+    if (updatedButton) {
+      updatedButton.disabled = false;
+      updatedButton.innerHTML = `
+        <i class="fa-solid fa-rotate"></i>
+        Check Verification Status
+      `;
+    }
+  }
+};
+
+/* LOGOUT */
+
+document.getElementById("logoutBtn").addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  stopPolling();
+
+  await supabase.auth.signOut();
+
+  window.location.href = "login.html";
+});
+
+/* CLEANUP */
+
+window.addEventListener("beforeunload", () => {
+  stopPolling();
+});
+
 </script>
+
 </body>
 </html>
