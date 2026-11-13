@@ -1,1253 +1,1114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="manifest" href="/manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Iyal Surveys – Dashboard</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-   <!-- Favicon -->
+<link rel="manifest" href="/manifest.json">
 <link rel="icon" type="image/png" href="iyallogo.png">
 <link rel="apple-touch-icon" href="iyallogo.png">
-   
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
-
-body{
-background:#08140d;
-color:white;
-min-height:100vh;
-overflow-x:hidden;
-}
-
-/* BACKGROUND */
-
-.bg{
-position:fixed;
-inset:0;
-z-index:-2;
-background:
-radial-gradient(circle at top left,#16a34a55,transparent 35%),
-radial-gradient(circle at bottom right,#22c55e44,transparent 35%),
-#08140d;
-}
-
-.blur{
-position:fixed;
-width:300px;
-height:300px;
-border-radius:50%;
-background:#22c55e22;
-filter:blur(90px);
-z-index:-1;
-animation:float 8s infinite ease-in-out;
-}
-
-.blur1{
-top:-80px;
-left:-80px;
-}
-
-.blur2{
-bottom:-100px;
-right:-100px;
-animation-delay:3s;
-}
-
-@keyframes float{
-0%,100%{transform:translateY(0px);}
-50%{transform:translateY(30px);}
-}
-
-/* HEADER */
-
-header{
-padding:20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-position:sticky;
-top:0;
-z-index:999;
-backdrop-filter:blur(20px);
-}
-
-.logo{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.logo img{
-width:52px;
-height:52px;
-border-radius:50%;
-border:2px solid #22c55e;
-object-fit:cover;
-}
-
-.logo h1{
-font-size:1.15rem;
-font-weight:700;
-}
-
-.header-right {
-display: flex;
-align-items: center;
-gap: 12px;
-}
-
-.bell-btn, .menu-btn{
-width:46px;
-height:46px;
-border-radius:16px;
-background:#ffffff10;
-display:flex;
-align-items:center;
-justify-content:center;
-backdrop-filter:blur(12px);
-cursor:pointer;
-font-size:1.1rem;
-border:1px solid #ffffff10;
-transition:.3s;
-position: relative;
-color: white;
-}
-
-.bell-btn:hover, .menu-btn:hover{
-transform:scale(1.05);
-}
-
-nav{
-position:absolute;
-top:85px;
-right:20px;
-background:#0f1d14ee;
-backdrop-filter:blur(18px);
-padding:18px;
-border-radius:22px;
-display:none;
-flex-direction:column;
-gap:16px;
-width:230px;
-border:1px solid #ffffff10;
-z-index:100;
-animation:fadeUp .3s ease;
-}
-
-nav a {
-  text-decoration: none;
-  color: #d1fae5;
-  font-size: .95rem;
-  display: flex;          /* Aligns icon and text horizontally */
-  align-items: center;    /* Keeps them vertically centered */
-  gap: 10px;             /* Adds clean spacing between icon and text */
-  transition: color .2s ease;
-}
-
-nav a:hover {
-  color: #86efac;
-}
-
-.nav-icon {
-  width: 20px;           /* Gives every icon fixed width so text lines up straight */
-  text-align: center;
-  color: #86efac;        /* Matches your accent green color */
-}
-
-/* NOTIFICATION DROPDOWN */
-#notifMenu {
-display: none;
-position: absolute;
-top: 85px;
-right: 20px;
-background: #0f1d14ee;
-backdrop-filter: blur(18px);
-padding: 16px;
-border-radius: 22px;
-width: 320px;
-border: 1px solid #ffffff10;
-z-index: 100;
-box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-animation: fadeUp .3s ease;
-}
-
-#notifMenu h4 {
-font-size: 1rem;
-color: #86efac;
-margin-bottom: 12px;
-border-bottom: 1px solid #ffffff10;
-padding-bottom: 8px;
-}
-
-.notif-item { padding: 12px 12px 12px 16px; border-radius: 12px; font-size: .85rem; line-height: 1.4; margin-bottom: 8px; position: relative; border: 1px solid transparent; }
-.notif-item.unread { background: #22c55e22; border-color: #22c55e55; color: #ffffff; }
-.notif-item.unread .notif-text { font-weight: 700; color: #ffffff; }
-.notif-item.read { background: #ffffff08; border-color: #ffffff08; color: #d1fae5; opacity: 0.75; }
-.notif-item.read .notif-text { font-weight: 400; }
-.notif-dot { position: absolute; left: 6px; top: 18px; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; }
-.notif-item span.notif-time { display: block; font-size: .7rem; color: #86efac; margin-top: 4px; }
-
-/* CONTAINER */
-
-.container{
-padding:20px;
-padding-bottom:120px;
-}
-
-/* GREETING */
-
-.greeting{
-margin-bottom:22px;
-animation:fadeUp .5s ease;
-}
-
-.greeting h2{
-font-size:1.7rem;
-margin-bottom:8px;
-}
-
-.greeting p{
-color:#bbf7d0;
-font-size:.95rem;
-}
-
-/* ADMIN BANNER */
-#adminBanner { display: none; position: relative; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #f97316 100%); border: 1px solid #fde68a; padding: 14px 44px 14px 16px; border-radius: 18px; margin-bottom: 18px; font-size: .92rem; font-weight: 700; color: #1a1000; line-height: 1.45; box-shadow: 0 10px 30px rgba(245,158,11,.35), 0 2px 0 rgba(255,255,255,.4) inset; animation: fadeUp .55s ease; overflow: hidden; }
-#adminBanner::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #92400e; }
-.banner-icon { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: rgba(0,0,0,.18); border-radius: 10px; font-size: 1rem; margin-right: 10px; vertical-align: middle; flex-shrink: 0; }
-#adminBannerText { vertical-align: middle; }
-.banner-close { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,0,0,.18); color: #1a1000; font-size: 1.2rem; font-weight: 800; line-height: 1; transition: .2s; border: none; }
-.banner-close:hover { background: rgba(0,0,0,.32); color: #fff; transform: translateY(-50%) rotate(90deg) scale(1.05); }
-.banner-close:active { transform: translateY(-50%) scale(.95); }
-
-/* COMBINED PROFILE BANNER */
-#profileBanner {
-display: none;
-background: #0f1d14;
-border: 1px solid #ffffff15;
-padding: 16px;
-border-radius: 20px;
-margin-bottom: 18px;
-animation: fadeUp .6s ease;
-}
-
-#profileBanner p {
-font-size: .9rem;
-margin-bottom: 12px;
-color: #d1fae5;
-line-height: 1.4;
-}
-
-.profile-banner-inputs {
-display: flex;
-flex-direction: column;
-gap: 10px;
-}
-
-.profile-input {
-width: 100%;
-padding: 12px;
-border-radius: 14px;
-border: 1px solid #ffffff15;
-outline: none;
-background: #ffffff08;
-color: white;
-font-size: .9rem;
-}
-
-.profile-input:focus {
-border-color: #22c55e;
-}
-
-.profile-btn {
-padding: 12px 18px;
-border: none;
-border-radius: 14px;
-background: linear-gradient(135deg, #16a34a, #22c55e);
-color: white;
-font-weight: 700;
-cursor: pointer;
-transition: .3s;
-width: 100%;
-}
-
-.profile-btn:hover {
-transform: scale(1.02);
-}
-
-/* BALANCE CARD */
-
-.balance-card{
-background:linear-gradient(135deg,#16a34a,#22c55e);
-padding:24px;
-border-radius:30px;
-margin-bottom:24px;
-box-shadow:0 15px 50px rgba(34,197,94,.25);
-position:relative;
-overflow:hidden;
-animation:fadeUp .6s ease;
-}
-
-.balance-card::before{
-content:'';
-position:absolute;
-width:180px;
-height:180px;
-background:#ffffff15;
-border-radius:50%;
-top:-60px;
-right:-60px;
-}
-
-.balance-label{
-font-size:.95rem;
-opacity:.9;
-margin-bottom:12px;
-}
-
-.balance-amount{
-font-size:2rem;
-font-weight:800;
-margin-bottom:18px;
-}
-
-.balance-actions{
-display:flex;
-gap:12px;
-}
-
-.balance-btn{
-flex:1;
-padding:14px;
-border:none;
-border-radius:18px;
-background:#ffffff18;
-backdrop-filter:blur(10px);
-color:white;
-font-weight:600;
-cursor:pointer;
-transition:.3s;
-}
-
-.balance-btn:hover{
-transform:translateY(-2px);
-}
-
-/* SURVEY SWITCHER */
-
-.vendor-switch{
-display:flex;
-gap:10px;
-margin-bottom:22px;
-overflow-x:auto;
-scrollbar-width:none;
-}
-
-.vendor-switch::-webkit-scrollbar{
-display:none;
-}
-
-.vendor-btn{
-border:none;
-padding:14px 18px;
-border-radius:18px;
-background:#ffffff08;
-color:#d1fae5;
-font-weight:600;
-cursor:pointer;
-white-space:nowrap;
-transition:.3s;
-border:1px solid #ffffff10;
-}
-
-.vendor-btn.active{
-background:linear-gradient(135deg,#16a34a,#22c55e);
-color:white;
-box-shadow:0 10px 25px rgba(34,197,94,.25);
-}
-
-/* SURVEY CARD */
-
-.survey-card{
-background:#ffffff10;
-backdrop-filter:blur(18px);
-border:1px solid #ffffff12;
-border-radius:28px;
-padding:18px;
-box-shadow:0 10px 40px rgba(0,0,0,.25);
-animation:fadeUp .6s ease;
-overflow:hidden;
-}
-
-.survey-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:18px;
-}
-
-.survey-top h3{
-font-size:1rem;
-color:#86efac;
-}
-
-.live-badge{
-background:#22c55e22;
-color:#86efac;
-padding:8px 12px;
-border-radius:999px;
-font-size:.75rem;
-font-weight:700;
-}
-
-/* IFRAME */
-
-iframe{
-width:100%;
-height:72vh;
-border:none;
-border-radius:22px;
-background:#08140d;
-}
-
-/* INLINE CONSENT BOX */
-.inline-consent {
-background: #0f1d14;
-padding: 24px;
-border-radius: 20px;
-border: 1px solid #ffffff10;
-text-align: center;
-margin: 10px 0;
-}
-
-.inline-consent p {
-line-height: 1.6;
-color: #d1fae5;
-margin-bottom: 14px;
-font-size: 0.95rem;
-}
-
-.inline-consent a {
-color: #86efac;
-text-decoration: none;
-}
-
-.inline-consent-actions {
-display: flex;
-gap: 12px;
-margin-top: 16px;
-}
-
-.inline-consent-actions button {
-flex: 1;
-padding: 12px;
-border: none;
-border-radius: 14px;
-font-weight: 700;
-cursor: pointer;
-transition: .3s;
-}
-
-.inline-accept {
-background: linear-gradient(135deg,#16a34a,#22c55e);
-color: white;
-}
-
-.inline-reject {
-background: #ffffff10;
-color: white;
-}
-
-/* LOADER */
-
-.loader-wrap{
-padding:50px 0;
-display:flex;
-justify-content:center;
-}
-
-.loader{
-width:28px;
-height:28px;
-border:3px solid #ffffff15;
-border-top:3px solid #22c55e;
-border-radius:50%;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-to{transform:rotate(360deg);}
-}
-
-@keyframes fadeUp{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-/* BOTTOM NAV */
-
-.bottom-nav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:#0b1610ee;
-backdrop-filter:blur(18px);
-display:flex;
-justify-content:space-around;
-padding:14px 0;
-border-top:1px solid #ffffff10;
-z-index:999;
-}
-
-.bottom-nav a{
-color:white;
-text-decoration:none;
-font-size:.8rem;
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:5px;
-transition:.3s;
-}
-
-.bottom-nav a:hover{
-transform:translateY(-2px);
-}
-
-.bottom-nav i{
-font-size:1.1rem;
-}
-
-.active-nav{
-color:#86efac !important;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{background:#08140d;color:white;min-height:100vh;overflow-x:hidden;}
+.bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at top left,#16a34a55,transparent 35%),radial-gradient(circle at bottom right,#22c55e44,transparent 35%),#08140d;}
+.blur{position:fixed;width:300px;height:300px;border-radius:50%;background:#22c55e22;filter:blur(90px);z-index:-1;animation:float 8s infinite ease-in-out;}
+.blur1{top:-80px;left:-80px;}
+.blur2{bottom:-100px;right:-100px;animation-delay:3s;}
+@keyframes float{0%,100%{transform:translateY(0px);}50%{transform:translateY(30px);}}
+.security-screen{position:fixed;inset:0;z-index:10000;background:#08140d;display:flex;align-items:center;justify-content:center;padding:24px;}
+.security-box{width:100%;max-width:390px;background:#0f1d14;border:1px solid #ffffff15;border-radius:26px;padding:30px 22px;text-align:center;box-shadow:0 20px 60px #0008;animation:fadeUp .4s ease;}
+.security-icon{width:68px;height:68px;border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;background:#22c55e18;color:#4ade80;font-size:1.8rem;}
+.security-box h2{font-size:1.3rem;margin-bottom:12px;}
+.security-box p{color:#bbf7d0;font-size:.92rem;line-height:1.6;margin-bottom:20px;}
+.security-loader{width:35px;height:35px;border:3px solid #ffffff15;border-top:3px solid #22c55e;border-radius:50%;animation:spin 1s linear infinite;margin:20px auto;}
+.security-btn{width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#16a34a,#22c55e);color:white;font-weight:700;font-size:.95rem;cursor:pointer;margin-top:8px;}
+.security-btn:disabled{opacity:.5;cursor:not-allowed;}
+.security-support{display:block;margin-top:18px;color:#86efac;text-decoration:none;font-size:.9rem;}
+header{padding:20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:999;backdrop-filter:blur(20px);}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo img{width:52px;height:52px;border-radius:50%;border:2px solid #22c55e;object-fit:cover;}
+.logo h1{font-size:1.15rem;font-weight:700;}
+.header-right{display:flex;align-items:center;gap:12px;}
+.bell-btn,.menu-btn{width:46px;height:46px;border-radius:16px;background:#ffffff10;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(12px);cursor:pointer;font-size:1.1rem;border:1px solid #ffffff10;transition:.3s;position:relative;color:white;}
+.bell-btn:hover,.menu-btn:hover{transform:scale(1.05);}
+nav{position:absolute;top:85px;right:20px;background:#0f1d14ee;backdrop-filter:blur(18px);padding:18px;border-radius:22px;display:none;flex-direction:column;gap:16px;width:230px;border:1px solid #ffffff10;z-index:100;animation:fadeUp .3s ease;}
+nav a{text-decoration:none;color:#d1fae5;font-size:.95rem;display:flex;align-items:center;gap:10px;transition:color .2s ease;}
+nav a:hover{color:#86efac;}
+.nav-icon{width:20px;text-align:center;color:#86efac;}
+#notifMenu{display:none;position:absolute;top:85px;right:20px;background:#0f1d14ee;backdrop-filter:blur(18px);padding:16px;border-radius:22px;width:min(320px,calc(100vw - 40px));border:1px solid #ffffff10;z-index:100;box-shadow:0 15px 40px rgba(0,0,0,.4);animation:fadeUp .3s ease;}
+#notifMenu h4{font-size:1rem;color:#86efac;margin-bottom:12px;border-bottom:1px solid #ffffff10;padding-bottom:8px;}
+.notif-item{padding:12px 12px 12px 16px;border-radius:12px;font-size:.85rem;line-height:1.4;margin-bottom:8px;position:relative;border:1px solid transparent;}
+.notif-item.unread{background:#22c55e22;border-color:#22c55e55;color:white;}
+.notif-item.unread .notif-text{font-weight:700;}
+.notif-item.read{background:#ffffff08;border-color:#ffffff08;color:#d1fae5;opacity:.75;}
+.notif-dot{position:absolute;left:6px;top:18px;width:8px;height:8px;background:#22c55e;border-radius:50%;}
+.notif-item span.notif-time{display:block;font-size:.7rem;color:#86efac;margin-top:4px;}
+.container{padding:20px;padding-bottom:120px;}
+.greeting{margin-bottom:22px;animation:fadeUp .5s ease;}
+.greeting h2{font-size:1.7rem;margin-bottom:8px;}
+.greeting p{color:#bbf7d0;font-size:.95rem;}
+#adminBanner{display:none;position:relative;background:linear-gradient(135deg,#f59e0b 0%,#fbbf24 50%,#f97316 100%);border:1px solid #fde68a;padding:14px 44px 14px 16px;border-radius:18px;margin-bottom:18px;font-size:.92rem;font-weight:700;color:#1a1000;line-height:1.45;box-shadow:0 10px 30px rgba(245,158,11,.35),0 2px 0 rgba(255,255,255,.4) inset;animation:fadeUp .55s ease;overflow:hidden;}
+#adminBanner::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:#92400e;}
+.banner-icon{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(0,0,0,.18);border-radius:10px;font-size:1rem;margin-right:10px;vertical-align:middle;}
+#adminBannerText{vertical-align:middle;}
+.banner-close{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(0,0,0,.18);color:#1a1000;font-size:1.2rem;font-weight:800;line-height:1;transition:.2s;border:none;}
+.banner-close:hover{background:rgba(0,0,0,.32);color:white;}
+#profileBanner{display:none;background:#0f1d14;border:1px solid #ffffff15;padding:16px;border-radius:20px;margin-bottom:18px;animation:fadeUp .6s ease;}
+#profileBanner p{font-size:.9rem;margin-bottom:12px;color:#d1fae5;line-height:1.4;}
+.profile-banner-inputs{display:flex;flex-direction:column;gap:10px;}
+.profile-input{width:100%;padding:12px;border-radius:14px;border:1px solid #ffffff15;outline:none;background:#ffffff08;color:white;font-size:.9rem;}
+.profile-input:focus{border-color:#22c55e;}
+.profile-btn{padding:12px 18px;border:none;border-radius:14px;background:linear-gradient(135deg,#16a34a,#22c55e);color:white;font-weight:700;cursor:pointer;transition:.3s;width:100%;}
+.balance-card{background:linear-gradient(135deg,#16a34a,#22c55e);padding:24px;border-radius:30px;margin-bottom:24px;box-shadow:0 15px 50px rgba(34,197,94,.25);position:relative;overflow:hidden;animation:fadeUp .6s ease;}
+.balance-card::before{content:'';position:absolute;width:180px;height:180px;background:#ffffff15;border-radius:50%;top:-60px;right:-60px;}
+.balance-label{font-size:.95rem;opacity:.9;margin-bottom:12px;}
+.balance-amount{font-size:2rem;font-weight:800;margin-bottom:18px;}
+.balance-actions{display:flex;gap:12px;}
+.balance-btn{flex:1;padding:14px;border:none;border-radius:18px;background:#ffffff18;backdrop-filter:blur(10px);color:white;font-weight:600;cursor:pointer;}
+.vendor-switch{display:flex;gap:10px;margin-bottom:22px;overflow-x:auto;scrollbar-width:none;}
+.vendor-switch::-webkit-scrollbar{display:none;}
+.vendor-btn{border:none;padding:14px 18px;border-radius:18px;background:#ffffff08;color:#d1fae5;font-weight:600;cursor:pointer;white-space:nowrap;transition:.3s;border:1px solid #ffffff10;}
+.vendor-btn.active{background:linear-gradient(135deg,#16a34a,#22c55e);color:white;box-shadow:0 10px 25px rgba(34,197,94,.25);}
+.survey-card{background:#ffffff10;backdrop-filter:blur(18px);border:1px solid #ffffff12;border-radius:28px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.25);animation:fadeUp .6s ease;overflow:hidden;}
+.survey-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.survey-top h3{font-size:1rem;color:#86efac;}
+.live-badge{background:#22c55e22;color:#86efac;padding:8px 12px;border-radius:999px;font-size:.75rem;font-weight:700;}
+iframe{width:100%;height:72vh;border:none;border-radius:22px;background:#08140d;}
+.inline-consent{background:#0f1d14;padding:24px;border-radius:20px;border:1px solid #ffffff10;text-align:center;margin:10px 0;}
+.inline-consent p{line-height:1.6;color:#d1fae5;margin-bottom:14px;font-size:.95rem;}
+.inline-consent a{color:#86efac;text-decoration:none;}
+.inline-consent-actions{display:flex;gap:12px;margin-top:16px;}
+.inline-consent-actions button{flex:1;padding:12px;border:none;border-radius:14px;font-weight:700;cursor:pointer;}
+.inline-accept{background:linear-gradient(135deg,#16a34a,#22c55e);color:white;}
+.inline-reject{background:#ffffff10;color:white;}
+.loader-wrap{padding:50px 0;display:flex;justify-content:center;}
+.loader{width:28px;height:28px;border:3px solid #ffffff15;border-top:3px solid #22c55e;border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:#0b1610ee;backdrop-filter:blur(18px);display:flex;justify-content:space-around;padding:14px 0;border-top:1px solid #ffffff10;z-index:999;}
+.bottom-nav a{color:white;text-decoration:none;font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.3s;}
+.bottom-nav i{font-size:1.1rem;}
+.active-nav{color:#86efac!important;}
 </style>
 </head>
-
 <body>
-
+<div id="securityScreen" class="security-screen">
+<div class="security-box">
+<div class="security-icon" id="securityIcon"><i class="fa-solid fa-shield-halved"></i></div>
+<h2 id="securityTitle">Securing your dashboard</h2>
+<p id="securityMessage">Please wait while we verify your device and connection.</p>
+<div id="securityLoader" class="security-loader"></div>
+<button id="securityRetry" class="security-btn" style="display:none;">Retry Verification</button>
+<a href="support.html" id="securitySupport" class="security-support" style="display:none;">Contact Support</a>
+</div>
+</div>
 <div class="bg"></div>
 <div class="blur blur1"></div>
 <div class="blur blur2"></div>
-
 <header>
-
-<div class="logo">
-<img src="iyallogo.png">
-<h1>Iyal Surveys</h1>
-</div>
-
+<div class="logo"><img src="iyallogo.png" alt="Iyal Surveys"><h1>Iyal Surveys</h1></div>
 <div class="header-right">
- <!-- BELL -->
- <div class="bell-btn" onclick="toggleNotif()">
- <i class="fa-solid fa-bell"></i>
- <span id="notifCount" style="position:absolute; top:-5px; right:-5px; background:#ef4444; color:white; font-size:.7rem; font-weight:700; min-width:20px; height:20px; border-radius:999px; display:none; align-items:center; justify-content:center; padding:0 5px;">0</span>
- </div>
-
- <div class="menu-btn" onclick="toggleMenu()">
- <i class="fa-solid fa-bars"></i>
- </div>
+<div class="bell-btn" onclick="toggleNotif()"><i class="fa-solid fa-bell"></i><span id="notifCount" style="position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;font-size:.7rem;font-weight:700;min-width:20px;height:20px;border-radius:999px;display:none;align-items:center;justify-content:center;padding:0 5px;">0</span></div>
+<div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
 </div>
-
-<!-- NOTIFICATION DROPDOWN -->
-<div id="notifMenu">
- <h4>Notifications</h4>
- <div id="notifList" style="display:flex; flex-direction:column; max-height: 250px; overflow-y: auto;">
- <div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div>
- </div>
-</div>
-
+<div id="notifMenu"><h4>Notifications</h4><div id="notifList" style="display:flex;flex-direction:column;max-height:250px;overflow-y:auto;"><div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div></div></div>
 <nav id="menu">
-  <a href="terms.html"><i class="fa-solid fa-handshake nav-icon"></i> Terms & Conditions</a>
-  <a href="privacy.html"><i class="fa-solid fa-shield-halved nav-icon"></i> Privacy Policy</a>
-  <a href="about.html"><i class="fa-solid fa-circle-info nav-icon"></i> About Us</a>
-  <a href="disclaimer.html"><i class="fa-solid fa-triangle-exclamation nav-icon"></i> Disclaimer</a>
-  <a href="support.html"><i class="fa-solid fa-envelope nav-icon"></i> Support</a>
-  <a href="settings.html"><i class="fa-solid fa-gear nav-icon"></i> Settings</a>
-  <a href="profile.html"><i class="fa-solid fa-user nav-icon"></i> Profile</a>
+<a href="terms.html"><i class="fa-solid fa-handshake nav-icon"></i>Terms & Conditions</a>
+<a href="privacy.html"><i class="fa-solid fa-shield-halved nav-icon"></i>Privacy Policy</a>
+<a href="about.html"><i class="fa-solid fa-circle-info nav-icon"></i>About Us</a>
+<a href="disclaimer.html"><i class="fa-solid fa-triangle-exclamation nav-icon"></i>Disclaimer</a>
+<a href="support.html"><i class="fa-solid fa-envelope nav-icon"></i>Support</a>
+<a href="settings.html"><i class="fa-solid fa-gear nav-icon"></i>Settings</a>
+<a href="profile.html"><i class="fa-solid fa-user nav-icon"></i>Profile</a>
 </nav>
-
 </header>
-
 <div class="container">
-
-<div class="greeting">
-<h2>Hello, <span id="username">User</span> 👋</h2>
-<p>Complete surveys and earn rewards instantly.</p>
+<div class="greeting"><h2>Hello, <span id="username">User</span> 👋</h2><p>Complete surveys and earn rewards instantly.</p></div>
+<div id="adminBanner"><span class="banner-icon">📢</span><span id="adminBannerText"></span><button class="banner-close" onclick="dismissAdminBanner()" title="Dismiss for 24 hours">&times;</button></div>
+<div id="profileBanner"><p>Please complete your profile details below to get rewards & leaderboard alerts:</p><div class="profile-banner-inputs"><input id="profileUsernameInput" class="profile-input" placeholder="Enter your username (e.g. John)"><input id="profileWhatsappInput" class="profile-input" placeholder="Enter WhatsApp number (e.g. 0803...)"><button onclick="saveProfileBanner()" class="profile-btn">Save Details</button></div></div>
+<div class="balance-card"><div class="balance-label">Available Balance</div><div class="balance-amount" id="userBalance">₦0</div><div class="balance-actions"><button class="balance-btn" onclick="location.href='withdraw.html'">Withdraw</button><button class="balance-btn" onclick="location.href='referrals.html'">Referrals</button></div></div>
+<div class="vendor-switch"><button class="vendor-btn active" data-vendor="cpx">CPX Research</button><button class="vendor-btn" data-vendor="bitlab">BitLabs</button><button class="vendor-btn" data-vendor="wannads">Wannads</button></div>
+<div class="survey-card"><div class="survey-top"><h3>Survey Offers</h3><div class="live-badge">LIVE</div></div><div id="surveyContent"><div class="inline-consent"><p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p><p><a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank" rel="noopener">CPX Privacy</a> | <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank" rel="noopener">CPX Terms</a></p><div class="inline-consent-actions"><button class="inline-accept" id="acceptConsentInline">Accept</button><button class="inline-reject" id="rejectConsentInline">Reject</button></div></div></div></div>
 </div>
-
-<!-- ADMIN BANNER (with 24h snooze + close button) -->
-<div id="adminBanner">
-  <span class="banner-icon">📢</span><span id="adminBannerText"></span>
-  <span class="banner-close" onclick="dismissAdminBanner()" title="Dismiss for 24 hours">&times;</span>
-</div>
-
-<!-- COMBINED PROFILE BANNER (Username & WhatsApp) -->
-<div id="profileBanner">
- <p>Please complete your profile details below to get rewards & leaderboard alerts:</p>
- <div class="profile-banner-inputs">
-   <input id="profileUsernameInput" class="profile-input" placeholder="Enter your username (e.g. John)">
-   <input id="profileWhatsappInput" class="profile-input" placeholder="Enter WhatsApp number (e.g. 0803...)">
-   <button onclick="saveProfileBanner()" class="profile-btn">Save Details</button>
- </div>
-</div>
-
-<div class="balance-card">
-
-<div class="balance-label">
-Available Balance
-</div>
-
-<div class="balance-amount" id="userBalance">
-₦0
-</div>
-
-<div class="balance-actions">
-<button class="balance-btn" onclick="location.href='withdraw.html'">
-Withdraw
-</button>
-
-<button class="balance-btn" onclick="location.href='referrals.html'">
-Referrals
-</button>
-</div>
-
-</div>
-
-<div class="vendor-switch">
-
-<button class="vendor-btn active" data-vendor="cpx">
-CPX Research
-</button>
-
-<button class="vendor-btn" data-vendor="bitlab">
-BitLabs
-</button>
-
-<button class="vendor-btn" data-vendor="wannads">
-Wannads
-</button>
-
-</div>
-
-<div class="survey-card">
-
-<div class="survey-top">
-<h3>Survey Offers</h3>
-<div class="live-badge">
-LIVE
-</div>
-</div>
-
-<div id="surveyContent">
-<!-- Inline CPX consent loaded by default -->
-<div class="inline-consent">
- <p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p>
- <p>
-  <a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank">CPX Privacy</a> | 
-  <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank">CPX Terms</a>
- </p>
- <div class="inline-consent-actions">
-  <button class="inline-accept" id="acceptConsentInline">Accept</button>
-  <button class="inline-reject" id="rejectConsentInline">Reject</button>
- </div>
-</div>
-</div>
-
-</div>
-
-</div>
-
-<!-- BOTTOM NAV -->
-
-<div class="bottom-nav">
-
-<a href="#" class="active-nav">
-<i class="fa-solid fa-house"></i>
-Home
-</a>
-
-<a href="withdraw.html">
-<i class="fa-solid fa-wallet"></i>
-Cash Out
-</a>
-
-<a href="referrals.html">
-<i class="fa-solid fa-users"></i>
-Referrals
-</a>
-
-<a href="#" id="logoutBtn">
-<i class="fa-solid fa-right-from-bracket"></i>
-Logout
-</a>
-
-</div>
-
+<div class="bottom-nav"><a href="#" class="active-nav"><i class="fa-solid fa-house"></i>Home</a><a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a><a href="referrals.html"><i class="fa-solid fa-users"></i>Referrals</a><a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>Logout</a></div>
 <script type="module">
-
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import FingerprintJS from "https://openfpcdn.io/fingerprintjs/v4";
 
-const supabase = createClient(
-"https://xkshzlfducmnglxfnxzk.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
-); 
+const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+const supabase = createClient(SUPABASE_URL,"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtZ2x4Zm54emsiLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0");
 
-/* =========================
-   SECURITY: HTML ESCAPING (XSS PROTECTION)
-========================= */
-function escapeHtml(str) {
-  if (!str) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+let session = null;
+let deviceFingerprint = null;
+let securityVerified = false;
+let securityBusy = false;
+let dashboardStarted = false;
+
+const DASHBOARD_SERVICE = SUPABASE_URL + "/functions/v1/dashboard-service";
+
+function securityElements(){
+return {
+screen:document.getElementById("securityScreen"),
+icon:document.getElementById("securityIcon"),
+title:document.getElementById("securityTitle"),
+message:document.getElementById("securityMessage"),
+loader:document.getElementById("securityLoader"),
+retry:document.getElementById("securityRetry"),
+support:document.getElementById("securitySupport")
+};
 }
 
-/* =========================
-   CHECK USER SESSION
-========================= */
+function showSecurityLoading(message){
+const e=securityElements();
+e.screen.style.display="flex";
+e.icon.innerHTML='<i class="fa-solid fa-shield-halved"></i>';
+e.title.textContent="Securing your dashboard";
+e.message.textContent=message||"Please wait while we verify your device and connection.";
+e.loader.style.display="block";
+e.retry.style.display="none";
+e.support.style.display="none";
+}
 
-const {
-data:{ session }
-} = await supabase.auth.getSession();
+function showSecurityError(message){
+securityVerified=false;
+const e=securityElements();
+e.screen.style.display="flex";
+e.icon.innerHTML='<i class="fa-solid fa-triangle-exclamation"></i>';
+e.title.textContent="Security check unavailable";
+e.message.textContent=message||"Our security service is temporarily unavailable. Please try again.";
+e.loader.style.display="none";
+e.retry.style.display="block";
+e.support.style.display="none";
+}
+
+function showLoginExpired(){
+securityVerified=false;
+const e=securityElements();
+e.screen.style.display="flex";
+e.icon.innerHTML='<i class="fa-solid fa-shield-halved"></i>';
+e.title.textContent="Session expired";
+e.message.textContent="Your session is no longer valid. Please log in again to continue.";
+e.loader.style.display="none";
+e.retry.style.display="none";
+e.support.style.display="block";
+setTimeout(()=>{window.location.href="login.html";},2000);
+}
+
+function showVerifyExpired(){
+securityVerified=false;
+const e=securityElements();
+e.screen.style.display="flex";
+e.icon.innerHTML='<i class="fa-solid fa-shield-halved"></i>';
+e.title.textContent="Verification expired";
+e.message.textContent="Your security verification has expired. Please verify again to continue.";
+e.loader.style.display="none";
+e.retry.style.display="block";
+e.support.style.display="none";
+}
+
+function showVpnDenied(message){
+securityVerified=false;
+const e=securityElements();
+e.screen.style.display="flex";
+e.icon.innerHTML='<i class="fa-solid fa-ban"></i>';
+e.title.textContent="VPN or proxy detected";
+e.message.textContent=(message||"Your connection was identified as using a VPN, proxy or Tor.")+" Disable your VPN or proxy, then retry verification. If the same result continues, the previous denial may be cached for up to 15 minutes before another check is performed.";
+e.loader.style.display="none";
+e.retry.style.display="block";
+e.support.style.display="block";
+}
+
+function showGenericDenied(message){
+securityVerified=false;
+const e=securityElements();
+e.screen.style.display="flex";
+e.icon.innerHTML='<i class="fa-solid fa-circle-exclamation"></i>';
+e.title.textContent="Access denied";
+e.message.textContent=message||"Access to your dashboard was denied. Please try again or contact support if the problem continues.";
+e.loader.style.display="none";
+e.retry.style.display="block";
+e.support.style.display="block";
+}
+
+function showRestriction(data){
+securityVerified=false;
+const e=securityElements();
+const restriction=data.restriction||{};
+const reason=data.reason||data.message||restriction.reason||"Your dashboard access has been restricted.";
+const restrictionType=String(data.restriction_type||restriction.restriction_type||restriction.type||"").toLowerCase();
+let expiry="";
+const restrictionExpiry=data.expires_at||data.restriction_expires_at||restriction.expires_at;
+
+if(restrictionExpiry){
+const date=new Date(restrictionExpiry);
+if(!isNaN(date.getTime())){
+expiry=" Restriction expires: "+date.toLocaleString();
+}
+}
+
+e.screen.style.display="flex";
+e.icon.innerHTML='<i class="fa-solid fa-lock"></i>';
+e.title.textContent=restrictionType==="permanent"?"Dashboard permanently restricted":"Dashboard temporarily restricted";
+e.message.textContent=reason+expiry;
+e.loader.style.display="none";
+e.retry.style.display="none";
+e.support.style.display="block";
+}
+
+function escapeHtml(str){
+if(!str)return"";
+return String(str)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+async function getFreshSession(){
+try{
+const {data,error}=await supabase.auth.getSession();
+
+if(error) throw error;
+
+session=data.session||null;
 
 if(!session){
-window.location.href = "login.html";
-throw new Error("No session");
+return {session:null,reason:"no-session"};
 }
 
-/* INITIAL TRACKERS & LOADERS */
+return {session,reason:"ok"};
+
+}catch(e){
+console.error("Session refresh failed:",e);
+session=null;
+return {session:null,reason:"error"};
+}
+}
+
+async function handleSecurityResponse(res,data){
+
+if(res.status===503){
+showSecurityError(data.message||"Security verification is temporarily unavailable. Please retry.");
+return false;
+}
+
+if(res.status===429){
+showSecurityError(data.message||"Too many security checks. Please wait 15 minutes and try again.");
+return false;
+}
+
+if(res.status===401){
+showLoginExpired();
+return false;
+}
+
+if(res.status===403){
+
+const decision=String(data.decision||"").toLowerCase();
+
+if(decision==="restricted"||data.restricted===true||data.restriction){
+showRestriction(data);
+return false;
+}
+
+const vpnDetected=
+data.vpn_detected===true||
+data.proxy_detected===true||
+data.tor_detected===true||
+data.denied===true||
+data.detections?.vpn===true||
+data.detections?.proxy===true||
+data.detections?.tor===true;
+
+if(vpnDetected){
+showVpnDenied(data.message);
+return false;
+}
+
+if(data.verified===false){
+showVerifyExpired();
+return false;
+}
+
+showGenericDenied(data.message||"Access to your dashboard was denied.");
+return false;
+}
+
+if(!res.ok||!data.success){
+showSecurityError(data.message||"Unable to complete security verification.");
+return false;
+}
+
+return true;
+}
+
+async function verifyDashboard(){
+
+if(securityBusy)return false;
+
+securityBusy=true;
+showSecurityLoading();
+
+try{
+
+const fresh=await getFreshSession();
+
+if(!fresh.session){
+
+if(fresh.reason==="no-session"){
+window.location.href="login.html";
+return false;
+}
+
+showSecurityError("Unable to refresh your session. Please check your connection and retry.");
+return false;
+}
+
+session=fresh.session;
+
+if(!deviceFingerprint){
+const agent=await FingerprintJS.load();
+const result=await agent.get();
+deviceFingerprint=result.visitorId;
+}
+
+if(!deviceFingerprint){
+throw new Error("Unable to identify this browser.");
+}
+
+const res=await fetch(DASHBOARD_SERVICE,{
+method:"POST",
+headers:{
+Authorization:`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+action:"verify-dashboard",
+device_fingerprint:deviceFingerprint
+})
+});
+
+let data={};
+
+try{
+data=await res.json();
+}catch(err){
+data={};
+}
+
+const approved=await handleSecurityResponse(res,data);
+
+if(!approved)return false;
+
+securityVerified=true;
+securityElements().screen.style.display="none";
+
+return true;
+
+}catch(err){
+
+console.error("Dashboard verification error:",err);
+
+showSecurityError("Unable to verify your device right now. Please check your connection and retry.");
+
+return false;
+
+}finally{
+securityBusy=false;
+}
+}
+
+document.getElementById("securityRetry").addEventListener("click",async()=>{
+
+const retryButton=document.getElementById("securityRetry");
+
+retryButton.disabled=true;
+retryButton.textContent="Verifying...";
+
+try{
+
+const verified=await verifyDashboard();
+
+if(verified){
+startDashboard();
+}
+
+}finally{
+
+retryButton.disabled=false;
+retryButton.textContent="Retry Verification";
+
+}
+});
+
+async function dashboardRequest(action,extra={}){
+
+if(!securityVerified||!deviceFingerprint){
+return {
+success:false,
+message:"Dashboard security verification is required."
+};
+}
+
+const fresh=await getFreshSession();
+
+if(!fresh.session){
+
+if(fresh.reason==="no-session"){
+showLoginExpired();
+}else{
+showSecurityError("Unable to refresh your session. Please retry.");
+}
+
+return {
+success:false,
+message:"Session expired. Please login again."
+};
+}
+
+session=fresh.session;
+
+const res=await fetch(DASHBOARD_SERVICE,{
+method:"POST",
+headers:{
+Authorization:`Bearer ${session.access_token}`,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+...extra,
+action,
+device_fingerprint:deviceFingerprint
+})
+});
+
+let data={};
+
+try{
+data=await res.json();
+}catch(err){
+data={};
+}
+
+if(res.status===401||res.status===403||res.status===503||res.status===429){
+await handleSecurityResponse(res,data);
+}
+
+return data;
+}
+
+async function startDashboard(){
+
+if(!securityVerified||dashboardStarted)return;
+
+dashboardStarted=true;
+
 initTrackers();
 loadDashboard();
 loadNewDashboardData();
 
-/* =========================
-   MENU & NOTIFICATION TOGGLES
-========================= */
-
-window.toggleMenu = function(){
-const menu = document.getElementById("menu");
-const notifMenu = document.getElementById("notifMenu");
-notifMenu.style.display = "none";
-
-if(menu.style.display === "flex"){
-menu.style.display = "none";
-}else{
-menu.style.display = "flex";
 }
+
+const verified=await verifyDashboard();
+
+if(verified){
+startDashboard();
+}
+
+window.toggleMenu=function(){
+
+const menu=document.getElementById("menu");
+const notifMenu=document.getElementById("notifMenu");
+
+notifMenu.style.display="none";
+
+menu.style.display=menu.style.display==="flex"?"none":"flex";
+
 };
 
-window.toggleNotif = function(){
-const notifMenu = document.getElementById("notifMenu");
-const menu = document.getElementById("menu");
-menu.style.display = "none";
+window.toggleNotif=function(){
 
-if(notifMenu.style.display === "block"){
-notifMenu.style.display = "none";
+const notifMenu=document.getElementById("notifMenu");
+const menu=document.getElementById("menu");
+
+menu.style.display="none";
+
+if(notifMenu.style.display==="block"){
+notifMenu.style.display="none";
 }else{
-notifMenu.style.display = "block";
+notifMenu.style.display="block";
 markNotificationsRead();
 }
+
 };
 
-// Close dropdowns when clicking outside
-window.addEventListener("click", (e) => {
-if(!e.target.closest('.bell-btn') && !e.target.closest('#notifMenu')){
-document.getElementById("notifMenu").style.display = "none";
+window.addEventListener("click",(e)=>{
+
+if(!e.target.closest(".bell-btn")&&!e.target.closest("#notifMenu")){
+document.getElementById("notifMenu").style.display="none";
 }
-if(!e.target.closest('.menu-btn') && !e.target.closest('nav')){
-document.getElementById("menu").style.display = "none";
+
+if(!e.target.closest(".menu-btn")&&!e.target.closest("nav")){
+document.getElementById("menu").style.display="none";
 }
+
 });
 
-/* =========================
-   EXISTING DASHBOARD (rapid-processor) - UNTOUCHED
-========================= */
-
 async function loadDashboard(){
+
+if(!securityVerified)return;
+
 try{
-const res = await fetch(
-"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/rapid-processor",
-{
+
+const fresh=await getFreshSession();
+
+if(!fresh.session){
+
+if(fresh.reason==="no-session"){
+window.location.href="login.html";
+}
+
+return;
+}
+
+session=fresh.session;
+
+const res=await fetch(SUPABASE_URL+"/functions/v1/rapid-processor",{
 method:"POST",
 headers:{
 Authorization:`Bearer ${session.access_token}`,
 "Content-Type":"application/json"
 },
-body: JSON.stringify({
-action:"dashboard"
-})
-}
-);
+body:JSON.stringify({action:"dashboard"})
+});
 
-const data = await res.json();
+const data=await res.json();
 
 if(!data.success){
-throw new Error(data.message || "Failed to load dashboard");
+throw new Error(data.message||"Failed to load dashboard");
 }
 
-document.getElementById("username").textContent = data.username || "User";
-animateBalance(Number(data.balance || 0));
+document.getElementById("username").textContent=data.username||"User";
+
+animateBalance(Number(data.balance||0));
 
 }catch(err){
+
 console.error(err);
-document.getElementById("username").textContent = "User";
-document.getElementById("userBalance").textContent = "₦0";
-}
+
+document.getElementById("username").textContent="User";
+document.getElementById("userBalance").textContent="₦0";
+
 }
 
-/* =========================
-   NEW DASHBOARD FEATURES (dashboard-service) - SECURED
-========================= */
+}
 
-let currentBannerId = null;
+let currentBannerId=null;
 
 async function loadNewDashboardData(){
+
+if(!securityVerified)return;
+
 try{
-const res = await fetch(
-"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
-{
-method:"POST",
-headers:{
-Authorization:`Bearer ${session.access_token}`,
-"Content-Type":"application/json"
-},
-body: JSON.stringify({
-action:"get-dashboard"
-})
-}
-);
 
-const data = await res.json();
-if(!data.success) return;
+const data=await dashboardRequest("get-dashboard");
 
-// 1. Profile Banner Check
-checkProfileBanner(data.username, data.whatsapp);
-
-// 2. Admin Banner (with 24h snooze + ID check)
-if(data.admin_banner && data.admin_banner.is_active !== false){
-currentBannerId = data.admin_banner.id || data.admin_banner.message;
-const bannerText = data.admin_banner.message;
-
-const dismissedBannerId = localStorage.getItem("dismissed_banner_id");
-const dismissedAt = localStorage.getItem("dismissed_at");
-const now = Date.now();
-const twentyFourHours = 24 * 60 * 60 * 1000;
-
-let showBanner = true;
-if (dismissedBannerId === String(currentBannerId) && dismissedAt) {
-  if (now - Number(dismissedAt) < twentyFourHours) {
-    showBanner = false;
-  }
+if(!data.success){
+return;
 }
 
-if (showBanner) {
-  document.getElementById("adminBannerText").textContent = bannerText;
-  document.getElementById("adminBanner").style.display = "block";
-} else {
-  document.getElementById("adminBanner").style.display = "none";
-}
-} else {
-document.getElementById("adminBanner").style.display = "none";
+checkProfileBanner(data.username,data.whatsapp);
+
+if(data.admin_banner&&data.admin_banner.is_active!==false){
+
+currentBannerId=data.admin_banner.id||data.admin_banner.message;
+
+const bannerText=data.admin_banner.message;
+
+const dismissedBannerId=localStorage.getItem("dismissed_banner_id");
+const dismissedAt=localStorage.getItem("dismissed_at");
+
+const now=Date.now();
+const twentyFourHours=24*60*60*1000;
+
+let showBanner=true;
+
+if(dismissedBannerId===String(currentBannerId)&&dismissedAt){
+
+if(now-Number(dismissedAt)<twentyFourHours){
+showBanner=false;
 }
 
-// 3. Notifications List
-updateNotifications(data.notifications || []);
+}
+
+if(showBanner){
+
+document.getElementById("adminBannerText").textContent=bannerText;
+document.getElementById("adminBanner").style.display="block";
+
+}else{
+
+document.getElementById("adminBanner").style.display="none";
+
+}
+
+}else{
+
+document.getElementById("adminBanner").style.display="none";
+
+}
+
+updateNotifications(data.notifications||[]);
 
 }catch(err){
-console.error("New dashboard service error:", err);
-}
+
+console.error("New dashboard service error:",err);
+
 }
 
-window.dismissAdminBanner = function(){
-if(currentBannerId){
-localStorage.setItem("dismissed_banner_id", currentBannerId);
-localStorage.setItem("dismissed_at", Date.now().toString());
 }
-document.getElementById("adminBanner").style.display = "none";
+
+window.dismissAdminBanner=function(){
+
+if(currentBannerId){
+
+localStorage.setItem("dismissed_banner_id",String(currentBannerId));
+localStorage.setItem("dismissed_at",Date.now().toString());
+
+}
+
+document.getElementById("adminBanner").style.display="none";
+
 };
 
-function checkProfileBanner(username, whatsapp){
-const banner = document.getElementById("profileBanner");
-const usernameInput = document.getElementById("profileUsernameInput");
-const whatsappInput = document.getElementById("profileWhatsappInput");
+function checkProfileBanner(username,whatsapp){
 
-const hasValidUsername = username && username.trim() !== "" && username !== "User";
-const hasValidWhatsapp = whatsapp && whatsapp.trim() !== "";
+const banner=document.getElementById("profileBanner");
+const usernameInput=document.getElementById("profileUsernameInput");
+const whatsappInput=document.getElementById("profileWhatsappInput");
 
-if (hasValidUsername && hasValidWhatsapp) {
-  banner.style.display = "none";
-  return;
+const hasValidUsername=username&&username.trim()!==""&&username!=="User";
+const hasValidWhatsapp=whatsapp&&whatsapp.trim()!=="";
+
+if(hasValidUsername&&hasValidWhatsapp){
+
+banner.style.display="none";
+return;
+
 }
 
-banner.style.display = "block";
+banner.style.display="block";
 
-if (hasValidUsername) {
-  usernameInput.style.display = "none";
-} else {
-  usernameInput.style.display = "block";
+usernameInput.style.display=hasValidUsername?"none":"block";
+whatsappInput.style.display=hasValidWhatsapp?"none":"block";
+
 }
 
-if (hasValidWhatsapp) {
-  whatsappInput.style.display = "none";
-} else {
-  whatsappInput.style.display = "block";
-}
-}
+window.saveProfileBanner=async function(){
 
-window.saveProfileBanner = async function(){
-const usernameInput = document.getElementById("profileUsernameInput");
-const whatsappInput = document.getElementById("profileWhatsappInput");
-const saveBtn = document.querySelector(".profile-btn");
+if(!securityVerified)return;
 
-const isUsernameVisible = usernameInput.style.display !== "none";
-const isWhatsappVisible = whatsappInput.style.display !== "none";
+const usernameInput=document.getElementById("profileUsernameInput");
+const whatsappInput=document.getElementById("profileWhatsappInput");
+const saveBtn=document.querySelector(".profile-btn");
 
-if (!isUsernameVisible && !isWhatsappVisible) {
-  document.getElementById("profileBanner").style.display = "none";
-  return;
+const isUsernameVisible=usernameInput.style.display!=="none";
+const isWhatsappVisible=whatsappInput.style.display!=="none";
+
+if(!isUsernameVisible&&!isWhatsappVisible){
+
+document.getElementById("profileBanner").style.display="none";
+return;
+
 }
 
-let updatePayload = { action: "save-profile" };
+let updatePayload={};
 
-if (isUsernameVisible) {
-  let rawUsername = usernameInput.value.trim();
-  const usernameRegex = /^[a-zA-Z0-9_\s]{2,30}$/;
-  if (!usernameRegex.test(rawUsername)) {
-    alert("Username must be 2-30 characters, letters and numbers only");
-    return;
-  }
-  updatePayload.username = rawUsername;
+if(isUsernameVisible){
+
+let rawUsername=usernameInput.value.trim();
+
+const usernameRegex=/^[a-zA-Z0-9_\s]{2,30}$/;
+
+if(!usernameRegex.test(rawUsername)){
+alert("Username must be 2-30 characters, letters and numbers only");
+return;
 }
 
-if (isWhatsappVisible) {
-  let rawWhatsapp = whatsappInput.value.trim();
-  let cleanedWhatsapp = rawWhatsapp.replace(/[\s+]/g, '');
-  const whatsappRegex = /^\d{10,15}$/;
-  if (!whatsappRegex.test(cleanedWhatsapp)) {
-    alert("Enter valid WhatsApp number, 10-15 digits");
-    return;
-  }
-  updatePayload.whatsapp = cleanedWhatsapp;
+updatePayload.username=rawUsername;
+
 }
 
-saveBtn.disabled = true;
-const originalBtnText = saveBtn.textContent;
-saveBtn.textContent = "Saving...";
+if(isWhatsappVisible){
 
-try {
-const res = await fetch(
-"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
-{
-method:"POST",
-headers:{
-Authorization:`Bearer ${session.access_token}`,
-"Content-Type":"application/json"
-},
-body: JSON.stringify(updatePayload)
+let rawWhatsapp=whatsappInput.value.trim();
+let cleanedWhatsapp=rawWhatsapp.replace(/[\s+]/g,'');
+
+const whatsappRegex=/^\d{10,15}$/;
+
+if(!whatsappRegex.test(cleanedWhatsapp)){
+alert("Enter valid WhatsApp number, 10-15 digits");
+return;
 }
-);
-const data = await res.json();
+
+updatePayload.whatsapp=cleanedWhatsapp;
+
+}
+
+saveBtn.disabled=true;
+
+const originalBtnText=saveBtn.textContent;
+
+saveBtn.textContent="Saving...";
+
+try{
+
+const data=await dashboardRequest("save-profile",updatePayload);
+
 if(data.success){
+
 alert("Profile saved successfully!");
+
 loadDashboard();
 loadNewDashboardData();
-} else {
-alert(data.message || "Failed to save profile.");
+
+}else{
+
+alert(data.message||"Failed to save profile.");
+
 }
-} catch(err){
+
+}catch(err){
+
 console.error(err);
 alert("Error saving profile.");
-} finally {
-saveBtn.disabled = false;
-saveBtn.textContent = originalBtnText;
+
+}finally{
+
+saveBtn.disabled=false;
+saveBtn.textContent=originalBtnText;
+
 }
+
 };
 
-function formatNotifTime(created_at) {
-  const d = new Date(created_at);
-  const now = new Date();
-  const diffMs = now - d;
-  const diffMin = Math.floor(diffMs / 60000);
-  const diffHour = Math.floor(diffMs / 3600000);
-  const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const dateStr = d.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
-  if (diffMin < 1) return 'Just now';
-  if (diffMin < 60) return diffMin + 'm ago';
-  const isToday = now.toDateString() === d.toDateString();
-  if (isToday) return diffHour + 'h ago • ' + timeStr;
-  const yesterday = new Date(now); yesterday.setDate(now.getDate() - 1);
-  if (yesterday.toDateString() === d.toDateString()) return 'Yesterday • ' + timeStr;
-  if (diffMs < 7 * 24 * 3600000) return d.toLocaleDateString([], { weekday: 'short' }) + ' • ' + timeStr;
-  return dateStr + ' • ' + timeStr;
+function formatNotifTime(created_at){
+
+const d=new Date(created_at);
+const now=new Date();
+
+const diffMs=now-d;
+const diffMin=Math.floor(diffMs/60000);
+const diffHour=Math.floor(diffMs/3600000);
+
+const timeStr=d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+const dateStr=d.toLocaleDateString([],{day:"numeric",month:"short",year:"numeric"});
+
+if(diffMin<1)return"Just now";
+
+if(diffMin<60)return diffMin+"m ago";
+
+const isToday=now.toDateString()===d.toDateString();
+
+if(isToday)return diffHour+"h ago • "+timeStr;
+
+const yesterday=new Date(now);
+yesterday.setDate(now.getDate()-1);
+
+if(yesterday.toDateString()===d.toDateString()){
+return"Yesterday • "+timeStr;
+}
+
+if(diffMs<7*24*3600000){
+return d.toLocaleDateString([],{weekday:"short"})+" • "+timeStr;
+}
+
+return dateStr+" • "+timeStr;
+
 }
 
 function updateNotifications(notifs){
-  const notifList = document.getElementById("notifList");
-  const notifCount = document.getElementById("notifCount");
-  if(!notifs || notifs.length === 0){
-    notifList.innerHTML = `<div class="notif-item" style="text-align:center; color:#86efac;">No new notifications</div>`;
-    notifCount.style.display = "none";
-    return;
-  }
-  let unreadCount = notifs.filter(n => !n.is_read).length;
-  if(unreadCount > 0){ notifCount.textContent = unreadCount; notifCount.style.display = "flex"; }
-  else { notifCount.style.display = "none"; }
-  notifList.innerHTML = notifs.map(n => {
-    const isUnread = !n.is_read;
-    return `<div class="notif-item ${isUnread ? 'unread' : 'read'}">${isUnread ? '<span class="notif-dot"></span>' : ''}<div class="notif-text">${escapeHtml(n.message)}</div><span class="notif-time">${formatNotifTime(n.created_at || Date.now())}</span></div>`;
-  }).join('');
+
+const notifList=document.getElementById("notifList");
+const notifCount=document.getElementById("notifCount");
+
+if(!notifs||notifs.length===0){
+
+notifList.innerHTML=`<div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div>`;
+
+notifCount.style.display="none";
+
+return;
+
+}
+
+const unreadCount=notifs.filter(n=>!n.is_read).length;
+
+if(unreadCount>0){
+
+notifCount.textContent=unreadCount;
+notifCount.style.display="flex";
+
+}else{
+
+notifCount.style.display="none";
+
+}
+
+notifList.innerHTML=notifs.map(n=>{
+
+const isUnread=!n.is_read;
+
+return `<div class="notif-item ${isUnread?"unread":"read"}">${isUnread?'<span class="notif-dot"></span>':""}<div class="notif-text">${escapeHtml(n.message)}</div><span class="notif-time">${formatNotifTime(n.created_at||Date.now())}</span></div>`;
+
+}).join("");
+
 }
 
 async function markNotificationsRead(){
-document.getElementById("notifCount").style.display = "none";
-try {
-await fetch(
-"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
-{
-method:"POST",
-headers:{
-Authorization:`Bearer ${session.access_token}`,
-"Content-Type":"application/json"
-},
-body: JSON.stringify({ action: "mark-read" })
-}
-);
-} catch(err){
-console.error("Mark read failed", err);
-}
+
+if(!securityVerified)return;
+
+document.getElementById("notifCount").style.display="none";
+
+try{
+
+await dashboardRequest("mark-read");
+
+}catch(err){
+
+console.error("Mark read failed",err);
+
 }
 
-/* =========================
-   ANIMATE BALANCE
-========================= */
+}
 
 function animateBalance(balance){
-const balanceElement = document.getElementById("userBalance");
-let start = 0;
-const duration = 1200;
-const increment = balance / 60;
 
-const timer = setInterval(()=>{
-start += increment;
-if(start >= balance){
-start = balance;
+const balanceElement=document.getElementById("userBalance");
+
+let start=0;
+
+const duration=1200;
+const increment=balance/60;
+
+const timer=setInterval(()=>{
+
+start+=increment;
+
+if(start>=balance){
+
+start=balance;
 clearInterval(timer);
-}
-balanceElement.textContent = `₦${Math.floor(start).toLocaleString()}`;
-}, duration / 60);
+
 }
 
-/* =========================
-   SURVEY VENDORS
-========================= */
+balanceElement.textContent=`₦${Math.floor(start).toLocaleString()}`;
 
-let activeVendor = "cpx";
+},duration/60);
+
+}
+
+let activeVendor="cpx";
 
 document.querySelectorAll(".vendor-btn").forEach(btn=>{
+
 btn.addEventListener("click",()=>{
+
+if(!securityVerified)return;
+
 document.querySelectorAll(".vendor-btn").forEach(b=>b.classList.remove("active"));
+
 btn.classList.add("active");
-activeVendor = btn.dataset.vendor;
+
+activeVendor=btn.dataset.vendor;
+
 loadSurveys();
-});
+
 });
 
-/* =========================
-   LOAD SURVEYS
-========================= */
+});
 
 function loadSurveys(){
-const surveyContent = document.getElementById("surveyContent");
 
-if(activeVendor === "cpx"){
-surveyContent.innerHTML = `
-<div class="inline-consent">
- <p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p>
- <p>
-  <a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank">CPX Privacy</a> | 
-  <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank">CPX Terms</a>
- </p>
- <div class="inline-consent-actions">
-  <button class="inline-accept" id="acceptConsentInline">Accept</button>
-  <button class="inline-reject" id="rejectConsentInline">Reject</button>
- </div>
-</div>
-`;
+if(!securityVerified)return;
+
+const surveyContent=document.getElementById("surveyContent");
+
+if(activeVendor==="cpx"){
+
+surveyContent.innerHTML=`<div class="inline-consent"><p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p><p><a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank" rel="noopener">CPX Privacy</a> | <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank" rel="noopener">CPX Terms</a></p><div class="inline-consent-actions"><button class="inline-accept" id="acceptConsentInline">Accept</button><button class="inline-reject" id="rejectConsentInline">Reject</button></div></div>`;
+
 return;
+
 }
 
-surveyContent.innerHTML = `
-<div class="loader-wrap">
-<div class="loader"></div>
-</div>
-`;
+surveyContent.innerHTML=`<div class="loader-wrap"><div class="loader"></div></div>`;
 
-if(activeVendor === "bitlab"){
-const userId = session.user.id;
-const bitlabsToken = "5f6cc641-dd5c-4551-a948-5c526d61d97a";
-const iframeSrc = `https://web.bitlabs.ai/?token=${bitlabsToken}&uid=${userId}`;
+if(activeVendor==="bitlab"){
 
-surveyContent.innerHTML = `
-<iframe src="${iframeSrc}" allowfullscreen></iframe>
-`;
+const userId=session.user.id;
+
+const bitlabsToken="5f6cc641-dd5c-4551-a948-5c526d61d97a";
+
+const iframeSrc=`https://web.bitlabs.ai/?token=${bitlabsToken}&uid=${encodeURIComponent(userId)}`;
+
+surveyContent.innerHTML=`<iframe src="${iframeSrc}" allowfullscreen></iframe>`;
+
 return;
+
 }
 
-if(activeVendor === "wannads"){
-const userId = session.user.id;
-const iframeSrc = `https://publishers.wannads.com/wall?apiKey=YOUR_WANNADS_API_KEY&userId=${userId}`;
+if(activeVendor==="wannads"){
 
-surveyContent.innerHTML = `
-<iframe src="${iframeSrc}" allowfullscreen></iframe>
-`;
+const userId=session.user.id;
+
+const iframeSrc=`https://publishers.wannads.com/wall?apiKey=YOUR_WANNADS_API_KEY&userId=${encodeURIComponent(userId)}`;
+
+surveyContent.innerHTML=`<iframe src="${iframeSrc}" allowfullscreen></iframe>`;
+
 return;
-}
+
 }
 
-/* =========================
-   INLINE CPX CONSENT HANDLERS (Event Delegation)
-========================= */
-
-document.getElementById("surveyContent").addEventListener("click", (e) => {
-if (e.target && e.target.id === "acceptConsentInline") {
-  const userId = session.user.id;
-  const iframeSrc = `https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${userId}`;
-  document.getElementById("surveyContent").innerHTML = `
-  <iframe src="${iframeSrc}" allowfullscreen></iframe>
-  `;
 }
 
-if (e.target && e.target.id === "rejectConsentInline") {
-  document.getElementById("surveyContent").innerHTML = `
-  <div style="padding:40px; text-align:center; color:#bbf7d0;">
-  You rejected cookies.<br>CPX surveys cannot be shown.
-  </div>
-  `;
+document.getElementById("surveyContent").addEventListener("click",(e)=>{
+
+if(!securityVerified)return;
+
+if(e.target&&e.target.id==="acceptConsentInline"){
+
+const userId=session.user.id;
+
+const iframeSrc=`https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${encodeURIComponent(userId)}`;
+
+document.getElementById("surveyContent").innerHTML=`<iframe src="${iframeSrc}" allowfullscreen></iframe>`;
+
 }
+
+if(e.target&&e.target.id==="rejectConsentInline"){
+
+document.getElementById("surveyContent").innerHTML=`<div style="padding:40px;text-align:center;color:#bbf7d0;">You rejected cookies.<br>CPX surveys cannot be shown.</div>`;
+
+}
+
 });
 
-/* =========================
-   LOGOUT
-========================= */
+document.getElementById("logoutBtn").addEventListener("click",async(e)=>{
 
-document.getElementById("logoutBtn").addEventListener("click", async (e)=>{
 e.preventDefault();
+
 await supabase.auth.signOut();
-window.location.href = "login.html";
+
+window.location.href="login.html";
+
 });
 
-/* =========================================================
-   VISIT & ACTIVE TIME TRACKER (Hardened & Anti-Cheat)
-========================================================= */
-function initTrackers() {
-  const userId = session.user.id;
+function initTrackers(){
 
-  // 1. Visit Tracker (30-min window check)
-  trackVisit(userId);
+const userId=session.user.id;
 
-  // 2. Active Time Tracker (3-min idle cutoff & visibility check)
-  let lastActivityTime = Date.now();
-  let accumulatedActiveSeconds = 0;
-  const idleLimit = 3 * 60 * 1000; // 3 minutes idle cutoff
+trackVisit(userId);
 
-  const activityEvents = ['click', 'scroll', 'keypress', 'mousemove', 'touchstart'];
-  activityEvents.forEach(event => {
-    window.addEventListener(event, () => {
-      lastActivityTime = Date.now();
-    }, { passive: true });
-  });
+let lastActivityTime=Date.now();
+let accumulatedActiveSeconds=0;
 
-  // Ticker every 10 seconds
-  setInterval(() => {
-    // If tab is hidden or minimized, stop accumulating active time immediately
-    if (document.hidden) return;
+const idleLimit=3*60*1000;
 
-    const now = Date.now();
-    const idleDuration = now - lastActivityTime;
+const activityEvents=["click","scroll","keypress","mousemove","touchstart"];
 
-    if (idleDuration < idleLimit) {
-      accumulatedActiveSeconds += 10;
-    }
+activityEvents.forEach(event=>{
 
-    if (accumulatedActiveSeconds >= 60) {
-      sendActiveTime(accumulatedActiveSeconds);
-      accumulatedActiveSeconds = 0;
-    }
-  }, 10000);
+window.addEventListener(event,()=>{
+
+lastActivityTime=Date.now();
+
+},{passive:true});
+
+});
+
+setInterval(()=>{
+
+if(!securityVerified||document.hidden)return;
+
+const now=Date.now();
+
+const idleDuration=now-lastActivityTime;
+
+if(idleDuration<idleLimit){
+
+accumulatedActiveSeconds+=10;
+
 }
 
-async function trackVisit(userId) {
-  try {
-    const lastVisitKey = `last_visit_recorded_${userId}`;
-    const lastVisitTime = localStorage.getItem(lastVisitKey);
-    const now = Date.now();
-    const thirtyMinutes = 30 * 60 * 1000;
+if(accumulatedActiveSeconds>=60){
 
-    if (!lastVisitTime || (now - Number(lastVisitTime)) > thirtyMinutes) {
-      localStorage.setItem(lastVisitKey, now.toString());
-      await fetch(
-        "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ action: "track-visit" })
-        }
-      );
-    }
-  } catch (err) {
-    console.error("Visit tracking error:", err);
-  }
+sendActiveTime(accumulatedActiveSeconds);
+
+accumulatedActiveSeconds=0;
+
 }
 
-async function sendActiveTime(seconds) {
-  if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0 || seconds > 70) {
-    console.warn("Blocked fraudulent or invalid active time payload:", seconds);
-    return;
-  }
+},10000);
 
-  try {
-    await fetch("https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/dashboard-service", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        action: "track-time",
-        active_seconds: seconds
-      })
-    });
-  } catch (err) {
-    console.error("Time tracking sync failed:", err);
-  }
+}
+
+async function trackVisit(userId){
+
+if(!securityVerified)return;
+
+try{
+
+const lastVisitKey=`last_visit_recorded_${userId}`;
+
+const lastVisitTime=localStorage.getItem(lastVisitKey);
+
+const now=Date.now();
+
+const thirtyMinutes=30*60*1000;
+
+if(!lastVisitTime||(now-Number(lastVisitTime))>thirtyMinutes){
+
+localStorage.setItem(lastVisitKey,now.toString());
+
+await dashboardRequest("track-visit");
+
+}
+
+}catch(err){
+
+console.error("Visit tracking error:",err);
+
+}
+
+}
+
+async function sendActiveTime(seconds){
+
+if(!securityVerified)return;
+
+if(typeof seconds!=="number"||isNaN(seconds)||seconds<0||seconds>70){
+
+console.warn("Blocked invalid active time payload:",seconds);
+
+return;
+
+}
+
+try{
+
+await dashboardRequest("track-time",{active_seconds:seconds});
+
+}catch(err){
+
+console.error("Time tracking sync failed:",err);
+
+}
+
 }
 
 </script>
-
 </body>
 </html>
