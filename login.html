@@ -543,20 +543,20 @@ import { createClient } from
 // ======================================
 
 const SUPABASE_URL =
-"https://xkshzlfducmnglxfnxzk.supabase.co";
+  "https://xkshzlfducmnglxfnxzk.supabase.co";
 
-const SUPABASE_ANON_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_Z6fCexCd_v13ARt6147e_Q_T9NtE-Hg";
 
 const LOGIN_ENDPOINT =
-SUPABASE_URL + "/functions/v1/smooth-processor";
+  SUPABASE_URL + "/functions/v1/smooth-processor";
 
 const RESET_REDIRECT =
 "https://iyalsurveys.online/reset-password.html";
 
 const supabase = createClient(
   SUPABASE_URL,
-  SUPABASE_ANON_KEY
+  SUPABASE_PUBLISHABLE_KEY
 );
 
 
@@ -825,7 +825,7 @@ async function login() {
 
         headers: {
           "Content-Type": "application/json",
-          "apikey": SUPABASE_ANON_KEY
+         "apikey": SUPABASE_PUBLISHABLE_KEY
         },
 
         body: JSON.stringify({
