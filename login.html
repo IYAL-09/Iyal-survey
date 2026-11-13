@@ -897,15 +897,13 @@ async function login() {
 
       });
 
-    if (sessionError) {
-
-      console.error("Session setup failed:", sessionError);
-
-      throw new Error(
-        "We couldn't establish your login session. Please try again."
-      );
-
-    }
+   if (sessionError) {
+  console.error("FULL SESSION ERROR:", sessionError);
+  
+  throw new Error(
+    "Session error: " + sessionError.message
+  );
+}
 
     showStatus(
       "Login successful! Redirecting to your dashboard...",
