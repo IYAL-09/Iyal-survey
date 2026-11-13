@@ -1,615 +1,1203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<!-- Favicon -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account • Iyal Surveys</title>
 <link rel="icon" type="image/png" href="iyallogo.png">
 <link rel="apple-touch-icon" href="iyallogo.png">
-  
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Create Account • Iyal Surveys</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 <style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  transition:
-  background .3s ease,
-  color .3s ease,
-  border .3s ease,
-  transform .3s ease,
-  box-shadow .3s ease;
+:root {
+  --green: #23833b;
+  --green-dark: #17652d;
+  --green-light: #e9f7ed;
+  --text: #193321;
+  --muted: #718078;
+  --border: #e2ebe4;
+  --white: #ffffff;
+  --danger: #d93645;
 }
-
-body{
-  font-family:'Segoe UI',sans-serif;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:30px;
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  min-height: 100vh;
+  padding: 35px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--text);
   background:
-  radial-gradient(circle at top left,#43a04722,transparent 40%),
-  radial-gradient(circle at bottom right,#2e7d3222,transparent 40%),
-  linear-gradient(135deg,#f5fff7,#edf7ee);
-
-  overflow-x:hidden;
+    radial-gradient(circle at 10% 5%, #43a04724, transparent 35%),
+    radial-gradient(circle at 90% 90%, #2e7d3220, transparent 35%),
+    linear-gradient(135deg, #f4fff6, #eaf5ec);
+  overflow-x: hidden;
 }
-
-.card{
-  background:rgba(255,255,255,0.75);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-
-  border:1px solid rgba(255,255,255,0.4);
-
-  border-radius:30px;
-  padding:35px;
-  max-width:430px;
-  width:100%;
-
+button, input, select {
+  font: inherit;
+}
+.page-wrapper {
+  width: 100%;
+  max-width: 470px;
+}
+.card {
+  width: 100%;
+  padding: 34px;
+  border-radius: 28px;
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255,255,255,.85);
   box-shadow:
-  0 10px 40px rgba(0,0,0,.08),
-  inset 0 1px 0 rgba(255,255,255,.5);
-
-  animation:fadeUp .8s ease;
+    0 25px 70px rgba(24,85,39,.10),
+    0 5px 20px rgba(0,0,0,.035);
+  animation: appear .65s ease;
 }
-
-@keyframes fadeUp{
-  from{
-    opacity:0;
-    transform:translateY(40px);
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
   }
-  to{
-    opacity:1;
-    transform:translateY(0);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
-
-.logo{
-  text-align:center;
-  margin-bottom:22px;
+.brand {
+  text-align: center;
+  margin-bottom: 28px;
 }
-
-.logo img{
-  width:90px;
-  height:90px;
-  border-radius:24px;
-  object-fit:cover;
-
-  box-shadow:
-  0 10px 25px rgba(46,125,50,.25);
+.logo-box {
+  display: inline-flex;
+  padding: 7px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 8px 25px #23833b20;
 }
-
-.logo h1{
-  margin-top:12px;
-  color:#1b5e20;
-  font-size:30px;
-  font-weight:800;
-  letter-spacing:-1px;
+.logo-box img {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 50%;
 }
-
-.subtitle{
-  text-align:center;
-  color:#5f6f65;
-  margin-top:6px;
-  font-size:14px;
+.brand h1 {
+  margin-top: 13px;
+  font-size: 29px;
+  font-weight: 850;
+  letter-spacing: -1.2px;
+  color: var(--green-dark);
 }
-
-h2{
-  text-align:center;
-  color:#1b5e20;
-  margin-bottom:25px;
-  font-size:24px;
-  font-weight:700;
+.brand p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
 }
-
-.input-group{
-  position:relative;
-  margin-bottom:16px;
+.heading {
+  margin-bottom: 23px;
 }
-
-input{
-  width:100%;
-  padding:16px;
-  border:1px solid #dfe5df;
-  border-radius:16px;
-  background:rgba(255,255,255,.85);
-  font-size:15px;
-  color:#222;
+.heading h2 {
+  font-size: 23px;
+  font-weight: 750;
+  text-align: center;
+  color: var(--text);
 }
-
-input:focus{
-  outline:none;
-  border-color:#43a047;
-  box-shadow:0 0 0 4px rgba(67,160,71,.15);
+.heading p {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 7px;
 }
-
-.eye-toggle{
-  position:absolute;
-  top:50%;
-  right:15px;
-  transform:translateY(-50%);
-  cursor:pointer;
-  color:#43a047;
+.section-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 750;
+  color: #52645a;
+  margin-bottom: 8px;
+  letter-spacing: .2px;
 }
-
-.password-checklist{
-  list-style:none;
-  padding-left:0;
-  margin-bottom:15px;
+.input-group {
+  margin-bottom: 17px;
 }
-
-.password-checklist li{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:8px;
-  font-size:13px;
-  color:#5f6f65;
+.input-wrap {
+  position: relative;
 }
-
-.password-checklist i{
-  width:16px;
+.input-wrap > i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #84968a;
+  font-size: 15px;
+  pointer-events: none;
 }
-
-.terms{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin:18px 0;
-  font-size:14px;
-  color:#555;
+.input-wrap input,
+.input-wrap select {
+  width: 100%;
+  height: 53px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0 43px;
+  outline: none;
+  background: rgba(255,255,255,.9);
+  color: var(--text);
+  font-size: 14px;
+  transition: .2s ease;
 }
-
-.terms input{
-  width:auto;
-  margin-top:3px;
+.input-wrap input::placeholder {
+  color: #a0aaa3;
 }
-
-.terms a{
-  color:#2e7d32;
-  text-decoration:none;
-  font-weight:600;
+.input-wrap input:focus,
+.input-wrap select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 4px #23833b13;
+  background: white;
 }
-
-button{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:16px;
-
-  background:linear-gradient(135deg,#2e7d32,#43a047);
-
-  color:white;
-  font-size:15px;
-  font-weight:700;
-
-  cursor:pointer;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:10px;
-
-  margin-top:15px;
-
-  box-shadow:
-  0 10px 25px rgba(46,125,50,.25);
+.input-wrap select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 38px;
 }
-
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:
-  0 14px 35px rgba(46,125,50,.35);
+.select-arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #829187;
+  pointer-events: none;
 }
-
-button:disabled{
-  opacity:.7;
-  cursor:not-allowed;
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #84968a;
+  padding: 5px;
 }
-
-.spinner{
-  display:none;
-  width:18px;
-  height:18px;
-  border:3px solid rgba(255,255,255,.4);
-  border-top:3px solid white;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
+.password-toggle:hover {
+  color: var(--green);
 }
-
-@keyframes spin{
-  to{
-    transform:rotate(360deg);
+.helper {
+  font-size: 11px;
+  color: #8a978f;
+  margin-top: 7px;
+}
+.password-checklist {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  padding: 13px;
+  background: #f6faf7;
+  border: 1px solid #edf3ee;
+  border-radius: 13px;
+  margin-top: -5px;
+  margin-bottom: 17px;
+}
+.password-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: #8a978f;
+}
+.password-checklist i {
+  color: #b6c1b8;
+  font-size: 12px;
+}
+.password-checklist li.valid {
+  color: var(--green);
+}
+.password-checklist li.valid i {
+  color: var(--green);
+}
+.country-search {
+  margin-bottom: 8px;
+}
+.country-search input {
+  padding-left: 42px;
+}
+.country-search i {
+  z-index: 1;
+}
+.terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 19px 0;
+  font-size: 12px;
+  color: #69776e;
+  line-height: 1.7;
+}
+.terms input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--green);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.terms a {
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: none;
+}
+.terms a:hover {
+  text-decoration: underline;
+}
+.captcha-box {
+  margin: 17px 0;
+  overflow-x: auto;
+}
+.register-btn {
+  width: 100%;
+  min-height: 55px;
+  border: none;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #176b30, #36a34d);
+  color: white;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 11px;
+  box-shadow: 0 9px 22px #23833b30;
+  transition: .2s ease;
+}
+.register-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 13px 28px #23833b40;
+}
+.register-btn:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+  transform: none;
+}
+.spinner {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ffffff65;
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
-
-.message{
-  text-align:center;
-  margin-top:15px;
-  font-weight:600;
-  font-size:14px;
+/* Feedback messages */
+.feedback {
+  display: none;
+  margin-top: 19px;
+  padding: 16px;
+  border-radius: 15px;
+  border: 1px solid transparent;
+  animation: appear .25s ease;
 }
-
-.error{
-  color:#d32f2f;
+.feedback.show {
+  display: block;
 }
-
-.success{
-  color:#2e7d32;
+.feedback-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
-
-.login-link{
-  text-align:center;
-  margin-top:22px;
-  color:#666;
-  font-size:14px;
+.feedback-icon {
+  width: 35px;
+  height: 35px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
 }
-
-.login-link a{
-  color:#2e7d32;
-  text-decoration:none;
-  font-weight:700;
+.feedback-content {
+  flex: 1;
+  min-width: 0;
 }
-
-.support-btn{
-  position:fixed;
-  bottom:20px;
-  left:20px;
-
-  width:62px;
-  height:62px;
-
-  border-radius:50%;
-
-  background:linear-gradient(135deg,#2e7d32,#43a047);
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  color:white;
-  font-size:24px;
-  text-decoration:none;
-
-  box-shadow:0 10px 30px rgba(46,125,50,.4);
-
-  z-index:999;
-
-  animation:pulse 2s infinite;
+.feedback-title {
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 5px;
 }
-
-.support-btn:hover{
-  transform:translateY(-5px) scale(1.05);
+.feedback-text {
+  font-size: 12px;
+  line-height: 1.65;
 }
-
-@keyframes pulse{
-  0%{
-    box-shadow:0 0 0 0 rgba(46,125,50,.5);
+.feedback.success {
+  background: #effaf1;
+  border-color: #d1ecd7;
+  color: #17652d;
+}
+.feedback.success .feedback-icon {
+  background: #d9f2df;
+}
+.feedback.error {
+  background: #fff1f1;
+  border-color: #f5d5d8;
+  color: #a82b37;
+}
+.feedback.error .feedback-icon {
+  background: #ffe0e3;
+}
+.feedback.warning {
+  background: #fff8e9;
+  border-color: #f3e2b9;
+  color: #89601a;
+}
+.feedback.warning .feedback-icon {
+  background: #ffedc6;
+}
+.feedback.info {
+  background: #eff6ff;
+  border-color: #d6e6fb;
+  color: #245b91;
+}
+.feedback.info .feedback-icon {
+  background: #dcecff;
+}
+.feedback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 13px;
+}
+.feedback-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 13px;
+  border-radius: 9px;
+  background: white;
+  border: 1px solid currentColor;
+  color: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+}
+.feedback-action:hover {
+  transform: translateY(-1px);
+}
+.login-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.login-link a {
+  color: var(--green);
+  font-weight: 800;
+  text-decoration: none;
+}
+.security-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: #87958b;
+  font-size: 10px;
+  margin-top: 20px;
+}
+.security-note i {
+  color: var(--green);
+}
+.support-btn {
+  position: fixed;
+  bottom: 22px;
+  left: 22px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #176b30, #36a34d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  text-decoration: none;
+  box-shadow: 0 8px 25px #23833b45;
+  z-index: 10;
+}
+.support-btn:hover {
+  transform: translateY(-4px);
+}
+@media(max-width:500px) {
+  body {
+    padding: 22px 13px 85px;
+    align-items: flex-start;
   }
-
-  70%{
-    box-shadow:0 0 0 18px rgba(46,125,50,0);
+  .card {
+    padding: 26px 20px;
+    border-radius: 23px;
   }
-
-  100%{
-    box-shadow:0 0 0 0 rgba(46,125,50,0);
+  .brand h1 {
+    font-size: 26px;
+  }
+  .heading h2 {
+    font-size: 21px;
+  }
+  .logo-box img {
+    width: 68px;
+    height: 68px;
+  }
+  .password-checklist {
+    grid-template-columns: 1fr 1fr;
+  }
+  .support-btn {
+    width: 49px;
+    height: 49px;
+    bottom: 15px;
+    left: 15px;
   }
 }
-
-@media(max-width:500px){
-
-  .card{
-    padding:28px 22px;
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
   }
-
-  .logo h1{
-    font-size:26px;
-  }
-
 }
-
 </style>
 </head>
-
 <body>
-
+<div class="page-wrapper">
 <div class="card">
-
-  <div class="logo">
-    <img src="iyallogo.png" alt="Iyal Surveys">
+  <div class="brand">
+    <div class="logo-box">
+      <img src="iyallogo.png" alt="Iyal Surveys logo">
+    </div>
     <h1>Iyal Surveys</h1>
-    <div class="subtitle">
-      Earn rewards by completing surveys online
-    </div>
+    <p>Turn your opinions into rewards.</p>
   </div>
-
-  <h2>Create Account</h2>
-
-  <form id="registerForm">
-
+  <div class="heading">
+    <h2>Create your account</h2>
+    <p>Join Iyal Surveys and start earning rewards.</p>
+  </div>
+  <form id="registerForm" novalidate>
     <div class="input-group">
-      <input id="full_name" placeholder="Full Name" required>
+      <label class="section-label" for="full_name">Full name</label>
+      <div class="input-wrap">
+        <i class="fa-regular fa-user"></i>
+        <input
+          id="full_name"
+          type="text"
+          placeholder="Enter your full name"
+          maxlength="100"
+          autocomplete="name"
+          required>
+      </div>
     </div>
-
     <div class="input-group">
-      <input id="username" placeholder="Username" required>
+      <label class="section-label" for="username">Username</label>
+      <div class="input-wrap">
+        <i class="fa-solid fa-at"></i>
+        <input
+          id="username"
+          type="text"
+          placeholder="Choose a username"
+          maxlength="30"
+          autocomplete="username"
+          required>
+      </div>
+      <p class="helper">3–30 characters. Letters, numbers and underscores only.</p>
     </div>
-
     <div class="input-group">
-      <input id="email" type="email" placeholder="Email Address" required>
+      <label class="section-label" for="email">Email address</label>
+      <div class="input-wrap">
+        <i class="fa-regular fa-envelope"></i>
+        <input
+          id="email"
+          type="email"
+          placeholder="you@example.com"
+          maxlength="254"
+          autocomplete="email"
+          required>
+      </div>
     </div>
-
     <div class="input-group">
-      <input id="password" type="password" placeholder="Password" required>
-
-      <span class="eye-toggle"
-      onclick="togglePassword('password','eye1')">
-        <i id="eye1" class="fa fa-eye"></i>
-      </span>
+      <label class="section-label" for="countrySearch">Country</label>
+      <div class="input-wrap country-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+          id="countrySearch"
+          type="search"
+          placeholder="Search African countries..."
+          autocomplete="off">
+      </div>
+      <div class="input-wrap">
+        <i class="fa-solid fa-earth-africa"></i>
+        <select id="country" required>
+          <option value="">Select your country</option>
+        </select>
+        <i class="fa-solid fa-chevron-down select-arrow"></i>
+      </div>
+      <p class="helper">Select the country where you currently reside.</p>
     </div>
-
     <div class="input-group">
-      <input id="confirm_password"
-      type="password"
-      placeholder="Confirm Password"
-      required>
-
-      <span class="eye-toggle"
-      onclick="togglePassword('confirm_password','eye2')">
-        <i id="eye2" class="fa fa-eye"></i>
-      </span>
+      <label class="section-label" for="password">Password</label>
+      <div class="input-wrap">
+        <i class="fa-solid fa-lock"></i>
+        <input
+          id="password"
+          type="password"
+          placeholder="Create a strong password"
+          autocomplete="new-password"
+          required>
+        <span class="password-toggle" id="togglePassword">
+          <i class="fa-regular fa-eye" id="eye1"></i>
+        </span>
+      </div>
     </div>
-
+    <div class="input-group">
+      <label class="section-label" for="confirm_password">Confirm password</label>
+      <div class="input-wrap">
+        <i class="fa-solid fa-shield-halved"></i>
+        <input
+          id="confirm_password"
+          type="password"
+          placeholder="Enter your password again"
+          autocomplete="new-password"
+          required>
+        <span class="password-toggle" id="toggleConfirm">
+          <i class="fa-regular fa-eye" id="eye2"></i>
+        </span>
+      </div>
+    </div>
     <ul class="password-checklist">
       <li id="checkLength">
-        <i class="fa fa-times"></i>
-        Minimum 6 characters
+        <i class="fa-solid fa-circle-xmark"></i>
+        6+ characters
       </li>
-
       <li id="checkUpper">
-        <i class="fa fa-times"></i>
-        At least 1 uppercase letter
+        <i class="fa-solid fa-circle-xmark"></i>
+        Uppercase letter
       </li>
-
       <li id="checkNumber">
-        <i class="fa fa-times"></i>
-        At least 1 number
+        <i class="fa-solid fa-circle-xmark"></i>
+        At least one number
       </li>
-
       <li id="checkSpecial">
-        <i class="fa fa-times"></i>
-        At least 1 special character
+        <i class="fa-solid fa-circle-xmark"></i>
+        Special character
       </li>
     </ul>
-
     <div class="input-group">
-      <input id="referral_code"
-      placeholder="Referral Code (Optional)">
+      <label class="section-label" for="referral_code">
+        Referral code
+        <span style="font-weight:400;color:#9aa69d;">(Optional)</span>
+      </label>
+      <div class="input-wrap">
+        <i class="fa-solid fa-gift"></i>
+        <input
+          id="referral_code"
+          type="text"
+          placeholder="Enter referral code"
+          maxlength="20">
+      </div>
     </div>
-
     <div class="terms">
       <input type="checkbox" id="terms" required>
-
       <label for="terms">
         I agree to the
         <a href="terms.html">Terms & Conditions</a>
-        <a href="privacy.html">/ Privacy Policy</a>
+        and
+        <a href="privacy.html">Privacy Policy</a>.
       </label>
     </div>
-
-    <div class="g-recaptcha"
-    data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz"></div>
-
-    <button id="registerBtn" type="submit">
-
-      Create Account
-
-      <div class="spinner" id="spinner"></div>
-
+    <div class="captcha-box">
+      <div
+        class="g-recaptcha"
+        data-sitekey="6Lf22SosAAAAADDRkt-YuGTX57eNEXjYSWfJJOHz">
+      </div>
+    </div>
+    <button class="register-btn" id="registerBtn" type="submit">
+      <span id="buttonText">Create Account</span>
+      <span class="spinner" id="spinner"></span>
+      <i class="fa-solid fa-arrow-right" id="buttonArrow"></i>
     </button>
-
-    <div id="message" class="message"></div>
-
+    <div id="feedback" class="feedback" role="alert" aria-live="polite">
+      <div class="feedback-inner">
+        <div class="feedback-icon" id="feedbackIcon">
+          <i class="fa-solid fa-circle-info"></i>
+        </div>
+        <div class="feedback-content">
+          <div class="feedback-title" id="feedbackTitle"></div>
+          <div class="feedback-text" id="feedbackText"></div>
+          <div class="feedback-actions" id="feedbackActions"></div>
+        </div>
+      </div>
+    </div>
     <div class="login-link">
       Already have an account?
-      <a href="login.html">Login</a>
+      <a href="login.html">Log in</a>
     </div>
-
+    <div class="security-note">
+      <i class="fa-solid fa-shield-halved"></i>
+      Your information is protected by our registration security checks.
+    </div>
   </form>
-
 </div>
-
-<a href="https://wa.me/2349045776340"
-class="support-btn">
-  <i class="fa-solid fa-headset"></i>
+</div>
+<a
+  class="support-btn"
+  href="https://wa.me/2349045776340"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Contact support">
+  <i class="fa-brands fa-whatsapp"></i>
 </a>
-
 <script type="module">
-
 const ENDPOINT =
 "https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/clever-handler";
-
 const form = document.getElementById("registerForm");
-const spinner = document.getElementById("spinner");
-const messageBox = document.getElementById("message");
 const btn = document.getElementById("registerBtn");
-
-window.togglePassword = (inputId, iconId) => {
-
-  const input = document.getElementById(inputId);
-  const icon = document.getElementById(iconId);
-
-  if(input.type === "password"){
-    input.type = "text";
-    icon.classList.replace("fa-eye","fa-eye-slash");
-  }else{
-    input.type = "password";
-    icon.classList.replace("fa-eye-slash","fa-eye");
-  }
-};
-
-document.getElementById("password")
-.addEventListener("input", e => {
-
-  const val = e.target.value;
-
-  document.getElementById("checkLength")
-  .querySelector("i").className =
-  val.length >= 6 ? "fa fa-check" : "fa fa-times";
-
-  document.getElementById("checkUpper")
-  .querySelector("i").className =
-  /[A-Z]/.test(val) ? "fa fa-check" : "fa fa-times";
-
-  document.getElementById("checkNumber")
-  .querySelector("i").className =
-  /\d/.test(val) ? "fa fa-check" : "fa fa-times";
-
-  document.getElementById("checkSpecial")
-  .querySelector("i").className =
-  /[^A-Za-z0-9]/.test(val)
-  ? "fa fa-check"
-  : "fa fa-times";
-
-});
-
-form.addEventListener("submit", async (e) => {
-
-  e.preventDefault();
-
-  spinner.style.display = "inline-block";
-  btn.disabled = true;
-
-  messageBox.textContent = "";
-
-  try{
-
-    const full_name =
-    document.getElementById("full_name")
-    .value.trim();
-
-    const username =
-    document.getElementById("username")
-    .value.trim();
-
-    const email =
-    document.getElementById("email")
-    .value.trim();
-
-    const password =
-    document.getElementById("password")
-    .value;
-
-    const confirm =
-    document.getElementById("confirm_password")
-    .value;
-
-    const referral_code =
-    document.getElementById("referral_code")
-    .value.trim() || null;
-
-    const terms =
-    document.getElementById("terms");
-
-    if(password !== confirm){
-      throw new Error("Passwords do not match");
-    }
-
-    if(!terms.checked){
-      throw new Error(
-      "You must accept Terms & Conditions");
-    }
-
-    const recaptcha_token =
-    grecaptcha.getResponse();
-
-    if(!recaptcha_token){
-      throw new Error(
-      "Please complete the reCAPTCHA");
-    }
-
-    const res = await fetch(ENDPOINT,{
-
-      method:"POST",
-
-      headers:{
-        "Content-Type":"application/json"
-      },
-
-      body:JSON.stringify({
-
-        recaptcha_token,
-        full_name,
-        username,
-        email,
-        password,
-        referral_code
-
-      })
-
+const spinner = document.getElementById("spinner");
+const buttonText = document.getElementById("buttonText");
+const buttonArrow = document.getElementById("buttonArrow");
+const feedback = document.getElementById("feedback");
+const feedbackIcon = document.getElementById("feedbackIcon");
+const feedbackTitle = document.getElementById("feedbackTitle");
+const feedbackText = document.getElementById("feedbackText");
+const feedbackActions = document.getElementById("feedbackActions");
+const passwordInput = document.getElementById("password");
+const confirmInput = document.getElementById("confirm_password");
+let isSubmitting = false;
+// AFRICAN COUNTRIES
+const countries = [
+  ["DZ","Algeria"],["AO","Angola"],["BJ","Benin"],
+  ["BW","Botswana"],["BF","Burkina Faso"],["BI","Burundi"],
+  ["CV","Cabo Verde"],["CM","Cameroon"],
+  ["CF","Central African Republic"],["TD","Chad"],
+  ["KM","Comoros"],["CG","Republic of the Congo"],
+  ["CD","Democratic Republic of the Congo"],
+  ["CI","Côte d'Ivoire"],["DJ","Djibouti"],["EG","Egypt"],
+  ["GQ","Equatorial Guinea"],["ER","Eritrea"],
+  ["SZ","Eswatini"],["ET","Ethiopia"],["GA","Gabon"],
+  ["GM","The Gambia"],["GH","Ghana"],["GN","Guinea"],
+  ["GW","Guinea-Bissau"],["KE","Kenya"],["LS","Lesotho"],
+  ["LR","Liberia"],["LY","Libya"],["MG","Madagascar"],
+  ["MW","Malawi"],["ML","Mali"],["MR","Mauritania"],
+  ["MU","Mauritius"],["MA","Morocco"],["MZ","Mozambique"],
+  ["NA","Namibia"],["NE","Niger"],["NG","Nigeria"],
+  ["RW","Rwanda"],["ST","Sao Tome and Principe"],
+  ["SN","Senegal"],["SC","Seychelles"],
+  ["SL","Sierra Leone"],["SO","Somalia"],
+  ["ZA","South Africa"],["SS","South Sudan"],
+  ["SD","Sudan"],["TZ","Tanzania"],["TG","Togo"],
+  ["TN","Tunisia"],["UG","Uganda"],["ZM","Zambia"],
+  ["ZW","Zimbabwe"]
+];
+// COUNTRY SELECTOR
+const countrySelect = document.getElementById("country");
+const countrySearch = document.getElementById("countrySearch");
+function populateCountries(filter = "") {
+  const previousValue = countrySelect.value;
+  countrySelect.innerHTML =
+    '<option value="">Select your country</option>';
+  const query = filter.trim().toLowerCase();
+  countries
+    .filter(([code, name]) =>
+      name.toLowerCase().includes(query) ||
+      code.toLowerCase().includes(query)
+    )
+    .forEach(([code, name]) => {
+      const option = document.createElement("option");
+      option.value = code;
+      option.textContent = name;
+      countrySelect.appendChild(option);
     });
-
-    messageBox.textContent =
-"✅ Registration successful! Please check your email to confirm your account before logging in.";
-
-messageBox.className =
-"message success";
-
-/* CLEAR FORM */
-form.reset();
-
-/* RESET RECAPTCHA */
-grecaptcha.reset();
-
-/* REDIRECT TO LOGIN */
-setTimeout(() => {
-
-  location.href = "login.html";
-
-},4000);
-  }catch(err){
-
-    messageBox.textContent =
-    "❌ " + err.message;
-
-    messageBox.className =
-    "message error";
-
-    grecaptcha.reset();
-
-  }finally{
-
-    spinner.style.display = "none";
-    btn.disabled = false;
-
-  }
-
-});
-
-/* GET REF CODE FROM URL */
-
-const params = new URLSearchParams(window.location.search);
-const ref = params.get("ref");
-
-/* AUTO FILL INPUT */
-
-if (ref) {
-  const input = document.getElementById("referral_code");
-  if (input) {
-    input.value = ref;
+  if (
+    previousValue &&
+    countries.some(([code]) => code === previousValue)
+  ) {
+    countrySelect.value = previousValue;
   }
 }
-
+populateCountries();
+countrySearch.addEventListener("input", () => {
+  populateCountries(countrySearch.value);
+});
+countrySelect.addEventListener("change", () => {
+  const selected = countries.find(
+    ([code]) => code === countrySelect.value
+  );
+  if (selected) {
+    countrySearch.value = selected[1];
+  }
+});
+// PASSWORD VISIBILITY
+function togglePassword(input, icon) {
+  const isPassword = input.type === "password";
+  input.type = isPassword ? "text" : "password";
+  icon.className = isPassword
+    ? "fa-regular fa-eye-slash"
+    : "fa-regular fa-eye";
+}
+document.getElementById("togglePassword").addEventListener("click", () => {
+  togglePassword(
+    passwordInput,
+    document.getElementById("eye1")
+  );
+});
+document.getElementById("toggleConfirm").addEventListener("click", () => {
+  togglePassword(
+    confirmInput,
+    document.getElementById("eye2")
+  );
+});
+// PASSWORD CHECKLIST
+const passwordRules = [
+  {
+    id: "checkLength",
+    test: value => value.length >= 6
+  },
+  {
+    id: "checkUpper",
+    test: value => /[A-Z]/.test(value)
+  },
+  {
+    id: "checkNumber",
+    test: value => /[0-9]/.test(value)
+  },
+  {
+    id: "checkSpecial",
+    test: value => /[^A-Za-z0-9]/.test(value)
+  }
+];
+passwordInput.addEventListener("input", () => {
+  const value = passwordInput.value;
+  passwordRules.forEach(rule => {
+    const item = document.getElementById(rule.id);
+    const icon = item.querySelector("i");
+    const valid = rule.test(value);
+    item.classList.toggle("valid", valid);
+    icon.className = valid
+      ? "fa-solid fa-circle-check"
+      : "fa-solid fa-circle-xmark";
+  });
+});
+// PROFESSIONAL MESSAGE SYSTEM
+function showMessage(type, title, description, actions = []) {
+  const icons = {
+    success: "fa-solid fa-circle-check",
+    error: "fa-solid fa-circle-exclamation",
+    warning: "fa-solid fa-triangle-exclamation",
+    info: "fa-solid fa-circle-info"
+  };
+  feedback.className = "feedback show " + type;
+  feedbackIcon.innerHTML = "";
+  const icon = document.createElement("i");
+  icon.className = icons[type] || icons.info;
+  feedbackIcon.appendChild(icon);
+  feedbackTitle.textContent = title;
+  feedbackText.textContent = description;
+  feedbackActions.replaceChildren();
+  actions.forEach(action => {
+    const link = document.createElement("a");
+    link.className = "feedback-action";
+    link.href = action.href;
+    link.textContent = action.text;
+    if (action.icon) {
+      const actionIcon = document.createElement("i");
+      actionIcon.className = action.icon;
+      link.prepend(actionIcon);
+    }
+    feedbackActions.appendChild(link);
+  });
+  feedback.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+}
+function hideMessage() {
+  feedback.className = "feedback";
+  feedbackActions.replaceChildren();
+}
+function setLoading(loading) {
+  btn.disabled = loading;
+  spinner.style.display = loading
+    ? "inline-block"
+    : "none";
+  buttonArrow.style.display = loading
+    ? "none"
+    : "inline-block";
+  buttonText.textContent = loading
+    ? "Creating your account..."
+    : "Create Account";
+}
+// CAPTCHA RESET
+function resetCaptcha() {
+  if (window.grecaptcha) {
+    try {
+      window.grecaptcha.reset();
+    } catch (error) {
+      console.warn("CAPTCHA reset unavailable:", error);
+    }
+  }
+}
+// DEVICE FINGERPRINT
+async function getDeviceFingerprint() {
+  try {
+    const FingerprintJS = await import(
+      "https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/+esm"
+    );
+    const agent = await FingerprintJS.load();
+    const result = await agent.get();
+    return result.visitorId || "";
+  } catch (error) {
+    console.warn("Fingerprint unavailable:", error);
+    // Fingerprint is optional.
+    return "";
+  }
+}
+// EXISTING ACCOUNT MESSAGE
+function showExistingAccountMessage() {
+  showMessage(
+    "warning",
+    "Account already exists",
+    "An account already exists with this email. Please log in using your existing account. If you have forgotten your password, use the Forgot Password option on the login page.",
+    [
+      {
+        text: "Go to Login",
+        href: "login.html",
+        icon: "fa-solid fa-right-to-bracket"
+      }
+    ]
+  );
+}
+// USERNAME MESSAGE
+function showUsernameTakenMessage(message) {
+  showMessage(
+    "warning",
+    "Username unavailable",
+    message || "This username is already taken. Please choose another username."
+  );
+}
+// ERROR HANDLING
+function handleBackendError(status, message, code = "") {
+  const msg = String(message || "").toLowerCase();
+  const errorCode = String(code || "").toUpperCase();
+  // Existing email
+  if (
+    errorCode === "EMAIL_ALREADY_EXISTS" ||
+    msg.includes("email may already be registered") ||
+    msg.includes("email already registered") ||
+    msg.includes("user already registered") ||
+    msg.includes("already associated with an account") ||
+    msg.includes("already been registered") ||
+    msg.includes("already exists with this email")
+  ) {
+    showExistingAccountMessage();
+    return;
+  }
+  // Existing username
+  if (
+    errorCode === "USERNAME_ALREADY_TAKEN" ||
+    msg.includes("username")
+  ) {
+    showUsernameTakenMessage(message);
+    return;
+  }
+  // Invalid referral
+  if (msg.includes("invalid referral code")) {
+    showMessage(
+      "error",
+      "Invalid referral code",
+      "The referral code you entered could not be found. Check the code or remove it if you do not have one."
+    );
+    return;
+  }
+  // CAPTCHA
+  if (
+    msg.includes("captcha") ||
+    msg.includes("security verification")
+  ) {
+    showMessage(
+      "warning",
+      "Security verification failed",
+      "Please complete the security verification again and retry."
+    );
+    return;
+  }
+  // VPN, proxy and Tor
+  if (
+    msg.includes("vpn") ||
+    msg.includes("proxy") ||
+    msg.includes("tor")
+  ) {
+    showMessage(
+      "warning",
+      "Connection not accepted",
+      message
+    );
+    return;
+  }
+  // Rate limiting
+  if (status === 429) {
+    showMessage(
+      "warning",
+      "Too many attempts",
+      message || "Please wait a few minutes before trying again."
+    );
+    return;
+  }
+  // Server errors
+  if (status === 503 || status >= 500) {
+    showMessage(
+      "error",
+      "Service temporarily unavailable",
+      "We could not complete your registration because our server is temporarily unavailable. Your details have not been confirmed as registered. Please try again shortly."
+    );
+    return;
+  }
+  // Other conflicts
+  if (status === 409) {
+    showMessage(
+      "warning",
+      "Account information unavailable",
+      message || "Some of your registration details are already in use. Please review them and try again."
+    );
+    return;
+  }
+  // Other errors
+  showMessage(
+    "error",
+    "Registration unsuccessful",
+    message || "We could not complete your registration. Please check your details and try again."
+  );
+}
+// FORM SUBMISSION
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (isSubmitting) return;
+  hideMessage();
+  const fullName = document
+    .getElementById("full_name")
+    .value.trim();
+  const username = document
+    .getElementById("username")
+    .value.trim()
+    .toLowerCase();
+  const email = document
+    .getElementById("email")
+    .value.trim()
+    .toLowerCase();
+  const password = passwordInput.value;
+  const confirmPassword = confirmInput.value;
+  const referralCode = document
+    .getElementById("referral_code")
+    .value.trim()
+    .toUpperCase();
+  const selectedCountryCode = countrySelect.value;
+  const selectedCountry = countries.find(
+    ([code]) => code === selectedCountryCode
+  );
+  const termsAccepted =
+    document.getElementById("terms").checked;
+  // Basic validation
+  if (!fullName || !username || !email || !password) {
+    showMessage(
+      "warning",
+      "Missing information",
+      "Please complete all required fields before continuing."
+    );
+    return;
+  }
+  if (!selectedCountry) {
+    showMessage(
+      "warning",
+      "Select your country",
+      "Please search for and select your country."
+    );
+    return;
+  }
+  if (!/^[a-z0-9_]{3,30}$/.test(username)) {
+    showMessage(
+      "warning",
+      "Invalid username",
+      "Your username must contain 3–30 characters using only letters, numbers or underscores."
+    );
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showMessage(
+      "warning",
+      "Invalid email address",
+      "Please enter a valid email address."
+    );
+    return;
+  }
+  if (password !== confirmPassword) {
+    showMessage(
+      "warning",
+      "Passwords do not match",
+      "Please make sure both password fields contain the same password."
+    );
+    return;
+  }
+  const passwordValid = passwordRules.every(
+    rule => rule.test(password)
+  );
+  if (!passwordValid) {
+    showMessage(
+      "warning",
+      "Password is not strong enough",
+      "Please satisfy all four password requirements before continuing."
+    );
+    return;
+  }
+  if (!termsAccepted) {
+    showMessage(
+      "warning",
+      "Terms and conditions required",
+      "Please accept our Terms & Conditions and Privacy Policy to continue."
+    );
+    return;
+  }
+  if (!window.grecaptcha) {
+    showMessage(
+      "error",
+      "Security verification unavailable",
+      "The security verification service could not load. Check your internet connection and refresh the page."
+    );
+    return;
+  }
+  const captchaToken = window.grecaptcha.getResponse();
+  if (!captchaToken) {
+    showMessage(
+      "warning",
+      "Complete security verification",
+      "Please complete the reCAPTCHA checkbox before creating your account."
+    );
+    return;
+  }
+  // Start registration
+  isSubmitting = true;
+  setLoading(true);
+  try {
+    showMessage(
+      "info",
+      "Preparing your registration",
+      "We're securely checking your registration details. Please wait."
+    );
+    // Get browser fingerprint.
+    // Failure does not prevent registration.
+    const deviceFingerprint = await getDeviceFingerprint();
+    // Exact payload expected by clever-handler.
+    const payload = {
+      recaptcha_token: captchaToken,
+      full_name: fullName,
+      username: username,
+      email: email,
+      password: password,
+      referral_code: referralCode || null,
+      country: selectedCountry[1],
+      country_code: selectedCountry[0],
+      device_fingerprint: deviceFingerprint
+    };
+    // Send request.
+    // JWT verification must be disabled on this public
+    // registration function. No user Authorization token
+    // is required here.
+    let response;
+    try {
+      response = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(30000)
+      });
+    } catch (networkError) {
+      if (networkError.name === "TimeoutError") {
+        throw new Error(
+          "The request took too long. Please check your connection before trying again."
+        );
+      }
+      throw new Error(
+        "Unable to connect to Iyal Surveys. Please check your internet connection and try again."
+      );
+    }
+    // Read backend response.
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error(
+        "The server returned an unexpected response. Please try again later."
+      );
+    }
+    // Never announce success unless backend confirms it.
+    if (!response.ok || data.success !== true) {
+      handleBackendError(
+        response.status,
+        data.message || "Registration could not be completed.",
+        data.code || ""
+      );
+      resetCaptcha();
+      return;
+    }
+    // Confirmed success.
+    showMessage(
+      "success",
+      "Registration successful!",
+      data.message || "Your account has been created. Please check your email and confirm your address before logging in.",
+      [
+        {
+          text: "Go to Login",
+          href: "login.html",
+          icon: "fa-solid fa-right-to-bracket"
+        }
+      ]
+    );
+    // Clear sensitive fields.
+    form.reset();
+    // Reset password checklist.
+    passwordRules.forEach(rule => {
+      const item = document.getElementById(rule.id);
+      item.classList.remove("valid");
+      item.querySelector("i").className =
+        "fa-solid fa-circle-xmark";
+    });
+    // Reset country selector.
+    countrySearch.value = "";
+    populateCountries();
+    // Reset CAPTCHA.
+    resetCaptcha();
+    // Do not force redirect.
+    // Give the user time to read the confirmation message.
+  } catch (error) {
+    console.error("Registration frontend error:", error);
+    showMessage(
+      "error",
+      "Something went wrong",
+      error.message || "An unexpected problem occurred. Please try again."
+    );
+    resetCaptcha();
+  } finally {
+    isSubmitting = false;
+    setLoading(false);
+  }
+});
+// REFERRAL LINK SUPPORT
+const params = new URLSearchParams(window.location.search);
+const referralFromUrl = params.get("ref");
+if (referralFromUrl) {
+  document.getElementById("referral_code").value =
+    referralFromUrl.trim().toUpperCase();
+}
 </script>
-
 </body>
 </html>
