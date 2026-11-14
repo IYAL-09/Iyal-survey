@@ -965,62 +965,35 @@ input:focus-visible {
 <div class="bg"></div>
 <div class="blur blur1"></div>
 <div class="blur blur2"></div>
-<header>
-<div class="logo"><img src="iyallogo.png" alt="Iyal Surveys"><h1>Iyal Surveys</h1></div>
-<div class="header-right">
-<div class="bell-btn" onclick="toggleNotif()"><i class="fa-solid fa-bell"></i><span id="notifCount" style="position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;font-size:.7rem;font-weight:700;min-width:20px;height:20px;border-radius:999px;display:none;align-items:center;justify-content:center;padding:0 5px;">0</span></div>
-<div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
-</div>
-<div id="notifMenu"><h4>Notifications</h4><div id="notifList" style="display:flex;flex-direction:column;max-height:250px;overflow-y:auto;"><div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div></div></div>
 
-<!-- HEADER RIGHT - use this, second version get bell -->
-<div class="header-right">
-  <div class="secure-badge">
-    <i class="fa-solid fa-shield-halved"></i>
-    <span>SECURE</span>
-  </div>
-  <div class="bell-btn" id="bellBtn">
-    <i class="fa-solid fa-bell"></i>
-  </div>
-  <div class="menu-btn" id="menuBtn" aria-label="Open navigation menu">
-    <i class="fa-solid fa-bars"></i>
-  </div>
-</div>
+   <header>
+  <div class="logo"><img src="iyallogo.png" alt="Iyal Surveys"><h1>Iyal Surveys</h1></div>
 
-<!-- NOTIF MENU - OUTSIDE nav, no be inside -->
-<div id="notifMenu">
-  <h4>Notifications</h4>
-  <div id="notifList" style="display:flex;flex-direction:column;max-height:250px;overflow-y:auto;">
-    <div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div>
+  <div class="header-right">
+    <div class="bell-btn" onclick="toggleNotif()">
+      <i class="fa-solid fa-bell"></i>
+      <span id="notifCount" style="position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;font-size:.7rem;font-weight:700;min-width:20px;height:20px;border-radius:999px;display:none;align-items:center;justify-content:center;padding:0 5px;">0</span>
+    </div>
+    <div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
   </div>
-</div>
 
-<!-- MAIN MENU - First one, but with second one's ids/classes -->
-<nav id="menu">
-  <a href="dashboard.html">
-    <i class="fa-solid fa-house nav-icon"></i>
-    Dashboard
-  </a>
-  <a href="referrals.html">
-    <i class="fa-solid fa-users nav-icon"></i>
-    Referrals
-  </a>
-  <div class="nav-divider"></div>
-  <a href="terms.html"><i class="fa-solid fa-handshake nav-icon"></i>Terms & Conditions</a>
-  <a href="privacy.html"><i class="fa-solid fa-shield-halved nav-icon"></i>Privacy Policy</a>
-  <a href="about.html"><i class="fa-solid fa-circle-info nav-icon"></i>About Us</a>
-  <a href="disclaimer.html"><i class="fa-solid fa-triangle-exclamation nav-icon"></i>Disclaimer</a>
-  <a href="support.html"><i class="fa-solid fa-envelope nav-icon"></i>Support</a>
-  <a href="settings.html"><i class="fa-solid fa-gear nav-icon"></i>Settings</a>
-  <a href="profile.html"><i class="fa-solid fa-user nav-icon"></i>Profile</a>
-  <div class="nav-divider"></div>
-  <a href="#" id="logoutMenuBtn">
-    <i class="fa-solid fa-right-from-bracket nav-icon"></i>
-    Logout
-  </a>
-</nav>
-   
+  <div id="notifMenu"><h4>Notifications</h4><div id="notifList" style="display:flex;flex-direction:column;max-height:250px;overflow-y:auto;"><div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div></div></div>
+
+  <nav id="menu">
+    <a href="dashboard.html"><i class="fa-solid fa-house nav-icon"></i>Dashboard</a>
+    <a href="referrals.html"><i class="fa-solid fa-users nav-icon"></i>Referrals</a>
+    <div class="nav-divider"></div>
+    <a href="terms.html"><i class="fa-solid fa-handshake nav-icon"></i>Terms & Conditions</a>
+    <a href="privacy.html"><i class="fa-solid fa-shield-halved nav-icon"></i>Privacy Policy</a>
+    <a href="about.html"><i class="fa-solid fa-circle-info nav-icon"></i>About Us</a>
+    <a href="disclaimer.html"><i class="fa-solid fa-triangle-exclamation nav-icon"></i>Disclaimer</a>
+    <a href="support.html"><i class="fa-solid fa-envelope nav-icon"></i>Support</a>
+    <a href="settings.html"><i class="fa-solid fa-gear nav-icon"></i>Settings</a>
+    <a href="profile.html"><i class="fa-solid fa-user nav-icon"></i>Profile</a>
+    <div class="nav-divider"></div>
+  </nav>
 </header>
+
 <div class="container">
 <div class="greeting"><h2>Hello, <span id="username">User</span> 👋</h2><p>Complete surveys and earn rewards instantly.</p></div>
 <div id="adminBanner"><span class="banner-icon">📢</span><span id="adminBannerText"></span><button class="banner-close" onclick="dismissAdminBanner()" title="Dismiss for 24 hours">&times;</button></div>
