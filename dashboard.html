@@ -1010,8 +1010,9 @@ input:focus-visible {
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import FingerprintJS from "https://openfpcdn.io/fingerprintjs/v4";
 
-const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-const supabase = createClient(SUPABASE_URL,"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtZ2x4Zm54emsiLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0");
+   const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtZ2x4Zm54emsiLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 let session = null;
 let deviceFingerprint = null;
