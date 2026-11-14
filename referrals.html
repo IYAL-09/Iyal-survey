@@ -1,729 +1,777 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="iyallogo.png">
-<link rel="apple-touch-icon" href="iyallogo.png">
- 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Iyal Surveys • Referrals</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
-
-body{
-background:#08140d;
-color:white;
-min-height:100vh;
-overflow-x:hidden;
-}
-
-/* BACKGROUND */
-
-.bg{
-position:fixed;
-inset:0;
-z-index:-2;
-background:
-radial-gradient(circle at top left,#16a34a55,transparent 35%),
-radial-gradient(circle at bottom right,#22c55e44,transparent 35%),
-#08140d;
-}
-
-.blur{
-position:fixed;
-width:300px;
-height:300px;
-border-radius:50%;
-background:#22c55e22;
-filter:blur(90px);
-z-index:-1;
-animation:float 8s infinite ease-in-out;
-}
-
-.blur1{
-top:-80px;
-left:-80px;
-}
-
-.blur2{
-bottom:-100px;
-right:-100px;
-animation-delay:3s;
-}
-
-@keyframes float{
-0%,100%{transform:translateY(0px);}
-50%{transform:translateY(30px);}
-}
-
-/* HEADER */
-
-header{
-padding:20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.logo{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.logo img{
-width:52px;
-height:52px;
-border-radius:50%;
-border:2px solid #22c55e;
-object-fit:cover;
-}
-
-.logo h1{
-font-size:1.2rem;
-font-weight:700;
-}
-
-.menu-btn{
-width:45px;
-height:45px;
-border-radius:14px;
-background:#ffffff10;
-display:flex;
-align-items:center;
-justify-content:center;
-backdrop-filter:blur(12px);
-cursor:pointer;
-font-size:1.2rem;
-}
-
-nav{
-position:absolute;
-top:80px;
-right:20px;
-background:#0f1d14ee;
-backdrop-filter:blur(18px);
-padding:15px;
-border-radius:20px;
-display:none;
-flex-direction:column;
-gap:14px;
-width:220px;
-border:1px solid #ffffff10;
-z-index:100;
-}
-
-nav a{
-text-decoration:none;
-color:#d1fae5;
-font-size:.95rem;
-}
-
-/* CONTENT */
-
-.container{
-padding:20px;
-padding-bottom:120px;
-}
-
-/* REWARD BANNER */
-
-.reward-banner{
-background:linear-gradient(135deg,#16a34a,#22c55e);
-padding:22px;
-border-radius:28px;
-margin-bottom:22px;
-box-shadow:0 10px 40px rgba(34,197,94,.25);
-animation:fadeUp .6s ease;
-position:relative;
-overflow:hidden;
-}
-
-.reward-banner::before{
-content:'';
-position:absolute;
-top:-40px;
-right:-40px;
-width:140px;
-height:140px;
-background:#ffffff15;
-border-radius:50%;
-}
-
-.reward-banner h2{
-font-size:1.3rem;
-margin-bottom:10px;
-}
-
-.reward-banner p{
-font-size:.95rem;
-line-height:1.6;
-color:#ecfdf5;
-}
-
-.reward-amount{
-display:inline-block;
-margin-top:14px;
-background:#ffffff18;
-padding:12px 18px;
-border-radius:18px;
-font-weight:700;
-font-size:1rem;
-backdrop-filter:blur(10px);
-}
-
-/* CARDS */
-
-.card{
-background:#ffffff10;
-backdrop-filter:blur(18px);
-border:1px solid #ffffff12;
-border-radius:28px;
-padding:22px;
-margin-bottom:22px;
-box-shadow:0 10px 40px rgba(0,0,0,.25);
-animation:fadeUp .6s ease;
-}
-
-@keyframes fadeUp{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-.card h2{
-font-size:1rem;
-margin-bottom:18px;
-color:#86efac;
-}
-
-/* STATS */
-
-.stats{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:14px;
-margin-bottom:20px;
-}
-
-.stat{
-background:#ffffff08;
-border-radius:22px;
-padding:18px;
-}
-
-.stat span{
-font-size:.85rem;
-color:#d1fae5;
-display:block;
-margin-bottom:8px;
-}
-
-.stat h3{
-font-size:1.4rem;
-}
-
-/* REF LINK */
-
-.ref-box{
-background:#0f1d14;
-padding:15px;
-border-radius:18px;
-word-break:break-all;
-font-size:.9rem;
-margin-bottom:14px;
-border:1px solid #ffffff10;
-}
-
-.copy-btn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:18px;
-background:linear-gradient(135deg,#16a34a,#22c55e);
-color:white;
-font-size:1rem;
-font-weight:600;
-cursor:pointer;
-transition:.3s;
-}
-
-.copy-btn:hover{
-transform:translateY(-2px);
-}
-
-/* HISTORY */
-
-.history-item{
-background:#ffffff08;
-padding:16px;
-border-radius:18px;
-margin-bottom:14px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-}
-
-.history-left h4{
-font-size:.95rem;
-margin-bottom:5px;
-}
-
-.history-left p{
-font-size:.8rem;
-color:#bbf7d0;
-}
-
-.badge{
-padding:8px 12px;
-border-radius:999px;
-font-size:.75rem;
-font-weight:700;
-background:#22c55e22;
-color:#86efac;
-}
-
-/* SUPPORT BUTTON */
-
-.support-btn{
-position:fixed;
-bottom:95px;
-right:20px;
-width:65px;
-height:65px;
-border-radius:50%;
-background:linear-gradient(135deg,#16a34a,#22c55e);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:1.4rem;
-color:white;
-text-decoration:none;
-box-shadow:0 10px 25px rgba(34,197,94,.4);
-z-index:100;
-animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.08);}
-100%{transform:scale(1);}
-}
-
-/* BOTTOM NAV */
-
-.bottom-nav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:#0b1610ee;
-backdrop-filter:blur(18px);
-display:flex;
-justify-content:space-around;
-padding:14px 0;
-border-top:1px solid #ffffff10;
-z-index:999;
-}
-
-.bottom-nav a{
-color:white;
-text-decoration:none;
-font-size:.8rem;
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:5px;
-}
-
-.bottom-nav i{
-font-size:1.1rem;
-}
-
-/* LOADER */
-
-.loader{
-width:22px;
-height:22px;
-border:3px solid #ffffff20;
-border-top:3px solid #22c55e;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:auto;
-}
-
-@keyframes spin{
-to{
-transform:rotate(360deg);
-}
-}
-
-.empty{
-text-align:center;
-padding:20px;
-color:#bbf7d0;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Referrals | Iyal Surveys</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      background: #08140d;
+      color: white;
+      font-family: "Segoe UI", Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(34,197,94,.13), transparent 35%),
+        radial-gradient(circle at 85% 75%, rgba(22,163,74,.12), transparent 35%);
+    }
+    .blur {
+      position: fixed;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(34,197,94,.12);
+      filter: blur(90px);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .blur.one {
+      top: 10%;
+      left: -90px;
+    }
+    .blur.two {
+      right: -100px;
+      bottom: 10%;
+    }
+    header {
+      width: 100%;
+      padding: 17px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      background: rgba(8,20,13,.75);
+      backdrop-filter: blur(15px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand img {
+      width: 39px;
+      height: 39px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+    .brand h2 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .menu-btn {
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: white;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .menu {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 5%;
+      width: 190px;
+      padding: 10px;
+      border-radius: 14px;
+      background: #102218;
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    }
+    .menu.show {
+      display: block;
+    }
+    .menu a,
+    .menu button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 12px;
+      color: #e5f5e9;
+      text-decoration: none;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+    .menu a:hover,
+    .menu button:hover {
+      background: rgba(34,197,94,.12);
+    }
+    .container {
+      width: 100%;
+      max-width: 850px;
+      margin: auto;
+      padding: 28px 16px 110px;
+    }
+    .page-heading {
+      margin-bottom: 22px;
+    }
+    .page-heading h1 {
+      font-size: 25px;
+      margin-bottom: 7px;
+    }
+    .page-heading p {
+      color: #a7b9ac;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .card {
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.12);
+      backdrop-filter: blur(12px);
+    }
+    .reward-banner {
+      background: linear-gradient(135deg, #14532d, #166534);
+      border: 1px solid rgba(134,239,172,.2);
+      padding: 23px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .reward-banner h2 {
+      font-size: 21px;
+      margin-bottom: 9px;
+    }
+    .reward-banner p {
+      color: #dcfce7;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .how-it-works {
+      margin-top: 16px;
+      font-size: .85rem;
+      color: #bbf7d0;
+      line-height: 1.9;
+    }
+    .how-it-works strong {
+      color: white;
+    }
+    .reward-highlight {
+      display: inline-block;
+      margin-top: 17px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.18);
+      color: white;
+      font-weight: 800;
+      font-size: 23px;
+    }
+    .section-title {
+      font-size: 17px;
+      margin-bottom: 15px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      padding: 17px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .stat-card span {
+      display: block;
+      color: #a7b9ac;
+      font-size: 12px;
+      margin-bottom: 9px;
+    }
+    .stat-card strong {
+      font-size: 23px;
+      color: #86efac;
+    }
+    .referral-input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.2);
+      color: #dcfce7;
+      font-size: 13px;
+      outline: none;
+      margin: 10px 0;
+    }
+    .primary-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 11px;
+      background: #22c55e;
+      color: #052e16;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .primary-btn:hover {
+      background: #4ade80;
+    }
+    .primary-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+    .muted {
+      color: #9caf9f;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .group-card,
+    .history-item {
+      padding: 15px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.08);
+      margin-top: 11px;
+    }
+    .group-top,
+    .history-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .group-top strong,
+    .history-top strong {
+      font-size: 14px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(250,204,21,.12);
+      color: #fde68a;
+      white-space: nowrap;
+    }
+    .badge.paid,
+    .badge.successful {
+      background: rgba(34,197,94,.14);
+      color: #86efac;
+    }
+    .progress-track {
+      height: 8px;
+      width: 100%;
+      background: rgba(255,255,255,.1);
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 12px 0 8px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #22c55e;
+      border-radius: 20px;
+      transition: width .3s;
+    }
+    .history-item p,
+    .group-card p {
+      color: #a7b9ac;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 25px 12px;
+      color: #9caf9f;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .error-box {
+      display: none;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(239,68,68,.1);
+      border: 1px solid rgba(239,68,68,.25);
+      color: #fecaca;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+    .loading {
+      text-align: center;
+      padding: 35px 10px;
+      color: #a7b9ac;
+      font-size: 14px;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 5px calc(12px + env(safe-area-inset-bottom));
+      background: rgba(8,20,13,.94);
+      backdrop-filter: blur(15px);
+      border-top: 1px solid rgba(255,255,255,.08);
+      z-index: 20;
+    }
+    .bottom-nav a {
+      color: #9caf9f;
+      text-decoration: none;
+      font-size: 11px;
+      text-align: center;
+      padding: 5px;
+    }
+    .bottom-nav a.active {
+      color: #4ade80;
+      font-weight: 800;
+    }
+    .support-btn {
+      position: fixed;
+      right: 17px;
+      bottom: 88px;
+      z-index: 15;
+      background: #22c55e;
+      color: #052e16;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 12px 16px;
+      border-radius: 30px;
+      box-shadow: 0 5px 20px rgba(34,197,94,.2);
+    }
+    @media (min-width: 650px) {
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .container {
+        padding-top: 38px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-
-<div class="bg"></div>
-<div class="blur blur1"></div>
-<div class="blur blur2"></div>
-
-<header>
-
-<div class="logo">
-<img src="iyallogo.png">
-<h1>Iyal Surveys</h1>
-</div>
-
-<div class="menu-btn" onclick="toggleMenu()">
-<i class="fa fa-bars"></i>
-</div>
-
-<nav id="menu">
-<a href="dashboard.html">Dashboard</a>
-<a href="withdraw.html">Withdraw</a>
-<a href="settings.html">Settings</a>
- <a href="video.html">Video</a>
-<a href="support.html">Support</a>
-<a href="terms.html">Terms</a>
-<a href="privacy.html">Privacy</a>
+  <div class="bg"></div>
+  <div class="blur one"></div>
+  <div class="blur two"></div>
+  <header>
+    <div class="brand">
+      <img src="iyallogo.png" alt="Iyal Surveys logo">
+      <h2>Iyal Surveys</h2>
+    </div>
+<button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+<nav class="menu" id="menu">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="withdraw.html">Cash Out</a>
+  <a href="settings.html">Settings</a>
+  <a href="support.html">Support</a>
+  <a href="terms.html">Terms</a>
+  <a href="privacy.html">Privacy</a>
+  <button id="logoutBtn">Logout</button>
 </nav>
-
-</header>
-
-<div class="container">
-
-<!-- REWARD BANNER -->
-
-<div class="reward-banner">
-
-<h2>
-<i class="fa fa-gift"></i>
- Earn Referral Rewards
-</h2>
-
-<p>
-Invite your friends to join Iyal Surveys using your referral link.
-Once a new user signs up successfully with your link,
-you instantly earn a referral bonus.
-</p>
-
-<div class="reward-amount">
-Earn ₦40 Per Successful Referral
+  </header>
+  <main class="container">
+    <div class="page-heading">
+      <h1>Referral Program</h1>
+      <p>Invite friends to Iyal Surveys and earn rewards when they complete qualifying surveys.</p>
+    </div>
+<div class="error-box" id="errorBox">
+  <span id="errorMessage"></span>
+  <button id="retryBtn" class="primary-btn" style="margin-top:12px;">Try Again</button>
 </div>
-
-</div>
-
-<!-- STATS -->
-
-<div class="stats">
-
-<div class="stat">
-<span>Total Referrals</span>
-<h3 id="totalReferrals">
-<div class="loader"></div>
-</h3>
-</div>
-
-<div class="stat">
-<span>Total Earned</span>
-<h3 id="earned">
-<div class="loader"></div>
-</h3>
-</div>
-
-<div class="stat">
-<span>Balance</span>
-<h3 id="balance">
-<div class="loader"></div>
-</h3>
-</div>
-
-<div class="stat">
-<span>Referral Code</span>
-<h3 id="refCode">
-<div class="loader"></div>
-</h3>
-</div>
-
-</div>
-
-<!-- REFERRAL LINK -->
-
-<div class="card">
-
-<h2>
-<i class="fa fa-link"></i>
- Referral Link
-</h2>
-
-<div class="ref-box" id="refLink">
-Loading...
-</div>
-
-<button class="copy-btn" onclick="copyReferral()">
-<i class="fa fa-copy"></i>
- Copy Referral Link
-</button>
-
-</div>
-
-<!-- REFERRAL HISTORY -->
-
-<div class="card">
-
-<h2>
-<i class="fa fa-users"></i>
- Referral History
-</h2>
-
-<div id="history">
-<div class="loader"></div>
-</div>
-
-</div>
-
-</div>
-
-<!-- SUPPORT BUTTON -->
-
-<a href="support.html" class="support-btn">
-<i class="fa fa-headset"></i>
-</a>
-
-<!-- BOTTOM NAV -->
-
-<div class="bottom-nav">
-
-<a href="dashboard.html">
-<i class="fa fa-home"></i>
-Home
-</a>
-
-<a href="referrals.html">
-<i class="fa fa-users"></i>
-Referrals
-</a>
-
-<a href="withdraw.html">
-<i class="fa fa-wallet"></i>
-Withdraw
-</a>
-
-<a href="#" id="logoutBtn">
-<i class="fa fa-sign-out-alt"></i>
-Logout
-</a>
-
-</div>
-
-<script type="module">
-
-import { createClient }
-from "https://esm.sh/@supabase/supabase-js@2";
-
-const supabase = createClient(
-"https://xkshzlfducmnglxfnxzk.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjkxNDQsImV4cCI6MjA4MTAwNTE0NH0.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0"
-);
-
-/* MENU */
-
-window.toggleMenu = () => {
-
-const menu = document.getElementById("menu");
-
-menu.style.display =
-menu.style.display === "flex"
-? "none"
-: "flex";
-
-};
-
-/* COPY */
-
-window.copyReferral = async () => {
-
-const text =
-document.getElementById("refLink").innerText;
-
-await navigator.clipboard.writeText(text);
-
-alert("Referral link copied!");
-
-};
-
-/* SESSION */
-
-const {
-data:{ session }
-}
-= await supabase.auth.getSession();
-
-if(!session){
-
-window.location.href = "login.html";
-
-}
-
-/* LOAD DATA */
-
-async function loadReferrals(){
-
-try{
-
-const res = await fetch(
-"https://xkshzlfducmnglxfnxzk.supabase.co/functions/v1/bright-worker",
-{
-method:"POST",
-headers:{
-"Authorization":
-`Bearer ${session.access_token}`,
-"Content-Type":"application/json"
-}
-}
-);
-
-const data = await res.json();
-
-if(!data.success){
-
-alert(data.message || "Failed to load");
-
-return;
-
-}
-
-/* STATS */
-
-document.getElementById("balance")
-.innerText =
-"₦" + Number(data.balance).toLocaleString();
-
-document.getElementById("earned")
-.innerText =
-"₦" + Number(data.total_referral_earned)
-.toLocaleString();
-
-document.getElementById("totalReferrals")
-.innerText =
-data.total_referrals;
-
-document.getElementById("refCode")
-.innerText =
-data.referral_code;
-
-document.getElementById("refLink")
-.innerText =
-data.referral_link;
-
-/* HISTORY */
-
-const history =
-document.getElementById("history");
-
-history.innerHTML = "";
-
-if(data.referrals.length === 0){
-
-history.innerHTML = `
-<div class="empty">
-No referrals yet
-</div>
-`;
-
-return;
-
-}
-
-data.referrals.forEach(ref => {
-
-const item =
-document.createElement("div");
-
-item.className = "history-item";
-
-item.innerHTML = `
-
-<div class="history-left">
-
-<h4>
-${ref.email}
-</h4>
-
-<p>
-₦${40} Reward
-</p>
-
-</div>
-
-<div class="badge">
-${new Date(ref.created_at)
-.toLocaleDateString()}
-</div>
-
-`;
-
-history.appendChild(item);
-
-});
-}catch(err){
-
-console.error(err);
-
-alert("Something went wrong");
-
-}
-
-}
-
-loadReferrals();
-
-/* LOGOUT */
-
-document
-.getElementById("logoutBtn")
-.onclick = async () => {
-
-await supabase.auth.signOut();
-
-window.location.href = "login.html";
-
-};
-
-/* AUTH STATE */
-
-supabase.auth.onAuthStateChange((event)=>{
-
-if(event === "SIGNED_OUT"){
-
-window.location.href = "login.html";
-
-}
-
-});
-
-</script>
-
+<section class="reward-banner">
+  <h2>Earn ₦500 in referral rewards</h2>
+  <p>
+    Get ₦500 for every 3 successful referrals. Each referred friend must
+    complete 3 qualifying surveys, with each survey worth at least ₦200.
+  </p>
+  <div class="how-it-works">
+    <strong>How it works:</strong><br>
+    1. Copy your referral link and share it with friends.<br>
+    2. Each friend registers and completes 3 qualifying surveys worth at least ₦200 each.<br>
+    3. When 3 referred friends qualify, you automatically receive ₦500.
+  </div>
+  <div class="reward-highlight">₦500 / 3 referrals</div>
+</section>
+<section class="stats-grid">
+  <div class="stat-card">
+    <span>Total Referrals</span>
+    <strong id="totalReferrals">—</strong>
+  </div>
+  <div class="stat-card">
+    <span>Successful</span>
+    <strong id="successfulReferrals">—</strong>
+  </div>
+  <div class="stat-card">
+    <span>Pending</span>
+    <strong id="pendingReferrals">—</strong>
+  </div>
+  <div class="stat-card">
+    <span>Referral Earnings</span>
+    <strong id="referralEarnings">—</strong>
+  </div>
+</section>
+<section class="card">
+  <h3 class="section-title">Your Referral Link</h3>
+  <p class="muted">Share your personal link with friends to invite them to Iyal Surveys.</p>
+  <input
+    class="referral-input"
+    id="referralLink"
+    type="text"
+    readonly
+    placeholder="Loading your referral link..."
+  >
+  <button class="primary-btn" id="copyBtn" disabled>Copy Referral Link</button>
+  <p class="muted" id="copyMessage" style="margin-top:10px;"></p>
+</section>
+<section class="card">
+  <h3 class="section-title">Your Reward Groups</h3>
+  <p class="muted">
+    Every 3 successful referrals form one reward group. When all 3 qualify,
+    ₦500 is automatically added to your account.
+  </p>
+  <div id="groups">
+    <div class="loading">Loading your reward groups...</div>
+  </div>
+</section>
+<section class="card">
+  <h3 class="section-title">Referral History</h3>
+  <p class="muted">Track the progress of people who joined using your referral link.</p>
+  <div id="history">
+    <div class="loading">Loading referral history...</div>
+  </div>
+</section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html">⌂<br>Home</a>
+    <a href="withdraw.html">₦<br>Cash Out</a>
+    <a href="referrals.html" class="active">♧<br>Referrals</a>
+    <a href="#" id="bottomLogout">⇥<br>Logout</a>
+  </nav>
+  <script>
+    const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+    // UPDATED: Replaced placeholder with real anon key - Reason: page was showing "Add your anon key" error and referrals no go load. Anon key na public, safe for frontend. Never put service_role key here.
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwiaWF0IjoxNzY1NDI5MTQ0LCJleHAiOjIwODEwMDUxNTR9.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+    const $ = (id) => document.getElementById(id);
+    let currentSession = null;
+    let loading = false;
+    let currentReferralLink = "";
+    $("menuBtn").addEventListener("click", () => {
+      $("menu").classList.toggle("show");
+    });
+    document.addEventListener("click", (event) => {
+      if (
+        !$("menu").contains(event.target) &&
+        !$("menuBtn").contains(event.target)
+      ) {
+        $("menu").classList.remove("show");
+      }
+    });
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    }
+    $("logoutBtn").addEventListener("click", logout);
+    $("bottomLogout").addEventListener("click", (event) => {
+      event.preventDefault();
+      logout();
+    });
+    function showError(message) {
+      $("errorMessage").textContent = message;
+      $("errorBox").style.display = "block";
+    }
+    function hideError() {
+      $("errorBox").style.display = "none";
+      $("errorMessage").textContent = "";
+    }
+    function formatMoney(value) {
+      const amount = Number(value || 0);
+      return "₦" + amount.toLocaleString("en-NG", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      });
+    }
+    function formatDate(value) {
+      if (!value) return "Date unavailable";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return "Date unavailable";
+      }
+      return date.toLocaleDateString("en-NG", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
+    }
+    function createEmptyState(message) {
+      const div = document.createElement("div");
+      div.className = "empty-state";
+      div.textContent = message;
+      return div;
+    }
+    function setText(id, value) {
+      $(id).textContent = value;
+    }
+    function renderStats(stats) {
+      setText("totalReferrals", stats.total_referrals ?? 0);
+      setText("successfulReferrals", stats.successful_referrals ?? 0);
+      setText("pendingReferrals", stats.pending_referrals ?? 0);
+      setText(
+        "referralEarnings",
+        formatMoney(stats.total_referral_earned ?? 0)
+      );
+    }
+    function renderReferralLink(link) {
+      currentReferralLink = link || "";
+      $("referralLink").value = currentReferralLink;
+      $("copyBtn").disabled = !currentReferralLink;
+    }
+    async function copyReferralLink() {
+      if (!currentReferralLink) return;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(currentReferralLink);
+        } else {
+          $("referralLink").select();
+          $("referralLink").setSelectionRange(0, 99999);
+          const copied = document.execCommand("copy");
+          if (!copied) {
+            throw new Error("Copy was not successful.");
+          }
+        }
+        $("copyMessage").textContent = "Referral link copied successfully!";
+      } catch (error) {
+        $("copyMessage").textContent =
+          "Unable to copy automatically. Please select and copy the link.";
+      }
+    }
+    $("copyBtn").addEventListener("click", copyReferralLink);
+    function renderGroups(referrals) {
+      const container = $("groups");
+      container.replaceChildren();
+      const grouped = new Map();
+      referrals.forEach((referral) => {
+        if (!referral.group_number) return;
+        const number = Number(referral.group_number);
+        if (!grouped.has(number)) {
+          grouped.set(number, []);
+        }
+        grouped.get(number).push(referral);
+      });
+      if (grouped.size === 0) {
+        container.appendChild(
+          createEmptyState(
+            "You do not have a reward group yet. Your group will appear when you get successful referrals."
+          )
+        );
+        return;
+      }
+      const sortedGroups = Array.from(grouped.entries())
+        .sort((a, b) => a[0] - b[0]);
+      sortedGroups.forEach(([groupNumber, members]) => {
+        const paid = members.some(
+          (member) =>
+            member.group_status === "paid" ||
+            Boolean(member.group_rewarded_at)
+        );
+        const card = document.createElement("div");
+        card.className = "group-card";
+        const top = document.createElement("div");
+        top.className = "group-top";
+        const title = document.createElement("strong");
+        title.textContent = "Group " + groupNumber;
+        const badge = document.createElement("span");
+        badge.className = paid ? "badge paid" : "badge";
+        badge.textContent = paid ? "Reward paid" : "Collecting";
+        top.append(title, badge);
+        const count = document.createElement("p");
+        count.textContent = members.length + " of 3 successful referrals";
+        const track = document.createElement("div");
+        track.className = "progress-track";
+        const fill = document.createElement("div");
+        fill.className = "progress-fill";
+        fill.style.width = Math.min((members.length / 3) * 100, 100) + "%";
+        track.appendChild(fill);
+        const reward = document.createElement("p");
+        reward.textContent = paid
+          ? "₦500 reward has been paid."
+          : "₦500 reward when this group reaches 3 successful referrals.";
+        card.append(top, count, track, reward);
+        container.appendChild(card);
+      });
+    }
+    function renderHistory(referrals) {
+      const container = $("history");
+      container.replaceChildren();
+      if (!referrals || referrals.length === 0) {
+        container.appendChild(
+          createEmptyState(
+            "You have not referred anyone yet. Share your referral link to get started."
+          )
+        );
+        return;
+      }
+      referrals.forEach((referral) => {
+        const item = document.createElement("div");
+        item.className = "history-item";
+        const top = document.createElement("div");
+        top.className = "history-top";
+        const email = document.createElement("strong");
+        email.textContent = referral.referred_email || "Referred user";
+        const badge = document.createElement("span");
+        const isSuccessful = referral.status === "successful";
+        badge.className = isSuccessful
+          ? "badge successful"
+          : "badge";
+        badge.textContent = isSuccessful ? "Successful" : "Pending";
+        top.append(email, badge);
+        const surveyCount = Math.min(
+          Number(referral.qualifying_surveys || 0),
+          3
+        );
+        const progress = document.createElement("p");
+        progress.textContent =
+          "Qualifying surveys: " + surveyCount + "/3";
+        const track = document.createElement("div");
+        track.className = "progress-track";
+        const fill = document.createElement("div");
+        fill.className = "progress-fill";
+        fill.style.width = (surveyCount / 3) * 100 + "%";
+        track.appendChild(fill);
+        const date = document.createElement("p");
+        date.textContent = "Joined: " + formatDate(referral.created_at);
+        const group = document.createElement("p");
+        if (referral.group_number) {
+          group.textContent =
+            "Reward group: " + referral.group_number;
+        } else if (isSuccessful) {
+          group.textContent = "Successful referral";
+        } else {
+          group.textContent = "Waiting to qualify";
+        }
+        item.append(top, progress, track, date, group);
+        container.appendChild(item);
+      });
+    }
+    async function loadReferrals() {
+      if (loading) return;
+      loading = true;
+      hideError();
+      $("history").replaceChildren();
+      $("groups").replaceChildren();
+      const historyLoading = document.createElement("div");
+      historyLoading.className = "loading";
+      historyLoading.textContent = "Loading referral history...";
+      const groupsLoading = document.createElement("div");
+      groupsLoading.className = "loading";
+      groupsLoading.textContent = "Loading reward groups...";
+      $("history").appendChild(historyLoading);
+      $("groups").appendChild(groupsLoading);
+      try {
+        const {
+          data: { session },
+          error: sessionError
+        } = await supabaseClient.auth.getSession();
+        if (sessionError) {
+          throw sessionError;
+        }
+        if (!session) {
+          window.location.href = "login.html";
+          return;
+        }
+        currentSession = session;
+        const response = await fetch(
+          SUPABASE_URL + "/functions/v1/bright-worker",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + session.access_token,
+              "apikey": SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({})
+          }
+        );
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error("The server returned an invalid response. Please try again.");
+        }
+        if (response.status === 401) {
+          await supabaseClient.auth.signOut();
+          window.location.href = "login.html";
+          return;
+        }
+        if (!response.ok || !data || data.success !== true) {
+          throw new Error(
+            data?.message || "We couldn't load your referral information."
+          );
+        }
+        if (!data.user || !data.stats || !Array.isArray(data.referrals)) {
+          throw new Error(
+            "The referral service returned incomplete information. Please check that the latest bright-worker function has been deployed."
+          );
+        }
+        renderStats(data.stats);
+        renderReferralLink(data.referral_link);
+        renderGroups(data.referrals);
+        renderHistory(data.referrals);
+      } catch (error) {
+        console.error("Referral dashboard error:", error);
+        $("history").replaceChildren();
+        $("groups").replaceChildren();
+        showError(
+          error.message ||
+          "We couldn't connect to the referral service. Please check your internet connection and try again."
+        );
+      } finally {
+        loading = false;
+      }
+    }
+    $("retryBtn").addEventListener("click", loadReferrals);
+    async function initializePage() {
+      if (
+        !SUPABASE_ANON_KEY ||
+        SUPABASE_ANON_KEY === "YOUR_SUPABASE_ANON_KEY"
+      ) {
+        showError(
+          "Add your Supabase public anon key in the page code before using this page."
+        );
+        return;
+      }
+      const {
+        data: { session },
+        error
+      } = await supabaseClient.auth.getSession();
+      if (error || !session) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentSession = session;
+      await loadReferrals();
+    }
+    initializePage();
+  </script>
 </body>
 </html>
