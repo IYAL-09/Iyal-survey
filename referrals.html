@@ -45,7 +45,6 @@
       right: -100px;
       bottom: 10%;
     }
-    /* UPDATED: Header padding match dashboard - Reason: make referrals header feel same as dashboard */
     header {
       width: 100%;
       padding: 20px;
@@ -64,7 +63,6 @@
       align-items: center;
       gap: 12px;
     }
-    /* UPDATED: Logo 39px -> 52px + green border - Reason: dashboard logo na 52px with border, referrals was smaller and no border */
     .brand img {
       width: 52px;
       height: 52px;
@@ -76,7 +74,6 @@
       font-size: 18px;
       font-weight: 700;
     }
-    /* UPDATED: Menu button 42px/12px -> 46px/16px - Reason: match dashboard menu button size */
     .menu-btn {
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
@@ -90,38 +87,37 @@
       align-items: center;
       justify-content: center;
     }
-    .menu {
-      display: none;
+    /* UPDATED: Hamburger menu CSS replaced with dashboard own - Reason: referrals menu was 190px / 14px radius / no icons, dashboard na 230px / 22px radius / with icons */
+    nav {
       position: absolute;
-      top: 70px;
-      right: 5%;
-      width: 190px;
-      padding: 10px;
-      border-radius: 14px;
-      background: #102218;
-      border: 1px solid rgba(255,255,255,.1);
-      box-shadow: 0 10px 30px rgba(0,0,0,.4);
+      top: 85px;
+      right: 20px;
+      background: #0f1d14ee;
+      backdrop-filter: blur(18px);
+      padding: 18px;
+      border-radius: 22px;
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      width: 230px;
+      border: 1px solid #ffffff10;
+      z-index: 100;
     }
-    .menu.show {
-      display: block;
-    }
-    .menu a,
-    .menu button {
-      display: block;
-      width: 100%;
-      text-align: left;
-      padding: 12px;
-      color: #e5f5e9;
+    nav a {
       text-decoration: none;
-      border: none;
-      background: transparent;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 8px;
+      color: #d1fae5;
+      font-size: .95rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .menu a:hover,
-    .menu button:hover {
-      background: rgba(34,197,94,.12);
+    nav a:hover {
+      color: #86efac;
+    }
+    .nav-icon {
+      width: 20px;
+      text-align: center;
+      color: #86efac;
     }
     .container {
       width: 100%;
@@ -246,7 +242,6 @@
       font-size: 13px;
       line-height: 1.6;
     }
-    /* UPDATED: Replaced referrals bottom-nav with dashboard bottom-nav - Reason: make both pages look same, same icons, same spacing, same active color */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -355,7 +350,6 @@
       color: #a7b9ac;
       font-size: 14px;
     }
-    /* UPDATED: Removed extra stray } here - Reason: extra } was breaking .support-btn style */
     .support-btn {
       position: fixed;
       right: 17px;
@@ -389,16 +383,16 @@
       <img src="iyallogo.png" alt="Iyal Surveys logo">
       <h2>Iyal Surveys</h2>
     </div>
-    <!-- UPDATED: ☰ text -> Font Awesome icon - Reason: ☰ dey render different for phones, FA icon dey consistent like dashboard -->
     <button class="menu-btn" id="menuBtn" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
-    <nav class="menu" id="menu">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="withdraw.html">Cash Out</a>
-      <a href="settings.html">Settings</a>
-      <a href="support.html">Support</a>
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
-      <button id="logoutBtn">Logout</button>
+    <!-- UPDATED: Hamburger menu list replaced with dashboard exact list - Reason: referrals menu was Dashboard/Cash Out/Settings/Support/Terms/Privacy + Logout, dashboard na Terms/Privacy/About/Disclaimer/Support/Settings/Profile with icons -->
+    <nav id="menu">
+      <a href="terms.html"><i class="fa-solid fa-handshake nav-icon"></i>Terms & Conditions</a>
+      <a href="privacy.html"><i class="fa-solid fa-shield-halved nav-icon"></i>Privacy Policy</a>
+      <a href="about.html"><i class="fa-solid fa-circle-info nav-icon"></i>About Us</a>
+      <a href="disclaimer.html"><i class="fa-solid fa-triangle-exclamation nav-icon"></i>Disclaimer</a>
+      <a href="support.html"><i class="fa-solid fa-envelope nav-icon"></i>Support</a>
+      <a href="settings.html"><i class="fa-solid fa-gear nav-icon"></i>Settings</a>
+      <a href="profile.html"><i class="fa-solid fa-user nav-icon"></i>Profile</a>
     </nav>
   </header>
   <main class="container">
@@ -473,7 +467,6 @@
       </div>
     </section>
   </main>
-  <!-- UPDATED: Replaced text symbols with Font Awesome icons - Reason: ⌂ ₦ ♧ ⇥ dey render different for each phone, Font Awesome dey consistent like dashboard -->
   <div class="bottom-nav">
     <a href="dashboard.html"><i class="fa-solid fa-house"></i>Home</a>
     <a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a>
@@ -482,7 +475,6 @@
   </div>
   <script>
     const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
-    // UPDATED: Replaced placeholder with real anon key - Reason: page was showing "Add your anon key" error and referrals no go load. Anon key na public, safe for frontend. Never put service_role key here.
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhrc2h6bGZkdWNtbmdseGZueHprIiwiaWF0IjoxNzY1NDI5MTQ0LCJleHAiOjIwODEwMDUxNTR9.xboUmMtODCPiOA6HbjgIOCztoNSnzeHsK2Kru3UQO_0";
     const supabaseClient = window.supabase.createClient(
       SUPABASE_URL,
@@ -492,22 +484,24 @@
     let currentSession = null;
     let loading = false;
     let currentReferralLink = "";
-    $("menuBtn").addEventListener("click", () => {
-      $("menu").classList.toggle("show");
-    });
+    /* UPDATED: Menu toggle changed to dashboard style - Reason: dashboard uses style.display flex/none, referrals was using classList show, now same logic */
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+    $("menuBtn").addEventListener("click", toggleMenu);
     document.addEventListener("click", (event) => {
       if (
         !$("menu").contains(event.target) &&
         !$("menuBtn").contains(event.target)
       ) {
-        $("menu").classList.remove("show");
+        $("menu").style.display = "none";
       }
     });
     async function logout() {
       await supabaseClient.auth.signOut();
       window.location.href = "login.html";
     }
-    $("logoutBtn").addEventListener("click", logout);
     $("bottomLogout").addEventListener("click", (event) => {
       event.preventDefault();
       logout();
