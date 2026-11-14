@@ -1983,6 +1983,334 @@ console.error("Time tracking sync failed:",err);
 
 }
 
+// =============================================
+// IYAL SURVEYS - UNIVERSAL ACTIVITY TRACKING
+// =============================================
+
+(async function iyalActivityTracker() {
+
+  // Prevent duplicate initialization
+  if (window.__iyalActivityStarted) return;
+
+  try {
+
+    // =========================================
+    // 1. FIND EXISTING SUPABASE CLIENT
+    // =========================================
+
+    let client = null;
+
+    if (typeof supabaseClient !== "undefined") {
+      client = supabaseClient;
+    } else if (typeof supabase !== "undefined") {
+      client = supabase;
+    }
+
+    if (!client || !client.auth) {
+      console.warn("Activity: Supabase client unavailable.");
+      return;
+    }
+
+
+    // =========================================
+    // 2. GET SUPABASE CONFIGURATION
+    // =========================================
+
+    const projectURL =
+      typeof SUPABASE_URL !== "undefined"
+        ? SUPABASE_URL
+        : null;
+
+    // Supports Publishable Key and legacy Anon Key
+    const publicKey =
+      typeof SUPABASE_PUBLISHABLE_KEY !== "undefined"
+        ? SUPABASE_PUBLISHABLE_KEY
+        : typeof SUPABASE_ANON_KEY !== "undefined"
+          ? SUPABASE_ANON_KEY
+          : null;
+
+    if (!projectURL || !publicKey) {
+      console.warn("Activity: Supabase configuration unavailable.");
+      return;
+    }
+
+
+    // =========================================
+    // 3. GET AUTHENTICATED SESSION
+    // =========================================
+
+    const {
+      data: { session },
+      error: sessionError
+    } = await client.auth.getSession();
+
+    if (sessionError || !session) {
+      console.warn("Activity: No authenticated session.");
+      return;
+    }
+
+    const userId = session.user.id;
+
+
+    // =========================================
+    // 4. DETECT CURRENT PAGE AUTOMATICALLY
+    // =========================================
+
+    let pageName = location.pathname
+      .split("/")
+      .pop()
+      .replace(/\.[^.]+$/, "")
+      .toLowerCase();
+
+    if (!pageName) {
+      pageName = "home";
+    }
+
+    if (!/^[a-z0-9][a-z0-9_-]{0,49}$/.test(pageName)) {
+      console.warn("Activity: Invalid page name.");
+      return;
+    }
+
+
+    // =========================================
+    // 5. CREATE OR REUSE SESSION ID
+    // =========================================
+
+    const storageKey = "iyal_activity_session_" + userId;
+
+    let sessionId;
+
+    try {
+
+      sessionId = sessionStorage.getItem(storageKey);
+
+      if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        sessionStorage.setItem(storageKey, sessionId);
+      }
+
+    } catch {
+
+      sessionId = crypto.randomUUID();
+
+    }
+
+
+    // =========================================
+    // 6. TRACKING SETTINGS
+    // =========================================
+
+    const activityURL =
+      projectURL + "/functions/v1/activity-service";
+
+    const IDLE_LIMIT = 5 * 60 * 1000;
+
+    const HEARTBEAT_INTERVAL = 10000;
+
+    let lastInteraction = Date.now();
+
+    let requestInProgress = false;
+
+    window.__iyalActivityStarted = true;
+
+
+    // =========================================
+    // 7. GET CURRENT ACCESS TOKEN
+    // =========================================
+
+    async function getAccessToken() {
+
+      const {
+        data,
+        error
+      } = await client.auth.getSession();
+
+      if (error || !data.session) {
+        return null;
+      }
+
+      return data.session.access_token;
+
+    }
+
+
+    // =========================================
+    // 8. SEND ACTIVITY TO EDGE FUNCTION
+    // =========================================
+
+    async function sendActivity(eventType) {
+
+      if (requestInProgress) return;
+
+      requestInProgress = true;
+
+      try {
+
+        const token = await getAccessToken();
+
+        if (!token) return;
+
+        const payload = {
+          event_type: eventType,
+          event_id: crypto.randomUUID(),
+          session_id: sessionId,
+          page: pageName
+        };
+
+        const result = await fetch(activityURL, {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": publicKey,
+            "Authorization": "Bearer " + token
+          },
+
+          body: JSON.stringify(payload),
+
+          keepalive: true
+
+        });
+
+        if (!result.ok) {
+
+          console.warn(
+            "Activity request failed:",
+            result.status
+          );
+
+          return;
+        }
+
+        const resultData = await result.json();
+
+        if (!resultData.success) {
+          console.warn("Activity recording was unsuccessful.");
+        }
+
+      } catch (error) {
+
+        console.warn("Activity network error:", error);
+
+      } finally {
+
+        requestInProgress = false;
+
+      }
+
+    }
+
+
+    // =========================================
+    // 9. RECORD DASHBOARD VISIT
+    // =========================================
+
+    if (pageName === "dashboard") {
+      sendActivity("dashboard_visit");
+    }
+
+
+    // =========================================
+    // 10. DETECT USER INTERACTIONS
+    // =========================================
+
+    function recordInteraction() {
+
+      if (document.visibilityState !== "visible") return;
+
+      lastInteraction = Date.now();
+
+    }
+
+    document.addEventListener("click", recordInteraction, {
+      passive: true
+    });
+
+    document.addEventListener("scroll", recordInteraction, {
+      passive: true
+    });
+
+    document.addEventListener("keydown", recordInteraction, {
+      passive: true
+    });
+
+    document.addEventListener("touchstart", recordInteraction, {
+      passive: true
+    });
+
+    document.addEventListener("pointerdown", recordInteraction, {
+      passive: true
+    });
+
+
+    // =========================================
+    // 11. SEND HEARTBEATS
+    // =========================================
+
+    const heartbeatTimer = setInterval(() => {
+
+      if (document.visibilityState !== "visible") return;
+
+      const inactiveTime = Date.now() - lastInteraction;
+
+      if (inactiveTime >= IDLE_LIMIT) return;
+
+      sendActivity("heartbeat");
+
+    }, HEARTBEAT_INTERVAL);
+
+
+    // =========================================
+    // 12. HANDLE PAGE VISIBILITY
+    // =========================================
+
+    document.addEventListener("visibilitychange", () => {
+
+      if (document.visibilityState === "hidden") {
+
+        if (Date.now() - lastInteraction < IDLE_LIMIT) {
+          sendActivity("heartbeat");
+        }
+
+      }
+
+    });
+
+
+    // =========================================
+    // 13. HANDLE PAGE CLOSING - FIXED
+    // =========================================
+
+    window.addEventListener("pagehide", () => {
+
+      clearInterval(heartbeatTimer);
+
+      // Attempt final heartbeat before leaving
+      if (Date.now() - lastInteraction < IDLE_LIMIT) {
+        sendActivity("heartbeat");
+      }
+
+    });
+
+
+    console.log(
+      "Iyal activity tracking started:",
+      pageName
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Iyal activity initialization error:",
+      error
+    );
+
+  }
+
+})();
+   
 </script>
 </body>
 </html>
