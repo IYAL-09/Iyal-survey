@@ -966,15 +966,42 @@ input:focus-visible {
 <div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
 </div>
 <div id="notifMenu"><h4>Notifications</h4><div id="notifList" style="display:flex;flex-direction:column;max-height:250px;overflow-y:auto;"><div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div></div></div>
-<nav id="menu">
-<a href="terms.html"><i class="fa-solid fa-handshake nav-icon"></i>Terms & Conditions</a>
-<a href="privacy.html"><i class="fa-solid fa-shield-halved nav-icon"></i>Privacy Policy</a>
-<a href="about.html"><i class="fa-solid fa-circle-info nav-icon"></i>About Us</a>
-<a href="disclaimer.html"><i class="fa-solid fa-triangle-exclamation nav-icon"></i>Disclaimer</a>
-<a href="support.html"><i class="fa-solid fa-envelope nav-icon"></i>Support</a>
-<a href="settings.html"><i class="fa-solid fa-gear nav-icon"></i>Settings</a>
-<a href="profile.html"><i class="fa-solid fa-user nav-icon"></i>Profile</a>
+
+   <nav id="menu">
+  <a href="dashboard.html">
+    <i class="fa-solid fa-house nav-icon"></i>Dashboard
+  </a>
+  <a href="referrals.html">
+    <i class="fa-solid fa-users nav-icon"></i>Referrals
+  </a>
+  <div class="nav-divider"></div>
+
+Terms & Conditions
+
+Privacy Policy
+
+About Us
+
+Disclaimer
+
+Support
+
+Settings
+
+Profile
+
+  <div class="nav-divider"></div>
+  <a href="#" id="logoutBtn">
+    <i class="fa-solid fa-right-from-bracket nav-icon"></i>Logout
+  </a>
+  <div id="notifMenu">
+    <h4>Notifications</h4>
+    <div id="notifList" style="display:flex;flex-direction:column;max-height:250px;overflow-y:auto;">
+      <div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div>
+    </div>
+  </div>
 </nav>
+   
 </header>
 <div class="container">
 <div class="greeting"><h2>Hello, <span id="username">User</span> 👋</h2><p>Complete surveys and earn rewards instantly.</p></div>
