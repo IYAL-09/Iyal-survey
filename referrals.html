@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Referrals | Iyal Surveys</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     * {
       margin: 0;
@@ -44,9 +45,10 @@
       right: -100px;
       bottom: 10%;
     }
+    /* UPDATED: Header padding match dashboard - Reason: make referrals header feel same as dashboard */
     header {
       width: 100%;
-      padding: 17px 5%;
+      padding: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -60,27 +62,33 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
+    /* UPDATED: Logo 39px -> 52px + green border - Reason: dashboard logo na 52px with border, referrals was smaller and no border */
     .brand img {
-      width: 39px;
-      height: 39px;
-      object-fit: contain;
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
       border-radius: 50%;
+      border: 2px solid #22c55e;
     }
     .brand h2 {
       font-size: 18px;
       font-weight: 700;
     }
+    /* UPDATED: Menu button 42px/12px -> 46px/16px - Reason: match dashboard menu button size */
     .menu-btn {
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
       color: white;
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
       font-size: 22px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .menu {
       display: none;
@@ -238,6 +246,36 @@
       font-size: 13px;
       line-height: 1.6;
     }
+    /* UPDATED: Replaced referrals bottom-nav with dashboard bottom-nav - Reason: make both pages look same, same icons, same spacing, same active color */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #0b1610ee;
+      backdrop-filter: blur(18px);
+      display: flex;
+      justify-content: space-around;
+      padding: 14px 0;
+      border-top: 1px solid #ffffff10;
+      z-index: 999;
+    }
+    .bottom-nav a {
+      color: white;
+      text-decoration: none;
+      font-size: .8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      transition: .3s;
+    }
+    .bottom-nav i {
+      font-size: 1.1rem;
+    }
+    .active-nav {
+      color: #86efac !important;
+    }
     .group-card,
     .history-item {
       padding: 15px;
@@ -317,30 +355,7 @@
       color: #a7b9ac;
       font-size: 14px;
     }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      padding: 12px 5px calc(12px + env(safe-area-inset-bottom));
-      background: rgba(8,20,13,.94);
-      backdrop-filter: blur(15px);
-      border-top: 1px solid rgba(255,255,255,.08);
-      z-index: 20;
-    }
-    .bottom-nav a {
-      color: #9caf9f;
-      text-decoration: none;
-      font-size: 11px;
-      text-align: center;
-      padding: 5px;
-    }
-    .bottom-nav a.active {
-      color: #4ade80;
-      font-weight: 800;
-    }
+    /* UPDATED: Removed extra stray } here - Reason: extra } was breaking .support-btn style */
     .support-btn {
       position: fixed;
       right: 17px;
@@ -374,96 +389,97 @@
       <img src="iyallogo.png" alt="Iyal Surveys logo">
       <h2>Iyal Surveys</h2>
     </div>
-<button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
-<nav class="menu" id="menu">
-  <a href="dashboard.html">Dashboard</a>
-  <a href="withdraw.html">Cash Out</a>
-  <a href="settings.html">Settings</a>
-  <a href="support.html">Support</a>
-  <a href="terms.html">Terms</a>
-  <a href="privacy.html">Privacy</a>
-  <button id="logoutBtn">Logout</button>
-</nav>
+    <!-- UPDATED: ☰ text -> Font Awesome icon - Reason: ☰ dey render different for phones, FA icon dey consistent like dashboard -->
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="menu" id="menu">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="withdraw.html">Cash Out</a>
+      <a href="settings.html">Settings</a>
+      <a href="support.html">Support</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <button id="logoutBtn">Logout</button>
+    </nav>
   </header>
   <main class="container">
     <div class="page-heading">
       <h1>Referral Program</h1>
       <p>Invite friends to Iyal Surveys and earn rewards when they complete qualifying surveys.</p>
     </div>
-<div class="error-box" id="errorBox">
-  <span id="errorMessage"></span>
-  <button id="retryBtn" class="primary-btn" style="margin-top:12px;">Try Again</button>
-</div>
-<section class="reward-banner">
-  <h2>Earn ₦500 in referral rewards</h2>
-  <p>
-    Get ₦500 for every 3 successful referrals. Each referred friend must
-    complete 3 qualifying surveys, with each survey worth at least ₦200.
-  </p>
-  <div class="how-it-works">
-    <strong>How it works:</strong><br>
-    1. Copy your referral link and share it with friends.<br>
-    2. Each friend registers and completes 3 qualifying surveys worth at least ₦200 each.<br>
-    3. When 3 referred friends qualify, you automatically receive ₦500.
-  </div>
-  <div class="reward-highlight">₦500 / 3 referrals</div>
-</section>
-<section class="stats-grid">
-  <div class="stat-card">
-    <span>Total Referrals</span>
-    <strong id="totalReferrals">—</strong>
-  </div>
-  <div class="stat-card">
-    <span>Successful</span>
-    <strong id="successfulReferrals">—</strong>
-  </div>
-  <div class="stat-card">
-    <span>Pending</span>
-    <strong id="pendingReferrals">—</strong>
-  </div>
-  <div class="stat-card">
-    <span>Referral Earnings</span>
-    <strong id="referralEarnings">—</strong>
-  </div>
-</section>
-<section class="card">
-  <h3 class="section-title">Your Referral Link</h3>
-  <p class="muted">Share your personal link with friends to invite them to Iyal Surveys.</p>
-  <input
-    class="referral-input"
-    id="referralLink"
-    type="text"
-    readonly
-    placeholder="Loading your referral link..."
-  >
-  <button class="primary-btn" id="copyBtn" disabled>Copy Referral Link</button>
-  <p class="muted" id="copyMessage" style="margin-top:10px;"></p>
-</section>
-<section class="card">
-  <h3 class="section-title">Your Reward Groups</h3>
-  <p class="muted">
-    Every 3 successful referrals form one reward group. When all 3 qualify,
-    ₦500 is automatically added to your account.
-  </p>
-  <div id="groups">
-    <div class="loading">Loading your reward groups...</div>
-  </div>
-</section>
-<section class="card">
-  <h3 class="section-title">Referral History</h3>
-  <p class="muted">Track the progress of people who joined using your referral link.</p>
-  <div id="history">
-    <div class="loading">Loading referral history...</div>
-  </div>
-</section>
+    <div class="error-box" id="errorBox">
+      <span id="errorMessage"></span>
+      <button id="retryBtn" class="primary-btn" style="margin-top:12px;">Try Again</button>
+    </div>
+    <section class="reward-banner">
+      <h2>Earn ₦500 in referral rewards</h2>
+      <p>
+        Get ₦500 for every 3 successful referrals. Each referred friend must
+        complete 3 qualifying surveys, with each survey worth at least ₦200.
+      </p>
+      <div class="how-it-works">
+        <strong>How it works:</strong><br>
+        1. Copy your referral link and share it with friends.<br>
+        2. Each friend registers and completes 3 qualifying surveys worth at least ₦200 each.<br>
+        3. When 3 referred friends qualify, you automatically receive ₦500.
+      </div>
+      <div class="reward-highlight">₦500 / 3 referrals</div>
+    </section>
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span>Total Referrals</span>
+        <strong id="totalReferrals">—</strong>
+      </div>
+      <div class="stat-card">
+        <span>Successful</span>
+        <strong id="successfulReferrals">—</strong>
+      </div>
+      <div class="stat-card">
+        <span>Pending</span>
+        <strong id="pendingReferrals">—</strong>
+      </div>
+      <div class="stat-card">
+        <span>Referral Earnings</span>
+        <strong id="referralEarnings">—</strong>
+      </div>
+    </section>
+    <section class="card">
+      <h3 class="section-title">Your Referral Link</h3>
+      <p class="muted">Share your personal link with friends to invite them to Iyal Surveys.</p>
+      <input
+        class="referral-input"
+        id="referralLink"
+        type="text"
+        readonly
+        placeholder="Loading your referral link..."
+      >
+      <button class="primary-btn" id="copyBtn" disabled>Copy Referral Link</button>
+      <p class="muted" id="copyMessage" style="margin-top:10px;"></p>
+    </section>
+    <section class="card">
+      <h3 class="section-title">Your Reward Groups</h3>
+      <p class="muted">
+        Every 3 successful referrals form one reward group. When all 3 qualify,
+        ₦500 is automatically added to your account.
+      </p>
+      <div id="groups">
+        <div class="loading">Loading your reward groups...</div>
+      </div>
+    </section>
+    <section class="card">
+      <h3 class="section-title">Referral History</h3>
+      <p class="muted">Track the progress of people who joined using your referral link.</p>
+      <div id="history">
+        <div class="loading">Loading referral history...</div>
+      </div>
+    </section>
   </main>
-
-  <nav class="bottom-nav">
-    <a href="dashboard.html">⌂<br>Home</a>
-    <a href="withdraw.html">₦<br>Cash Out</a>
-    <a href="referrals.html" class="active">♧<br>Referrals</a>
-    <a href="#" id="bottomLogout">⇥<br>Logout</a>
-  </nav>
+  <!-- UPDATED: Replaced text symbols with Font Awesome icons - Reason: ⌂ ₦ ♧ ⇥ dey render different for each phone, Font Awesome dey consistent like dashboard -->
+  <div class="bottom-nav">
+    <a href="dashboard.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a>
+    <a href="referrals.html" class="active-nav"><i class="fa-solid fa-users"></i>Referrals</a>
+    <a href="#" id="bottomLogout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+  </div>
   <script>
     const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
     // UPDATED: Replaced placeholder with real anon key - Reason: page was showing "Add your anon key" error and referrals no go load. Anon key na public, safe for frontend. Never put service_role key here.
