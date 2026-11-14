@@ -36,6 +36,13 @@
       filter: blur(90px);
       z-index: -1;
       pointer-events: none;
+
+      .nav-divider{
+  height:1px;
+  background:#ffffff12;
+  margin:2px 0;
+}
+      
     }
     .blur.one { top: 10%; left: -90px; }
     .blur.two { right: -100px; bottom: 10%; }
@@ -107,6 +114,8 @@
       width: 230px;
       border: 1px solid #ffffff10;
       z-index: 100;
+      max-height:75vh;
+      overflow-y:auto;
     }
     nav#menu a {
       text-decoration: none;
