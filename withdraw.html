@@ -885,6 +885,45 @@ to{opacity:1;transform:translateY(0);}
   overflow-wrap: anywhere;
 }
 
+.withdrawal-reference {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #22c55e0c;
+  border: 1px solid #22c55e25;
+}
+
+.reference-label {
+  font-size: .72rem;
+  color: #86efac;
+  margin-bottom: 7px;
+  font-weight: 700;
+}
+
+.reference-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.reference-value code {
+  color: #d1fae5;
+  font-size: .75rem;
+  overflow-wrap: anywhere;
+}
+
+.copy-reference {
+  border: none;
+  background: #22c55e20;
+  color: #86efac;
+  padding: 9px 11px;
+  border-radius: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+
 </style>
 </head>
 
@@ -1808,6 +1847,29 @@ const date = item.created_at
 ? new Date(item.created_at).toLocaleString()
 : "-";
 
+const withdrawalId = String(item.id || "");
+
+const referenceHTML = withdrawalId ? `
+<div class="withdrawal-reference">
+    <div class="reference-label">
+        Withdrawal Reference
+    </div>
+
+    <div class="reference-value">
+        <code>${escapeHTML(withdrawalId)}</code>
+
+        <button
+            type="button"
+            class="copy-reference"
+            data-reference="${escapeHTML(withdrawalId)}"
+            aria-label="Copy withdrawal reference"
+        >
+            <i class="fa-regular fa-copy"></i>
+        </button>
+    </div>
+</div>
+` : "";
+
 const card = document.createElement("div");
 
 card.className = "history-card";
@@ -1840,6 +1902,8 @@ ${formatMoney(item.amount)}
 
 ${rejectionHTML}
 
+${referenceHTML}
+
 <div class="history-footer">
 
 <div class="status-badge ${statusClass}">
@@ -1858,6 +1922,25 @@ Refunded
 `;
 
 history.appendChild(card);
+
+card.querySelector(".copy-reference")?.addEventListener("click", async function() {
+  
+  const reference = this.dataset.reference;
+  
+  try {
+    await navigator.clipboard.writeText(reference);
+    
+    this.innerHTML = '<i class="fa-solid fa-check"></i>';
+    
+    setTimeout(() => {
+      this.innerHTML = '<i class="fa-regular fa-copy"></i>';
+    }, 1500);
+    
+  } catch (error) {
+    alert("Unable to copy. Please select and copy the reference manually.");
+  }
+  
+});
 
 });
 
