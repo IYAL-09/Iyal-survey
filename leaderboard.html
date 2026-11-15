@@ -1,815 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#08140d">
-  <title>Weekly Leaderboard | Iyal Surveys</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    :root {
-      --bg: #08140d;
-      --surface: #0e1d14;
-      --surface-2: #12251a;
-      --surface-3: #172d20;
-      --line: rgba(181, 220, 190, .12);
-      --text: #f2f8f3;
-      --muted: #9aafa0;
-      --green: #22c55e;
-      --green-light: #86efac;
-      --green-soft: rgba(34, 197, 94, .12);
-      --gold: #f7c967;
-      --silver: #c8d4df;
-      --bronze: #d99a70;
-      --blue: #75c8ff;
-      --purple: #c2a0ff;
-      --danger: #ff9292;
-      --radius: 20px;
-      --shadow: 0 16px 42px rgba(0,0,0,.22);
-    }
-
-    * { box-sizing: border-box; }
-    html { min-width: 0; scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      min-width: 0;
-      overflow-x: hidden;
-      background:
-        radial-gradient(ellipse at 12% 0%, rgba(34,197,94,.11), transparent 34rem),
-        radial-gradient(ellipse at 100% 28%, rgba(34,197,94,.055), transparent 28rem),
-        var(--bg);
-      color: var(--text);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    button, a { font: inherit; }
-    a { color: inherit; text-decoration: none; }
-    button { color: inherit; }
-    .page-shell { width: min(100% - 28px, 760px); margin: 0 auto; padding-bottom: 112px; }
-
-    /* Header follows the existing Dashboard's dark-green / green identity. */
-    .topbar {
-      height: 76px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      position: relative;
-      z-index: 20;
-    }
-    .brand { display: inline-flex; align-items: center; min-width: 0; gap: 10px; }
-    .brand img { width: 42px; height: 42px; object-fit: contain; border-radius: 12px; }
-    .brand-copy { min-width: 0; }
-    .brand-name { display: block; font-size: 15px; font-weight: 850; letter-spacing: -.45px; }
-    .brand-caption { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; }
-    .header-actions { display: flex; align-items: center; gap: 9px; }
-    .icon-button {
-      width: 43px; height: 43px; border: 1px solid var(--line); border-radius: 14px;
-      display: grid; place-items: center; background: rgba(16,34,23,.86); color: var(--green-light);
-      cursor: pointer; transition: .2s ease;
-    }
-    .icon-button:active { transform: scale(.96); }
-    .icon-button:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid var(--green-light); outline-offset: 3px; }
-    .menu-panel {
-      position: absolute; top: 67px; right: 0; width: min(230px, calc(100vw - 36px));
-      padding: 12px; border: 1px solid rgba(134,239,172,.13); border-radius: 20px;
-      background: rgba(15,29,20,.97); box-shadow: var(--shadow); backdrop-filter: blur(16px);
-      display: none;
-    }
-    .menu-panel.open { display: block; animation: menuIn .16s ease-out; }
-    @keyframes menuIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-    .menu-panel a { min-height: 42px; display: flex; align-items: center; gap: 12px; padding: 9px 10px; border-radius: 12px; color: #e8f4eb; font-size: 13px; font-weight: 600; }
-    .menu-panel a i { width: 18px; color: var(--green-light); text-align: center; }
-    .menu-panel a:hover { background: rgba(34,197,94,.1); }
-    .nav-divider { height: 1px; margin: 7px 4px; background: var(--line); }
-
-    .eyebrow { color: var(--green-light); font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
-    .hero { position: relative; overflow: hidden; padding: 22px 20px 20px; border: 1px solid rgba(134,239,172,.16); border-radius: 26px; background: linear-gradient(135deg, rgba(22,61,36,.96), rgba(12,31,19,.98) 66%); box-shadow: var(--shadow); }
-    .hero::after { content: ""; position: absolute; width: 190px; height: 190px; right: -70px; top: -82px; border-radius: 50%; background: rgba(34,197,94,.13); filter: blur(5px); pointer-events: none; }
-    .hero-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-    h1 { margin: 8px 0 7px; font-size: clamp(25px, 6vw, 34px); line-height: 1.12; letter-spacing: -1.1px; }
-    .hero-description { max-width: 470px; margin: 0; color: #c0d4c5; font-size: 12px; line-height: 1.65; }
-    .live-pill { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; padding: 7px 9px; border: 1px solid rgba(134,239,172,.22); border-radius: 99px; background: rgba(34,197,94,.1); color: var(--green-light); font-size: 10px; font-weight: 800; white-space: nowrap; }
-    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-light); box-shadow: 0 0 0 4px rgba(134,239,172,.1); }
-    .hero-stats { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin-top: 20px; }
-    .hero-stat { min-width: 0; padding: 12px 10px; border: 1px solid rgba(200,240,210,.11); border-radius: 15px; background: rgba(5,19,10,.28); }
-    .hero-stat-label { display: block; color: #abc4b1; font-size: 9px; font-weight: 700; line-height: 1.35; text-transform: uppercase; letter-spacing: .55px; }
-    .hero-stat-value { display: block; margin-top: 6px; color: #fff; font-size: clamp(13px, 3.5vw, 19px); font-weight: 850; letter-spacing: -.5px; overflow-wrap: anywhere; }
-    .hero-stat-value.prize { color: #ffe09a; }
-    .countdown-row { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 14px; color: #c4d7c9; font-size: 10px; }
-    .countdown-row strong { color: #fff; font-size: 11px; }
-
-    .section { margin-top: 24px; }
-    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin: 0 2px 12px; }
-    .section-heading h2 { margin: 0; font-size: 17px; letter-spacing: -.45px; }
-    .section-subtitle { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
-    .section-tag { color: var(--muted); font-size: 10px; font-weight: 700; white-space: nowrap; }
-
-    .notice { display: flex; align-items: flex-start; gap: 11px; padding: 13px 14px; border: 1px solid var(--line); border-radius: 16px; background: rgba(15,31,20,.8); }
-    .notice-icon { flex: 0 0 31px; width: 31px; height: 31px; display: grid; place-items: center; border-radius: 11px; background: var(--green-soft); color: var(--green-light); }
-    .notice strong { display: block; margin: 1px 0 4px; font-size: 12px; }
-    .notice p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
-    .notice.warning { border-color: rgba(247,201,103,.2); background: rgba(68,49,17,.16); }
-    .notice.warning .notice-icon { background: rgba(247,201,103,.12); color: var(--gold); }
-    .notice.error { border-color: rgba(255,146,146,.2); background: rgba(70,20,20,.2); }
-    .notice.error .notice-icon { background: rgba(255,146,146,.1); color: var(--danger); }
-
-    .my-card { padding: 16px; border: 1px solid rgba(134,239,172,.19); border-radius: var(--radius); background: linear-gradient(145deg, rgba(20,49,30,.95), rgba(13,28,18,.96)); }
-    .my-card-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .my-card-title { font-size: 12px; font-weight: 800; }
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border-radius: 99px; background: rgba(247,201,103,.12); color: var(--gold); font-size: 9px; font-weight: 800; }
-    .status-badge.good { background: rgba(34,197,94,.13); color: var(--green-light); }
-    .my-main { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; margin-top: 15px; }
-    .my-rank-label { color: var(--muted); font-size: 10px; }
-    .my-rank { margin-top: 3px; font-size: 31px; font-weight: 900; letter-spacing: -1.4px; }
-    .my-rank small { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: 0; }
-    .my-prize { text-align: right; }
-    .my-prize span { display: block; color: var(--muted); font-size: 9px; }
-    .my-prize strong { display: block; margin-top: 4px; color: #ffe09a; font-size: 19px; }
-    .progress-track { height: 8px; margin-top: 15px; overflow: hidden; border-radius: 99px; background: rgba(255,255,255,.09); }
-    .progress-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #16a34a, #86efac); transition: width .35s ease; }
-    .progress-caption { display: flex; justify-content: space-between; gap: 8px; margin-top: 7px; color: var(--muted); font-size: 9px; }
-    .my-metrics { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin-top: 15px; }
-    .metric { min-width: 0; padding: 10px 9px; border: 1px solid var(--line); border-radius: 13px; background: rgba(4,16,9,.28); }
-    .metric .metric-icon { display: inline-grid; place-items: center; width: 25px; height: 25px; margin-bottom: 8px; border-radius: 9px; font-size: 11px; }
-    .metric.surveys .metric-icon { color: var(--green-light); background: rgba(34,197,94,.13); }
-    .metric.time .metric-icon { color: var(--purple); background: rgba(194,160,255,.13); }
-    .metric.visits .metric-icon { color: var(--blue); background: rgba(117,200,255,.13); }
-    .metric-label { display: block; color: var(--muted); font-size: 9px; line-height: 1.4; }
-    .metric-value { display: block; margin-top: 4px; font-size: 14px; font-weight: 850; overflow-wrap: anywhere; }
-    .metric-help { display: block; margin-top: 3px; color: #789080; font-size: 8px; line-height: 1.4; }
-    .action-button { min-height: 42px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 0 14px; border: 1px solid rgba(134,239,172,.24); border-radius: 13px; background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; font-size: 11px; font-weight: 800; cursor: pointer; }
-    .action-button.secondary { background: rgba(34,197,94,.09); color: var(--green-light); }
-    .action-button.full { width: 100%; margin-top: 12px; }
-    .action-button:disabled { opacity: .55; cursor: not-allowed; }
-
-    .podium { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); align-items: end; gap: 8px; }
-    .podium-card { min-width: 0; position: relative; display: flex; flex-direction: column; align-items: center; padding: 13px 7px 12px; border: 1px solid var(--line); border-radius: 17px; background: linear-gradient(180deg, rgba(22,43,29,.95), rgba(13,28,18,.95)); text-align: center; }
-    .podium-card.first { min-height: 174px; border-color: rgba(247,201,103,.34); background: linear-gradient(180deg, rgba(88,65,22,.32), rgba(15,30,20,.98)); }
-    .podium-card.second, .podium-card.third { min-height: 153px; }
-    .podium-medal { margin-bottom: 7px; font-size: 17px; }
-    .first .podium-medal { color: var(--gold); }
-    .second .podium-medal { color: var(--silver); }
-    .third .podium-medal { color: var(--bronze); }
-    .avatar { flex: 0 0 auto; width: 43px; height: 43px; display: grid; place-items: center; overflow: hidden; border: 2px solid rgba(255,255,255,.12); border-radius: 50%; background: #24452e; color: #eaffef; font-size: 14px; font-weight: 850; }
-    .podium-card.first .avatar { width: 51px; height: 51px; border-color: rgba(247,201,103,.5); }
-    .avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .podium-name { width: 100%; margin-top: 8px; overflow: hidden; color: #f3f8f4; font-size: 10px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
-    .podium-earnings { margin-top: 4px; color: var(--muted); font-size: 9px; }
-    .podium-prize { margin-top: 7px; color: #ffe09a; font-size: 12px; font-weight: 900; }
-    .podium-rank { margin-top: 7px; color: var(--muted); font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; }
-
-    .leader-list { display: grid; gap: 9px; }
-    .leader-row { min-width: 0; padding: 12px; border: 1px solid var(--line); border-radius: 17px; background: rgba(14,29,20,.9); }
-    .leader-row.me { border-color: rgba(134,239,172,.45); background: linear-gradient(100deg, rgba(34,197,94,.12), rgba(14,29,20,.96)); }
-    .leader-row.previous-winner { border-color: rgba(247,201,103,.34); }
-    .leader-main { display: grid; grid-template-columns: 28px 39px minmax(0,1fr) auto; align-items: center; gap: 9px; }
-    .rank-number { color: #a9b9ad; font-size: 12px; font-weight: 900; text-align: center; }
-    .leader-name-wrap { min-width: 0; }
-    .leader-name { display: block; overflow: hidden; font-size: 11px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
-    .leader-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-    .mini-tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 6px; border-radius: 99px; background: rgba(255,255,255,.055); color: var(--muted); font-size: 8px; font-weight: 700; }
-    .mini-tag.winner { background: rgba(247,201,103,.12); color: var(--gold); }
-    .mini-tag.you { background: rgba(34,197,94,.13); color: var(--green-light); }
-    .row-prize { text-align: right; }
-    .row-prize strong { display: block; color: #ffe09a; font-size: 12px; }
-    .row-prize span { display: block; margin-top: 3px; color: var(--muted); font-size: 8px; }
-    .row-details { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 6px; margin-top: 11px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.055); }
-    .row-detail { min-width: 0; display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 9px; line-height: 1.35; }
-    .row-detail i { flex: 0 0 auto; width: 13px; text-align: center; }
-    .row-detail.survey i { color: var(--green-light); }
-    .row-detail.time i { color: var(--purple); }
-    .row-detail.visit i { color: var(--blue); }
-    .row-detail.earnings i { color: var(--gold); }
-    .row-detail b { color: #e9f3eb; font-size: 9px; font-weight: 800; overflow-wrap: anywhere; }
-    .empty-state { padding: 24px 16px; border: 1px dashed rgba(134,239,172,.22); border-radius: 18px; background: rgba(14,29,20,.55); text-align: center; }
-    .empty-state i { color: var(--green-light); font-size: 24px; }
-    .empty-state strong { display: block; margin-top: 10px; font-size: 13px; }
-    .empty-state p { max-width: 420px; margin: 6px auto 0; color: var(--muted); font-size: 10px; line-height: 1.65; }
-
-    .previous-list { display: grid; gap: 8px; }
-    .previous-row { display: grid; grid-template-columns: 28px 35px minmax(0,1fr) auto; align-items: center; gap: 9px; padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: rgba(14,29,20,.72); }
-    .previous-rank { color: var(--gold); font-size: 11px; font-weight: 900; text-align: center; }
-    .previous-name { overflow: hidden; font-size: 10px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
-    .previous-meta { margin-top: 3px; color: var(--muted); font-size: 8px; }
-    .previous-prize { color: #ffe09a; font-size: 11px; font-weight: 900; white-space: nowrap; }
-
-    .explain-grid { display: grid; gap: 9px; }
-    .explain-item { display: grid; grid-template-columns: 32px minmax(0,1fr); gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 15px; background: rgba(14,29,20,.72); }
-    .explain-icon { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 11px; background: rgba(34,197,94,.12); color: var(--green-light); }
-    .explain-item strong { display: block; font-size: 10px; }
-    .explain-item p { margin: 4px 0 0; color: var(--muted); font-size: 9px; line-height: 1.6; }
-    .note-text { margin: 10px 2px 0; color: #829889; font-size: 9px; line-height: 1.6; }
-
-    .bottom-nav {
-      position: fixed; z-index: 30; left: 50%; bottom: max(10px, env(safe-area-inset-bottom));
-      transform: translateX(-50%); width: min(calc(100% - 22px), 520px); min-height: 67px;
-      display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 3px; padding: 7px;
-      border: 1px solid rgba(134,239,172,.14); border-radius: 20px;
-      background: rgba(12,27,17,.94); box-shadow: 0 12px 36px rgba(0,0,0,.4); backdrop-filter: blur(18px);
-    }
-    .bottom-nav a, .bottom-nav button { min-width: 0; min-height: 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; border: 0; border-radius: 13px; background: transparent; color: #8ea394; font-size: 8px; font-weight: 700; cursor: pointer; }
-    .bottom-nav i { font-size: 16px; }
-    .bottom-nav .active { background: rgba(34,197,94,.12); color: var(--green-light); }
-
-    .loading { padding: 22px 14px; border: 1px solid var(--line); border-radius: 17px; background: rgba(14,29,20,.8); text-align: center; color: var(--muted); font-size: 10px; }
-    .spinner { display: inline-block; width: 19px; height: 19px; margin-bottom: 8px; border: 2px solid rgba(134,239,172,.18); border-top-color: var(--green-light); border-radius: 50%; animation: spin .75s linear infinite; vertical-align: middle; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .toast { position: fixed; z-index: 60; left: 50%; bottom: 94px; transform: translate(-50%, 12px); width: min(calc(100% - 32px), 430px); padding: 12px 14px; border: 1px solid var(--line); border-radius: 13px; background: #173020; box-shadow: var(--shadow); color: #effaf1; font-size: 11px; line-height: 1.5; opacity: 0; pointer-events: none; transition: .2s ease; }
-    .toast.show { opacity: 1; transform: translate(-50%,0); }
-    .hidden { display: none !important; }
-
-    @media (min-width: 600px) {
-      .page-shell { width: min(100% - 40px, 760px); }
-      .hero { padding: 27px 27px 23px; }
-      .hero-stats { gap: 12px; }
-      .my-card { padding: 20px; }
-      .leader-row { padding: 14px 16px; }
-      .explain-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-      .my-metrics { grid-template-columns: repeat(4,minmax(0,1fr)); }
-      .row-details { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 6px; }
-    }
-    @media (max-width: 370px) {
-      .page-shell { width: calc(100% - 20px); }
-      .brand img { width: 37px; height: 37px; }
-      .brand-name { font-size: 13px; }
-      .hero { padding: 17px 13px; }
-      .live-pill { font-size: 8px; padding: 6px 7px; }
-      .hero-stat { padding: 10px 7px; }
-      .podium { gap: 5px; }
-      .podium-card { padding-left: 4px; padding-right: 4px; }
-      .leader-main { grid-template-columns: 22px 34px minmax(0,1fr) auto; gap: 6px; }
-      .leader-row { padding: 10px; }
-      .row-detail { gap: 4px; font-size: 8px; }
-      .row-detail b { font-size: 8px; }
-      .my-metrics { gap: 5px; }
-      .metric { padding: 9px 6px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08140d">
+<title>Weekly Leaderboard | Iyal Surveys</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#08140d;color:#f2f8f3;font-family:Inter,system-ui,sans-serif;padding-bottom:190px;overflow-x:hidden}
+a{color:inherit;text-decoration:none}.page{width:min(100% - 28px,760px);margin:0 auto}
+.topbar{height:72px;display:flex;justify-content:space-between;align-items:center;position:relative}
+.brand{display:flex;gap:10px;align-items:center}.brand img{width:40px;height:40px;border-radius:12px;object-fit:contain}
+.brand b{font-size:15px}.brand span{display:block;color:#9aafa0;font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-top:2px}
+.icon-btn{width:42px;height:42px;border:1px solid rgba(181,220,190,.12);background:#101f16;border-radius:13px;color:#86efac;display:grid;place-items:center;cursor:pointer}
+.menu{position:absolute;top:66px;right:0;width:230px;background:#0f1d14;border:1px solid rgba(134,239,172,.13);border-radius:18px;padding:10px;display:none;z-index:50;box-shadow:0 16px 42px rgba(0,0,0,.3)}
+.menu.open{display:block}.menu a{display:flex;gap:12px;padding:11px 10px;border-radius:12px;font-size:13px;font-weight:600}.menu a i{color:#86efac;width:18px;text-align:center}
+.hero{background:linear-gradient(135deg,#163d24,#0c1f13 70%);border:1px solid rgba(134,239,172,.16);border-radius:24px;padding:20px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:180px;height:180px;background:rgba(34,197,94,.14);border-radius:50%;right:-70px;top:-80px}
+.eyebrow{color:#86efac;font-size:10px;font-weight:800;letter-spacing:1.4px}.hero h1{margin:8px 0 6px;font-size:30px;letter-spacing:-1px;line-height:1.1}
+.hero p{margin:0;color:#c0d4c5;font-size:12px;line-height:1.6;max-width:480px}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px;position:relative;z-index:1}
+.stat{background:rgba(5,19,10,.3);border:1px solid rgba(200,240,210,.11);border-radius:14px;padding:11px 10px}
+.stat span{display:block;color:#abc4b1;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}.stat strong{display:block;margin-top:5px;font-size:16px}.stat strong.gold{color:#ffe09a}
+.countdown{display:flex;justify-content:space-between;margin-top:13px;color:#c4d7c9;font-size:10px;position:relative;z-index:1}.countdown strong{color:#fff}
+.section{margin-top:22px}.section h2{margin:0;font-size:17px}.section p.sub{margin:5px 0 12px;color:#9aafa0;font-size:10px}
+/* PODIUM */
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:8px}
+.p-card{background:#0e1d14;border:1px solid rgba(181,220,190,.12);border-radius:18px;padding:14px 8px 12px;text-align:center}
+.p-card.first{background:linear-gradient(180deg,rgba(88,65,22,.35),#0f1e14);border-color:rgba(247,201,103,.4);min-height:178px}
+.p-card.second,.p-card.third{min-height:148px}.crown{font-size:20px}.p-card.first .crown{font-size:26px}
+.avatar{width:44px;height:44px;border-radius:50%;background:#24452e;display:grid;place-items:center;margin:8px auto 0;font-weight:850;font-size:16px;overflow:hidden;border:2px solid rgba(255,255,255,.12)}
+.p-card.first .avatar{width:56px;height:56px;border-color:#f7c967;font-size:20px}.avatar img{width:100%;height:100%;object-fit:cover}
+.p-name{margin-top:8px;font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.p-survey{color:#9aafa0;font-size:9px;margin-top:3px}
+.p-prize{margin-top:6px;color:#ffe09a;font-weight:900;font-size:13px}.p-rank{margin-top:5px;color:#9aafa0;font-size:8px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.p-badge{display:inline-block;margin-top:6px;background:rgba(247,201,103,.12);color:#f7c967;font-size:8px;font-weight:800;padding:4px 7px;border-radius:99px}
+/* DETAILED MY CARD */
+.my-card{background:linear-gradient(145deg,#14311e,#0d1c12);border:1px solid rgba(134,239,172,.19);border-radius:20px;padding:16px}
+.my-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.my-top b{font-size:12px}
+.badge{display:inline-flex;gap:6px;align-items:center;padding:6px 9px;border-radius:99px;background:rgba(247,201,103,.12);color:#f7c967;font-size:9px;font-weight:800}
+.badge.good{background:rgba(34,197,94,.13);color:#86efac}
+.my-main{display:grid;grid-template-columns:1fr auto;gap:12px;margin-top:15px;align-items:center}
+.my-rank-label{color:#9aafa0;font-size:10px}.my-rank{font-size:31px;font-weight:900;letter-spacing:-1px;margin-top:3px}.my-rank small{color:#9aafa0;font-size:11px;font-weight:600}
+.my-prize{text-align:right}.my-prize span{color:#9aafa0;font-size:9px}.my-prize strong{color:#ffe09a;font-size:19px;display:block;margin-top:4px}
+.progress{height:8px;background:rgba(255,255,255,.09);border-radius:99px;overflow:hidden;margin-top:15px}.progress i{display:block;height:100%;background:linear-gradient(90deg,#16a34a,#86efac);width:0%}
+.progress-cap{display:flex;justify-content:space-between;color:#9aafa0;font-size:9px;margin-top:7px}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:15px}
+.metric{padding:10px 9px;border:1px solid rgba(181,220,190,.12);border-radius:13px;background:rgba(4,16,9,.28)}
+.metric .ic{width:25px;height:25px;display:grid;place-items:center;border-radius:9px;font-size:11px;margin-bottom:8px}
+.metric.surveys .ic{color:#86efac;background:rgba(34,197,94,.13)}.metric.earn .ic{color:#f7c967;background:rgba(247,201,103,.12)}
+.metric.time .ic{color:#c2a0ff;background:rgba(194,160,255,.13)}.metric.visits .ic{color:#75c8ff;background:rgba(117,200,255,.13)}
+.metric label{display:block;color:#9aafa0;font-size:9px}.metric strong{display:block;margin-top:4px;font-size:14px}.metric span.help{display:block;margin-top:3px;color:#789080;font-size:8px}
+/* COMPACT LIST */
+.list{display:grid;gap:7px}.row{display:flex;align-items:center;gap:10px;background:#0e1d14;border:1px solid rgba(181,220,190,.12);border-radius:15px;padding:11px 12px}
+.row.me{border-color:#22c55e;background:linear-gradient(100deg,rgba(34,197,94,.14),#0e1d14)}.row.winner{border-color:rgba(247,201,103,.35)}
+.rank{width:28px;text-align:center;font-weight:900;font-size:14px;color:#a9b9ad;flex:0 0 auto}.rank.top1{color:#f7c967;font-size:18px}.rank.top2{color:#c8d4df}.rank.top3{color:#d99a70}
+.row .avatar{width:36px;height:36px;margin:0;font-size:13px;flex:0 0 auto}.info{flex:1;min-width:0}
+.name{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;gap:6px;align-items:center}
+.you-tag{background:rgba(34,197,94,.15);color:#86efac;font-size:8px;padding:2px 6px;border-radius:99px;font-weight:800}.winner-tag{background:rgba(247,201,103,.12);color:#f7c967;font-size:8px;padding:2px 6px;border-radius:99px;font-weight:800}
+.meta{color:#9aafa0;font-size:9px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prize{text-align:right;flex:0 0 auto}.prize b{color:#ffe09a;font-size:13px;display:block}.prize span{color:#9aafa0;font-size:8px}.prize.badge b{color:#9aafa0;font-size:11px}
+/* STICKY */
+.my-sticky{position:fixed;left:50%;transform:translateX(-50%);bottom:92px;width:min(calc(100% - 22px),520px);background:#122e1c;border:1px solid rgba(134,239,172,.35);border-radius:18px;padding:12px 13px;z-index:40;box-shadow:0 12px 36px rgba(0,0,0,.45);display:flex;align-items:center;gap:10px}
+.my-sticky .avatar{width:38px;height:38px;margin:0;font-size:14px}.my-info{flex:1;min-width:0}.my-info b{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.my-info span{font-size:9px;color:#9aafa0;display:block;margin-top:2px}
+.my-sticky .progress{margin-top:8px;height:6px}.my-prize2{text-align:right}.my-prize2 b{color:#ffe09a;font-size:14px;display:block}.my-prize2 span{font-size:8px;color:#9aafa0}
+.notice{display:flex;gap:11px;padding:13px;border:1px solid rgba(181,220,190,.12);border-radius:16px;background:#0f1f14;margin-top:12px}
+.notice.warn{border-color:rgba(247,201,103,.25);background:rgba(68,49,17,.15)}.notice.err{border-color:rgba(255,146,146,.25);background:rgba(70,20,20,.2)}
+.notice b{font-size:12px;display:block}.notice p{margin:4px 0 0;color:#9aafa0;font-size:10px;line-height:1.6}
+.btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:1px solid rgba(134,239,172,.25);border-radius:12px;padding:11px 14px;font-size:11px;font-weight:800;cursor:pointer;width:100%;margin-top:10px}
+.btn.sec{background:rgba(34,197,94,.09);color:#86efac}.empty{padding:22px;text-align:center;border:1px dashed rgba(134,239,172,.22);border-radius:16px;color:#9aafa0;font-size:10px;line-height:1.6}.empty b{color:#fff;font-size:13px;display:block;margin:8px 0 4px}
+.loading{padding:20px;text-align:center;color:#9aafa0;font-size:10px;border:1px solid rgba(181,220,190,.12);border-radius:16px;background:#0e1d14}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(134,239,172,.2);border-top-color:#86efac;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:8px}
+@keyframes spin{to{transform:rotate(360deg)}}.how{display:grid;gap:8px}.how-item{display:flex;gap:10px;background:#0e1d14;border:1px solid rgba(181,220,190,.12);border-radius:14px;padding:12px}
+.how-item i{width:32px;height:32px;flex:0 0 auto;display:grid;place-items:center;background:rgba(34,197,94,.12);color:#86efac;border-radius:10px}.how-item b{font-size:11px}.how-item p{margin:4px 0 0;color:#9aafa0;font-size:9px;line-height:1.6}
+.note{color:#829889;font-size:9px;line-height:1.6;margin:10px 2px 0}
+.bottom-nav{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 22px),520px);display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:7px;background:rgba(12,27,17,.94);border:1px solid rgba(134,239,172,.14);border-radius:20px;z-index:30}
+.bottom-nav a,.bottom-nav button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 0;background:transparent;border:0;color:#8ea394;font-size:8px;font-weight:700;cursor:pointer}.bottom-nav i{font-size:16px}
+.toast{position:fixed;left:50%;bottom:170px;transform:translate(-50%,10px);width:min(calc(100% - 32px),430px);background:#173020;border:1px solid rgba(181,220,190,.12);padding:12px;border-radius:13px;font-size:11px;opacity:0;pointer-events:none;transition:.2s;z-index:60}.toast.show{opacity:1;transform:translate(-50%,0)}
+.hidden{display:none!important}.prev{display:grid;gap:7px}.prev-row{display:flex;align-items:center;gap:10px;background:#0e1d14;border:1px solid rgba(181,220,190,.12);border-radius:13px;padding:10px}.prev-row .rank{color:#f7c967}.prev-row .avatar{width:32px;height:32px;font-size:11px}
+@media(min-width:600px){.metrics{grid-template-columns:repeat(4,1fr)}.how{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
-  <div class="page-shell">
-    <header class="topbar">
-      <a class="brand" href="dashboard.html" aria-label="Iyal Surveys dashboard">
-        <img src="iyallogo.png" alt="Iyal Surveys logo" onerror="this.style.display='none'">
-        <span class="brand-copy"><span class="brand-name">Iyal Surveys</span><span class="brand-caption">Earn · Progress · Win</span></span>
-      </a>
-      <div class="header-actions">
-        <button class="icon-button" id="menuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="menuPanel"><i class="fa-solid fa-bars"></i></button>
-      </div>
-      <nav class="menu-panel" id="menuPanel" aria-label="Main navigation">
-        <a href="dashboard.html"><i class="fa-solid fa-house nav-icon"></i>Dashboard</a>
-        <a href="leaderboard.html" aria-current="page"><i class="fa-solid fa-ranking-star nav-icon"></i>Weekly Leaderboard</a>
-        <div class="nav-divider"></div>
-        <a href="terms.html"><i class="fa-solid fa-handshake nav-icon"></i>Terms</a>
-        <a href="privacy.html"><i class="fa-solid fa-shield-halved nav-icon"></i>Privacy</a>
-        <a href="about.html"><i class="fa-solid fa-circle-info nav-icon"></i>About</a>
-        <a href="disclaimer.html"><i class="fa-solid fa-triangle-exclamation nav-icon"></i>Disclaimer</a>
-        <a href="support.html"><i class="fa-solid fa-envelope nav-icon"></i>Support</a>
-        <a href="settings.html"><i class="fa-solid fa-gear nav-icon"></i>Settings</a>
-        <a href="profile.html"><i class="fa-solid fa-user nav-icon"></i>Profile</a>
-      </nav>
-    </header>
+<div class="page">
+<header class="topbar">
+<a class="brand" href="dashboard.html"><img src="iyallogo.png" onerror="this.style.display='none'"><span><b>Iyal Surveys</b><span>Earn · Progress · Win</span></span></a>
+<button class="icon-btn" id="menuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+<nav class="menu" id="menuPanel">
+<a href="dashboard.html"><i class="fa-solid fa-house"></i>Dashboard</a>
+<a href="leaderboard.html"><i class="fa-solid fa-ranking-star"></i>Weekly Leaderboard</a>
+<a href="terms.html"><i class="fa-solid fa-handshake"></i>Terms</a>
+<a href="privacy.html"><i class="fa-solid fa-shield-halved"></i>Privacy</a>
+<a href="about.html"><i class="fa-solid fa-circle-info"></i>About</a>
+<a href="support.html"><i class="fa-solid fa-envelope"></i>Support</a>
+<a href="settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+<a href="profile.html"><i class="fa-solid fa-user"></i>Profile</a>
+</nav>
+</header>
+<main>
+<section class="hero">
+<span class="eyebrow">🏆 WEEKLY CHALLENGE • LIVE</span><h1>Weekly<br>Leaderboard</h1>
+<p>Every survey moves you up. Top 5 win cash. Top 10 win badge.</p>
+<div class="hero-stats"><div class="stat"><span>Prize Pool</span><strong class="gold">₦2,000</strong></div><div class="stat"><span>Week</span><strong id="weekLabel">Loading…</strong></div><div class="stat"><span>To Qualify</span><strong>4 surveys</strong></div></div>
+<div class="countdown"><span><i class="fa-regular fa-clock"></i> Week ends in</span><strong id="countdown" aria-live="polite">Loading…</strong></div>
+</section>
 
-    <main>
-      <section class="hero" aria-labelledby="pageTitle">
-        <div class="hero-top">
-          <div>
-            <span class="eyebrow">Your weekly challenge</span>
-            <h1 id="pageTitle">Weekly Leaderboard</h1>
-            <p class="hero-description">Every completed survey moves you forward. Build your weekly progress, climb the rankings and compete for real rewards.</p>
-          </div>
-          <span class="live-pill"><span class="live-dot"></span> WEEKLY</span>
-        </div>
-        <div class="hero-stats">
-          <div class="hero-stat"><span class="hero-stat-label">Prize pool</span><strong class="hero-stat-value prize">₦2,000</strong></div>
-          <div class="hero-stat"><span class="hero-stat-label">Competition week</span><strong class="hero-stat-value" id="weekLabel">Loading…</strong></div>
-          <div class="hero-stat"><span class="hero-stat-label">Surveys to qualify</span><strong class="hero-stat-value">4 completed</strong></div>
-        </div>
-        <div class="countdown-row"><span><i class="fa-regular fa-clock"></i> Current week ends in</span><strong id="countdown">Loading countdown…</strong></div>
-      </section>
+<div id="offlineNotice" class="notice hidden"><div><b>You appear to be offline</b><p>Last results may be out of date. Reconnect and refresh.</p></div></div>
+<div id="errorNotice" class="notice err hidden" role="alert"><div><b id="errorTitle">We couldn't load the leaderboard</b><p id="errorMessage"></p><button class="btn sec" id="retryButton" type="button" style="width:auto;padding:9px 14px"><i class="fa-solid fa-rotate-right"></i> Try again</button></div></div>
+<div id="blockedNotice" class="notice warn hidden"><div><b>Leaderboard unavailable for this account</b><p>Your account is restricted. Contact support if this is a mistake.</p></div></div>
 
-      <section class="section" id="connectionNotice" aria-live="polite">
-        <div class="notice hidden" id="offlineNotice"><span class="notice-icon"><i class="fa-solid fa-wifi"></i></span><div><strong>You appear to be offline</strong><p>Your last displayed results may be out of date. Reconnect and tap refresh to load the latest leaderboard.</p></div></div>
-        <div class="notice error hidden" id="errorNotice"><span class="notice-icon"><i class="fa-solid fa-triangle-exclamation"></i></span><div><strong id="errorTitle">We couldn't load the leaderboard</strong><p id="errorMessage">Please try again. Your account and survey records have not been changed.</p><button class="action-button secondary" id="retryButton" type="button" style="margin-top:10px;min-height:36px"> <i class="fa-solid fa-rotate-right"></i> Try again</button></div></div>
-        <div class="notice warning hidden" id="blockedNotice"><span class="notice-icon"><i class="fa-solid fa-lock"></i></span><div><strong>Leaderboard unavailable for this account</strong><p>Your account is currently restricted from participating in the weekly leaderboard. Contact support if you believe this is a mistake.</p></div></div>
-      </section>
+<section class="section"><h2>Your Weekly Progress</h2><p class="sub">Your personal progress for this week</p>
+<div class="loading" id="myLoading"><span class="spinner"></span><br>Loading your progress…</div>
+<div class="my-card hidden" id="myCard">
+<div class="my-top"><b>Your competition status</b><span class="badge" id="qualificationBadge">Checking…</span></div>
+<div class="my-main"><div><div class="my-rank-label">Your current position</div><div class="my-rank" id="myRank">— <small>not ranked</small></div></div><div class="my-prize"><span>Current estimated prize</span><strong id="myPrize">₦0</strong></div></div>
+<div class="progress"><i id="progressFill"></i></div><div class="progress-cap"><span id="progressText">0 of 4</span><span id="progressRemaining">4 more to qualify</span></div>
+<div class="metrics">
+<div class="metric surveys"><span class="ic"><i class="fa-solid fa-clipboard-check"></i></span><label>Successful surveys</label><strong id="mySurveys">0</strong><span class="help">This week</span></div>
+<div class="metric earn"><span class="ic"><i class="fa-solid fa-coins"></i></span><label>Survey earnings</label><strong id="myEarnings">₦0</strong><span class="help">Separate from prize</span></div>
+<div class="metric time"><span class="ic"><i class="fa-regular fa-clock"></i></span><label>Active time</label><strong id="myActiveTime">0 sec</strong><span class="help">Tracked on app</span></div>
+<div class="metric visits"><span class="ic"><i class="fa-solid fa-door-open"></i></span><label>Dashboard visits</label><strong id="myVisits">0</strong><span class="help" id="myVisitHelp">No visits yet</span></div>
+</div>
+<div class="notice warn hidden" id="profileNotice"><div><b>Complete your profile to qualify</b><p id="profileReason"></p><a class="btn" href="profile.html">Complete Profile</a></div></div>
+<div class="notice warn hidden" id="surveyNotice"><div><b>You're not qualified yet</b><p id="surveyReason"></p><a class="btn" href="dashboard.html">Find Surveys →</a></div></div>
+<div class="notice hidden" id="qualifiedNotice"><div><b>✅ You're qualified!</b><p>Profile complete + 4 surveys done. Keep going to climb higher.</p></div></div>
+</div></section>
 
-      <section class="section" id="myProgressSection">
-        <div class="section-heading"><div><h2>Your weekly progress</h2><p class="section-subtitle">Your personal progress for this competition week.</p></div><span class="section-tag" id="myWeekTag">This week</span></div>
-        <div class="loading" id="myLoading"><span class="spinner"></span><br>Loading your progress securely…</div>
-        <div class="my-card hidden" id="myCard">
-          <div class="my-card-top"><span class="my-card-title">Your competition status</span><span class="status-badge" id="qualificationBadge">Checking status</span></div>
-          <div class="my-main"><div><div class="my-rank-label">Your current position</div><div class="my-rank" id="myRank">— <small>not ranked</small></div></div><div class="my-prize"><span>Current estimated prize</span><strong id="myPrize">₦0</strong></div></div>
-          <div class="progress-track" role="progressbar" aria-label="Weekly survey qualification progress" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0" id="progressTrack"><div class="progress-fill" id="progressFill"></div></div>
-          <div class="progress-caption"><span id="progressText">0 of 4 successful surveys</span><span id="progressRemaining">4 more to qualify</span></div>
-          <div class="my-metrics">
-            <div class="metric surveys"><span class="metric-icon"><i class="fa-solid fa-clipboard-check"></i></span><span class="metric-label">Successful surveys</span><strong class="metric-value" id="mySurveys">0</strong><span class="metric-help">This week</span></div>
-            <div class="metric earnings"><span class="metric-icon" style="color:var(--gold);background:rgba(247,201,103,.12)"><i class="fa-solid fa-coins"></i></span><span class="metric-label">Survey earnings</span><strong class="metric-value" id="myEarnings">₦0</strong><span class="metric-help">This week · separate from prize</span></div>
-            <div class="metric time"><span class="metric-icon"><i class="fa-regular fa-clock"></i></span><span class="metric-label">Active time</span><strong class="metric-value" id="myActiveTime">0 sec</strong><span class="metric-help">Tracked on the app</span></div>
-            <div class="metric visits"><span class="metric-icon"><i class="fa-solid fa-door-open"></i></span><span class="metric-label">Dashboard visits</span><strong class="metric-value" id="myVisits">0</strong><span class="metric-help" id="myVisitHelp">No visits recorded yet</span></div>
-          </div>
-          <div class="notice warning hidden" id="profileNotice" style="margin-top:13px"><span class="notice-icon"><i class="fa-solid fa-user-pen"></i></span><div><strong>Complete your profile to qualify</strong><p id="profileReason">Some required profile details are missing.</p><a class="action-button full" href="profile.html"><i class="fa-solid fa-user-check"></i> Complete profile</a></div></div>
-          <div class="notice warning hidden" id="surveyNotice" style="margin-top:13px"><span class="notice-icon"><i class="fa-solid fa-bullseye"></i></span><div><strong>You're not qualified yet — keep going</strong><p id="surveyReason">Complete four successful surveys this week and keep your profile complete to qualify for the weekly ranking.</p><a class="action-button full" href="dashboard.html"><i class="fa-solid fa-arrow-right"></i> Find available surveys</a></div></div>
-          <div class="notice hidden" id="qualifiedNotice" style="margin-top:13px"><span class="notice-icon"><i class="fa-solid fa-circle-check"></i></span><div><strong>You're qualified for this week's leaderboard</strong><p>Your profile is complete and you've reached the four-survey requirement. Keep completing surveys to improve your position.</p></div></div>
-        </div>
-      </section>
+<section class="section"><h2>🏆 Top 3 This Week</h2><p class="sub">The leaders to beat</p>
+<div class="loading" id="podiumLoading"><span class="spinner"></span><br>Finding leaders…</div><div class="podium hidden" id="podium"></div></section>
 
-      <section class="section" id="podiumSection">
-        <div class="section-heading"><div><h2>Leading this week</h2><p class="section-subtitle">The top three qualified participants.</p></div><span class="section-tag">Top 3</span></div>
-        <div class="loading" id="podiumLoading"><span class="spinner"></span><br>Finding this week's leaders…</div>
-        <div class="podium hidden" id="podium"></div>
-      </section>
+<section class="section"><div style="display:flex;justify-content:space-between;align-items:end"><div><h2>📊 Weekly Rankings</h2><p class="sub">Surveys first. Earnings second. Activity breaks ties.</p></div><button class="icon-btn" id="refreshButton" type="button" aria-label="Refresh leaderboard" style="width:36px;height:36px"><i class="fa-solid fa-rotate-right"></i></button></div>
+<div class="loading" id="listLoading"><span class="spinner"></span><br>Loading rankings…</div><div class="list hidden" id="leaderList"></div>
+<div class="empty hidden" id="emptyLeaderboard"><i class="fa-solid fa-ranking-star" style="font-size:22px;color:#86efac"></i><b>The race is ready</b>No qualified participants yet. Complete 4 surveys to enter.</div></section>
 
-      <section class="section" id="rankingSection">
-        <div class="section-heading"><div><h2>Weekly rankings</h2><p class="section-subtitle">Your survey results lead the ranking. Activity is used only to break ties.</p></div><button class="icon-button" id="refreshButton" type="button" aria-label="Refresh leaderboard" style="width:36px;height:36px"><i class="fa-solid fa-rotate-right"></i></button></div>
-        <div class="loading" id="listLoading"><span class="spinner"></span><br>Loading qualified participants…</div>
-        <div class="leader-list hidden" id="leaderList"></div>
-        <div class="empty-state hidden" id="emptyLeaderboard"><i class="fa-solid fa-ranking-star"></i><strong>The weekly race is ready for its first leaders</strong><p>There are no qualified participants to display yet. Complete four successful surveys and make sure your profile is complete to enter the rankings.</p></div>
-      </section>
+<section class="section"><h2>🏅 Previous Winners</h2><p class="sub">Last week's champions</p>
+<div class="loading" id="previousLoading"><span class="spinner"></span><br>Loading winners…</div><div class="prev hidden" id="previousList"></div><div class="empty hidden" id="previousEmpty"><b>Previous winners will appear here</b>Once first week is finalised, Top 5 will show.</div></section>
 
-      <section class="section" id="previousSection">
-        <div class="section-heading"><div><h2>Previous week's winners</h2><p class="section-subtitle">Recognising the last completed competition.</p></div></div>
-        <div class="loading" id="previousLoading"><span class="spinner"></span><br>Loading previous winners…</div>
-        <div class="previous-list hidden" id="previousList"></div>
-        <div class="empty-state hidden" id="previousEmpty"><i class="fa-solid fa-award"></i><strong>Previous winners will appear here</strong><p>Once the first weekly competition is finalised, the five prize winners will be shown here.</p></div>
-      </section>
+<section class="section"><h2>How it works</h2><p class="sub">Clear rules. No hidden scoring.</p>
+<div class="how">
+<div class="how-item"><i class="fa-solid fa-list-check"></i><div><b>1. Qualify - 4 surveys</b><p>Complete 4 successful surveys Mon-Sun + complete profile.</p></div></div>
+<div class="how-item"><i class="fa-solid fa-ranking-star"></i><div><b>2. Ranking</b><p>More surveys = higher. Tie? Higher earnings win. Then active time & visits.</p></div></div>
+<div class="how-item"><i class="fa-solid fa-clock" style="color:#c2a0ff;background:rgba(194,160,255,.13)"></i><div><b>3. Active time</b><p>Time app records while you're active. Helps break ties. Leaving app open inactive no count.</p></div></div>
+<div class="how-item"><i class="fa-solid fa-door-open" style="color:#75c8ff;background:rgba(117,200,255,.13)"></i><div><b>4. Dashboard visits</b><p>Qualifying Dashboard visits this week. Only a later tie-breaker.</p></div></div>
+<div class="how-item"><i class="fa-solid fa-trophy" style="color:#f7c967;background:rgba(247,201,103,.12)"></i><div><b>5. Prizes</b><p>1st ₦1,000 • 2nd ₦500 • 3rd ₦300 • 4th ₦100 • 5th ₦100 • 6-10 Badge</p></div></div>
+<div class="how-item"><i class="fa-solid fa-calendar-check"></i><div><b>6. Reset</b><p>Mon-Sun, Nigeria time. 24h wait, then prizes auto-credit.</p></div></div>
+</div><p class="note">Survey earnings = earnings from surveys this week. Leaderboard prize = separate reward. Displayed prize is estimate until finalisation.</p></section>
+</main></div>
 
-      <section class="section" id="howItWorks">
-        <div class="section-heading"><div><h2>How the leaderboard works</h2><p class="section-subtitle">Clear rules. Fair rankings. No hidden scoring.</p></div></div>
-        <div class="explain-grid">
-          <article class="explain-item"><span class="explain-icon"><i class="fa-solid fa-list-check"></i></span><div><strong>1. Qualify with four surveys</strong><p>Complete at least four successful surveys between Monday and Sunday, and keep all required profile details complete.</p></div></article>
-          <article class="explain-item"><span class="explain-icon"><i class="fa-solid fa-ranking-star"></i></span><div><strong>2. How positions are decided</strong><p>More successful surveys rank first. If survey counts match, higher survey earnings rank next. Active time and dashboard visits are only tie-breakers, not extra points.</p></div></article>
-          <article class="explain-item"><span class="explain-icon" style="background:rgba(194,160,255,.12);color:var(--purple)"><i class="fa-regular fa-clock"></i></span><div><strong>3. Active time</strong><p>This is the time the app records while you're actively using it. It helps separate users who are otherwise tied. Leaving the app open while inactive does not mean unlimited active time.</p></div></article>
-          <article class="explain-item"><span class="explain-icon" style="background:rgba(117,200,255,.12);color:var(--blue)"><i class="fa-solid fa-door-open"></i></span><div><strong>4. Dashboard visits</strong><p>This shows how many qualifying visits to your Dashboard were recorded this week. Zero visits are shown as 0; visits are only a later tie-breaker.</p></div></article>
-          <article class="explain-item"><span class="explain-icon" style="background:rgba(247,201,103,.12);color:var(--gold)"><i class="fa-solid fa-trophy"></i></span><div><strong>5. Weekly prizes</strong><p>1st: ₦1,000 · 2nd: ₦500 · 3rd: ₦300 · 4th: ₦100 · 5th: ₦100. Positions 6–10 receive a leaderboard badge, not a cash prize.</p></div></article>
-          <article class="explain-item"><span class="explain-icon"><i class="fa-solid fa-calendar-check"></i></span><div><strong>6. Weekly reset and payment</strong><p>The competition runs Monday to Sunday, Nigeria time. Results are allowed a 24-hour waiting period, then the previous week's results are finalised and prizes are credited automatically after finalisation.</p></div></article>
-        </div>
-        <p class="note-text">Important: “Survey earnings” are the earnings recorded from successful surveys during this week. “Leaderboard prize” is a separate competition reward. A displayed current prize is an estimate based on your live position; final prizes are determined when the week is finalised. Activity time and visits do not replace the four-survey requirement.</p>
-      </section>
-    </main>
-  </div>
+<div class="my-sticky hidden" id="mySticky">
+<span class="avatar" id="myStickyAvatar">?</span>
+<div class="my-info"><b id="myStickyName">You • #—</b><span id="myStickyMeta">0 surveys</span><div class="progress"><i id="myStickyProgress"></i></div></div>
+<div class="my-prize2"><b id="myStickyPrize">₦0</b><span id="myStickyGap">No prize yet</span></div>
+</div>
 
-  <nav class="bottom-nav" aria-label="Quick navigation">
-    <a href="dashboard.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
-    <a href="withdraw.html"><i class="fa-solid fa-wallet"></i><span>Cash Out</span></a>
-    <a href="referrals.html"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
-    <button type="button" id="logoutButton"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></button>
-  </nav>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<nav class="bottom-nav">
+<a href="dashboard.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+<a href="withdraw.html"><i class="fa-solid fa-wallet"></i><span>Cash Out</span></a>
+<a href="referrals.html"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+<button id="logoutButton" type="button"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></button>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script>
-    /*
-      CONNECTION SETUP:
-      This page first reuses an existing Supabase client/config if the site exposes one.
-      If it does not, set the two values below to the same public URL and anon key used by Dashboard.
-      Never put the Supabase service-role key in this file.
-    */
-  window.IYAL_SUPABASE_URL = window.IYAL_SUPABASE_URL || "https://xkshzlfducmnglxfnxzk.supabase.co";
+<script>
+window.IYAL_SUPABASE_URL = window.IYAL_SUPABASE_URL || "https://xkshzlfducmnglxfnxzk.supabase.co";
 window.IYAL_SUPABASE_ANON_KEY = window.IYAL_SUPABASE_ANON_KEY || "sb_publishable_Z6fCexCd_v13ARt6147e_Q_T9NtE-Hg";
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+let client=window.supabaseClient||null, isLoading=false, countdownTimer=null, countdownRemaining=null, lastPayload=null, toastTimer=null;
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function money(v){const a=Number(v||0);return "₦"+(Number.isFinite(a)?a:0).toLocaleString("en-NG",{maximumFractionDigits:2})}
+function fmtDur(s){const t=Math.max(0,Math.floor(Number(s)||0)),h=Math.floor(t/3600),m=Math.floor((t%3600)/60),sec=t%60;if(h)return `${h}h ${m}m`;if(m)return `${m}m ${sec}s`;return `${sec}s`}
+function fmtDate(d){if(!d)return "This week";const dt=new Date(d+"T12:00:00");if(isNaN(dt))return "This week";return dt.toLocaleDateString("en-GB",{day:"numeric",month:"short"})}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),3200)}
 
-    (function () {
-      "use strict";
+/* Avatar fallback is delegated at document level. This still works after
+   avatar markup is converted to HTML strings and inserted with innerHTML. */
+function avatar(url,name){
+  const displayName=(name||"Iyal member").trim()||"Iyal member";
+  const init=esc(displayName.charAt(0).toUpperCase()||"I");
+  const label=esc(displayName+" avatar");
+  if(url&&/^https:\/\//i.test(String(url))){
+    return `<span class="avatar" aria-label="${label}"><img src="${esc(url)}" alt="${label}" loading="lazy" referrerpolicy="no-referrer" data-avatar-fallback="${init}"></span>`;
+  }
+  return `<span class="avatar" aria-label="${label}">${init}</span>`;
+}
+document.addEventListener("error",event=>{
+  const img=event.target;
+  if(!(img instanceof HTMLImageElement)||!img.hasAttribute("data-avatar-fallback"))return;
+  const wrapper=img.parentElement;
+  const fallback=img.getAttribute("data-avatar-fallback")||"I";
+  img.removeAttribute("data-avatar-fallback");
+  if(wrapper&&wrapper.classList.contains("avatar"))wrapper.textContent=fallback;
+},true);
 
-      const $ = (id) => document.getElementById(id);
-      let client = window.supabaseClient || window.supabase || null;
-      let isLoading = false;
-      let countdownTimer = null;
-      let countdownEnd = null;
-      let lastPayload = null;
-      let toastTimer = null;
+/* The RPC's seconds_remaining is calculated by the server in Africa/Lagos.
+   Count down from that value instead of trusting the visitor's device clock. */
+function updateCountdown(){
+  if(countdownRemaining===null)return;
+  const rem=Math.max(0,Math.floor(countdownRemaining));
+  if(rem<=0){
+    $("countdown").textContent="Week ended";
+    if(countdownTimer){clearInterval(countdownTimer);countdownTimer=null;}
+    return;
+  }
+  const d=Math.floor(rem/86400),h=Math.floor((rem%86400)/3600),m=Math.floor((rem%3600)/60),s=rem%60;
+  $("countdown").textContent=d?`${d}d ${h}h ${m}m`:`${h}h ${m}m ${s}s`;
+  countdownRemaining=Math.max(0,countdownRemaining-1);
+}
+function startCountdown(seconds){
+  const value=Number(seconds);
+  if(!Number.isFinite(value)||value<0){
+    if(countdownTimer){clearInterval(countdownTimer);countdownTimer=null;}
+    countdownRemaining=null;
+    $("countdown").textContent="Unavailable";
+    return;
+  }
+  countdownRemaining=Math.floor(value);
+  if(countdownTimer){clearInterval(countdownTimer);countdownTimer=null;}
+  updateCountdown();
+  if(countdownRemaining>0)countdownTimer=setInterval(updateCountdown,1000);
+}
 
-      function escapeHTML(value) {
-        return String(value ?? "").replace(/[&<>"']/g, (char) => ({
-          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-        }[char]));
-      }
-
-      function money(value) {
-        const amount = Number(value || 0);
-        if (!Number.isFinite(amount)) return "₦0";
-        return "₦" + amount.toLocaleString("en-NG", { maximumFractionDigits: 2 });
-      }
-
-      function formatDuration(seconds) {
-        const total = Math.max(0, Math.floor(Number(seconds) || 0));
-        const hours = Math.floor(total / 3600);
-        const minutes = Math.floor((total % 3600) / 60);
-        const secs = total % 60;
-        if (hours) return `${hours}h ${minutes}m`;
-        if (minutes) return `${minutes}m ${secs}s`;
-        return `${secs}s`;
-      }
-
-      function formatDate(dateString) {
-        if (!dateString) return "This week";
-        const date = new Date(dateString + "T12:00:00");
-        if (Number.isNaN(date.getTime())) return "This week";
-        return date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-      }
-
-      function showToast(message) {
-        const toast = $("toast");
-        toast.textContent = message;
-        toast.classList.add("show");
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast.classList.remove("show"), 3200);
-      }
-
-      function avatarMarkup(url, username, sizeClass) {
-        const safeName = escapeHTML(username || "Iyal member");
-        const initial = escapeHTML((username || "I").trim().charAt(0).toUpperCase() || "I");
-        if (url && /^https:\/\//i.test(url)) {
-          return `<span class="avatar ${sizeClass || ""}"><img src="${escapeHTML(url)}" alt="${safeName} avatar" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.textContent='${initial}'"></span>`;
-        }
-        return `<span class="avatar ${sizeClass || ""}" aria-label="${safeName} avatar">${initial}</span>`;
-      }
-
-      function setLoading(show) {
-        ["myLoading", "podiumLoading", "listLoading", "previousLoading"].forEach((id) => $(id).classList.toggle("hidden", !show));
-        ["myCard", "podium", "leaderList", "previousList", "emptyLeaderboard", "previousEmpty"].forEach((id) => $(id).classList.add("hidden"));
-        if (show) {
-          $("myLoading").classList.remove("hidden");
-          $("podiumLoading").classList.remove("hidden");
-          $("listLoading").classList.remove("hidden");
-          $("previousLoading").classList.remove("hidden");
-        }
-      }
-
-      function setError(title, message) {
-        $("errorTitle").textContent = title;
-        $("errorMessage").textContent = message;
-        $("errorNotice").classList.remove("hidden");
-      }
-
-      function hideErrors() {
-        $("errorNotice").classList.add("hidden");
-        $("blockedNotice").classList.add("hidden");
-      }
-
-      function updateCountdown() {
-        if (!countdownEnd) return;
-        const remaining = Math.max(0, Math.floor((countdownEnd.getTime() - Date.now()) / 1000));
-        if (remaining <= 0) {
-          $("countdown").textContent = "Week ended · results update after finalisation";
-          return;
-        }
-        const days = Math.floor(remaining / 86400);
-        const hours = Math.floor((remaining % 86400) / 3600);
-        const minutes = Math.floor((remaining % 3600) / 60);
-        const seconds = remaining % 60;
-        $("countdown").textContent = days ? `${days}d ${hours}h ${minutes}m` : `${hours}h ${minutes}m ${seconds}s`;
-      }
-
-      function startCountdown(weekEndsAt) {
-        const date = new Date(weekEndsAt);
-        if (Number.isNaN(date.getTime())) return;
-        countdownEnd = date;
-        updateCountdown();
-        if (countdownTimer) clearInterval(countdownTimer);
-        countdownTimer = setInterval(updateCountdown, 1000);
-      }
-
-      function renderMyProgress(me) {
-        $("myLoading").classList.add("hidden");
-        $("myCard").classList.remove("hidden");
-        const count = Math.max(0, Number(me?.survey_count || 0));
-        const qualified = Boolean(me?.qualified);
-        const profileComplete = Boolean(me?.profile_complete);
-        const rank = me?.rank;
-        const visits = Math.max(0, Number(me?.visit_count || 0));
-        const activeSeconds = Math.max(0, Number(me?.active_seconds || 0));
-        const remaining = Math.max(0, 4 - count);
-
-        $("myRank").innerHTML = rank ? `#${escapeHTML(rank)} <small>this week</small>` : `— <small>not ranked yet</small>`;
-        $("myPrize").textContent = money(me?.current_prize || 0);
-        $("mySurveys").textContent = String(count);
-        $("myEarnings").textContent = money(me?.survey_earnings || 0);
-        $("myActiveTime").textContent = formatDuration(activeSeconds);
-        $("myVisits").textContent = String(visits);
-        $("myVisitHelp").textContent = visits === 0 ? "No visits recorded yet" : (visits === 1 ? "1 visit recorded" : `${visits} visits recorded`);
-        $("progressText").textContent = `${Math.min(count, 4)} of 4 successful surveys`;
-        $("progressRemaining").textContent = remaining === 0 ? "Survey target reached" : `${remaining} more to qualify`;
-        $("progressFill").style.width = `${Math.min(100, (count / 4) * 100)}%`;
-        $("progressTrack").setAttribute("aria-valuenow", String(Math.min(count, 4)));
-
-        const badge = $("qualificationBadge");
-        badge.classList.toggle("good", qualified);
-        badge.innerHTML = qualified ? '<i class="fa-solid fa-circle-check"></i> Qualified' : '<i class="fa-solid fa-hourglass-half"></i> Not qualified yet';
-
-        $("profileNotice").classList.toggle("hidden", profileComplete);
-        $("surveyNotice").classList.toggle("hidden", !profileComplete || count >= 4);
-        $("qualifiedNotice").classList.toggle("hidden", !qualified);
-
-        if (!profileComplete) {
-          let missing = [];
-          if (Array.isArray(me?.profile_requirements)) {
-            missing = me.profile_requirements.filter((item) => item.complete === false || item.completed === false).map((item) => item.label || item.field || item.name);
-          } else if (me?.profile_requirements && typeof me.profile_requirements === "object") {
-            missing = Object.entries(me.profile_requirements)
-              .filter(([, value]) => value === false || value === null || (value && typeof value === "object" && (value.complete === false || value.completed === false)))
-              .map(([key]) => key.replaceAll("_", " "));
-          }
-          $("profileReason").textContent = missing.length
-            ? `Please complete these profile details: ${missing.join(", ")}. Your profile must be complete before you can qualify.`
-            : "Your profile is missing one or more required details. Open your profile page and complete every required field.";
-        }
-        if (profileComplete && count < 4) {
-          $("surveyReason").textContent = `You have completed ${count} of the 4 successful surveys required this week. Complete ${remaining} more ${remaining === 1 ? "survey" : "surveys"} to meet the survey requirement.`;
-        }
-      }
-
-      function winnerTag(row) {
-        if (row.is_previous_week_winner || row.previous_week_winner) return '<span class="mini-tag winner"><i class="fa-solid fa-crown"></i> Previous Week Winner</span>';
-        return "";
-      }
-
-      function renderPodium(rows) {
-        const podium = $("podium");
-        $("podiumLoading").classList.add("hidden");
-        const top = rows.filter((row) => Number(row.rank) >= 1 && Number(row.rank) <= 3).sort((a,b) => Number(a.rank)-Number(b.rank));
-        if (!top.length) { podium.classList.add("hidden"); return; }
-        const byRank = new Map(top.map((row) => [Number(row.rank), row]));
-        const ordered = [byRank.get(2), byRank.get(1), byRank.get(3)].filter(Boolean);
-        podium.innerHTML = ordered.map((row) => {
-          const rank = Number(row.rank);
-          const cls = rank === 1 ? "first" : rank === 2 ? "second" : "third";
-          const medal = rank === 1 ? "fa-crown" : "fa-medal";
-          return `<article class="podium-card ${cls}"><i class="fa-solid ${medal} podium-medal"></i>${avatarMarkup(row.avatar_url, row.username)}<span class="podium-name" title="${escapeHTML(row.username || "Iyal member")}">${escapeHTML(row.username || "Iyal member")}</span><span class="podium-earnings">${Number(row.survey_count || 0)} surveys</span><span class="podium-prize">${money(row.current_prize || 0)}</span><span class="podium-rank">${rank === 1 ? "1st place" : rank === 2 ? "2nd place" : "3rd place"}</span>${row.is_previous_week_winner || row.previous_week_winner ? '<span class="mini-tag winner" style="margin-top:6px">Previous winner</span>' : ""}</article>`;
-        }).join("");
-        podium.classList.remove("hidden");
-      }
-
-      function renderLeaderboard(rows) {
-        const list = $("leaderList");
-        $("listLoading").classList.add("hidden");
-        if (!Array.isArray(rows) || rows.length === 0) {
-          list.classList.add("hidden");
-          $("emptyLeaderboard").classList.remove("hidden");
-          return;
-        }
-        $("emptyLeaderboard").classList.add("hidden");
-        list.innerHTML = rows.map((row) => {
-          const isMe = Boolean(row.is_me || row.is_current_user) || (
-            lastPayload?.me?.rank != null && Number(lastPayload.me.rank) === Number(row.rank)
-          );
-          const isPrevious = Boolean(row.is_previous_week_winner || row.previous_week_winner);
-          const count = Math.max(0, Number(row.survey_count || 0));
-          const active = Math.max(0, Number(row.active_seconds || 0));
-          const visits = Math.max(0, Number(row.visit_count || 0));
-          const rank = Number(row.rank || 0);
-          const rankLabel = rank > 0 ? `#${rank}` : "—";
-          const name = row.username || "Iyal member";
-          const prize = Number(row.current_prize || 0);
-          return `<article class="leader-row ${isMe ? "me" : ""} ${isPrevious ? "previous-winner" : ""}">
-            <div class="leader-main"><span class="rank-number">${rankLabel}</span>${avatarMarkup(row.avatar_url, name)}<div class="leader-name-wrap"><span class="leader-name">${escapeHTML(name)}</span><div class="leader-tags">${isMe ? '<span class="mini-tag you">YOU</span>' : ""}${winnerTag(row)}</div></div><div class="row-prize"><strong>${prize > 0 ? money(prize) : (rank >= 6 && rank <= 10 ? "Badge" : "—")}</strong><span>${prize > 0 ? "Current prize" : (rank >= 6 && rank <= 10 ? "Recognition" : "No cash prize")}</span></div></div>
-            <div class="row-details"><span class="row-detail survey"><i class="fa-solid fa-clipboard-check"></i><span><b>${count}</b> surveys</span></span><span class="row-detail earnings"><i class="fa-solid fa-coins"></i><span><b>${money(row.survey_earnings || 0)}</b> earned</span></span><span class="row-detail time"><i class="fa-regular fa-clock"></i><span><b>${formatDuration(active)}</b> active</span></span><span class="row-detail visit"><i class="fa-solid fa-door-open"></i><span><b>${visits}</b> ${visits === 1 ? "visit" : "visits"}</span></span></div>
-          </article>`;
-        }).join("");
-        list.classList.remove("hidden");
-      }
-
-      function renderPrevious(winners) {
-        $("previousLoading").classList.add("hidden");
-        const list = $("previousList");
-        if (!Array.isArray(winners) || winners.length === 0) {
-          list.classList.add("hidden");
-          $("previousEmpty").classList.remove("hidden");
-          return;
-        }
-        $("previousEmpty").classList.add("hidden");
-        list.innerHTML = winners.slice(0, 5).map((winner) => `<article class="previous-row"><span class="previous-rank">#${escapeHTML(winner.rank)}</span>${avatarMarkup(winner.avatar_url, winner.username)}<div style="min-width:0"><div class="previous-name">${escapeHTML(winner.username || "Iyal member")}</div><div class="previous-meta">${Number(winner.survey_count || 0)} successful surveys · Previous week</div></div><strong class="previous-prize">${money(winner.prize_amount || winner.prize || 0)}</strong></article>`).join("");
-        list.classList.remove("hidden");
-      }
-
-      function renderPayload(payload) {
-        lastPayload = payload;
-        hideErrors();
-        $("offlineNotice").classList.toggle("hidden", navigator.onLine);
-        $("weekLabel").textContent = `${formatDate(payload.week_start)} – ${formatDate(payload.week_end)}`;
-        startCountdown(payload.week_ends_at);
-        renderMyProgress(payload.me || {});
-        const rows = Array.isArray(payload.leaderboard) ? payload.leaderboard : [];
-        renderPodium(rows);
-        renderLeaderboard(rows);
-        renderPrevious(payload.previous_winners || []);
-      }
-
-      async function getClient() {
-        if (client && typeof client.rpc === "function") return client;
-        const url = window.SUPABASE_URL || window.IYAL_SUPABASE_URL;
-        const key = window.SUPABASE_ANON_KEY || window.SUPABASE_KEY || window.IYAL_SUPABASE_ANON_KEY;
-        if (!url || !key || String(url).includes("YOUR_SUPABASE") || (String(key).includes("YOUR_SUPABASE") || String(key).includes("PASTE_YOUR_EXISTING"))) {
-          throw new Error("Supabase is not configured on this page yet. Add the same project URL and public anon key used by Dashboard.");
-        }
-        if (!window.supabase || typeof window.supabase.createClient !== "function") throw new Error("The Supabase library did not load. Check your internet connection and reload the page.");
-        client = window.supabase.createClient(url, key, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
-        window.supabaseClient = client;
-        return client;
-      }
-
-      // Universal activity tracking for this page.
-      // Uses the existing activity-service Edge Function and user_activity table.
-      // This page sends heartbeat events only. dashboard_visit remains exclusive to Dashboard.
-      function startUniversalActivityTracker(supabase, userId) {
-        if (window.__iyalActivityStarted || !userId) return;
-        window.__iyalActivityStarted = true;
-
-        const projectUrl = window.SUPABASE_URL || window.IYAL_SUPABASE_URL;
-        const publicKey = window.SUPABASE_ANON_KEY || window.SUPABASE_KEY || window.IYAL_SUPABASE_ANON_KEY;
-        if (!projectUrl || !publicKey || String(publicKey).includes("PASTE_YOUR_EXISTING")) {
-          console.warn("Iyal activity tracker: public Supabase configuration is incomplete; activity tracking was not started.");
-          window.__iyalActivityStarted = false;
-          return;
-        }
-
-        const sessionStorageKey = `iyal_activity_session_${userId}`;
-        const makeUuid = () => {
-          if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
-          const bytes = new Uint8Array(16);
-          window.crypto.getRandomValues(bytes);
-          bytes[6] = (bytes[6] & 0x0f) | 0x40;
-          bytes[8] = (bytes[8] & 0x3f) | 0x80;
-          const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0"));
-          return `${hex.slice(0,4).join("")}-${hex.slice(4,6).join("")}-${hex.slice(6,8).join("")}-${hex.slice(8,10).join("")}-${hex.slice(10,16).join("")}`;
-        };
-
-        let sessionId;
-        try {
-          sessionId = sessionStorage.getItem(sessionStorageKey);
-          if (!sessionId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(sessionId)) {
-            sessionId = makeUuid();
-            sessionStorage.setItem(sessionStorageKey, sessionId);
-          }
-        } catch (error) {
-          console.warn("Iyal activity tracker: session storage unavailable; using a temporary session ID.");
-          sessionId = makeUuid();
-        }
-
-        const page = "leaderboard";
-        const idleLimitMs = 5 * 60 * 1000;
-        let lastInteractionAt = Date.now();
-        let requestInProgress = false;
-        let stopped = false;
-        let heartbeatTimer = null;
-
-        async function sendHeartbeat(keepalive = false) {
-          if (requestInProgress || stopped) return;
-          requestInProgress = true;
-          try {
-            const { data, error } = await supabase.auth.getSession();
-            if (error) throw error;
-            const accessToken = data?.session?.access_token;
-            if (!accessToken) return;
-
-            const payload = {
-              event_type: "heartbeat",
-              event_id: makeUuid(),
-              session_id: sessionId,
-              page
-            };
-
-            const response = await fetch(`${projectUrl}/functions/v1/activity-service`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "apikey": publicKey,
-                "Authorization": `Bearer ${accessToken}`
-              },
-              body: JSON.stringify(payload),
-              keepalive
-            });
-            if (!response.ok) {
-              const responseText = await response.text().catch(() => "");
-              throw new Error(`Activity service returned ${response.status}${responseText ? `: ${responseText.slice(0, 160)}` : ""}`);
-            }
-          } catch (error) {
-            // Activity tracking must never prevent the leaderboard from working.
-            console.warn("Iyal activity heartbeat was not recorded:", error);
-          } finally {
-            requestInProgress = false;
-          }
-        }
-
-        const markActive = () => { lastInteractionAt = Date.now(); };
-        ["click", "scroll", "keydown", "touchstart", "pointerdown"].forEach((eventName) => {
-          document.addEventListener(eventName, markActive, { passive: true });
-        });
-
-        heartbeatTimer = window.setInterval(() => {
-          const isVisible = document.visibilityState === "visible";
-          const recentlyActive = Date.now() - lastInteractionAt <= idleLimitMs;
-          if (isVisible && recentlyActive) sendHeartbeat(false);
-        }, 10000);
-
-        document.addEventListener("visibilitychange", () => {
-          if (document.visibilityState === "hidden" && Date.now() - lastInteractionAt <= idleLimitMs) {
-            sendHeartbeat(true);
-          }
-        });
-
-        window.addEventListener("pagehide", () => {
-          if (Date.now() - lastInteractionAt <= idleLimitMs) sendHeartbeat(true);
-          stopped = true;
-          if (heartbeatTimer) window.clearInterval(heartbeatTimer);
-        }, { once: true });
-      }
-
-      async function loadLeaderboard() {
-        if (isLoading) return;
-        isLoading = true;
-        $("refreshButton").disabled = true;
-        $("retryButton").disabled = true;
-        hideErrors();
-        setLoading(true);
-        try {
-          const supabase = await getClient();
-          const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-          if (sessionError) throw sessionError;
-          if (!sessionData?.session?.user) {
-            throw new Error("Please sign in to view your personal leaderboard progress. Return to the sign-in page and log in, then open this page again.");
-          }
-          startUniversalActivityTracker(supabase, sessionData.session.user.id);
-          const { data, error } = await supabase.rpc("get_weekly_leaderboard");
-          if (error) throw error;
-          if (!data || typeof data !== "object") throw new Error("The leaderboard service returned an unexpected response. Please try again shortly.");
-          if (data.success === false && data.code === "ACCOUNT_BLOCKED") {
-            ["myLoading", "podiumLoading", "listLoading", "previousLoading"].forEach((id) => $(id).classList.add("hidden"));
-            $("myCard").classList.add("hidden");
-            $("podium").classList.add("hidden");
-            $("leaderList").classList.add("hidden");
-            $("previousList").classList.add("hidden");
-            $("blockedNotice").classList.remove("hidden");
-            return;
-          }
-          if (data.success !== true) throw new Error(data.message || "The leaderboard could not be loaded. Please try again.");
-          renderPayload(data);
-        } catch (error) {
-          console.error("Leaderboard load error:", error);
-          ["myLoading", "podiumLoading", "listLoading", "previousLoading"].forEach((id) => $(id).classList.add("hidden"));
-          setError("We couldn't load the leaderboard", error?.message || "Something went wrong. Please check your connection and try again.");
-          if (lastPayload) {
-            renderPayload(lastPayload);
-            setError("Showing your last loaded results", "We couldn't refresh just now. The information below may be out of date; reconnect and try again.");
-          } else {
-            $("myLoading").classList.add("hidden");
-            $("podiumLoading").classList.add("hidden");
-            $("listLoading").classList.add("hidden");
-            $("previousLoading").classList.add("hidden");
-          }
-        } finally {
-          isLoading = false;
-          $("refreshButton").disabled = false;
-          $("retryButton").disabled = false;
-        }
-      }
-
-      async function logout() {
-        try {
-          const supabase = await getClient();
-          const { error } = await supabase.auth.signOut();
-          if (error) throw error;
-          window.location.href = "login.html";
-        } catch (error) {
-          console.error("Logout error:", error);
-          showToast("We couldn't complete logout. Please try again.");
-        }
-      }
-
-      const menuToggle = $("menuToggle");
-      const menuPanel = $("menuPanel");
-      menuToggle.addEventListener("click", () => {
-        const open = menuPanel.classList.toggle("open");
-        menuToggle.setAttribute("aria-expanded", String(open));
-        menuToggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
-        menuToggle.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
-      });
-      document.addEventListener("click", (event) => {
-        if (!menuPanel.contains(event.target) && !menuToggle.contains(event.target)) {
-          menuPanel.classList.remove("open");
-          menuToggle.setAttribute("aria-expanded", "false");
-          menuToggle.setAttribute("aria-label", "Open navigation menu");
-          menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
-        }
-      });
-      $("refreshButton").addEventListener("click", loadLeaderboard);
-      $("retryButton").addEventListener("click", loadLeaderboard);
-      $("logoutButton").addEventListener("click", logout);
-      window.addEventListener("online", () => { $("offlineNotice").classList.add("hidden"); showToast("You're back online. Refreshing leaderboard…"); loadLeaderboard(); });
-      window.addEventListener("offline", () => $("offlineNotice").classList.remove("hidden"));
-      if (!navigator.onLine) $("offlineNotice").classList.remove("hidden");
-
-      loadLeaderboard();
-    })();
-  </script>
+// Handles both array and object formats returned by profile_requirements.
+function getMissingProfile(req){
+  if(Array.isArray(req)) return req.filter(i=>i.complete===false||i.completed===false).map(i=>i.label||i.field||i.name).filter(Boolean);
+  if(req&&typeof req==="object") return Object.entries(req).filter(([,v])=>v===false||v===null||(v&&typeof v==="object"&&(v.complete===false||v.completed===false))).map(([k])=>k.replaceAll("_"," "));
+  return [];
+}
+function renderMy(me,rows){
+  $("myLoading").classList.add("hidden");$("myCard").classList.remove("hidden");
+  const count=Math.max(0,Number(me?.survey_count||0)), qualified=Boolean(me?.qualified), profileComplete=Boolean(me?.profile_complete);
+  const rank=me?.rank, visits=Math.max(0,Number(me?.visit_count||0)), active=Math.max(0,Number(me?.active_seconds||0)), remaining=Math.max(0,4-count);
+  $("myRank").innerHTML=rank?`#${esc(rank)} <small>this week</small>`:`— <small>not ranked yet</small>`;
+  $("myPrize").textContent=money(me?.current_prize||0);$("mySurveys").textContent=String(count);
+  $("myEarnings").textContent=money(me?.survey_earnings||0);$("myActiveTime").textContent=fmtDur(active);$("myVisits").textContent=String(visits);
+  $("myVisitHelp").textContent=visits===0?"No visits recorded yet":visits===1?"1 visit recorded":`${visits} visits recorded`;
+  $("progressText").textContent=`${Math.min(count,4)} of 4 successful surveys`; $("progressRemaining").textContent=remaining===0?"Survey target reached":`${remaining} more to qualify`;
+  $("progressFill").style.width=`${Math.min(100,(count/4)*100)}%`;
+  const badge=$("qualificationBadge");badge.classList.toggle("good",qualified);badge.innerHTML=qualified?'✅ Qualified':'⏳ Not qualified yet';
+  $("profileNotice").classList.toggle("hidden",profileComplete);$("surveyNotice").classList.toggle("hidden",!profileComplete||count>=4);$("qualifiedNotice").classList.toggle("hidden",!qualified);
+  if(!profileComplete){const missing=getMissingProfile(me?.profile_requirements);$("profileReason").textContent=missing.length?`Please complete: ${missing.join(", ")}.`:"Your profile is missing required details. Open profile and complete every required field."}
+  if(profileComplete&&count<4) $("surveyReason").textContent=`You have ${count} of 4. Complete ${remaining} more ${remaining===1?"survey":"surveys"} to qualify.`;
+  const st=$("mySticky");st.classList.remove("hidden");
+  $("myStickyAvatar").textContent=(me?.username||"Y").trim().charAt(0).toUpperCase();
+  $("myStickyName").textContent=`You • ${rank?`#${rank}`:"Not ranked"}`;
+  $("myStickyMeta").textContent=`${count} surveys • ${money(me?.survey_earnings||0)} • ${fmtDur(active)} • ${visits} visits`;
+  $("myStickyProgress").style.width=`${Math.min(100,(count/4)*100)}%`; $("myStickyPrize").textContent=money(me?.current_prize||0);
+  let gap="No prize yet"; if(rank===1)gap="🏆 You lead!"; else if(rank&&rank>1){const above=rows.find(r=>Number(r.rank)===Number(rank)-1); if(above){const g=Math.max(0,Number(above.survey_count||0)-count); gap=g===0?`Tied with #${rank-1} - earn more to pass`:`${g} survey${g===1?"":"s"} to pass #${rank-1}`} else gap=`#${rank} this week`} else if(count<4) gap=`${4-count} more to qualify`;
+  $("myStickyGap").textContent=gap;
+}
+function renderPodium(rows){
+  $("podiumLoading").classList.add("hidden");const top=rows.filter(r=>Number(r.rank)>=1&&Number(r.rank)<=3).sort((a,b)=>Number(a.rank)-Number(b.rank));
+  const pod=$("podium");if(!top.length){pod.classList.add("hidden");return}const by=new Map(top.map(r=>[Number(r.rank),r]));const ordered=[by.get(2),by.get(1),by.get(3)].filter(Boolean);
+  pod.innerHTML=ordered.map(r=>{const rank=Number(r.rank),cls=rank===1?"first":rank===2?"second":"third",medal=rank===1?"👑":rank===2?"🥈":"🥉",label=rank===1?"1ST PLACE • WINNER":rank===2?"2ND PLACE":"3RD PLACE";
+  return `<article class="p-card ${cls}"><div class="crown">${medal}</div>${avatar(r.avatar_url,r.username)}<div class="p-name">${esc(r.username||"Iyal member")}</div><div class="p-survey">${Number(r.survey_count||0)} surveys • ${money(r.survey_earnings||0)}</div><div class="p-prize">${money(r.current_prize||0)}</div><div class="p-rank">${label}</div>${r.is_previous_week_winner||r.previous_week_winner?`<span class="p-badge">👑 Previous Winner</span>`:""}</article>`}).join("");pod.classList.remove("hidden");
+}
+function renderList(rows){
+  $("listLoading").classList.add("hidden");const list=$("leaderList");
+  if(!rows.length){list.classList.add("hidden");$("emptyLeaderboard").classList.remove("hidden");return}$("emptyLeaderboard").classList.add("hidden");
+  list.innerHTML=rows.slice(0,10).map(r=>{const isMe=Boolean(r.is_me||r.is_current_user)||(lastPayload?.me?.rank!=null&&Number(lastPayload.me.rank)===Number(r.rank));
+  const rank=Number(r.rank||0),count=Number(r.survey_count||0),prize=Number(r.current_prize||0),rankCls=rank===1?"top1":rank===2?"top2":rank===3?"top3":"",medal=rank===1?"👑":rank===2?"🥈":rank===3?"🥉":`#${rank}`;
+  return `<article class="row ${isMe?"me":""} ${r.is_previous_week_winner||r.previous_week_winner?"winner":""}"><span class="rank ${rankCls}">${medal}</span>${avatar(r.avatar_url,r.username)}<div class="info"><div class="name">${esc(r.username||"Iyal member")} ${isMe?`<span class="you-tag">YOU</span>`:""} ${(r.is_previous_week_winner||r.previous_week_winner)?`<span class="winner-tag">👑 Prev Winner</span>`:""}</div><div class="meta">${count} surveys • ${money(r.survey_earnings||0)} earned • ${fmtDur(r.active_seconds||0)} • ${r.visit_count||0} visits</div></div><div class="prize ${prize>0?"":"badge"}"><b>${prize>0?money(prize):(rank>=6&&rank<=10?"Badge":"—")}</b><span>${prize>0?"Prize":(rank>=6&&rank<=10?"Recognition":"No prize")}</span></div></article>`}).join("");list.classList.remove("hidden");
+}
+function renderPrev(w){
+  $("previousLoading").classList.add("hidden");const list=$("previousList");
+  if(!w.length){list.classList.add("hidden");$("previousEmpty").classList.remove("hidden");return}
+  $("previousEmpty").classList.add("hidden");
+  list.innerHTML=w.slice(0,5).map(x=>`<article class="prev-row"><span class="rank">#${esc(x.rank)}</span>${avatar(x.avatar_url,x.username)}<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(x.username||"Iyal member")}</div><div style="color:#9aafa0;font-size:9px">${Number(x.survey_count||0)} surveys • Previous week</div></div><b style="color:#ffe09a">${money(x.prize_amount||x.prize||0)}</b></article>`).join("");list.classList.remove("hidden");
+}
+function renderPayload(p,{preserveCountdown=false}={}){
+  lastPayload=p;$("errorNotice").classList.add("hidden");$("blockedNotice").classList.add("hidden");$("offlineNotice").classList.toggle("hidden",navigator.onLine);
+  $("weekLabel").textContent=`${fmtDate(p.week_start)} – ${fmtDate(p.week_end)}`;
+  if(!preserveCountdown)startCountdown(p.seconds_remaining);
+  const rows=Array.isArray(p.leaderboard)?p.leaderboard:[];
+  renderPodium(rows);renderList(rows);renderPrev(p.previous_winners||[]);renderMy(p.me||{},rows);
+}
+async function getClient(){
+  if(client&&typeof client.rpc==="function")return client;
+  const url=window.IYAL_SUPABASE_URL,key=window.IYAL_SUPABASE_ANON_KEY;
+  if(!url||!key)throw new Error("Supabase not configured");
+  if(!window.supabase?.createClient)throw new Error("Supabase library could not be loaded. Refresh the page.");
+  client=window.supabase.createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  window.supabaseClient=client;return client;
+}
+function startTracker(supabase,userId){
+  if(window.__iyalActivityStarted||!userId)return;window.__iyalActivityStarted=true;
+  const projectUrl=window.IYAL_SUPABASE_URL,publicKey=window.IYAL_SUPABASE_ANON_KEY,key=`iyal_activity_session_${userId}`;
+  const uuid=()=>window.crypto?.randomUUID?window.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&0x3|0x8)).toString(16)});
+  let sid;try{sid=sessionStorage.getItem(key);if(!sid||!/^[0-9a-f]{8}-/.test(sid)){sid=uuid();sessionStorage.setItem(key,sid)}}catch(e){sid=uuid()}
+  let last=Date.now(),busy=false,stopped=false;
+  async function beat(keep=false){
+    if(busy||stopped)return;busy=true;
+    try{
+      const {data,error}=await supabase.auth.getSession();if(error)throw error;
+      const tok=data?.session?.access_token;if(!tok)return;
+      const res=await fetch(`${projectUrl}/functions/v1/activity-service`,{method:"POST",headers:{"Content-Type":"application/json","apikey":publicKey,"Authorization":`Bearer ${tok}`},body:JSON.stringify({event_type:"heartbeat",event_id:uuid(),session_id:sid,page:"leaderboard"}),keepalive:keep});
+      if(!res.ok)throw new Error("Activity service returned "+res.status);
+    }catch(e){console.warn("Leaderboard activity heartbeat failed",e)}
+    finally{busy=false}
+  }
+  ["click","scroll","keydown","touchstart","pointerdown"].forEach(ev=>document.addEventListener(ev,()=>last=Date.now(),{passive:true}));
+  const heartbeatTimer=setInterval(()=>{if(document.visibilityState==="visible"&&Date.now()-last<=5*60*1000)beat(false)},10000);
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")beat(true)});
+  window.addEventListener("pagehide",()=>{beat(true);stopped=true;clearInterval(heartbeatTimer)},{once:true});
+}
+async function load(){
+  if(isLoading)return;isLoading=true;$("refreshButton").disabled=true;$("retryButton").disabled=true;
+  try{
+    const supabase=await getClient();const {data:s,error:se}=await supabase.auth.getSession();
+    if(se)throw se;if(!s?.session?.user)throw new Error("Please sign in to view leaderboard.");
+    startTracker(supabase,s.session.user.id);
+    const {data,error}=await supabase.rpc("get_weekly_leaderboard");if(error)throw error;
+    if(data?.success===false&&data.code==="ACCOUNT_BLOCKED"){
+      ["podiumLoading","listLoading","previousLoading","myLoading"].forEach(id=>$(id).classList.add("hidden"));
+      $("errorNotice").classList.add("hidden");$("blockedNotice").classList.remove("hidden");return;
+    }
+    if(data?.success!==true)throw new Error(data?.message||"Could not load leaderboard");
+    renderPayload(data);
+  }catch(e){
+    console.error(e);
+    ["podiumLoading","listLoading","previousLoading","myLoading"].forEach(id=>$(id).classList.add("hidden"));
+    $("errorTitle").textContent="We couldn't load the leaderboard";
+    $("errorMessage").textContent=e?.message||"Try again";
+    $("errorNotice").classList.remove("hidden");
+    if(lastPayload){
+      renderPayload(lastPayload,{preserveCountdown:true});
+      $("errorTitle").textContent="Showing last loaded results";
+      $("errorMessage").textContent="Couldn't refresh. These saved results may be out of date.";
+      $("errorNotice").classList.remove("hidden");
+    }
+  }finally{
+    isLoading=false;$("refreshButton").disabled=false;$("retryButton").disabled=false;
+  }
+}
+async function logout(){
+  try{const s=await getClient();const {error}=await s.auth.signOut();if(error)throw error;location.href="login.html"}
+  catch(e){toast("Couldn't logout, try again")}
+}
+const mt=$("menuToggle"),mp=$("menuPanel");
+mt.addEventListener("click",()=>{
+  const o=mp.classList.toggle("open");mt.setAttribute("aria-expanded",String(o));
+  mt.innerHTML=o?'<i class="fa-solid fa-xmark"></i>':'<i class="fa-solid fa-bars"></i>';
+});
+document.addEventListener("click",e=>{
+  if(!mp.contains(e.target)&&!mt.contains(e.target)){mp.classList.remove("open");mt.setAttribute("aria-expanded","false");mt.innerHTML='<i class="fa-solid fa-bars"></i>'}
+});
+$("refreshButton").addEventListener("click",load);$("retryButton").addEventListener("click",load);$("logoutButton").addEventListener("click",logout);
+window.addEventListener("online",()=>{$("offlineNotice").classList.add("hidden");toast("Back online. Refreshing…");load()});
+window.addEventListener("offline",()=>$("offlineNotice").classList.remove("hidden"));
+if(!navigator.onLine)$("offlineNotice").classList.remove("hidden");
+load();
+})();
+</script>
 </body>
 </html>
