@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#08140d;color:#f2f8f3;font-family:Inter,system-ui,sans-serif;padding-bottom:120px;overflow-x:hidden}
+*{box-sizing:border-box}body{margin:0;background:#08140d;color:#f2f8f3;font-family:Inter,system-ui,sans-serif;padding-bottom:320px;overflow-x:hidden}
 a{color:inherit;text-decoration:none}.page{width:min(100% - 28px,760px);margin:0 auto}
 .topbar{height:72px;display:flex;justify-content:space-between;align-items:center;position:relative}
 .brand{display:flex;gap:10px;align-items:center}.brand img{width:40px;height:40px;border-radius:12px;object-fit:contain}
@@ -131,7 +131,7 @@ a{color:inherit;text-decoration:none}.page{width:min(100% - 28px,760px);margin:0
 <section class="section"><h2>🏆 Top 3 This Week</h2><p class="sub">The leaders to beat</p>
 <div class="loading" id="podiumLoading"><span class="spinner"></span><br>Finding leaders…</div><div class="podium hidden" id="podium"></div></section>
 
-<section class="section"><div style="display:flex;justify-content:space-between;align-items:end"><div><h2>📊 Weekly Rankings</h2><p class="sub">Surveys first. Earnings second. Activity breaks ties.</p></div><button class="icon-btn" id="refreshButton" type="button" aria-label="Refresh leaderboard" style="width:36px;height:36px"><i class="fa-solid fa-rotate-right"></i></button></div>
+<section class="section"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-right:2px"><div><h2>📊 Weekly Rankings</h2><p class="sub">Surveys first. Earnings second. Activity breaks ties.</p></div><button class="icon-btn" id="refreshButton" type="button" aria-label="Refresh leaderboard" style="width:38px;height:38px;flex:0 0 auto;margin-left:8px;margin-bottom:14px"><i class="fa-solid fa-rotate-right"></i></button></div>
 <div class="loading" id="listLoading"><span class="spinner"></span><br>Loading rankings…</div><div class="list hidden" id="leaderList"></div>
 <div class="empty hidden" id="emptyLeaderboard"><i class="fa-solid fa-ranking-star" style="font-size:22px;color:#86efac"></i><b>The race is ready</b>No qualified participants yet. Complete 4 surveys to enter.</div></section>
 
@@ -147,7 +147,9 @@ a{color:inherit;text-decoration:none}.page{width:min(100% - 28px,760px);margin:0
 <div class="how-item"><i class="fa-solid fa-trophy" style="color:#f7c967;background:rgba(247,201,103,.12)"></i><div><b>5. Prizes</b><p>1st ₦1,000 • 2nd ₦500 • 3rd ₦300 • 4th ₦100 • 5th ₦100 • 6-10 Badge</p></div></div>
 <div class="how-item"><i class="fa-solid fa-calendar-check"></i><div><b>6. Reset</b><p>Mon-Sun, Nigeria time. 24h wait, then prizes auto-credit.</p></div></div>
 </div><p class="note">Survey earnings = earnings from surveys this week. Leaderboard prize = separate reward. Displayed prize is estimate until finalisation.</p></section>
-</main></div>
+</main>
+<div style="height:140px"></div>
+</div>
 
 <div class="my-sticky hidden" id="mySticky">
 <span class="avatar" id="myStickyAvatar">?</span>
