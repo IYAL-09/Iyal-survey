@@ -1,154 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About Us – Iyal Surveys</title>
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#15803d">
+<meta name="description" content="About Iyal Surveys — who we are, how rewards work, and how we pay you.">
+<title>About Us – Iyal Surveys</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="icon" type="image/png" href="iyallogo.png">
+<link rel="apple-touch-icon" href="iyallogo.png">
+<style>
+body{font-family:'Segoe UI',system-ui,sans-serif}
+.hero-grad{background:linear-gradient(135deg,#14532d 0%,#15803d 45%,#22c55e 100%)}
+.card-shadow{box-shadow:0 20px 50px rgba(21,128,61,.12),0 2px 10px rgba(0,0,0,.04)}
+</style>
 </head>
-<body class="bg-green-50 min-h-screen flex flex-col">
+<body class="bg-[#f0fdf4] min-h-screen flex flex-col text-slate-800">
 
-  <!-- HEADER -->
-  <header class="bg-green-700 text-white shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-     <img src="iyallogo.png" alt="Iyal Surveys Logo" class="w-10 h-10 rounded-full">
-        <span class="text-xl font-bold">Iyal Surveys</span>
-      </div>
-      <a href="dashboard.html" class="text-sm hover:underline">
-        <i class="fa fa-home mr-1"></i> Home
-      </a>
-    </div>
-  </header>
+<!-- HEADER — SAME AS PRIVACY + TERMS -->
+<header class="bg-green-800 text-white shadow-lg sticky top-0 z-50">
+<div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img src="iyallogo.png" alt="Iyal Surveys Logo" class="w-10 h-10 rounded-full border-2 border-green-300 object-cover">
+<div><span class="text-xl font-bold block leading-none">Iyal Surveys</span><span class="text-[11px] text-green-200 tracking-wide">EARN • SURVEY • WITHDRAW</span></div>
+</div>
+<a href="dashboard.html" class="text-sm bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2 rounded-full font-semibold"><i class="fa fa-home mr-1"></i> Dashboard</a>
+</div>
+</header>
 
-  <!-- MAIN CONTENT -->
-  <main class="flex-grow max-w-5xl mx-auto px-4 py-10">
+<!-- HERO — SAME AS PRIVACY + TERMS -->
+<section class="hero-grad text-white">
+<div class="max-w-4xl mx-auto px-4 py-10 md:py-12">
+<div class="inline-flex items-center gap-2 bg-white/15 border border-white/20 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider"><i class="fa-solid fa-circle-info"></i> ABOUT • WHO WE ARE</div>
+<h1 class="text-3xl md:text-[42px] leading-[1.1] font-extrabold mt-4">Real surveys.<br>Real rewards.<br>No confusion.</h1>
+<p class="text-green-100 mt-3 leading-relaxed max-w-2xl">Iyal Surveys connects you to trusted survey providers, tracks your real participation, and pays you through airtime or bank — simply and transparently.</p>
+<div class="flex flex-wrap gap-2 mt-5 text-xs font-semibold"><span class="bg-black/20 border border-white/20 px-3 py-1.5 rounded-full">Operated in Nigeria</span><span class="bg-black/20 border border-white/20 px-3 py-1.5 rounded-full">Updated: 15 November 2026</span><span class="bg-black/20 border border-white/20 px-3 py-1.5 rounded-full">18+ Only</span></div>
+</div>
+</section>
 
-    <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 space-y-8">
+<!-- TRUST BAR — SAME AS PRIVACY + TERMS -->
+<div class="max-w-4xl mx-auto px-4 -mt-6 relative z-10 w-full">
+<div class="bg-white rounded-2xl card-shadow grid grid-cols-3 divide-x divide-green-100 overflow-hidden text-center">
+<div class="p-4"><i class="fa-solid fa-handshake text-green-700 text-xl"></i><p class="font-bold text-sm mt-1">Trusted Partners</p><p class="text-xs text-slate-500 mt-0.5">CPX, BitLabs, Wannads.</p></div>
+<div class="p-4"><i class="fa-solid fa-wallet text-green-700 text-xl"></i><p class="font-bold text-sm mt-1">Airtime or Bank</p><p class="text-xs text-slate-500 mt-0.5">You choose how you withdraw.</p></div>
+<div class="p-4"><i class="fa-solid fa-eye text-green-700 text-xl"></i><p class="font-bold text-sm mt-1">Transparent</p><p class="text-xs text-slate-500 mt-0.5">No hidden charges to withdraw.</p></div>
+</div>
+</div>
 
-      <!-- TITLE -->
-      <div class="text-center">
-        <h1 class="text-3xl font-bold text-green-700 mb-2">
-          About Iyal Surveys
-        </h1>
-        <p class="text-gray-600">
-          Learn more about who we are and what we do
-        </p>
-      </div>
+<!-- MAIN -->
+<main class="flex-grow max-w-4xl mx-auto px-4 py-8 w-full">
+<div class="bg-white rounded-2xl card-shadow p-6 md:p-8 space-y-10">
 
-      <!-- WHO WE ARE -->
-      <section class="space-y-3">
-        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
-          <i class="fa fa-users"></i> Who We Are
-        </h2>
-        <p class="text-gray-700 leading-relaxed">
-          Iyal Surveys is an online rewards platform that connects users with
-          trusted third-party survey and offer providers. Our goal is to give
-          users a simple and transparent way to earn rewards by participating
-          in surveys and completing approved tasks.
-        </p>
-      </section>
+<div class="text-center">
+<h1 class="text-2xl md:text-3xl font-extrabold text-green-800">About Iyal Surveys</h1>
+<p class="text-slate-500 mt-1">Learn more about who we are and what we do</p>
+</div>
 
-      <!-- WHAT WE DO -->
-      <section class="space-y-3">
-        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
-          <i class="fa fa-clipboard-list"></i> What We Do
-        </h2>
-        <p class="text-gray-700 leading-relaxed">
-          We partner with reputable advertising and survey networks to display
-          available surveys and offers to our users. When a user completes a
-          survey successfully, we receive a reward from the survey provider,
-          and a portion of that reward is credited to the user’s account.
-        </p>
-      </section>
+<section class="space-y-3">
+<h2 class="text-lg font-bold text-green-800 flex items-center gap-2"><i class="fa fa-users text-green-700"></i> Who We Are</h2>
+<p class="text-slate-700 leading-relaxed">Iyal Surveys is an online rewards platform operated by <strong>Iyal Couch Global Ventures And Business Solutions</strong>, a business registered in Nigeria.</p>
+<p class="text-slate-700 leading-relaxed">We connect users with trusted third-party survey and offer providers. Our goal is to give you a simple and transparent way to earn rewards by participating in surveys and completing approved tasks — without confusion, without hidden tricks.</p>
+</section>
 
-      <!-- HOW IT WORKS -->
-      <section class="space-y-4">
-        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
-          <i class="fa fa-gears"></i> How It Works
-        </h2>
+<section class="space-y-3">
+<h2 class="text-lg font-bold text-green-800 flex items-center gap-2"><i class="fa fa-clipboard-list text-green-700"></i> What We Do</h2>
+<p class="text-slate-700 leading-relaxed">We partner with reputable advertising and survey networks to display available surveys and offers to our users. When you complete a survey successfully, we receive a reward from the survey provider, and a portion of that reward is credited to your account balance.</p>
+<div class="grid sm:grid-cols-2 gap-3 mt-2">
+<div class="bg-green-50 border border-green-100 rounded-xl p-4"><p class="font-bold text-sm"><i class="fa-solid fa-magnifying-glass text-green-700 mr-1"></i> We bring surveys to you</p><p class="text-sm text-slate-600 mt-1 leading-relaxed">You don't need to search the internet for surveys. We bring CPX Research, BitLabs and Wannads together in one dashboard.</p></div>
+<div class="bg-green-50 border border-green-100 rounded-xl p-4"><p class="font-bold text-sm"><i class="fa-solid fa-coins text-green-700 mr-1"></i> We track & credit fairly</p><p class="text-sm text-slate-600 mt-1 leading-relaxed">Your balance, total earned, surveys completed and referrals are shown clearly in your dashboard and profile.</p></div>
+</div>
+</section>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-green-100 p-4 rounded-lg text-center">
-            <i class="fa fa-user-plus text-2xl text-green-700 mb-2"></i>
-            <h3 class="font-semibold mb-1">Create an Account</h3>
-            <p class="text-sm text-gray-700">
-              Sign up and access available surveys and offers.
-            </p>
-          </div>
+<section class="space-y-4">
+<h2 class="text-lg font-bold text-green-800 flex items-center gap-2"><i class="fa fa-gears text-green-700"></i> How It Works</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+<div class="bg-green-50 border border-green-100 p-4 rounded-xl text-center"><div class="w-10 h-10 mx-auto rounded-full bg-green-700 text-white flex items-center justify-center font-bold">1</div><i class="fa fa-user-plus text-xl text-green-700 my-2 block"></i><h3 class="font-bold text-sm">Create Account</h3><p class="text-xs text-slate-600 mt-1 leading-relaxed">Sign up (18+), complete your profile: name, username, phone, date of birth.</p></div>
+<div class="bg-green-50 border border-green-100 p-4 rounded-xl text-center"><div class="w-10 h-10 mx-auto rounded-full bg-green-700 text-white flex items-center justify-center font-bold">2</div><i class="fa fa-list-check text-xl text-green-700 my-2 block"></i><h3 class="font-bold text-sm">Complete Surveys</h3><p class="text-xs text-slate-600 mt-1 leading-relaxed">Choose CPX, BitLabs or Wannads. Answer honestly. Active participation counts.</p></div>
+<div class="bg-green-50 border border-green-100 p-4 rounded-xl text-center"><div class="w-10 h-10 mx-auto rounded-full bg-green-700 text-white flex items-center justify-center font-bold">3</div><i class="fa fa-wallet text-xl text-green-700 my-2 block"></i><h3 class="font-bold text-sm">Earn Rewards</h3><p class="text-xs text-slate-600 mt-1 leading-relaxed">Rewards are credited to your balance after provider verification.</p></div>
+<div class="bg-green-50 border border-green-100 p-4 rounded-xl text-center"><div class="w-10 h-10 mx-auto rounded-full bg-green-700 text-white flex items-center justify-center font-bold">4</div><i class="fa fa-money-bill-wave text-xl text-green-700 my-2 block"></i><h3 class="font-bold text-sm">Withdraw</h3><p class="text-xs text-slate-600 mt-1 leading-relaxed">Withdraw as airtime to your number, or to your bank account.</p></div>
+</div>
+</section>
 
-          <div class="bg-green-100 p-4 rounded-lg text-center">
-            <i class="fa fa-list-check text-2xl text-green-700 mb-2"></i>
-            <h3 class="font-semibold mb-1">Complete Surveys</h3>
-            <p class="text-sm text-gray-700">
-              Participate in surveys provided by our partners.
-            </p>
-          </div>
+<section class="space-y-3">
+<h2 class="text-lg font-bold text-green-800 flex items-center gap-2"><i class="fa fa-users text-green-700"></i> Referrals</h2>
+<p class="text-slate-700 leading-relaxed">You can also invite friends with your referral link. When your referrals participate genuinely, you earn referral rewards as shown in your Referrals page. Fake referrals, multiple accounts, or manipulated activity are not counted.</p>
+</section>
 
-          <div class="bg-green-100 p-4 rounded-lg text-center">
-            <i class="fa fa-wallet text-2xl text-green-700 mb-2"></i>
-            <h3 class="font-semibold mb-1">Earn Rewards</h3>
-            <p class="text-sm text-gray-700">
-              Earn rewards credited to your account balance.
-            </p>
-          </div>
-        </div>
-      </section>
+<section class="space-y-3">
+<h2 class="text-lg font-bold text-green-800 flex items-center gap-2"><i class="fa fa-circle-info text-green-700"></i> Important Information</h2>
+<p class="text-slate-700 leading-relaxed">Survey availability, eligibility, and completion status are determined entirely by third-party survey providers. Iyal Surveys does not control survey qualification criteria or disqualifications.</p>
+<p class="text-slate-700 leading-relaxed">A reward may be reversed if the provider later determines the completion was invalid, duplicated, incomplete, or ineligible. Only valid and confirmed rewards can be withdrawn.</p>
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 leading-relaxed"><b>No payment to withdraw:</b> We will never ask you to send money to unlock a withdrawal, and we will never ask for your bank PIN or card CVV. If anyone asks you to pay, report it in Support.</div>
+</section>
 
-      <!-- IMPORTANT NOTE -->
-      <section class="space-y-3">
-        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
-          <i class="fa fa-circle-info"></i> Important Information
-        </h2>
-        <p class="text-gray-700 leading-relaxed">
-          Survey availability, eligibility, and completion status are determined
-          entirely by third-party survey providers. Iyal Surveys does not control
-          survey qualification criteria or disqualifications.
-        </p>
-      </section>
+<section class="space-y-3">
+<h2 class="text-lg font-bold text-green-800 flex items-center gap-2"><i class="fa fa-shield-halved text-green-700"></i> Trust & Transparency</h2>
+<p class="text-slate-700 leading-relaxed">We are committed to operating a transparent platform that respects user privacy and complies with applicable laws and third-party network requirements. We use reasonable security measures to protect accounts and prevent fraud — but no website is 100% secure. By registering, you acknowledge and accept this risk, as explained in our Privacy Policy and Terms.</p>
+<p class="text-slate-700 leading-relaxed">Please review our <a href="privacy.html" class="text-green-700 font-semibold hover:underline">Privacy Policy</a>, <a href="terms.html" class="text-green-700 font-semibold hover:underline">Terms & Conditions</a> and <a href="disclaimer.html" class="text-green-700 font-semibold hover:underline">Disclaimer</a> for more information.</p>
+</section>
 
-      <!-- TRUST & COMPLIANCE -->
-      <section class="space-y-3">
-        <h2 class="text-xl font-semibold text-green-700 flex items-center gap-2">
-          <i class="fa fa-shield-halved"></i> Trust & Transparency
-        </h2>
-        <p class="text-gray-700 leading-relaxed">
-          We are committed to operating a transparent platform that respects
-          user privacy and complies with applicable laws and third-party
-          network requirements. Please review our
-          <a href="privacy.html" class="text-green-700 font-semibold hover:underline">Privacy Policy</a>
-          and
-          <a href="terms.html" class="text-green-700 font-semibold hover:underline">Terms & Conditions</a>
-          for more information.
-        </p>
-      </section>
+</div>
 
-    </div>
-  </main>
+<div class="flex flex-col sm:flex-row gap-3 mt-6">
+<a href="dashboard.html" class="flex-1 text-center bg-green-700 hover:bg-green-800 text-white font-bold py-3.5 rounded-xl">Go to Dashboard →</a>
+<a href="support.html" class="flex-1 text-center bg-white border font-bold py-3.5 rounded-xl">Contact Support</a>
+</div>
+</main>
 
-  <!-- FOOTER -->
-  <footer class="bg-green-700 text-white text-sm">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-2">
-      <p>© 2025 Iyal Surveys. All rights reserved.</p>
-      <div class="flex gap-4">
-        <a href="terms.html" class="hover:underline">Terms</a>
-        <a href="privacy.html" class="hover:underline">Privacy</a>
-        <a href="disclaimer.html" class="hover:underline">Disclaimer</a>
-        <a href="support.html" class="hover:underline">Support</a>
-      </div>
-    </div>
-  </footer>
+<!-- FOOTER — SAME AS PRIVACY + TERMS -->
+<footer class="bg-green-800 text-white text-sm mt-10">
+<div class="max-w-6xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-3">
+<p>© 2026 Iyal Surveys. All rights reserved.</p>
+<div class="flex gap-5"><a href="terms.html" class="hover:underline">Terms</a><a href="privacy.html" class="hover:underline">Privacy</a><a href="about.html" class="hover:underline">About</a><a href="disclaimer.html" class="hover:underline">Disclaimer</a><a href="support.html" class="hover:underline">Support</a></div>
+</div>
+</footer>
 
 </body>
 </html>
