@@ -3,174 +3,2114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Iyal Surveys - Earn Rewards For Your Opinion</title>
-<meta name="description" content="Share your opinion, earn rewards, climb the weekly leaderboard. Withdraw as airtime or bank with Iyal Surveys.">
+
+<title>Iyal Surveys — Your Opinions Deserve Rewards</title>
+
+<meta name="description" content="Share your opinions, complete surveys and earn rewards with Iyal Surveys. Join for free and withdraw eligible rewards through airtime or bank transfer.">
+
 <meta name="theme-color" content="#ffffff">
+
 <link rel="canonical" href="https://iyalsurveys.online">
-<meta property="og:title" content="Iyal Surveys - Earn Rewards For Your Opinion">
-<meta property="og:description" content="Complete surveys, earn rewards, climb the weekly leaderboard.">
+
+<meta property="og:title" content="Iyal Surveys — Your Opinions Deserve Rewards">
+<meta property="og:description" content="Your opinions matter. Share them, complete surveys and earn rewards. Join Iyal Surveys for free.">
 <meta property="og:image" content="https://iyalsurveys.online/iyallogo.png">
 <meta property="og:url" content="https://iyalsurveys.online">
 <meta property="og:type" content="website">
+
 <link rel="icon" href="iyallogo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
-<script defer src="/_vercel/insights/script.js"></script>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fdf9;color:#0f2418;overflow-x:hidden}
-a{text-decoration:none}
-.wrap{max-width:1120px;margin:auto;padding:0 20px}
-/* HEADER - LIGHT AGENCY */
-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid #e6f2e9}
-.nav{max-width:1120px;margin:auto;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{display:flex;align-items:center;gap:11px;color:#0f2418}
-.brand img{width:44px;height:44px;border-radius:50%;border:2px solid #22c55e;object-fit:cover}
-.brand b{font-size:1.08rem;line-height:1;display:block}.brand span{font-size:10px;letter-spacing:1.2px;color:#16a34a;font-weight:700}
-.nav-links{display:flex;gap:6px;align-items:center}
-.nav-links a{color:#3d5546;font-size:.9rem;font-weight:600;padding:9px 14px;border-radius:99px}
-.nav-links a:hover{background:#eefaf0}
-.btn-login{border:1px solid #d7eadc!important;background:#fff!important;color:#14532d!important}
-.btn-start{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff!important;font-weight:700;box-shadow:0 8px 22px rgba(34,197,94,.28)}
-.btn{height:52px;display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:14px;padding:0 22px;font-weight:700;font-size:.92rem;transition:.2s}
-.btn:hover{transform:translateY(-2px)}
-/* HERO - LIGHT + EXCITING */
-.hero{background:linear-gradient(180deg,#eafff1 0%,#f8fdf9 70%);border-bottom:1px solid #e6f2e9}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:center;padding:42px 0 36px}
-.badge-live{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #bbf7d0;padding:7px 12px;border-radius:999px;font-size:.78rem;font-weight:700;color:#15803d;box-shadow:0 4px 14px rgba(0,0,0,.04)}
-.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px #bbf7d0;animation:pulse 1.6s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 #bbf7d0}100%{box-shadow:0 0 0 8px transparent}}
-h1{font-size:clamp(38px,6vw,58px);line-height:1.02;font-weight:900;letter-spacing:-1.8px;margin:16px 0 14px;color:#071f12}
-h1 span{color:#16a34a}
-h1 em{font-style:normal;color:#f59e0b}
-.subtitle{font-size:1.05rem;line-height:1.7;color:#4a6353;max-width:540px}
-.subtitle b{color:#0f2418}
-.cta-row{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;align-items:center}
-.btn-primary{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;box-shadow:0 12px 28px rgba(34,197,94,.3)}
-.btn-ghost{background:#fff;border:1px solid #d7eadc;color:#14532d}
-.small-note{font-size:.82rem;color:#6b8576;margin-top:12px}
-.small-note b{color:#15803d}
-.avatars{display:flex;align-items:center;gap:10px;margin-top:18px}
-.avatar-stack{display:flex}
-.avatar-stack span{width:34px;height:34px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;margin-left:-8px}
-.avatar-stack span:first-child{margin-left:0}
-.avatars p{font-size:.85rem;color:#4a6353;line-height:1.4}.avatars p b{color:#0f2418}
-/* RIGHT CARD - LEADERBOARD TEASER, NO BALANCE, NO AMOUNT */
-.leader-card{background:#fff;border:1px solid #e2f2e6;border-radius:26px;padding:22px;box-shadow:0 20px 50px rgba(21,128,61,.12);position:relative;overflow:hidden}
-.leader-card:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#f59e0b,#22c55e,#16a34a)}
-.leader-top{display:flex;justify-content:space-between;align-items:center}
-.leader-top h3{font-size:1.05rem}.leader-top span{background:#fef3c7;color:#92400e;font-size:.72rem;font-weight:800;padding:6px 10px;border-radius:999px}
-.leader-top p{font-size:.85rem;color:#6b8576;margin-top:4px}
-.leader-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
-.leader-row{display:flex;align-items:center;gap:12px;background:#f8fdf9;border:1px solid #eef6ef;border-radius:16px;padding:12px}
-.rank{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;flex-shrink:0}
-.r1{background:#fef3c7;color:#92400e}.r2{background:#eef2ff;color:#4338ca}.r3{background:#fef2f2;color:#991b1b}.rX{background:#eefaf0;color:#15803d}
-.leader-row b{font-size:.92rem}.leader-row small{display:block;color:#6b8576;font-size:.78rem}
-.leader-row .pts{margin-left:auto;text-align:right}
-.leader-row .pts b{color:#16a34a}.leader-row .pts small{color:#6b8576}
-.you-row{border:2px dashed #22c55e!important;background:#eafff1!important}
-.leader-cta{margin-top:16px;background:#0f2418;color:#fff;border-radius:14px;padding:14px;text-align:center;font-weight:700;font-size:.9rem;display:block}
-.leader-cta span{color:#86efac}
-/* STRIP */
-.strip{background:#0f2418;color:#fff}
-.strip-in{max-width:1120px;margin:auto;padding:18px 20px;display:flex;gap:22px;flex-wrap:wrap;justify-content:space-between}
-.strip-in div{display:flex;gap:10px;align-items:center;font-size:.9rem;font-weight:600}
-.strip-in i{color:#22c55e}
-/* SECTIONS */
-.section{padding:44px 0}
-.section h2{font-size:1.9rem;letter-spacing:-.8px}.section p.sub{color:#4a6353;line-height:1.7;margin-top:8px;max-width:660px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
-.card{background:#fff;border:1px solid #e6f2e9;border-radius:20px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.03)}
-.card i{width:46px;height:46px;border-radius:13px;background:#eafff1;color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
-.card h3{margin-top:14px;font-size:1.05rem}.card p{color:#5a7265;font-size:.92rem;line-height:1.65;margin-top:6px}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
-.step{background:#fff;border:1px solid #e6f2e9;border-radius:20px;padding:22px;position:relative}
-.step .num{width:36px;height:36px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
-.step h3{margin-top:14px}.step p{color:#5a7265;font-size:.9rem;line-height:1.6;margin-top:6px}
-.step .tag{position:absolute;top:16px;right:16px;background:#fef3c7;color:#92400e;font-size:.68rem;font-weight:800;padding:5px 8px;border-radius:999px}
-/* LEADERBOARD EXPLAINER */
-.leader-explain{background:linear-gradient(135deg,#14532d,#16a34a);color:#fff;border-radius:26px;padding:28px;display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center}
-.leader-explain h2{color:#fff}.leader-explain p{color:#dcfce7;line-height:1.7;margin-top:10px}
-.leader-explain ul{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:10px}
-.leader-explain li{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;line-height:1.6}
-.leader-explain li i{color:#fbbf24;margin-top:4px}
-.leader-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:20px;text-align:center}
-.leader-box .big{font-size:2.2rem;font-weight:900}.leader-box p{font-size:.9rem}
-/* WITHDRAW */
-.withdraw{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
-.wcard{background:#fff;border:1px solid #e6f2e9;border-radius:20px;padding:22px;display:flex;gap:14px}
-.wcard i{width:48px;height:48px;border-radius:14px;background:#eafff1;color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-.wcard h3{font-size:1rem}.wcard p{color:#5a7265;font-size:.9rem;line-height:1.6;margin-top:4px}
-/* FAQ / TRUST */
-.trust{background:#fff;border:1px solid #e6f2e9;border-radius:20px;padding:22px;margin-top:22px}
-.trust h3{font-size:1rem}.trust p{color:#5a7265;font-size:.9rem;line-height:1.65;margin-top:8px}
-.disclaimer{font-size:.8rem;color:#6b8576;line-height:1.6;border:1px dashed #d7eadc;border-radius:16px;padding:16px;margin-top:16px;background:#f8fdf9}
-.disclaimer a{color:#16a34a;font-weight:700}
+
+:root {
+  --green: #16a34a;
+  --green-dark: #087443;
+  --green-light: #eafaf0;
+  --dark: #10251a;
+  --text: #34483b;
+  --muted: #718276;
+  --border: #e8efe9;
+  --background: #f8fbf9;
+  --white: #ffffff;
+  --gold: #f5b942;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--white);
+  color: var(--dark);
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: 1160px;
+  margin: auto;
+  padding: 0 22px;
+}
+
+/* NAVIGATION */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav {
+  max-width: 1160px;
+  margin: auto;
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand img {
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.brand-name {
+  font-family: 'Manrope', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -.6px;
+}
+
+.brand-sub {
+  font-size: 9px;
+  letter-spacing: 1.4px;
+  color: var(--green);
+  font-weight: 800;
+  display: block;
+  margin-top: 2px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.nav-links a {
+  font-size: 13px;
+  font-weight: 700;
+  color: #536459;
+  transition: .2s;
+}
+
+.nav-links a:hover {
+  color: var(--green);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.login-btn {
+  padding: 11px 17px;
+  border-radius: 11px;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1px solid var(--border);
+}
+
+.primary-btn {
+  background: var(--green);
+  color: white;
+  padding: 13px 20px;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 800;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  transition: .25s;
+  box-shadow: 0 7px 18px rgba(22,163,74,.19);
+}
+
+.primary-btn:hover {
+  background: var(--green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(22,163,74,.25);
+}
+
+.menu-btn {
+  display: none;
+  border: none;
+  background: transparent;
+  font-size: 23px;
+  color: var(--dark);
+  cursor: pointer;
+}
+
+/* HERO */
+
+.hero {
+  background:
+    radial-gradient(circle at 85% 25%, rgba(34,197,94,.12), transparent 30%),
+    linear-gradient(180deg,#f0fbf3 0%,#ffffff 100%);
+  padding: 82px 0 75px;
+  overflow: hidden;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.08fr .92fr;
+  align-items: center;
+  gap: 65px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: white;
+  border: 1px solid #d9f2df;
+  border-radius: 100px;
+  padding: 8px 13px;
+  color: #168343;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+.badge-icon {
+  width: 23px;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--green-light);
+}
+
+.hero h1 {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(40px,5.2vw,65px);
+  line-height: 1.08;
+  letter-spacing: -2.8px;
+  font-weight: 900;
+  margin: 23px 0 20px;
+  color: #10251a;
+}
+
+.hero h1 span {
+  color: var(--green);
+}
+
+.hero-description {
+  font-size: 16px;
+  color: #617267;
+  line-height: 1.85;
+  max-width: 510px;
+}
+
+.hero-description strong {
+  color: var(--dark);
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 29px;
+}
+
+.hero-buttons .primary-btn {
+  padding: 16px 23px;
+  font-size: 14px;
+}
+
+.secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 21px;
+  border-radius: 11px;
+  border: 1px solid #dce9df;
+  background: white;
+  color: var(--dark);
+  font-size: 13px;
+  font-weight: 800;
+  transition: .2s;
+}
+
+.secondary-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.hero-note {
+  font-size: 11px;
+  color: #718276;
+  margin-top: 16px;
+}
+
+.hero-note i {
+  color: var(--green);
+  margin-right: 5px;
+}
+
+/* HERO PRODUCT PREVIEW */
+
+.preview-wrap {
+  position: relative;
+}
+
+.preview-glow {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: #c8f3d3;
+  filter: blur(80px);
+  border-radius: 50%;
+  top: 20px;
+  left: 50px;
+  opacity: .6;
+}
+
+.dashboard-preview {
+  position: relative;
+  z-index: 2;
+  background: white;
+  border: 1px solid #e5eee7;
+  border-radius: 23px;
+  padding: 23px;
+  box-shadow: 0 30px 75px rgba(18,75,38,.13);
+  transform: rotate(-1deg);
+}
+
+.preview-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #edf2ee;
+  padding-bottom: 17px;
+}
+
+.preview-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.preview-brand img {
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+}
+
+.preview-user {
+  width: 34px;
+  height: 34px;
+  background: #eafaf0;
+  color: var(--green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.preview-greeting {
+  margin-top: 22px;
+}
+
+.preview-greeting small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.preview-greeting h3 {
+  font-family: 'Manrope', sans-serif;
+  font-size: 19px;
+  margin-top: 4px;
+}
+
+.balance-box {
+  margin-top: 17px;
+  padding: 20px;
+  border-radius: 17px;
+  background: linear-gradient(135deg,#087443,#16a34a);
+  color: white;
+}
+
+.balance-box small {
+  color: #d8fbe2;
+  font-size: 11px;
+}
+
+.balance-box h2 {
+  font-size: 29px;
+  font-family: 'Manrope', sans-serif;
+  margin-top: 7px;
+}
+
+.balance-box p {
+  color: #d8fbe2;
+  font-size: 10px;
+  margin-top: 7px;
+}
+
+.preview-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 23px 0 12px;
+}
+
+.preview-section-title b {
+  font-size: 13px;
+}
+
+.preview-section-title span {
+  font-size: 10px;
+  color: var(--green);
+  font-weight: 800;
+}
+
+.survey-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px;
+  border: 1px solid #edf2ee;
+  border-radius: 13px;
+  margin-bottom: 9px;
+}
+
+.survey-icon {
+  width: 39px;
+  height: 39px;
+  border-radius: 11px;
+  background: #eafaf0;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.survey-info {
+  flex: 1;
+}
+
+.survey-info b {
+  display: block;
+  font-size: 11px;
+}
+
+.survey-info small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.survey-reward {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--green);
+}
+
+.preview-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  color: #6c7c71;
+  font-size: 10px;
+  margin-top: 17px;
+}
+
+.preview-footer i {
+  color: var(--green);
+}
+
+/* TRUST STRIP */
+
+.trust-strip {
+  border-bottom: 1px solid var(--border);
+  background: white;
+}
+
+.trust-strip-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 23px 0;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #405447;
+}
+
+.trust-item i {
+  color: var(--green);
+  font-size: 17px;
+}
+
+/* GENERAL SECTIONS */
+
+.section {
+  padding: 85px 0;
+}
+
+.section-heading {
+  max-width: 640px;
+  margin-bottom: 38px;
+}
+
+.section-label {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+.section-heading h2 {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(28px,4vw,39px);
+  line-height: 1.2;
+  letter-spacing: -1.3px;
+  margin-top: 12px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+  margin-top: 13px;
+}
+
+/* BENEFITS */
+
+.benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 18px;
+}
+
+.benefit-card {
+  border: 1px solid var(--border);
+  border-radius: 19px;
+  padding: 27px;
+  background: white;
+  transition: .25s;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px);
+  border-color: #b7e9c4;
+  box-shadow: 0 15px 35px rgba(22,163,74,.07);
+}
+
+.benefit-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  background: var(--green-light);
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.benefit-card h3 {
+  font-family: 'Manrope',sans-serif;
+  font-size: 17px;
+  margin-top: 20px;
+}
+
+.benefit-card p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 9px;
+}
+
+/* HOW IT WORKS */
+
+.how-section {
+  background: var(--background);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+}
+
+.step-card {
+  padding: 24px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+}
+
+.step-number {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--green);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.step-card h3 {
+  font-family: 'Manrope',sans-serif;
+  font-size: 15px;
+  margin-top: 17px;
+}
+
+.step-card p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 8px;
+}
+
+/* LEADERBOARD */
+
+.leader-section {
+  padding: 80px 0;
+}
+
+.leader-panel {
+  background: #102b1c;
+  border-radius: 25px;
+  padding: 44px;
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr .85fr;
+  gap: 40px;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.leader-panel:after {
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: rgba(34,197,94,.12);
+  border-radius: 50%;
+  filter: blur(70px);
+  right: -70px;
+  top: -90px;
+}
+
+.leader-content,
+.leader-preview {
+  position: relative;
+  z-index: 2;
+}
+
+.leader-label {
+  color: #86efac;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.leader-content h2 {
+  font-family: 'Manrope',sans-serif;
+  font-size: 34px;
+  line-height: 1.2;
+  margin-top: 15px;
+  letter-spacing: -1px;
+}
+
+.leader-content p {
+  color: #c4d7c9;
+  font-size: 13px;
+  line-height: 1.9;
+  margin-top: 15px;
+}
+
+.leader-content ul {
+  list-style: none;
+  margin-top: 23px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.leader-content li {
+  font-size: 12px;
+  color: #e0f2e5;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.leader-content li i {
+  color: #86efac;
+}
+
+.leader-preview {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 18px;
+  padding: 23px;
+}
+
+.leader-preview h3 {
+  font-family: 'Manrope',sans-serif;
+  font-size: 16px;
+}
+
+.leader-preview p {
+  font-size: 11px;
+  color: #b8d4c0;
+  margin-top: 5px;
+}
+
+.leader-preview .leader-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 17px;
+  background: rgba(255,255,255,.12);
+  color: #f8d47a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-top: 22px;
+}
+
+.leader-preview .leader-call {
+  font-size: 18px;
+  font-weight: 900;
+  margin-top: 14px;
+  color: white;
+}
+
+.leader-preview .leader-small {
+  color: #c4d7c9;
+  line-height: 1.7;
+}
+
+/* WITHDRAWAL */
+
+.withdraw-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.withdraw-card {
+  border: 1px solid var(--border);
+  border-radius: 19px;
+  padding: 27px;
+  display: flex;
+  gap: 17px;
+  align-items: flex-start;
+}
+
+.withdraw-icon {
+  width: 51px;
+  height: 51px;
+  background: var(--green-light);
+  color: var(--green);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.withdraw-card h3 {
+  font-family: 'Manrope',sans-serif;
+  font-size: 16px;
+}
+
+.withdraw-card p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 8px;
+}
+
+/* TRUST */
+
+.security-box {
+  margin-top: 24px;
+  background: #f0fbf3;
+  border: 1px solid #d9f2df;
+  border-radius: 18px;
+  padding: 23px;
+  display: flex;
+  gap: 15px;
+}
+
+.security-box i {
+  color: var(--green);
+  font-size: 22px;
+}
+
+.security-box h3 {
+  font-size: 14px;
+}
+
+.security-box p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #63776a;
+  margin-top: 6px;
+}
+
+/* FAQ */
+
+.faq-section {
+  background: var(--background);
+}
+
+.faq-list {
+  max-width: 790px;
+}
+
+.faq-item {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  margin-bottom: 11px;
+  overflow: hidden;
+}
+
+.faq-question {
+  width: 100%;
+  padding: 19px;
+  border: none;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--dark);
+  cursor: pointer;
+}
+
+.faq-question i {
+  color: var(--green);
+  transition: .2s;
+}
+
+.faq-answer {
+  display: none;
+  padding: 0 19px 19px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+.faq-item.active .faq-question i {
+  transform: rotate(45deg);
+}
+
 /* FINAL CTA */
-.final{background:#fff;border:1px solid #e6f2e9;border-radius:26px;padding:30px;text-align:center;box-shadow:0 20px 50px rgba(21,128,61,.1)}
-.final h2{font-size:2rem}.final p{color:#5a7265;margin-top:10px;line-height:1.7}
-footer{background:#071f12;color:#9db5a6;padding:28px 0 32px;margin-top:10px}
-.foot{max-width:1120px;margin:auto;padding:0 20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.foot a{color:#cbdccf}.foot a:hover{color:#22c55e}
-.social{display:flex;gap:10px;margin-top:14px}
-.social a{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,.08);color:#fff}
-@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.leader-explain{grid-template-columns:1fr}.withdraw{grid-template-columns:1fr}.nav-links a.hide-m{display:none}}
-@media(max-width:520px){.steps{grid-template-columns:1fr}.cta-row .btn{flex:1}.nav{padding:12px 16px}}
+
+.final-cta {
+  padding: 75px 0;
+}
+
+.final-box {
+  background: linear-gradient(135deg,#eafaf0,#f7fff9);
+  border: 1px solid #d9f2df;
+  border-radius: 25px;
+  padding: 55px 25px;
+  text-align: center;
+}
+
+.final-box .small-label {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.final-box h2 {
+  font-family: 'Manrope',sans-serif;
+  font-size: clamp(29px,4vw,43px);
+  letter-spacing: -1.5px;
+  line-height: 1.2;
+  margin-top: 14px;
+}
+
+.final-box p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+  max-width: 540px;
+  margin: 14px auto 25px;
+}
+
+/* FOOTER */
+
+footer {
+  background: #10251a;
+  color: #c1d2c6;
+  padding: 45px 0 25px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding-bottom: 30px;
+}
+
+.footer-brand {
+  max-width: 330px;
+}
+
+.footer-brand h3 {
+  color: white;
+  font-family: 'Manrope',sans-serif;
+  font-size: 20px;
+}
+
+.footer-brand p {
+  color: #9db5a6;
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 12px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 19px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.footer-links a {
+  font-size: 12px;
+  color: #d4e2d8;
+}
+
+.footer-links a:hover {
+  color: #86efac;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding-top: 20px;
+  font-size: 11px;
+  color: #8da797;
+}
+
+/* SUPPORT BUTTON */
+
+.support-button {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 55px;
+  height: 55px;
+  background: var(--green);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 17px;
+  font-size: 20px;
+  box-shadow: 0 8px 25px rgba(22,163,74,.3);
+  z-index: 90;
+  transition: .2s;
+}
+
+.support-button:hover {
+  transform: translateY(-3px);
+}
+
+/* ANIMATIONS */
+
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-9px) rotate(-1deg); }
+}
+
+.dashboard-preview {
+  animation: float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px) {
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .hero-content {
+    max-width: 650px;
+  }
+
+  .preview-wrap {
+    max-width: 520px;
+    width: 100%;
+    margin: auto;
+  }
+
+  .benefit-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .leader-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .leader-preview {
+    max-width: 420px;
+  }
+
+  .nav-links {
+    gap: 14px;
+  }
+
+}
+
+@media(max-width:650px) {
+
+  .container {
+    padding: 0 18px;
+  }
+
+  .nav {
+    padding: 12px 18px;
+  }
+
+  .menu-btn {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 69px;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links a {
+    padding: 14px 5px;
+    border-bottom: 1px solid #f0f3f0;
+  }
+
+  .nav-actions {
+    display: none;
+  }
+
+  .hero {
+    padding: 55px 0 55px;
+  }
+
+  .hero-grid {
+    gap: 43px;
+  }
+
+  .hero h1 {
+    font-size: 43px;
+    letter-spacing: -2px;
+  }
+
+  .hero-description {
+    font-size: 14px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .hero-buttons a {
+    width: 100%;
+  }
+
+  .dashboard-preview {
+    padding: 17px;
+  }
+
+  .trust-strip-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 17px;
+  }
+
+  .trust-item {
+    font-size: 10px;
+  }
+
+  .section {
+    padding: 65px 0;
+  }
+
+  .benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .step-card {
+    padding: 18px;
+  }
+
+  .leader-panel {
+    padding: 28px 22px;
+  }
+
+  .leader-content h2 {
+    font-size: 28px;
+  }
+
+  .withdraw-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .final-box {
+    padding: 40px 20px;
+  }
+
+  .footer-top {
+    flex-direction: column;
+  }
+
+  .support-button {
+    right: 16px;
+    bottom: 17px;
+  }
+
+}
+
+@media(max-width:380px) {
+
+  .hero h1 {
+    font-size: 37px;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trust-strip-inner {
+    grid-template-columns: 1fr;
+  }
+
+}
+
 </style>
 </head>
+
 <body>
 
-<header><div class="nav"><a class="brand" href="index.html"><img src="iyallogo.png" alt="Iyal Surveys Logo"><div><b>Iyal Surveys</b><span>EARN • SURVEY • WITHDRAW</span></div></a><div class="nav-links"><a href="about.html" class="hide-m">About</a><a href="terms.html" class="hide-m">Terms</a><a href="privacy.html" class="hide-m">Privacy</a><a href="login.html" class="btn-login">Login</a><a href="register.html" class="btn-start">Start Earning →</a></div></div></header>
+<!-- NAVIGATION -->
 
-<section class="hero"><div class="wrap"><div class="hero-grid">
+<header>
+
+<nav class="nav">
+
+<a href="index.html" class="brand">
+
+<img src="iyallogo.png" alt="Iyal Surveys logo">
+
 <div>
-<div class="badge-live"><span class="dot"></span> LIVE • WEEKLY LEADERBOARD IS ON</div>
-<h1>Your opinion is <span>worth rewards.</span> <em>Start today.</em></h1>
-<p class="subtitle">Turn your spare time into rewards. <b>Answer surveys, earn for real participation, invite friends</b> — and climb the weekly leaderboard while you do it.</p>
-<div class="cta-row"><a href="register.html" class="btn btn-primary">Start Earning — It's Free <i class="fa-solid fa-arrow-right"></i></a><a href="login.html" class="btn btn-ghost">Login</a></div>
-<p class="small-note">✅ No experience needed &nbsp;•&nbsp; ✅ 18+ only &nbsp;•&nbsp; ✅ <b>No payment to withdraw</b></p>
-<div class="avatars"><div class="avatar-stack"><span style="background:#16a34a">A</span><span style="background:#f59e0b">J</span><span style="background:#3b82f6">K</span><span style="background:#8b5cf6">+9</span></div><p><b>People across Nigeria</b><br>are already sharing opinions & earning rewards.</p></div>
+<div class="brand-name">Iyal Surveys</div>
+<span class="brand-sub">EARN • SURVEY • WITHDRAW</span>
 </div>
 
-<!-- LEADERBOARD TEASER — NO BALANCE, NO AMOUNT -->
-<div class="leader-card">
-<div class="leader-top"><div><h3>🏆 Weekly Leaderboard</h3><p>This week • Top participants</p></div><span>🔥 LIVE</span></div>
-<div class="leader-list">
-<div class="leader-row"><span class="rank r1">1</span><div><b>A***e</b><small>Top this week</small></div><div class="pts"><b>▲ Rising</b><small>Active participant</small></div></div>
-<div class="leader-row"><span class="rank r2">2</span><div><b>J***n</b><small>Close behind</small></div><div class="pts"><b>▲ Rising</b><small>Active participant</small></div></div>
-<div class="leader-row"><span class="rank r3">3</span><div><b>K***a</b><small>Climbing fast</small></div><div class="pts"><b>▲ Rising</b><small>Active participant</small></div></div>
-<div class="leader-row you-row"><span class="rank rX">?</span><div><b>Your name here?</b><small>Join today & climb</small></div><div class="pts"><b>Start now →</b><small>Free to join</small></div></div>
-</div>
-<a href="register.html" class="leader-cta">Join the leaderboard <span>→ Claim your spot</span></a>
-<p style="font-size:.78rem;color:#6b8576;text-align:center;margin-top:10px">Leaderboard rewards are announced weekly. No amount is promised — participation matters.</p>
-</div>
-</div></div></section>
+</a>
 
-<div class="strip"><div class="strip-in"><div><i class="fa-solid fa-bolt"></i> 3 minutes to start</div><div><i class="fa-solid fa-mobile-screen"></i> Works on any phone</div><div><i class="fa-solid fa-wallet"></i> Airtime or Bank withdrawal</div><div><i class="fa-solid fa-trophy"></i> Weekly Leaderboard</div></div></div>
+<div class="nav-links" id="navLinks">
 
-<div class="wrap">
-<section class="section"><h2>Why people choose Iyal Surveys</h2><p class="sub">Simple, transparent, and built for real people — not bots, not tricks.</p><div class="grid3">
-<div class="card"><i class="fa-solid fa-square-poll-vertical"></i><h3>Answer surveys</h3><p>Surveys matched to you from trusted third-party providers. Answer honestly — that's what counts.</p></div>
-<div class="card"><i class="fa-solid fa-wallet"></i><h3>Earn rewards</h3><p>Valid, confirmed rewards go to your balance. Fake or inactive activity does not count.</p></div>
-<div class="card"><i class="fa-solid fa-user-group"></i><h3>Refer & earn</h3><p>Invite friends with your link. When they participate genuinely, you earn too.</p></div>
-</div></section>
+<a href="#how">How it works</a>
+<a href="#benefits">Why Iyal</a>
+<a href="#leaderboard">Leaderboard</a>
+<a href="#faq">FAQs</a>
 
-<section class="section"><h2>How it works — in 4 simple steps</h2><p class="sub">If you can use WhatsApp, you can use Iyal Surveys.</p><div class="steps">
-<div class="step"><span class="tag">FREE</span><div class="num">1</div><h3>Create account</h3><p>Sign up in 3 minutes. 18+ only. Complete your profile.</p></div>
-<div class="step"><span class="tag">EASY</span><div class="num">2</div><h3>Complete surveys</h3><p>Pick available surveys in your dashboard. Answer honestly.</p></div>
-<div class="step"><span class="tag">FAIR</span><div class="num">3</div><h3>Earn + climb</h3><p>Real participation earns rewards — and moves you up the weekly leaderboard.</p></div>
-<div class="step"><span class="tag">1–10 DAYS</span><div class="num">4</div><h3>Withdraw</h3><p>Withdraw as airtime to your number, or to your bank account.</p></div>
-</div></section>
-
-<section class="section"><div class="leader-explain"><div><h2>🏆 The Weekly Leaderboard is where the excitement is</h2><p>Every week, the most active, genuine participants climb the leaderboard. It's not just about surveys — it's about showing up, staying consistent, and being real.</p><ul><li><i class="fa-solid fa-check"></i> Your activity counts when you participate genuinely</li><li><i class="fa-solid fa-check"></i> Referrals help you climb faster</li><li><i class="fa-solid fa-check"></i> Leaderboard resets weekly — everyone gets a fresh chance</li></ul></div><div class="leader-box"><div class="big">Your spot is waiting</div><p>This week's board is already moving.<br>Don't watch others climb — join them.</p><a href="register.html" class="btn btn-primary" style="margin-top:16px;width:100%">Join Now — Free →</a><p style="font-size:.78rem;margin-top:10px">We never promise a specific amount. Rewards depend on verified participation.</p></div></div></section>
-
-<section class="section"><h2>How you withdraw</h2><p class="sub">You choose. We pay. No hidden charges to withdraw.</p><div class="withdraw"><div class="wcard"><i class="fa-solid fa-mobile-screen"></i><div><h3>📱 Airtime Withdrawal</h3><p>Provide your phone number and receive airtime directly. Simple and fast.</p></div></div><div class="wcard"><i class="fa-solid fa-building-columns"></i><div><h3>🏦 Bank Withdrawal</h3><p>Provide bank name, account number and account name. Paid after verification.</p></div></div></div><div class="trust"><h3>🛡️ Fair, transparent, safe — but honest</h3><p>We use reasonable security measures to protect accounts and prevent fraud. But no website is 100% secure — by registering, you acknowledge and accept this risk, as explained in our Privacy Policy and Terms. Earnings are not guaranteed and depend on survey providers.</p><p><b>Warning:</b> We will never ask you to send money to unlock a withdrawal, and we will never ask for your bank PIN or card CVV.</p></div><div class="disclaimer"><b style="color:#0f2418">Important:</b> You must be 18+ to register. One person, one account. Read <a href="terms.html">Terms</a>, <a href="privacy.html">Privacy</a> and <a href="disclaimer.html">Disclaimer</a> before you register.</div></section>
-
-<section class="section"><div class="final"><h2>Don't just watch others earn.<br>Your turn is now. 🚀</h2><p>Join free today, complete your first survey, and see your name climb the weekly leaderboard.</p><div class="cta-row" style="justify-content:center;margin-top:22px"><a href="register.html" class="btn btn-primary">Create Free Account →</a><a href="about.html" class="btn btn-ghost">Learn More</a></div><p style="font-size:.82rem;margin-top:14px">Free to join • 3 minutes to start • No payment to withdraw</p></div></section>
 </div>
 
-<footer><div class="foot"><div>© 2026 <b style="color:#fff">Iyal Surveys</b>. Operated by Iyal Couch Global Ventures And Business Solutions.<br>Earn rewards. Share your opinion.</div><div style="display:flex;gap:16px;flex-wrap:wrap"><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="about.html">About</a><a href="disclaimer.html">Disclaimer</a><a href="support.html">Support</a></div></div></footer>
-<a href="support.html" style="position:fixed;right:20px;bottom:20px;width:54px;height:54px;display:flex;align-items:center;justify-content:center;border-radius:18px;color:#04110a;background:#22c55e;box-shadow:0 12px 35px rgba(34,197,94,.3);z-index:10" aria-label="Support"><i class="fas fa-headset"></i></a>
+<div class="nav-actions">
+
+<a href="login.html" class="login-btn">Log in</a>
+
+<a href="register.html" class="primary-btn">
+Join for free <i class="fa-solid fa-arrow-right"></i>
+</a>
+
+</div>
+
+<button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false">
+<i class="fa-solid fa-bars"></i>
+</button>
+
+</nav>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="container">
+
+<div class="hero-grid">
+
+<div class="hero-content">
+
+<div class="hero-badge">
+
+<span class="badge-icon">
+<i class="fa-solid fa-sparkles"></i>
+</span>
+
+YOUR OPINIONS HAVE VALUE
+
+</div>
+
+<h1>
+Your voice matters.<br>
+Your opinions can <span>earn rewards.</span>
+</h1>
+
+<p class="hero-description">
+
+Every day, companies want to understand what people think.
+<strong>Your opinions can help them make better decisions.</strong>
+
+Share your thoughts through surveys, earn rewards for valid participation, and enjoy a more rewarding way to spend your spare time.
+
+</p>
+
+<div class="hero-buttons">
+
+<a href="register.html" class="primary-btn">
+
+Create your free account
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+<a href="#how" class="secondary-btn">
+
+<i class="fa-regular fa-circle-play"></i>
+
+See how it works
+
+</a>
+
+</div>
+
+<p class="hero-note">
+
+<i class="fa-solid fa-shield-halved"></i>
+Free to join &nbsp; • &nbsp; 18+ only &nbsp; • &nbsp; No payment required to withdraw
+
+</p>
+
+</div>
+
+
+<!-- PRODUCT PREVIEW -->
+
+<div class="preview-wrap">
+
+<div class="preview-glow"></div>
+
+<div class="dashboard-preview">
+
+<div class="preview-top">
+
+<div class="preview-brand">
+
+<img src="iyallogo.png" alt="">
+
+Iyal Surveys
+
+</div>
+
+<div class="preview-user">
+<i class="fa-solid fa-user"></i>
+</div>
+
+</div>
+
+
+<div class="preview-greeting">
+
+<small>A look inside your dashboard</small>
+
+<h3>Your rewards journey starts here 👋</h3>
+
+</div>
+
+
+<div class="balance-box">
+
+<small>YOUR REWARD BALANCE</small>
+
+<h2>₦0.00</h2>
+
+<p>Complete eligible surveys to earn rewards.</p>
+
+</div>
+
+
+<div class="preview-section-title">
+
+<b>Explore surveys</b>
+
+<span>VIEW DASHBOARD →</span>
+
+</div>
+
+
+<div class="survey-item">
+
+<div class="survey-icon">
+<i class="fa-solid fa-clipboard-list"></i>
+</div>
+
+<div class="survey-info">
+<b>Share your opinion</b>
+<small>Available surveys depend on your profile</small>
+</div>
+
+<div class="survey-reward">
+Explore
+</div>
+
+</div>
+
+
+<div class="survey-item">
+
+<div class="survey-icon">
+<i class="fa-solid fa-chart-simple"></i>
+</div>
+
+<div class="survey-info">
+<b>Participate & earn</b>
+<small>Rewards for valid completed surveys</small>
+</div>
+
+<div class="survey-reward">
+Earn
+</div>
+
+</div>
+
+
+<div class="preview-footer">
+
+<i class="fa-solid fa-lock"></i>
+
+A simple experience designed around you.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- TRUST STRIP -->
+
+<section class="trust-strip">
+
+<div class="container">
+
+<div class="trust-strip-inner">
+
+<div class="trust-item">
+<i class="fa-solid fa-user-plus"></i>
+Free registration
+</div>
+
+<div class="trust-item">
+<i class="fa-solid fa-mobile-screen"></i>
+Works on smartphones
+</div>
+
+<div class="trust-item">
+<i class="fa-solid fa-wallet"></i>
+Airtime & bank withdrawals
+</div>
+
+<div class="trust-item">
+<i class="fa-solid fa-trophy"></i>
+Weekly leaderboard
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BENEFITS -->
+
+<section class="section" id="benefits">
+
+<div class="container">
+
+<div class="section-heading">
+
+<span class="section-label">WHY IYAL SURVEYS</span>
+
+<h2>A simple way to make your spare time more rewarding.</h2>
+
+<p>
+
+No complicated process. No special experience needed.
+Just share your opinions, participate honestly and earn rewards when your surveys are successfully completed.
+
+</p>
+
+</div>
+
+
+<div class="benefit-grid">
+
+<div class="benefit-card">
+
+<div class="benefit-icon">
+<i class="fa-solid fa-clipboard-check"></i>
+</div>
+
+<h3>Your opinions matter</h3>
+
+<p>
+
+Take surveys from third-party research providers and share your honest opinions. Your responses help businesses understand consumers better.
+
+</p>
+
+</div>
+
+
+<div class="benefit-card">
+
+<div class="benefit-icon">
+<i class="fa-solid fa-gift"></i>
+</div>
+
+<h3>Earn real rewards</h3>
+
+<p>
+
+Receive eligible rewards for successfully completed and confirmed surveys. Your available opportunities depend on your profile and survey supply.
+
+</p>
+
+</div>
+
+
+<div class="benefit-card">
+
+<div class="benefit-icon">
+<i class="fa-solid fa-people-group"></i>
+</div>
+
+<h3>Grow with your friends</h3>
+
+<p>
+
+Invite people to join Iyal Surveys using your referral link. Qualifying referrals can earn rewards under our referral programme.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- HOW IT WORKS -->
+
+<section class="section how-section" id="how">
+
+<div class="container">
+
+<div class="section-heading">
+
+<span class="section-label">GETTING STARTED</span>
+
+<h2>Four simple steps. That's all it takes.</h2>
+
+<p>
+
+Getting started shouldn't be difficult. Here's how you can begin your journey with Iyal Surveys.
+
+</p>
+
+</div>
+
+
+<div class="steps-grid">
+
+<div class="step-card">
+
+<div class="step-number">01</div>
+
+<h3>Create your account</h3>
+
+<p>
+
+Register for free, provide the required information and complete your profile.
+
+</p>
+
+</div>
+
+
+<div class="step-card">
+
+<div class="step-number">02</div>
+
+<h3>Explore available surveys</h3>
+
+<p>
+
+Visit your dashboard to discover surveys available through our research partners.
+
+</p>
+
+</div>
+
+
+<div class="step-card">
+
+<div class="step-number">03</div>
+
+<h3>Share your opinions</h3>
+
+<p>
+
+Answer questions honestly. Successfully completed and confirmed surveys earn rewards.
+
+</p>
+
+</div>
+
+
+<div class="step-card">
+
+<div class="step-number">04</div>
+
+<h3>Withdraw your rewards</h3>
+
+<p>
+
+Once you meet the withdrawal requirements, request airtime or bank withdrawal.
+
+</p>
+
+</div>
+
+</div>
+
+<div style="text-align:center;margin-top:32px">
+
+<a href="register.html" class="primary-btn">
+
+I'm ready to get started
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- LEADERBOARD -->
+
+<section class="leader-section" id="leaderboard">
+
+<div class="container">
+
+<div class="leader-panel">
+
+<div class="leader-content">
+
+<span class="leader-label">MORE THAN JUST SURVEYS</span>
+
+<h2>Your consistency could earn you a place on the leaderboard.</h2>
+
+<p>
+
+Iyal Surveys gives participants another reason to stay active. Our weekly leaderboard recognises qualifying participation and gives eligible users an opportunity to compete for announced rewards.
+
+</p>
+
+<ul>
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Participate genuinely and consistently.
+</li>
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Invite friends through the referral programme.
+</li>
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Compete for weekly leaderboard rewards.
+</li>
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Start fresh when a new week begins.
+</li>
+
+</ul>
+
+<a href="register.html" class="primary-btn" style="margin-top:27px;background:#22c55e">
+
+Join Iyal Surveys <i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+</div>
+
+
+<div class="leader-preview">
+
+<h3>🏆 Weekly Leaderboard</h3>
+
+<p>Every week brings a fresh opportunity.</p>
+
+<div class="leader-icon">
+<i class="fa-solid fa-trophy"></i>
+</div>
+
+<div class="leader-call">
+Could your name be here?
+</div>
+
+<p class="leader-small">
+
+Join the community, participate genuinely and see how you perform on the weekly leaderboard.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- WITHDRAWAL -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-heading">
+
+<span class="section-label">YOUR REWARDS</span>
+
+<h2>When it's time to withdraw, you have options.</h2>
+
+<p>
+
+We want the reward process to be straightforward. Choose an available withdrawal method when you meet the applicable requirements.
+
+</p>
+
+</div>
+
+
+<div class="withdraw-grid">
+
+<div class="withdraw-card">
+
+<div class="withdraw-icon">
+<i class="fa-solid fa-mobile-screen-button"></i>
+</div>
+
+<div>
+
+<h3>Airtime withdrawal</h3>
+
+<p>
+
+Request eligible rewards as airtime directly to your supported mobile number.
+
+</p>
+
+</div>
+
+</div>
+
+
+<div class="withdraw-card">
+
+<div class="withdraw-icon">
+<i class="fa-solid fa-building-columns"></i>
+</div>
+
+<div>
+
+<h3>Bank withdrawal</h3>
+
+<p>
+
+Request eligible rewards to your bank account using the required account information.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="security-box">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+<div>
+
+<h3>Your safety matters to us.</h3>
+
+<p>
+
+We use security measures to protect accounts and help prevent fraudulent activity. We will never ask for your bank PIN or card CVV. You do not need to pay money to unlock a withdrawal. Earnings depend on available surveys, provider approval and valid participation.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FAQ -->
+
+<section class="section faq-section" id="faq">
+
+<div class="container">
+
+<div class="section-heading">
+
+<span class="section-label">GOT QUESTIONS?</span>
+
+<h2>Everything you need to know before joining.</h2>
+
+<p>
+
+We believe people should understand how a platform works before creating an account.
+
+</p>
+
+</div>
+
+
+<div class="faq-list">
+
+
+<div class="faq-item">
+
+<button class="faq-question">
+
+Is it free to join Iyal Surveys?
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<div class="faq-answer">
+
+Yes. Creating an account is free. You do not need to pay a registration fee to participate.
+
+</div>
+
+</div>
+
+
+<div class="faq-item">
+
+<button class="faq-question">
+
+How do I earn rewards?
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<div class="faq-answer">
+
+You can earn rewards by completing eligible surveys from our research partners. Rewards are subject to successful completion, provider confirmation and our platform requirements.
+
+</div>
+
+</div>
+
+
+<div class="faq-item">
+
+<button class="faq-question">
+
+Will every survey accept my answers?
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<div class="faq-answer">
+
+Not necessarily. Survey providers use different eligibility requirements. You may sometimes be disqualified because your profile does not match the audience they need. This is normal in market research.
+
+</div>
+
+</div>
+
+
+<div class="faq-item">
+
+<button class="faq-question">
+
+How can I withdraw my rewards?
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<div class="faq-answer">
+
+Eligible users can request available airtime or bank withdrawals after meeting the applicable minimum withdrawal requirements. Requests may be subject to verification and processing.
+
+</div>
+
+</div>
+
+
+<div class="faq-item">
+
+<button class="faq-question">
+
+Can I invite my friends?
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<div class="faq-answer">
+
+Yes. You can invite friends using your referral link. Referral rewards are subject to the qualifying conditions explained in our referral programme.
+
+</div>
+
+</div>
+
+
+<div class="faq-item">
+
+<button class="faq-question">
+
+Who can register?
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<div class="faq-answer">
+
+Iyal Surveys is for individuals aged 18 and above. Each person is allowed one account, subject to our Terms and Conditions.
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FINAL CTA -->
+
+<section class="final-cta">
+
+<div class="container">
+
+<div class="final-box">
+
+<span class="small-label">YOUR NEXT STEP STARTS HERE</span>
+
+<h2>
+
+Your opinions have a place here.<br>
+
+Why not give it a try?
+
+</h2>
+
+<p>
+
+Join Iyal Surveys for free, discover available surveys and start participating. Your first step is simply creating your account.
+
+</p>
+
+<a href="register.html" class="primary-btn" style="padding:16px 25px;font-size:14px">
+
+Create My Free Account
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+<p style="font-size:11px;margin-top:16px">
+
+18+ only &nbsp; • &nbsp; Free registration &nbsp; • &nbsp; Rewards subject to eligibility
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<div class="container">
+
+<div class="footer-top">
+
+<div class="footer-brand">
+
+<h3>Iyal Surveys</h3>
+
+<p>
+
+A survey rewards platform that gives people an opportunity to share their opinions through market research and earn rewards for valid participation.
+
+</p>
+
+</div>
+
+
+<div class="footer-links">
+
+<a href="about.html">About</a>
+
+<a href="terms.html">Terms</a>
+
+<a href="privacy.html">Privacy</a>
+
+<a href="disclaimer.html">Disclaimer</a>
+
+<a href="support.html">Support</a>
+
+</div>
+
+</div>
+
+
+<div class="footer-bottom">
+
+© 2026 Iyal Surveys. Operated by Iyal Couch Global Ventures And Business Solutions. All rights reserved.
+
+</div>
+
+</div>
+
+</footer>
+
+
+<!-- SUPPORT -->
+
+<a href="support.html" class="support-button" aria-label="Contact support">
+
+<i class="fa-solid fa-headset"></i>
+
+</a>
+
+
+<script>
+
+/* MOBILE MENU */
+
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", function() {
+
+  const isOpen = navLinks.classList.toggle("show");
+
+  menuBtn.setAttribute("aria-expanded", isOpen);
+
+  menuBtn.innerHTML = isOpen
+    ? '<i class="fa-solid fa-xmark"></i>'
+    : '<i class="fa-solid fa-bars"></i>';
+
+});
+
+
+/* CLOSE MOBILE MENU AFTER CLICK */
+
+navLinks.querySelectorAll("a").forEach(function(link) {
+
+  link.addEventListener("click", function() {
+
+    navLinks.classList.remove("show");
+
+    menuBtn.setAttribute("aria-expanded", "false");
+
+    menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+
+  });
+
+});
+
+
+/* FAQ ACCORDION */
+
+document.querySelectorAll(".faq-question").forEach(function(button) {
+
+  button.addEventListener("click", function() {
+
+    const currentItem = button.parentElement;
+
+    const wasOpen = currentItem.classList.contains("active");
+
+    document.querySelectorAll(".faq-item").forEach(function(item) {
+
+      item.classList.remove("active");
+
+    });
+
+    if (!wasOpen) {
+
+      currentItem.classList.add("active");
+
+    }
+
+  });
+
+});
+
+</script>
+
 </body>
 </html>
