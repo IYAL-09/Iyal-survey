@@ -1,0 +1,2710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08140d">
+
+<title>Iyal Streak Rewards</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --bg: #08140d;
+  --surface: #0e1d14;
+  --surface-2: #12251a;
+  --surface-3: #172e20;
+  --border: rgba(160, 210, 170, .12);
+  --text: #f2f8f3;
+  --muted: #9aafa0;
+  --green: #86efac;
+  --green-strong: #16a34a;
+  --green-dark: #123d23;
+  --gold: #f7c967;
+  --red: #fb8585;
+  --radius: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(22, 163, 74, .10), transparent 35%),
+    var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  padding-bottom: 110px;
+}
+
+button {
+  font: inherit;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.page {
+  width: min(100% - 28px, 760px);
+  margin: auto;
+}
+
+/* HEADER */
+
+.topbar {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.brand img {
+  width: 41px;
+  height: 41px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -.4px;
+}
+
+.brand-tagline {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 3px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+}
+
+.icon-btn:active {
+  transform: scale(.96);
+}
+
+.menu {
+  display: none;
+  position: absolute;
+  z-index: 30;
+  right: 0;
+  top: 66px;
+  width: 210px;
+  padding: 8px;
+  background: #102117;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  box-shadow: 0 18px 45px rgba(0,0,0,.4);
+}
+
+.menu.open {
+  display: block;
+  animation: menuIn .18s ease;
+}
+
+.menu a,
+.menu button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 12px;
+  color: var(--text);
+  text-decoration: none;
+  border: 0;
+  background: transparent;
+  border-radius: 9px;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu a:hover,
+.menu button:hover {
+  background: var(--surface-3);
+}
+
+.menu i {
+  color: var(--green);
+  width: 17px;
+}
+
+/* MAIN */
+
+main {
+  padding-top: 20px;
+}
+
+.eyebrow {
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  margin-bottom: 9px;
+}
+
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.page-heading h1 {
+  font-size: clamp(23px, 5vw, 29px);
+  font-weight: 900;
+  letter-spacing: -1.1px;
+}
+
+.page-heading p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 6px;
+}
+
+.rules-button {
+  flex-shrink: 0;
+  border: 1px solid rgba(134,239,172,.2);
+  background: rgba(134,239,172,.07);
+  color: var(--green);
+  border-radius: 12px;
+  padding: 10px 11px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* HERO */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 22px;
+  border-radius: 24px;
+  border: 1px solid rgba(134,239,172,.16);
+  background:
+    radial-gradient(circle at 90% 0%, rgba(134,239,172,.17), transparent 35%),
+    linear-gradient(135deg, #163d24, #0c1f13 75%);
+  margin-bottom: 15px;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -75px;
+  bottom: -110px;
+  border: 1px solid rgba(134,239,172,.12);
+  border-radius: 50%;
+  box-shadow: 0 0 0 20px rgba(134,239,172,.025),
+              0 0 0 40px rgba(134,239,172,.02);
+  pointer-events: none;
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-label {
+  font-size: 11px;
+  color: #c3e6cb;
+  font-weight: 600;
+}
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--green);
+  background: rgba(134,239,172,.10);
+  border: 1px solid rgba(134,239,172,.16);
+  padding: 7px 9px;
+  border-radius: 30px;
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 9px var(--green);
+}
+
+.balance-label {
+  color: #b4d6bd;
+  font-size: 11px;
+  margin-top: 26px;
+  position: relative;
+  z-index: 1;
+}
+
+.balance-value {
+  font-size: clamp(34px, 8vw, 43px);
+  font-weight: 900;
+  letter-spacing: -1.8px;
+  margin-top: 5px;
+  position: relative;
+  z-index: 1;
+  overflow-wrap: anywhere;
+}
+
+.balance-value.negative {
+  color: var(--red);
+}
+
+.balance-caption {
+  color: #b4d6bd;
+  font-size: 10px;
+  margin-top: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 23px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-pill {
+  background: rgba(0,0,0,.17);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 10px;
+  padding: 9px 11px;
+  font-size: 10px;
+  color: #d7eadd;
+}
+
+.hero-pill strong {
+  color: white;
+  margin-left: 3px;
+}
+
+/* CARDS */
+
+.card {
+  background: linear-gradient(145deg, rgba(18,37,26,.96), rgba(12,27,18,.98));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.card-heading h2 {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -.3px;
+}
+
+.card-heading p {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.section-icon {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 11px;
+  color: var(--green);
+  background: rgba(134,239,172,.09);
+  border: 1px solid rgba(134,239,172,.12);
+}
+
+/* WEEK PROGRESS */
+
+.progress-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.progress-number {
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.progress-number small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.progress-status {
+  color: var(--muted);
+  font-size: 10px;
+  text-align: right;
+  line-height: 1.5;
+}
+
+.progress-track {
+  height: 9px;
+  background: #1d3425;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #16a34a, #86efac);
+  transition: width .7s cubic-bezier(.2,.8,.2,1);
+}
+
+.progress-legend {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 9px;
+  margin-top: 9px;
+}
+
+/* WEEK CALENDAR */
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.day {
+  min-width: 0;
+  text-align: center;
+  padding: 11px 3px 10px;
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  position: relative;
+}
+
+.day.today {
+  border-color: rgba(134,239,172,.45);
+  background: rgba(134,239,172,.06);
+}
+
+.day.active {
+  background: rgba(22,163,74,.12);
+  border-color: rgba(134,239,172,.22);
+}
+
+.day-name {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.day-number {
+  font-size: 12px;
+  font-weight: 800;
+  margin-top: 7px;
+}
+
+.day-icon {
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  margin: 8px auto 0;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  background: rgba(255,255,255,.06);
+  color: var(--muted);
+}
+
+.day.active .day-icon {
+  color: #06140a;
+  background: var(--green);
+}
+
+.day.today .day-name {
+  color: var(--green);
+}
+
+.day-details {
+  font-size: 8px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 7px;
+  min-height: 20px;
+  overflow-wrap: anywhere;
+}
+
+.day-reversed {
+  color: var(--red);
+  display: block;
+  margin-top: 3px;
+}
+
+/* ESTIMATES */
+
+.estimate-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 9px;
+}
+
+.estimate-item {
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 13px;
+}
+
+.estimate-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.estimate-item strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 8px;
+  letter-spacing: -.5px;
+}
+
+.estimate-item small {
+  color: var(--muted);
+  font-size: 9px;
+  display: block;
+  margin-top: 5px;
+}
+
+/* CLAIMS */
+
+.claim-list {
+  display: grid;
+  gap: 9px;
+}
+
+.claim-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 13px;
+}
+
+.claim-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.claim-icon {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: rgba(134,239,172,.09);
+  color: var(--green);
+}
+
+.claim-title {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.claim-time {
+  color: var(--muted);
+  font-size: 9px;
+  margin-top: 4px;
+}
+
+.claim-btn {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--green);
+  color: #082011;
+  padding: 10px 13px;
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.claim-btn:active {
+  transform: scale(.94);
+}
+
+.claim-btn.loading {
+  pointer-events: none;
+  opacity: .7;
+}
+
+.claim-btn.done {
+  background: rgba(134,239,172,.12);
+  color: var(--green);
+  border: 1px solid rgba(134,239,172,.2);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px 10px;
+  color: var(--muted);
+}
+
+.empty-state i {
+  font-size: 22px;
+  color: #65836d;
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* VISIT REWARD */
+
+.visit-box {
+  background: rgba(134,239,172,.035);
+  border: 1px solid rgba(134,239,172,.12);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.visit-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.visit-count {
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.visit-count small {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.visit-reward {
+  text-align: right;
+}
+
+.visit-reward strong {
+  display: block;
+  color: var(--green);
+  font-size: 15px;
+}
+
+.visit-reward span {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.visit-track {
+  height: 7px;
+  background: #20382a;
+  border-radius: 30px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+.visit-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #16a34a, #86efac);
+  border-radius: inherit;
+  transition: width .6s ease;
+}
+
+.visit-note {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.6;
+  margin-top: 11px;
+}
+
+.visit-action {
+  margin-top: 13px;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--green);
+  color: #082011;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.visit-action.done {
+  color: var(--green);
+  background: rgba(134,239,172,.10);
+  border: 1px solid rgba(134,239,172,.2);
+}
+
+/* FIVE MONTH SUMMARY */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 8px;
+}
+
+.summary-item {
+  min-width: 0;
+  padding: 12px 9px;
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.summary-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.5;
+  min-height: 27px;
+}
+
+.summary-item strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.summary-item.reversed strong {
+  color: var(--red);
+}
+
+/* SETTLEMENT */
+
+.settlement-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(247,201,103,.055);
+  border: 1px solid rgba(247,201,103,.14);
+  border-radius: 14px;
+  padding: 13px;
+}
+
+.settlement-icon {
+  width: 37px;
+  height: 37px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 12px;
+  color: var(--gold);
+  background: rgba(247,201,103,.10);
+}
+
+.settlement-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.settlement-info strong {
+  font-size: 11px;
+  display: block;
+}
+
+.settlement-info span {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  margin-top: 4px;
+}
+
+.countdown {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* HISTORY */
+
+.history-list {
+  display: grid;
+  gap: 0;
+}
+
+.history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.history-row:last-child {
+  border-bottom: 0;
+}
+
+.history-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.history-icon {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: rgba(134,239,172,.08);
+  color: var(--green);
+}
+
+.history-icon.reversal {
+  background: rgba(251,133,133,.08);
+  color: var(--red);
+}
+
+.history-icon.payout {
+  background: rgba(247,201,103,.08);
+  color: var(--gold);
+}
+
+.history-title {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.history-date {
+  color: var(--muted);
+  font-size: 9px;
+  margin-top: 4px;
+}
+
+.history-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.history-amount {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.history-amount.negative {
+  color: var(--red);
+}
+
+.history-status {
+  color: var(--muted);
+  font-size: 8px;
+  margin-top: 4px;
+  text-transform: capitalize;
+}
+
+/* FEEDBACK */
+
+.notice {
+  display: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 10px;
+  line-height: 1.6;
+  margin-bottom: 13px;
+}
+
+.notice.show {
+  display: block;
+}
+
+.notice.error {
+  color: #ffc0c0;
+  background: rgba(251,133,133,.08);
+  border: 1px solid rgba(251,133,133,.17);
+}
+
+.notice.info {
+  color: #c9e8d0;
+  background: rgba(134,239,172,.07);
+  border: 1px solid rgba(134,239,172,.15);
+}
+
+.notice button {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 800;
+  margin-left: 5px;
+}
+
+.refresh-row {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 20px;
+}
+
+.refresh-btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  padding: 10px 14px;
+  border-radius: 11px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.refresh-btn i {
+  margin-right: 6px;
+}
+
+/* RULES DRAWER */
+
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0,0,0,.68);
+  backdrop-filter: blur(5px);
+}
+
+.overlay.open {
+  display: block;
+}
+
+.drawer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: min(100%, 470px);
+  background: #0b1b11;
+  border-left: 1px solid var(--border);
+  padding: 22px;
+  overflow-y: auto;
+  animation: drawerIn .25s ease;
+}
+
+.drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid var(--border);
+}
+
+.drawer-head h2 {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.drawer-head p {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.close-btn {
+  width: 37px;
+  height: 37px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 11px;
+  cursor: pointer;
+}
+
+.rule-section {
+  padding: 17px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.rule-section h3 {
+  font-size: 12px;
+  margin-bottom: 9px;
+  color: var(--green);
+}
+
+.rule-section p,
+.rule-section li {
+  color: #b5c7b9;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.rule-section ul {
+  padding-left: 17px;
+}
+
+.rule-section li {
+  margin-bottom: 5px;
+}
+
+/* TOAST */
+
+.toast {
+  position: fixed;
+  z-index: 120;
+  left: 50%;
+  bottom: 95px;
+  transform: translate(-50%, 20px);
+  width: min(90%, 390px);
+  padding: 13px 15px;
+  background: #173c25;
+  border: 1px solid rgba(134,239,172,.25);
+  border-radius: 14px;
+  color: #eaffee;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s ease;
+  box-shadow: 0 12px 35px rgba(0,0,0,.35);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.toast i {
+  color: var(--green);
+  margin-right: 7px;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav {
+  position: fixed;
+  z-index: 50;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  width: min(calc(100% - 24px), 500px);
+  padding: 10px 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: rgba(12,29,18,.96);
+  border: 1px solid rgba(160,210,170,.16);
+  border-radius: 19px;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 12px 35px rgba(0,0,0,.4);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  color: #849b8a;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 5px 2px;
+}
+
+.nav-item i {
+  font-size: 17px;
+}
+
+.nav-item.active {
+  color: var(--green);
+}
+
+/* LOADING */
+
+.skeleton {
+  height: 15px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #14281b 25%, #203a29 50%, #14281b 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.loading-card {
+  min-height: 120px;
+}
+
+.loading-card .skeleton + .skeleton {
+  margin-top: 12px;
+}
+
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes drawerIn {
+  from { transform: translateX(35px); opacity: .6; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes successPop {
+  0% { transform: scale(.96); }
+  55% { transform: scale(1.025); }
+  100% { transform: scale(1); }
+}
+
+.success-pop {
+  animation: successPop .38s ease;
+}
+
+@media (max-width: 430px) {
+  .page-heading {
+    align-items: flex-start;
+  }
+
+  .rules-button {
+    padding: 9px;
+    font-size: 0;
+  }
+
+  .rules-button i {
+    font-size: 14px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .week-grid {
+    gap: 4px;
+  }
+
+  .day {
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+
+  .day-name {
+    font-size: 8px;
+  }
+
+  .day-details {
+    font-size: 7px;
+  }
+
+  .summary-grid {
+    gap: 5px;
+  }
+
+  .summary-item {
+    padding: 10px 7px;
+  }
+
+  .summary-item span {
+    font-size: 8px;
+  }
+
+  .summary-item strong {
+    font-size: 13px;
+  }
+
+  .countdown {
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <header class="topbar">
+    <div class="brand">
+      <img src="iyallogo.png" alt="Iyal Surveys logo">
+      <div>
+        <div class="brand-name">Iyal Surveys</div>
+        <div class="brand-tagline">Earn · Progress · Win</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="rulesTopButton" aria-label="How Streak Rewards work">
+        <i class="fa-regular fa-file-lines"></i>
+      </button>
+
+      <button class="icon-btn" id="menuButton" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <nav class="menu" id="menu">
+      <a href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+      <a href="leaderboard.html"><i class="fa-solid fa-ranking-star"></i> Leaderboard</a>
+      <a href="terms.html"><i class="fa-regular fa-file-lines"></i> Terms</a>
+      <a href="privacy.html"><i class="fa-solid fa-lock"></i> Privacy</a>
+      <a href="about.html"><i class="fa-regular fa-circle-question"></i> About</a>
+      <a href="support.html"><i class="fa-regular fa-envelope"></i> Support</a>
+      <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+      <a href="profile.html"><i class="fa-regular fa-user"></i> Profile</a>
+      <button id="logoutButton"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow">Consistency deserves recognition</div>
+        <h1>Streak Rewards</h1>
+        <p>Build your weekly streak, collect points and earn rewards for staying active.</p>
+      </div>
+
+      <button class="rules-button" id="rulesButton">
+        <i class="fa-regular fa-file-lines"></i>
+        How it works
+      </button>
+    </div>
+
+    <div id="notice" class="notice"></div>
+
+    <!-- MAIN POINT BALANCE -->
+
+    <section class="hero" id="balanceCard">
+      <div class="hero-top">
+        <span class="hero-label">Your current Streak position</span>
+        <span class="live-badge"><span class="live-dot"></span> YOUR REWARDS</span>
+      </div>
+
+      <div class="balance-label">Current point balance</div>
+      <div class="balance-value" id="currentBalance">—</div>
+      <div class="balance-caption" id="balanceCaption">
+        Your balance reflects claimed rewards, reversals and debt recovery.
+      </div>
+
+      <div class="hero-bottom">
+        <div class="hero-pill">Points value <strong>₦1 = 1 point</strong></div>
+        <div class="hero-pill">Weekly target <strong>5 active days</strong></div>
+      </div>
+    </section>
+
+    <!-- WEEKLY PROGRESS -->
+
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <h2>This week's progress</h2>
+          <p id="weekRange">Monday – Sunday</p>
+        </div>
+        <div class="section-icon"><i class="fa-solid fa-chart-line"></i></div>
+      </div>
+
+      <div class="progress-summary">
+        <div class="progress-number">
+          <span id="activeDays">—</span><small> / 5 days</small>
+        </div>
+        <div class="progress-status" id="progressStatus">Loading your progress...</div>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="weekProgress"></div>
+      </div>
+
+      <div class="progress-legend">
+        <span>Weekly qualification</span>
+        <span>5 active days required</span>
+      </div>
+    </section>
+
+    <!-- WEEK CALENDAR -->
+
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <h2>Your seven-day calendar</h2>
+          <p>One active day is counted once, even if you claim several rewards.</p>
+        </div>
+        <div class="section-icon"><i class="fa-regular fa-calendar-days"></i></div>
+      </div>
+
+      <div class="week-grid" id="weekCalendar">
+        <div class="empty-state" style="grid-column:1/-1">Loading calendar...</div>
+      </div>
+    </section>
+
+    <!-- WEEKLY ESTIMATE -->
+
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <h2>Weekly reward estimate</h2>
+          <p>This is an estimate, not a confirmed payment.</p>
+        </div>
+        <div class="section-icon"><i class="fa-solid fa-coins"></i></div>
+      </div>
+
+      <div class="estimate-grid">
+        <div class="estimate-item">
+          <span>Base points</span>
+          <strong id="basePoints">—</strong>
+          <small>From your claimed rewards</small>
+        </div>
+
+        <div class="estimate-item">
+          <span>Potential 10% bonus</span>
+          <strong id="bonusPoints">—</strong>
+          <small>When weekly requirements are met</small>
+        </div>
+
+        <div class="estimate-item">
+          <span>Estimated payout</span>
+          <strong id="estimatedPayout">—</strong>
+          <small>After applicable debt recovery</small>
+        </div>
+
+        <div class="estimate-item">
+          <span>Outstanding debt</span>
+          <strong id="outstandingDebt">—</strong>
+          <small>Recovered from future Streak claims</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- SURVEY CLAIMS -->
+
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <h2>Survey rewards to claim</h2>
+          <p>Claim each qualifying survey before midnight today.</p>
+        </div>
+        <div class="section-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+      </div>
+
+      <div class="claim-list" id="surveyClaims">
+        <div class="empty-state">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          <p>Checking for qualifying survey rewards...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISIT REWARD -->
+
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <h2>Daily visit reward</h2>
+          <p>Stay active throughout the day to unlock your visit reward.</p>
+        </div>
+        <div class="section-icon"><i class="fa-solid fa-footprints"></i></div>
+      </div>
+
+      <div class="visit-box">
+        <div class="visit-top">
+          <div>
+            <div class="visit-count">
+              <span id="visitCount">—</span><small> / 10 visits</small>
+            </div>
+          </div>
+
+          <div class="visit-reward">
+            <strong>10 points</strong>
+            <span>Daily reward</span>
+          </div>
+        </div>
+
+        <div class="visit-track">
+          <div class="visit-fill" id="visitProgress"></div>
+        </div>
+
+        <p class="visit-note" id="visitNote">
+          Complete 10 qualifying Dashboard visits, with at least 30 minutes between qualifying visits.
+        </p>
+
+        <button class="visit-action" id="visitClaimButton" disabled>
+          Checking visit progress...
+        </button>
+      </div>
+    </section>
+
+    <!-- FIVE MONTH SUMMARY -->
+
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <h2>Your five-month summary</h2>
+          <p>A transparent overview of earned and reversed Streak points.</p>
+        </div>
+        <div class="section-icon"><i class="fa-solid fa-chart-pie"></i></div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span>Total points earned</span>
+          <strong id="earnedFiveMonths">—</strong>
+        </div>
+
+        <div class="summary-item reversed">
+          <span>Points reversed</span>
+          <strong id="reversedFiveMonths">—</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Current balance</span>
+          <strong id="netFiveMonths">—</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTLEMENT COUNTDOWN -->
+
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <h2>Weekly settlement</h2>
+          <p>Eligible rewards are converted to your wallet every Monday.</p>
+        </div>
+        <div class="section-icon"><i class="fa-regular fa-clock"></i></div>
+      </div>
+
+      <div class="settlement-box">
+        <div class="settlement-icon"><i class="fa-solid fa-wallet"></i></div>
+
+        <div class="settlement-info">
+          <strong>Next weekly settlement</strong>
+          <span>Monday · 12:00 AM Nigeria time</span>
+        </div>
+
+        <div class="countdown" id="settlementCountdown">—</div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <h2>Recent reward history</h2>
+          <p>Your latest five Streak records.</p>
+        </div>
+        <div class="section-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+      </div>
+
+      <div class="history-list" id="historyList">
+        <div class="empty-state">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          <p>Loading your reward history...</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="refresh-row">
+      <button class="refresh-btn" id="refreshButton">
+        <i class="fa-solid fa-rotate"></i> Refresh rewards
+      </button>
+    </div>
+
+  </main>
+</div>
+
+<!-- RULES DRAWER -->
+
+<div class="overlay" id="rulesOverlay" aria-hidden="true">
+  <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+
+    <div class="drawer-head">
+      <div>
+        <h2 id="rulesTitle">How Streak Rewards Work</h2>
+        <p>Understand how to earn, claim and receive your rewards.</p>
+      </div>
+
+      <button class="close-btn" id="closeRules" aria-label="Close rules">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="rule-section">
+      <h3>1. Qualifying survey rewards</h3>
+      <ul>
+        <li>A completed survey qualifies when your credited share is at least ₦100.</li>
+        <li>You must manually claim each qualifying survey.</li>
+        <li>Each qualifying survey can be claimed only once.</li>
+        <li>Claims must be made before midnight on the same Nigeria calendar day the survey was completed.</li>
+        <li>Unclaimed survey rewards expire at midnight. Your normal survey earnings are not affected.</li>
+      </ul>
+    </div>
+
+    <div class="rule-section">
+      <h3>2. Weekly challenge</h3>
+      <ul>
+        <li>Each challenge runs from Monday to Sunday, Nigeria time.</li>
+        <li>You may take up to two rest days.</li>
+        <li>You need at least five distinct active days to qualify for a weekly payout.</li>
+        <li>You must also have at least one qualifying survey claim during that week.</li>
+        <li>Completing zero to four active days means no weekly payout.</li>
+        <li>Several claims on one day still count as only one active day.</li>
+      </ul>
+    </div>
+
+    <div class="rule-section">
+      <h3>3. Points and weekly bonus</h3>
+      <ul>
+        <li>Survey claims earn base points equal to 10% of your credited survey amount.</li>
+        <li>For example, a ₦500 credited survey share earns 50 base points.</li>
+        <li>If you meet the weekly requirements, you receive an additional 10% bonus on your week's base points.</li>
+        <li>One point is equal to ₦1.</li>
+        <li>Weekly rewards are settled into your wallet every Monday at midnight Nigeria time.</li>
+      </ul>
+    </div>
+
+    <div class="rule-section">
+      <h3>4. Daily visit reward</h3>
+      <ul>
+        <li>Complete 10 qualifying Dashboard visits to unlock 10 points for that day.</li>
+        <li>Qualifying visits must be separated by at least 30 minutes.</li>
+        <li>You must manually claim the visit reward after reaching 10 visits.</li>
+        <li>Only one visit reward can be claimed per day.</li>
+        <li>Unclaimed visit rewards expire at midnight.</li>
+        <li>Visit rewards count as one active day, but visits alone cannot satisfy the weekly survey requirement.</li>
+      </ul>
+    </div>
+
+    <div class="rule-section">
+      <h3>5. Reversed surveys and point recovery</h3>
+      <ul>
+        <li>If a survey is reversed before weekly settlement, its pending Streak reward is removed.</li>
+        <li>If a survey is reversed after its Streak reward has been paid, the paid Streak amount is recorded as a debt.</li>
+        <li>Future manually claimed Streak rewards are used to recover that debt.</li>
+        <li>Your normal survey earnings and regular wallet balance are separate from Streak debt.</li>
+        <li>Your current point balance may become negative while a debt remains.</li>
+        <li>Claimed points can recover debt even in a week when you do not meet the five-day payout requirement.</li>
+        <li>If you do not qualify for weekly payout, any remaining positive points for that week are forfeited after applicable debt recovery.</li>
+      </ul>
+    </div>
+
+    <div class="rule-section">
+      <h3>6. Records and retention</h3>
+      <p>Streak reward records are normally retained for six months. Records connected to an outstanding debt are preserved until that debt has been fully recovered.</p>
+    </div>
+
+    <div class="rule-section">
+      <p>All claims and settlements are verified by Iyal Surveys' secure system. Displayed weekly payout figures are estimates until settlement is completed.</p>
+    </div>
+
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- BOTTOM NAVIGATION -->
+
+<nav class="bottom-nav">
+  <a href="dashboard.html" class="nav-item">
+    <i class="fa-solid fa-house"></i>
+    <span>Dashboard</span>
+  </a>
+
+  <a href="withdraw.html" class="nav-item">
+    <i class="fa-solid fa-wallet"></i>
+    <span>Cash Out</span>
+  </a>
+
+  <a href="referrals.html" class="nav-item">
+    <i class="fa-solid fa-users"></i>
+    <span>Referrals</span>
+  </a>
+
+  <a href="leaderboard.html" class="nav-item">
+    <i class="fa-solid fa-ranking-star"></i>
+    <span>Leaderboard</span>
+  </a>
+</nav>
+
+<script>
+/* =========================================================
+   IYAL STREAK REWARDS
+   Uses existing secure Supabase RPC functions.
+   No direct writes to streak_rewards.
+========================================================= */
+
+const SUPABASE_URL = "https://xkshzlfducmnglxfnxzk.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_Z6fCexCd_v13ARt6147e_Q_T9NtE-Hg";
+
+const supabaseClient =
+  window.supabaseClient ||
+  window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+window.supabaseClient = supabaseClient;
+
+const LAGOS_TIMEZONE = "Africa/Lagos";
+
+let currentUser = null;
+let currentSession = null;
+let dashboardData = null;
+let isLoading = false;
+let isClaiming = false;
+let toastTimer = null;
+let countdownTimer = null;
+let heartbeatTimer = null;
+let lastInteraction = Date.now();
+
+/* =========================================================
+   GENERAL HELPERS
+========================================================= */
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function number(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function formatPoints(value) {
+  return number(value).toLocaleString("en-NG", {
+    maximumFractionDigits: 2
+  });
+}
+
+function formatNaira(value) {
+  return "₦" + number(value).toLocaleString("en-NG", {
+    maximumFractionDigits: 2
+  });
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[character]);
+}
+
+function showToast(message, icon = "fa-circle-check") {
+  const toast = $("toast");
+
+  toast.innerHTML = `
+    <i class="fa-solid ${icon}"></i>
+    ${escapeHTML(message)}
+  `;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3500);
+}
+
+function showNotice(message, type = "info", showRetry = false) {
+  const notice = $("notice");
+
+  notice.className = "notice show " + type;
+
+  notice.innerHTML = `
+    ${escapeHTML(message)}
+    ${showRetry ? '<button id="noticeRetry">Try again</button>' : ""}
+  `;
+
+  const retry = $("noticeRetry");
+
+  if (retry) {
+    retry.addEventListener("click", loadDashboard);
+  }
+}
+
+function clearNotice() {
+  $("notice").className = "notice";
+  $("notice").textContent = "";
+}
+
+function getLagosParts(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: LAGOS_TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(date);
+
+  const result = {};
+
+  for (const part of parts) {
+    if (part.type !== "literal") {
+      result[part.type] = Number(part.value);
+    }
+  }
+
+  return result;
+}
+
+function formatDate(dateValue, options = {}) {
+  if (!dateValue) return "—";
+
+  const date = new Date(dateValue);
+
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+
+  return new Intl.DateTimeFormat("en-NG", {
+    timeZone: LAGOS_TIMEZONE,
+    day: "numeric",
+    month: "short",
+    ...options
+  }).format(date);
+}
+
+function formatDateOnly(dateString, options = {}) {
+  if (!dateString) return "—";
+
+  // Parse a date-only value at noon UTC to avoid shifting its calendar day.
+  const date = new Date(dateString + "T12:00:00Z");
+
+  if (Number.isNaN(date.getTime())) return "—";
+
+  return new Intl.DateTimeFormat("en-NG", {
+    timeZone: LAGOS_TIMEZONE,
+    day: "numeric",
+    month: "short",
+    ...options
+  }).format(date);
+}
+
+function formatTime(dateValue) {
+  if (!dateValue) return "";
+
+  const date = new Date(dateValue);
+
+  if (Number.isNaN(date.getTime())) return "";
+
+  return new Intl.DateTimeFormat("en-NG", {
+    timeZone: LAGOS_TIMEZONE,
+    hour: "numeric",
+    minute: "2-digit"
+  }).format(date);
+}
+
+function getNextMondayMidnightLagos() {
+  const parts = getLagosParts();
+
+  // JavaScript day number for the current Lagos calendar date.
+  const today = new Date(Date.UTC(
+    parts.year,
+    parts.month - 1,
+    parts.day,
+    12
+  ));
+
+  const day = today.getUTCDay();
+
+  let daysUntilMonday = (8 - day) % 7;
+
+  // If today is Monday, the next settlement is next Monday.
+  if (daysUntilMonday === 0) {
+    daysUntilMonday = 7;
+  }
+
+  // Lagos is UTC+1.
+  return new Date(Date.UTC(
+    parts.year,
+    parts.month - 1,
+    parts.day + daysUntilMonday,
+    -1,
+    0,
+    0
+  ));
+}
+
+function getSettlementDate() {
+  if (dashboardData?.settlement_at) {
+    const supplied = new Date(dashboardData.settlement_at);
+
+    if (!Number.isNaN(supplied.getTime())) {
+      return supplied;
+    }
+  }
+
+  return getNextMondayMidnightLagos();
+}
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+
+async function initialisePage() {
+  try {
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error) throw error;
+
+    currentSession = data.session;
+
+    if (!currentSession?.user) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    currentUser = currentSession.user;
+
+    await loadDashboard();
+
+    startActivityHeartbeat();
+
+  } catch (error) {
+    console.error("Initialisation error:", error);
+
+    showNotice(
+      "We could not verify your session. Please refresh the page or sign in again.",
+      "error",
+      true
+    );
+  }
+}
+
+/* =========================================================
+   DASHBOARD RPC
+========================================================= */
+
+async function loadDashboard() {
+  if (isLoading) return;
+
+  if (!navigator.onLine) {
+    showNotice(
+      "You are offline. Connect to the internet to refresh your Streak Rewards.",
+      "error",
+      true
+    );
+    return;
+  }
+
+  isLoading = true;
+  $("refreshButton").disabled = true;
+  $("refreshButton").innerHTML =
+    '<i class="fa-solid fa-spinner fa-spin"></i> Refreshing...';
+
+  try {
+    clearNotice();
+
+    const { data, error } = await supabaseClient.rpc(
+      "get_streak_dashboard"
+    );
+
+    if (error) throw error;
+
+    const result = Array.isArray(data) ? data[0] : data;
+
+    if (!result || typeof result !== "object") {
+      throw new Error("The rewards service returned an unexpected response.");
+    }
+
+    dashboardData = result;
+
+    renderDashboard(result);
+
+  } catch (error) {
+    console.error("Dashboard loading error:", error);
+
+    const message = getFriendlyError(error);
+
+    showNotice(message, "error", true);
+
+  } finally {
+    isLoading = false;
+
+    $("refreshButton").disabled = false;
+    $("refreshButton").innerHTML =
+      '<i class="fa-solid fa-rotate"></i> Refresh rewards';
+  }
+}
+
+/* =========================================================
+   FRIENDLY ERROR MESSAGES
+========================================================= */
+
+function getFriendlyError(error) {
+  const message = String(
+    error?.message || error?.details || error || ""
+  ).toLowerCase();
+
+  if (!navigator.onLine) {
+    return "Your internet connection appears to be unavailable. Please reconnect and try again.";
+  }
+
+  if (
+    message.includes("blocked") ||
+    message.includes("account is blocked")
+  ) {
+    return "Your account cannot access Streak Rewards at this time. Please contact support if you believe this is a mistake.";
+  }
+
+  if (
+    message.includes("jwt") ||
+    message.includes("unauthorized") ||
+    message.includes("not authenticated")
+  ) {
+    return "Your session may have expired. Please sign in again.";
+  }
+
+  if (
+    message.includes("already claimed") ||
+    message.includes("duplicate")
+  ) {
+    return "This reward has already been claimed. Refreshing your rewards...";
+  }
+
+  if (
+    message.includes("expired") ||
+    message.includes("midnight")
+  ) {
+    return "This reward has expired. Only eligible rewards within the claim period can be claimed.";
+  }
+
+  return "We couldn't load your Streak Rewards right now. Please try again.";
+}
+
+/* =========================================================
+   RENDER DASHBOARD
+========================================================= */
+
+function renderDashboard(data) {
+  renderBalance(data);
+  renderWeeklyProgress(data);
+  renderCalendar(data);
+  renderEstimates(data);
+  renderSurveyClaims(data);
+  renderVisitReward(data);
+  renderFiveMonthSummary(data);
+  renderHistory(data);
+  startCountdown();
+}
+
+function renderBalance(data) {
+  const balance = number(data.current_point_balance);
+
+  const element = $("currentBalance");
+
+  element.textContent =
+    (balance > 0 ? "+" : balance < 0 ? "−" : "") +
+    formatPoints(Math.abs(balance)) +
+    " points";
+
+  element.classList.toggle("negative", balance < 0);
+
+  if (balance < 0) {
+    $("balanceCaption").textContent =
+      "You have an outstanding Streak debt. Future claimed Streak rewards will help recover it.";
+  } else if (balance > 0) {
+    $("balanceCaption").textContent =
+      "Your current net Streak point balance after applicable reversals and debt recovery.";
+  } else {
+    $("balanceCaption").textContent =
+      "Your current Streak point balance is zero.";
+  }
+}
+
+function renderWeeklyProgress(data) {
+  const activeDays = Math.max(0, number(data.active_days));
+  const requiredDays = Math.max(1, number(data.required_active_days) || 5);
+
+  $("activeDays").textContent = activeDays;
+
+  const percentage = Math.min(
+    100,
+    (activeDays / requiredDays) * 100
+  );
+
+  $("weekProgress").style.width = percentage + "%";
+
+  if (data.eligible_if_week_ended_now) {
+    $("progressStatus").textContent =
+      "Weekly requirements currently met";
+  } else {
+    const remaining = Math.max(0, requiredDays - activeDays);
+
+    $("progressStatus").textContent =
+      remaining + " more active day" +
+      (remaining === 1 ? "" : "s") +
+      " needed";
+  }
+
+  if (data.week_start && data.week_end) {
+    $("weekRange").textContent =
+      formatDateOnly(data.week_start) +
+      " – " +
+      formatDateOnly(data.week_end);
+  }
+}
+
+function renderCalendar(data) {
+  const calendar = Array.isArray(data.calendar)
+    ? data.calendar
+    : [];
+
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const today = data.today;
+
+  if (!calendar.length) {
+    $("weekCalendar").innerHTML =
+      '<div class="empty-state" style="grid-column:1/-1">Your weekly calendar will appear here.</div>';
+    return;
+  }
+
+  $("weekCalendar").innerHTML = calendar.map(item => {
+    const dateString = item.date;
+
+    const date = new Date(dateString + "T12:00:00Z");
+
+    const dayName = new Intl.DateTimeFormat("en-NG", {
+      timeZone: LAGOS_TIMEZONE,
+      weekday: "short"
+    }).format(date);
+
+    const dayNumber = new Intl.DateTimeFormat("en-NG", {
+      timeZone: LAGOS_TIMEZONE,
+      day: "numeric"
+    }).format(date);
+
+    const surveyCount = Math.max(0, number(item.survey_claims));
+    const reversedCount = Math.max(0, number(item.survey_reversed));
+
+    const validSurveyCount = Math.max(
+      0,
+      surveyCount - reversedCount
+    );
+
+    const visitClaimed = item.visit_claimed === true;
+    const isActive = item.is_active === true;
+    const isToday = dateString === today;
+
+    let details = "Rest day";
+
+    if (validSurveyCount > 0 && visitClaimed) {
+      details = "Survey + visit";
+    } else if (validSurveyCount > 0) {
+      details = validSurveyCount + " survey" +
+        (validSurveyCount === 1 ? "" : "s");
+    } else if (visitClaimed) {
+      details = "Visit reward";
+    } else if (number(item.expired_surveys) > 0) {
+      details = "Expired";
+    }
+
+    if (reversedCount > 0) {
+      details += `<span class="day-reversed">${reversedCount} reversed</span>`;
+    }
+
+    const icon = isActive
+      ? '<i class="fa-solid fa-check"></i>'
+      : number(item.expired_surveys) > 0
+        ? '<i class="fa-solid fa-clock"></i>'
+        : '<i class="fa-solid fa-minus"></i>';
+
+    return `
+      <div class="day ${isToday ? "today" : ""} ${isActive ? "active" : ""}">
+        <div class="day-name">${escapeHTML(dayName)}</div>
+        <div class="day-number">${escapeHTML(dayNumber)}</div>
+        <div class="day-icon">${icon}</div>
+        <div class="day-details">${details}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderEstimates(data) {
+  $("basePoints").textContent =
+    formatPoints(data.current_base_points);
+
+  $("bonusPoints").textContent =
+    formatPoints(data.estimated_bonus_points);
+
+  $("estimatedPayout").textContent =
+    formatNaira(data.estimated_payout_points);
+
+  $("outstandingDebt").textContent =
+    formatPoints(data.outstanding_debt) + " pts";
+}
+
+/* =========================================================
+   SURVEY CLAIMS
+========================================================= */
+
+function renderSurveyClaims(data) {
+  const claims = Array.isArray(data.pending_surveys)
+    ? data.pending_surveys
+    : [];
+
+  if (!claims.length) {
+    $("surveyClaims").innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-circle-check"></i>
+        <p>No unclaimed qualifying survey rewards right now.<br>
+        Completed qualifying surveys will appear here.</p>
+      </div>
+    `;
+    return;
+  }
+
+  $("surveyClaims").innerHTML = claims.map((claim, index) => {
+    const time = formatTime(claim.completed_at);
+
+    return `
+      <div class="claim-row" id="surveyClaim-${index}">
+        <div class="claim-info">
+          <div class="claim-icon">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+
+          <div>
+            <div class="claim-title">Qualifying survey completed</div>
+            <div class="claim-time">
+              ${escapeHTML(formatDate(claim.completed_at, {
+                year: "numeric"
+              }))}
+              ${time ? " · " + escapeHTML(time) : ""}
+            </div>
+          </div>
+        </div>
+
+        <button
+          class="claim-btn"
+          data-survey-index="${index}"
+          type="button"
+        >
+          Claim
+        </button>
+      </div>
+    `;
+  }).join("");
+
+  document.querySelectorAll("[data-survey-index]").forEach(button => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.surveyIndex);
+
+      if (!Number.isInteger(index) || !claims[index]) return;
+
+      claimSurvey(claims[index].claim_ref, button);
+    });
+  });
+}
+
+async function claimSurvey(claimRef, button) {
+  if (isClaiming) return;
+
+  if (!claimRef) {
+    showToast("We couldn't identify this reward. Refresh and try again.", "fa-circle-exclamation");
+    return;
+  }
+
+  if (!navigator.onLine) {
+    showToast("You are offline. Reconnect to claim this reward.", "fa-wifi");
+    return;
+  }
+
+  isClaiming = true;
+
+  const originalText = button.textContent;
+
+  button.disabled = true;
+  button.classList.add("loading");
+  button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+  try {
+    const { data, error } = await supabaseClient.rpc(
+      "claim_streak_survey",
+      {
+        p_webhook_id: claimRef
+      }
+    );
+
+    if (error) throw error;
+
+    const result = Array.isArray(data) ? data[0] : data;
+
+    if (!result || result.success !== true) {
+      throw new Error(result?.message || "This reward could not be claimed.");
+    }
+
+    button.classList.remove("loading");
+    button.classList.add("done");
+    button.textContent = "Claimed";
+
+    const points = number(result.base_points);
+    const recovered = number(result.debt_recovered);
+
+    if (recovered > 0) {
+      showToast(
+        formatPoints(points) +
+        " points claimed. " +
+        formatPoints(recovered) +
+        " points used to recover outstanding debt."
+      );
+    } else {
+      showToast(
+        formatPoints(points) + " Streak points claimed successfully!"
+      );
+    }
+
+    $("balanceCard").classList.remove("success-pop");
+    void $("balanceCard").offsetWidth;
+    $("balanceCard").classList.add("success-pop");
+
+    await loadDashboard();
+
+  } catch (error) {
+    console.error("Survey claim error:", error);
+
+    showToast(getFriendlyError(error), "fa-circle-exclamation");
+
+    button.disabled = false;
+    button.classList.remove("loading");
+    button.textContent = originalText;
+
+    if (
+      String(error?.message || "").toLowerCase().includes("already claimed") ||
+      String(error?.message || "").toLowerCase().includes("duplicate")
+    ) {
+      await loadDashboard();
+    }
+
+  } finally {
+    isClaiming = false;
+  }
+}
+
+/* =========================================================
+   VISIT REWARD
+========================================================= */
+
+function renderVisitReward(data) {
+  const visits = Math.max(0, number(data.visit_count_today));
+  const goal = Math.max(1, number(data.visit_goal) || 10);
+
+  const claimed = data.visit_claimed_today === true;
+  const available = data.visit_reward_available === true;
+
+  $("visitCount").textContent = Math.min(visits, goal);
+
+  $("visitProgress").style.width =
+    Math.min(100, (visits / goal) * 100) + "%";
+
+  const button = $("visitClaimButton");
+
+  if (claimed) {
+    $("visitNote").textContent =
+      "Your daily visit reward has already been claimed. You can work towards tomorrow's reward after the daily reset.";
+
+    button.disabled = true;
+    button.classList.add("done");
+    button.textContent = "Daily reward claimed";
+    return;
+  }
+
+  if (available) {
+    $("visitNote").textContent =
+      "You've completed the required qualifying visits. Claim your daily 10-point reward before midnight.";
+
+    button.disabled = false;
+    button.classList.remove("done");
+    button.textContent = "Claim 10 visit points";
+    return;
+  }
+
+  const remaining = Math.max(0, goal - visits);
+
+  $("visitNote").textContent =
+    remaining +
+    " more qualifying visit" +
+    (remaining === 1 ? "" : "s") +
+    " needed. Each qualifying visit must be at least 30 minutes apart.";
+
+  button.disabled = true;
+  button.classList.remove("done");
+  button.textContent = remaining > 0
+    ? "Complete " + remaining + " more visits"
+    : "Checking visit eligibility...";
+}
+
+async function claimVisitReward() {
+  const button = $("visitClaimButton");
+
+  if (isClaiming) return;
+
+  if (!navigator.onLine) {
+    showToast("You are offline. Reconnect to claim your reward.", "fa-wifi");
+    return;
+  }
+
+  isClaiming = true;
+
+  button.disabled = true;
+  button.innerHTML =
+    '<i class="fa-solid fa-spinner fa-spin"></i> Claiming...';
+
+  try {
+    const { data, error } = await supabaseClient.rpc(
+      "claim_streak_visit"
+    );
+
+    if (error) throw error;
+
+    const result = Array.isArray(data) ? data[0] : data;
+
+    if (!result || result.success !== true) {
+      throw new Error(result?.message || "The visit reward could not be claimed.");
+    }
+
+    const recovered = number(result.debt_recovered);
+
+    if (recovered > 0) {
+      showToast(
+        "10 visit points claimed. " +
+        formatPoints(recovered) +
+        " points used to recover debt."
+      );
+    } else {
+      showToast("Your 10 daily visit points have been claimed!");
+    }
+
+    button.classList.add("done");
+    button.textContent = "Reward claimed";
+
+    $("balanceCard").classList.remove("success-pop");
+    void $("balanceCard").offsetWidth;
+    $("balanceCard").classList.add("success-pop");
+
+    await loadDashboard();
+
+  } catch (error) {
+    console.error("Visit claim error:", error);
+
+    showToast(getFriendlyError(error), "fa-circle-exclamation");
+
+    button.disabled = false;
+    button.textContent = "Try claiming again";
+
+    await loadDashboard();
+
+  } finally {
+    isClaiming = false;
+  }
+}
+
+$("visitClaimButton").addEventListener("click", claimVisitReward);
+
+/* =========================================================
+   FIVE-MONTH SUMMARY
+========================================================= */
+
+function renderFiveMonthSummary(data) {
+  $("earnedFiveMonths").textContent =
+    formatPoints(data.total_points_earned_5m);
+
+  $("reversedFiveMonths").textContent =
+    "−" + formatPoints(data.total_points_reversed_5m);
+
+  $("netFiveMonths").textContent =
+    formatPoints(data.current_point_balance);
+}
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function renderHistory(data) {
+  const records = Array.isArray(data.history)
+    ? data.history.slice(0, 5)
+    : [];
+
+  if (!records.length) {
+    $("historyList").innerHTML = `
+      <div class="empty-state">
+        <i class="fa-regular fa-folder-open"></i>
+        <p>Your reward history will appear here after your first Streak activity.</p>
+      </div>
+    `;
+    return;
+  }
+
+  $("historyList").innerHTML = records.map(record => {
+    let title = "Streak reward";
+    let icon = "fa-star";
+    let iconClass = "";
+    let amount = number(record.total_points);
+    let negative = amount < 0;
+
+    switch (record.record_type) {
+      case "survey_claim":
+        title = "Survey reward";
+        icon = "fa-clipboard-check";
+        break;
+
+      case "visit_claim":
+        title = "Daily visit reward";
+        icon = "fa-shoe-prints";
+        break;
+
+      case "weekly_settlement":
+        title = "Weekly wallet payout";
+        icon = "fa-wallet";
+        iconClass = "payout";
+
+        // Settlement records store the paid amount separately.
+        amount = number(record.amount_paid);
+        negative = false;
+        break;
+
+      case "reversal":
+        title = "Survey reward reversal";
+        icon = "fa-rotate-left";
+        iconClass = "reversal";
+        amount = -Math.abs(amount);
+        negative = true;
+        break;
+    }
+
+    const amountText =
+      (amount > 0 ? "+" : amount < 0 ? "−" : "") +
+      formatPoints(Math.abs(amount)) +
+      " pts";
+
+    return `
+      <div class="history-row">
+        <div class="history-left">
+          <div class="history-icon ${iconClass}">
+            <i class="fa-solid ${icon}"></i>
+          </div>
+
+          <div>
+            <div class="history-title">${escapeHTML(title)}</div>
+            <div class="history-date">
+              ${escapeHTML(formatDateOnly(record.activity_date || record.created_at))}
+            </div>
+          </div>
+        </div>
+
+        <div class="history-right">
+          <div class="history-amount ${negative ? "negative" : ""}">
+            ${escapeHTML(amountText)}
+          </div>
+          <div class="history-status">
+            ${escapeHTML(record.status || "")}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+/* =========================================================
+   SETTLEMENT COUNTDOWN
+========================================================= */
+
+function startCountdown() {
+  clearInterval(countdownTimer);
+
+  function update() {
+    const target = getSettlementDate();
+    const difference = target.getTime() - Date.now();
+
+    if (difference <= 0) {
+      $("settlementCountdown").textContent = "Processing";
+      return;
+    }
+
+    const totalSeconds = Math.floor(difference / 1000);
+
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+    $("settlementCountdown").textContent =
+      days + "d " + hours + "h " + minutes + "m";
+  }
+
+  update();
+
+  countdownTimer = setInterval(update, 60000);
+}
+
+/* =========================================================
+   SHARED ACTIVITY HEARTBEAT
+   Uses the existing activity-service.
+   Does not create dashboard_visit events.
+========================================================= */
+
+function createUUID() {
+  if (crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, character => {
+    const random = Math.random() * 16 | 0;
+
+    const value = character === "x"
+      ? random
+      : (random & 3 | 8);
+
+    return value.toString(16);
+  });
+}
+
+function getActivitySessionId() {
+  const key = "iyal_activity_session_id";
+
+  let sessionId = sessionStorage.getItem(key);
+
+  if (!sessionId) {
+    sessionId = createUUID();
+    sessionStorage.setItem(key, sessionId);
+  }
+
+  return sessionId;
+}
+
+function markInteraction() {
+  lastInteraction = Date.now();
+}
+
+async function sendStreakHeartbeat() {
+  if (!currentSession?.access_token) return;
+  if (!navigator.onLine) return;
+  if (document.visibilityState !== "visible") return;
+
+  // Follow the existing activity tracker rule:
+  // no heartbeat after five minutes without interaction.
+  if (Date.now() - lastInteraction > 5 * 60 * 1000) return;
+
+  try {
+    await fetch(
+      SUPABASE_URL + "/functions/v1/activity-service",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + currentSession.access_token,
+          "apikey": SUPABASE_KEY
+        },
+        body: JSON.stringify({
+          event_id: createUUID(),
+          session_id: getActivitySessionId(),
+          event_type: "heartbeat",
+          page: "streak-rewards"
+        })
+      }
+    );
+
+  } catch (error) {
+    // Activity tracking must never block the Streak Rewards page.
+    console.warn("Streak heartbeat could not be sent:", error);
+  }
+}
+
+function startActivityHeartbeat() {
+  const interactions = [
+    "pointerdown",
+    "keydown",
+    "touchstart",
+    "scroll"
+  ];
+
+  interactions.forEach(eventName => {
+    document.addEventListener(eventName, markInteraction, {
+      passive: true
+    });
+  });
+
+  sendStreakHeartbeat();
+
+  heartbeatTimer = setInterval(() => {
+    sendStreakHeartbeat();
+  }, 10000);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      markInteraction();
+      sendStreakHeartbeat();
+    }
+  });
+}
+
+/* =========================================================
+   MENU AND RULES DRAWER
+========================================================= */
+
+$("menuButton").addEventListener("click", event => {
+  event.stopPropagation();
+  $("menu").classList.toggle("open");
+});
+
+document.addEventListener("click", event => {
+  if (
+    !$("menu").contains(event.target) &&
+    !$("menuButton").contains(event.target)
+  ) {
+    $("menu").classList.remove("open");
+  }
+});
+
+function openRules() {
+  $("rulesOverlay").classList.add("open");
+  $("rulesOverlay").setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeRules() {
+  $("rulesOverlay").classList.remove("open");
+  $("rulesOverlay").setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+$("rulesButton").addEventListener("click", openRules);
+$("rulesTopButton").addEventListener("click", openRules);
+$("closeRules").addEventListener("click", closeRules);
+
+$("rulesOverlay").addEventListener("click", event => {
+  if (event.target === $("rulesOverlay")) {
+    closeRules();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeRules();
+    $("menu").classList.remove("open");
+  }
+});
+
+/* =========================================================
+   REFRESH, NETWORK AND LOGOUT
+========================================================= */
+
+$("refreshButton").addEventListener("click", loadDashboard);
+
+window.addEventListener("online", () => {
+  showToast("Connection restored. Refreshing your rewards.");
+  loadDashboard();
+});
+
+window.addEventListener("offline", () => {
+  showNotice(
+    "Your internet connection was lost. Your reward claims will not be submitted until you reconnect.",
+    "error"
+  );
+});
+
+$("logoutButton").addEventListener("click", async () => {
+  try {
+    await supabaseClient.auth.signOut();
+  } finally {
+    window.location.href = "login.html";
+  }
+});
+
+/* =========================================================
+   START
+========================================================= */
+
+initialisePage();
+</script>
+
+</body>
+</html>
