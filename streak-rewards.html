@@ -1965,15 +1965,28 @@ function getFriendlyError(error) {
 ========================================================= */
 
 function renderDashboard(data) {
-  renderBalance(data);
-  renderWeeklyProgress(data);
-  renderCalendar(data);
-  renderEstimates(data);
-  renderSurveyClaims(data);
-  renderVisitReward(data);
-  renderFiveMonthSummary(data);
-  renderHistory(data);
-  startCountdown();
+  const sections = [
+    ["Balance", () => renderBalance(data)],
+    ["Weekly progress", () => renderWeeklyProgress(data)],
+    ["Calendar", () => renderCalendar(data)],
+    ["Estimates", () => renderEstimates(data)],
+    ["Survey claims", () => renderSurveyClaims(data)],
+    ["Visit reward", () => renderVisitReward(data)],
+    ["Five-month summary", () => renderFiveMonthSummary(data)],
+    ["History", () => renderHistory(data)]
+  ];
+  sections.forEach(([name, render]) => {
+    try {
+      render();
+    } catch (error) {
+      console.error("Streak section failed:", name, error);
+    }
+  });
+  try {
+    startCountdown();
+  } catch (error) {
+    console.error("Settlement countdown failed:", error);
+  }
 }
 
 function renderBalance(data) {
@@ -2034,49 +2047,45 @@ function renderWeeklyProgress(data) {
 }
 
 function renderCalendar(data) {
-  const calendar = Array.isArray(data.calendar)
-    ? data.calendar
-    : [];
-
-  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  const today = data.today;
-
+  const calendar = Array.isArray(data.calendar) ? data.calendar : [];
   if (!calendar.length) {
     $("weekCalendar").innerHTML =
       '<div class="empty-state" style="grid-column:1/-1">Your weekly calendar will appear here.</div>';
     return;
   }
-
   $("weekCalendar").innerHTML = calendar.map(item => {
     const dateString = item.date;
-
-    const date = new Date(dateString + "T12:00:00Z");
-
+    const date = dateString
+      ? new Date(dateString + "T12:00:00Z")
+      : null;
+    if (!date || Number.isNaN(date.getTime())) {
+      console.warn("Invalid Streak calendar date:", item);
+      return `
+        <div class="day">
+          <div class="day-name">—</div>
+          <div class="day-number">—</div>
+          <div class="day-icon">
+            <i class="fa-solid fa-minus"></i>
+          </div>
+          <div class="day-details">Unavailable</div>
+        </div>
+      `;
+    }
     const dayName = new Intl.DateTimeFormat("en-NG", {
       timeZone: LAGOS_TIMEZONE,
       weekday: "short"
     }).format(date);
-
     const dayNumber = new Intl.DateTimeFormat("en-NG", {
       timeZone: LAGOS_TIMEZONE,
       day: "numeric"
     }).format(date);
-
     const surveyCount = Math.max(0, number(item.survey_claims));
     const reversedCount = Math.max(0, number(item.survey_reversed));
-
-    const validSurveyCount = Math.max(
-      0,
-      surveyCount - reversedCount
-    );
-
+    const validSurveyCount = Math.max(0, surveyCount - reversedCount);
     const visitClaimed = item.visit_claimed === true;
     const isActive = item.is_active === true;
-    const isToday = dateString === today;
-
+    const isToday = dateString === data.today;
     let details = "Rest day";
-
     if (validSurveyCount > 0 && visitClaimed) {
       details = "Survey + visit";
     } else if (validSurveyCount > 0) {
@@ -2087,17 +2096,14 @@ function renderCalendar(data) {
     } else if (number(item.expired_surveys) > 0) {
       details = "Expired";
     }
-
     if (reversedCount > 0) {
       details += `<span class="day-reversed">${reversedCount} reversed</span>`;
     }
-
     const icon = isActive
       ? '<i class="fa-solid fa-check"></i>'
       : number(item.expired_surveys) > 0
         ? '<i class="fa-solid fa-clock"></i>'
         : '<i class="fa-solid fa-minus"></i>';
-
     return `
       <div class="day ${isToday ? "today" : ""} ${isActive ? "active" : ""}">
         <div class="day-name">${escapeHTML(dayName)}</div>
