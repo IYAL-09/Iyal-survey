@@ -96,7 +96,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 <div id="securityScreen" class="security-screen"><div class="security-box"><div class="security-icon" id="securityIcon"><i class="fa-solid fa-shield-halved"></i></div><h2 id="securityTitle">Securing your dashboard</h2><p id="securityMessage">Please wait while we verify your device and connection.</p><div id="securityLoader" class="security-loader"></div><button id="securityRetry" class="security-btn" style="display:none;">Retry Verification</button><a href="support.html" id="securitySupport" class="security-support" style="display:none;">Contact Support</a></div></div>
 <div class="bg"></div><div class="blur blur1"></div><div class="blur blur2"></div>
 <header><div class="logo"><img src="iyallogo.png" alt="Iyal Surveys"><h1>Iyal Surveys</h1></div><div class="header-right"><div class="bell-btn" onclick="toggleNotif()"><i class="fa-solid fa-bell"></i><span id="notifCount" style="position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;font-size:.7rem;font-weight:700;min-width:20px;height:20px;border-radius:999px;display:none;align-items:center;justify-content:center;padding:0 5px;">0</span></div><div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div></div><div id="notifMenu"><h4>Notifications</h4><div id="notifList" style="display:flex;flex-direction:column;max-height:250px;overflow-y:auto;"><div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div></div></div><nav id="menu"><a href="dashboard.html"><i class="fa-solid fa-house nav-icon"></i>Dashboard</a><a href="leaderboard.html"><i class="fa-solid fa-ranking-star nav-icon"></i>Weekly Leaderboard</a><a href="referrals.html"><i class="fa-solid fa-users nav-icon"></i>Referrals</a><a href="withdraw.html"><i class="fa-solid fa-wallet nav-icon"></i>Cash Out</a><div class="nav-divider"></div><a href="terms.html"><i class="fa-solid fa-handshake nav-icon"></i>Terms & Conditions</a><a href="privacy.html"><i class="fa-solid fa-shield-halved nav-icon"></i>Privacy Policy</a><a href="about.html"><i class="fa-solid fa-circle-info nav-icon"></i>About Us</a><a href="disclaimer.html"><i class="fa-solid fa-triangle-exclamation nav-icon"></i>Disclaimer</a><a href="support.html"><i class="fa-solid fa-envelope nav-icon"></i>Support</a><a href="settings.html"><i class="fa-solid fa-gear nav-icon"></i>Settings</a><a href="profile.html"><i class="fa-solid fa-user nav-icon"></i>Profile</a><div class="nav-divider"></div></nav></header>
-<div class="container"><div class="greeting"><h2>Hello, <span id="username">User</span> 👋</h2><p>Complete surveys and earn rewards instantly.</p></div><div id="adminBanner"><span class="banner-icon">📢</span><span id="adminBannerText"></span><button class="banner-close" onclick="dismissAdminBanner()" title="Dismiss for 24 hours">&times;</button></div><div id="profileBanner"><p>Please complete your profile details below to get rewards & leaderboard alerts:</p><div class="profile-banner-inputs"><input id="profileUsernameInput" class="profile-input" placeholder="Enter your username (e.g. John)"><input id="profileWhatsappInput" class="profile-input" placeholder="Enter WhatsApp number (e.g. 0803...)"><button onclick="saveProfileBanner()" class="profile-btn">Save Details</button></div></div><div class="balance-card"><div class="balance-label">Available Balance</div><div class="balance-amount" id="userBalance">₦0</div><div class="balance-actions"><button class="balance-btn" onclick="location.href='streak-rewards.html'">Rewards</button><button class="balance-btn" onclick="location.href='leaderboard.html'">Leaderboard</button></div></div><div class="vendor-switch"><button class="vendor-btn active" data-vendor="cpx">CPX Research</button><button class="vendor-btn" data-vendor="bitlab">BitLabs</button><button class="vendor-btn" data-vendor="wannads" disabled title="Wannads coming soon">Wannads (Soon)</button></div><div class="survey-card"><div class="survey-top"><h3>Survey Offers</h3><div class="live-badge">LIVE</div></div><div id="surveyContent"><div class="inline-consent"><p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p><p><a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank" rel="noopener">CPX Privacy</a> | <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank" rel="noopener">CPX Terms</a></p><div class="inline-consent-actions"><button class="inline-accept" id="acceptConsentInline">Accept</button><button class="inline-reject" id="rejectConsentInline">Reject</button></div></div></div></div></div>
+<div class="container"><div class="greeting"><h2>Hello, <span id="username">User</span> 👋</h2><p>Complete surveys and earn rewards instantly.</p></div><div id="adminBanner"><span class="banner-icon">📢</span><span id="adminBannerText"></span><button class="banner-close" onclick="dismissAdminBanner()" title="Dismiss for 24 hours">&times;</button></div><div id="profileBanner"><p>Please complete your profile details below to get rewards & leaderboard alerts:</p><div class="profile-banner-inputs"><input id="profileUsernameInput" class="profile-input" placeholder="Enter your username (e.g. John)"><input id="profileWhatsappInput" class="profile-input" placeholder="Enter WhatsApp number (e.g. 0803...)"><button onclick="saveProfileBanner()" class="profile-btn">Save Details</button></div></div><div class="balance-card"><div class="balance-label">Available Balance</div><div class="balance-amount" id="userBalance">₦0</div><div class="balance-actions"><button class="balance-btn" onclick="location.href='streak-rewards.html'">Rewards</button><button class="balance-btn" onclick="location.href='leaderboard.html'">Leaderboard</button></div></div><div class="vendor-switch"><button class="vendor-btn active" data-vendor="cpx">CPX Research</button><button class="vendor-btn" data-vendor="bitlab" disabled title="BitLabs coming soon">BitLabs (Soon)</button><button class="vendor-btn" data-vendor="wannads" disabled title="Wannads coming soon">Wannads (Soon)</button></div><div class="survey-card"><div class="survey-top"><h3>Survey Offers</h3><div class="live-badge">LIVE</div></div><div id="surveyContent"><div class="inline-consent"><p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p><p><a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank" rel="noopener">CPX Privacy</a> | <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank" rel="noopener">CPX Terms</a></p><div class="inline-consent-actions"><button class="inline-accept" id="acceptConsentInline">Accept</button><button class="inline-reject" id="rejectConsentInline">Reject</button></div></div></div></div></div>
 <div class="bottom-nav"><a href="#" class="active-nav"><i class="fa-solid fa-house"></i>Home</a><a href="withdraw.html"><i class="fa-solid fa-wallet"></i>Cash Out</a><a href="referrals.html"><i class="fa-solid fa-users"></i>Referrals</a><a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>Logout</a></div>
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
@@ -224,31 +224,137 @@ function formatNotifTime(created_at){ const d=new Date(created_at); const now=ne
 function updateNotifications(notifs){ const notifList=document.getElementById("notifList"); const notifCount=document.getElementById("notifCount"); if(!notifs||notifs.length===0){ notifList.innerHTML=`<div class="notif-item" style="text-align:center;color:#86efac;">No new notifications</div>`; notifCount.style.display="none"; return; } const unreadCount=notifs.filter(n=>!n.is_read).length; if(unreadCount>0){ notifCount.textContent=unreadCount; notifCount.style.display="flex"; }else{ notifCount.style.display="none"; } notifList.innerHTML=notifs.map(n=>{ const isUnread=!n.is_read; return `<div class="notif-item ${isUnread?"unread":"read"}">${isUnread?'<span class="notif-dot"></span>':""}<div class="notif-text">${escapeHtml(n.message)}</div><span class="notif-time">${formatNotifTime(n.created_at||Date.now())}</span></div>`; }).join(""); }
 async function markNotificationsRead(){ if(!securityVerified) return; document.getElementById("notifCount").style.display="none"; document.querySelectorAll(".notif-item.unread").forEach(el=>{ el.classList.remove("unread"); el.classList.add("read"); const dot=el.querySelector(".notif-dot"); if(dot) dot.remove(); }); try{ await dashboardRequest("mark-read"); }catch(err){ console.error("Mark read failed",err); } }
 function animateBalance(balance){ const balanceElement=document.getElementById("userBalance"); let start=0; const duration=1200; const increment=balance/60; const timer=setInterval(()=>{ start+=increment; if(start>=balance){ start=balance; clearInterval(timer); } balanceElement.textContent=`₦${Math.floor(start).toLocaleString()}`; },duration/60); }
+
 let activeVendor="cpx";
-document.querySelectorAll(".vendor-btn").forEach(btn=>{ btn.addEventListener("click",()=>{ if(!securityVerified) return; if(btn.disabled) return; document.querySelectorAll(".vendor-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); activeVendor=btn.dataset.vendor; loadSurveys(); }); });
-// ORIGINAL CPX BEHAVIOUR: No localStorage. Show consent every time, like original.
-function loadSurveys(){
-  if(!securityVerified) return;
+
+document.querySelectorAll(".vendor-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    if(!securityVerified) return;
+    if(btn.disabled) return;
+
+    document.querySelectorAll(".vendor-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    activeVendor=btn.dataset.vendor;
+    loadSurveys();
+  });
+});
+
+// Each provider has its own consent screen.
+// Consent is displayed before any provider survey content is loaded.
+function getProviderConsent(vendor){
+  if(vendor==="cpx"){
+    return `
+      <div class="inline-consent">
+        <p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p>
+        <p>
+          <a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank" rel="noopener">CPX Privacy</a> |
+          <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank" rel="noopener">CPX Terms</a>
+        </p>
+        <div class="inline-consent-actions">
+          <button class="inline-accept" data-consent-action="accept">Accept</button>
+          <button class="inline-reject" data-consent-action="reject">Reject</button>
+        </div>
+      </div>`;
+  }
+
+  if(vendor==="bitlab"){
+    return `
+      <div class="inline-consent">
+        <p>BitLabs is a third-party survey provider. If you continue when this service becomes available, relevant information may be processed by BitLabs to provide survey offers and manage your participation.</p>
+        <p>BitLabs privacy and terms links will be added here before the service is activated.</p>
+        <div class="inline-consent-actions">
+          <button class="inline-accept" data-consent-action="accept">Accept</button>
+          <button class="inline-reject" data-consent-action="reject">Reject</button>
+        </div>
+      </div>`;
+  }
+
+  if(vendor==="wannads"){
+    return `
+      <div class="inline-consent">
+        <p>Wannads is a third-party survey provider. If you continue when this service becomes available, relevant information may be processed by Wannads to provide survey offers and manage your participation.</p>
+        <p>Wannads privacy and terms links will be added here before the service is activated.</p>
+        <div class="inline-consent-actions">
+          <button class="inline-accept" data-consent-action="accept">Accept</button>
+          <button class="inline-reject" data-consent-action="reject">Reject</button>
+        </div>
+      </div>`;
+  }
+
+  return "";
+}
+
+function showProviderPlaceholder(vendor){
   const surveyContent=document.getElementById("surveyContent");
-  if(activeVendor==="wannads"){
-    surveyContent.innerHTML=`<div style="padding:40px;text-align:center;color:#bbf7d0;">Wannads coming soon.<br>Use CPX or BitLabs for now.</div>`;
+
+  if(vendor==="bitlab"){
+    // BITLABS PLACEHOLDER:
+    // Add the approved BitLabs publisher token and iframe URL here after approval.
+    surveyContent.innerHTML=`
+      <div style="padding:40px;text-align:center;color:#bbf7d0;">
+        BitLabs integration will be available after publisher approval.
+      </div>`;
     return;
   }
-  if(activeVendor==="cpx"){
-    surveyContent.innerHTML=`<div class="inline-consent"><p>CPX Research uses cookies and tracking technologies to deliver surveys. By accepting, you agree to data processing.</p><p><a href="https://www.cpx-research.com/main/en/privacy.php" target="_blank" rel="noopener">CPX Privacy</a> | <a href="https://cpx-research.com/main/en/terms-user.php" target="_blank" rel="noopener">CPX Terms</a></p><div class="inline-consent-actions"><button class="inline-accept" id="acceptConsentInline">Accept</button><button class="inline-reject" id="rejectConsentInline">Reject</button></div></div>`;
-    return;
-  }
-  surveyContent.innerHTML=`<div class="loader-wrap"><div class="loader"></div></div>`;
-  if(activeVendor==="bitlab"){
-    if(!session?.user) return;
-    const userId=session.user.id;
-    const bitlabsToken="5f6cc641-dd5c-4551-a948-5c526d61d97a";
-    const iframeSrc=`https://web.bitlabs.ai/?token=${bitlabsToken}&uid=${encodeURIComponent(userId)}`;
-    surveyContent.innerHTML=`<iframe src="${iframeSrc}" allowfullscreen></iframe>`;
-    return;
+
+  if(vendor==="wannads"){
+    // WANNADS PLACEHOLDER:
+    // Add the approved Wannads publisher details and iframe URL here when integrated.
+    surveyContent.innerHTML=`
+      <div style="padding:40px;text-align:center;color:#bbf7d0;">
+        Wannads integration will be available soon.
+      </div>`;
   }
 }
-document.getElementById("surveyContent").addEventListener("click",(e)=>{ if(!securityVerified) return; if(e.target&&e.target.id==="acceptConsentInline"){ if(!session?.user) return; const userId=session.user.id; const iframeSrc=`https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${encodeURIComponent(userId)}`; document.getElementById("surveyContent").innerHTML=`<iframe src="${iframeSrc}" allowfullscreen></iframe>`; } if(e.target&&e.target.id==="rejectConsentInline"){ document.getElementById("surveyContent").innerHTML=`<div style="padding:40px;text-align:center;color:#bbf7d0;">You rejected cookies.<br>CPX surveys cannot be shown.</div>`; } });
+
+function loadSurveys(){
+  if(!securityVerified) return;
+
+  const surveyContent=document.getElementById("surveyContent");
+
+  // Disabled providers cannot be selected through the normal dashboard interface.
+  const providerButton=document.querySelector(`.vendor-btn[data-vendor="${activeVendor}"]`);
+  if(providerButton?.disabled) return;
+
+  surveyContent.innerHTML=getProviderConsent(activeVendor);
+}
+
+document.getElementById("surveyContent").addEventListener("click",(e)=>{
+  if(!securityVerified) return;
+
+  const action=e.target?.dataset?.consentAction;
+  if(!action) return;
+
+  const vendor=activeVendor;
+
+  if(action==="reject"){
+    const providerName=vendor==="cpx"?"CPX Research":vendor==="bitlab"?"BitLabs":"Wannads";
+
+    document.getElementById("surveyContent").innerHTML=`
+      <div style="padding:40px;text-align:center;color:#bbf7d0;">
+        You rejected the consent request.<br>
+        ${providerName} surveys cannot be shown.
+      </div>`;
+    return;
+  }
+
+  if(action==="accept"){
+    if(!session?.user) return;
+
+    if(vendor==="cpx"){
+      const userId=session.user.id;
+      const iframeSrc=`https://offers.cpx-research.com/index.php?app_id=30559&ext_user_id=${encodeURIComponent(userId)}`;
+
+      document.getElementById("surveyContent").innerHTML=`
+        <iframe src="${iframeSrc}" allowfullscreen></iframe>`;
+      return;
+    }
+
+    // BitLabs and Wannads remain placeholders until their integrations are approved and configured.
+    showProviderPlaceholder(vendor);
+  }
+});
+
 document.getElementById("logoutBtn").addEventListener("click", async(e)=>{ e.preventDefault(); await supabase.auth.signOut(); window.location.href="login.html"; });
 </script>
 </body>
